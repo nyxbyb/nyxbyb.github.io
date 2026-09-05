@@ -16,5 +16,14 @@ corpus/*.json
 data/raw/
 pipeline/raw/
 
+# ⚠️ 私人精神语料：你的真实书评/文章/论文一律不进公开仓库
+# （默认连 books/articles/papers 下的内容都排除，模板除外）
+corpus/books/*
+!corpus/books/_template.md
+corpus/articles/*
+!corpus/articles/_template.md
+corpus/papers/*
+!corpus/papers/_template.md
+
 # 本地嵌入缓存（体积大，不入库）
 *.npy
