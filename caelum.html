@@ -460,6 +460,71 @@
       border-top: 1px solid rgba(238,240,245,0.08); padding-top: 14px;
     }
 
+    /* 叶子条目页 · 独立全屏 */
+    .leaf-page {
+      position: fixed; inset: 0; z-index: 400; display: none;
+      flex-direction: column; background: rgba(4,5,8,0.985);
+      backdrop-filter: blur(8px); overflow-y: auto;
+    }
+    .leaf-page.open { display: flex; }
+    .lp-head {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 22px 6vw; border-bottom: 1px solid rgba(238,240,245,0.08);
+      position: sticky; top: 0; z-index: 5; background: rgba(4,5,8,0.9);
+    }
+    .lp-crumb { font-size: 12px; color: var(--accent-dim); letter-spacing: 0.08em; }
+    .lp-close { font-size: 28px; color: var(--ink-dim); cursor: pointer; line-height: 1; }
+    .lp-close:hover { color: var(--accent); }
+    .lp-body { max-width: 760px; margin: 0 auto; padding: 48px 6vw 80px; width: 100%; }
+
+    .lp-title { font-size: 34px; color: var(--accent); letter-spacing: 0.1em; font-weight: 600; }
+    .lp-title-en {
+      font-family: var(--serif-en); font-style: italic; font-size: 16px;
+      color: var(--accent-dim); margin-top: 6px; letter-spacing: 0.06em;
+    }
+    .lp-marks { display: flex; gap: 12px; margin: 22px 0; }
+    .lp-marks button {
+      font-family: var(--serif); font-size: 14px; letter-spacing: 0.2em;
+      color: var(--ink-dim); background: transparent; cursor: pointer;
+      border: 1px solid rgba(238,240,245,0.2); border-radius: 22px;
+      padding: 9px 24px; transition: all 0.25s;
+    }
+    .lp-marks button:hover { color: var(--accent); border-color: var(--accent); }
+    .lp-marks button.on { color: var(--accent); border-color: var(--accent); background: rgba(238,240,245,0.1); }
+    .lp-block { margin: 34px 0; }
+    .lp-block-h {
+      font-size: 13px; color: var(--accent-dim); letter-spacing: 0.2em;
+      margin-bottom: 14px; display: flex; align-items: center; gap: 10px;
+    }
+    .lp-block-h::after { content: ""; flex: 1; height: 1px; background: rgba(238,240,245,0.1); }
+    .lp-desc { font-size: 15px; line-height: 2.0; color: var(--ink); letter-spacing: 0.05em; }
+    .lp-concepts { display: flex; flex-wrap: wrap; gap: 10px; }
+    .lp-concepts .cc {
+      font-size: 13px; color: var(--ink); padding: 6px 14px;
+      border: 1px solid rgba(238,240,245,0.18); border-radius: 16px;
+      background: rgba(10,14,22,0.5); letter-spacing: 0.05em;
+    }
+    .lp-questions { list-style: none; padding: 0; }
+    .lp-questions li {
+      padding: 10px 4px; border-bottom: 1px dashed rgba(238,240,245,0.1);
+      font-size: 14px; color: var(--ink); letter-spacing: 0.04em;
+    }
+    .lp-books .bk {
+      font-size: 14px; color: var(--ink-dim); padding: 8px 0;
+    }
+    .lp-note {
+      width: 100%; min-height: 140px; background: rgba(5,6,8,0.55);
+      border: 1px solid rgba(238,240,245,0.14); color: var(--ink);
+      font-family: var(--serif); font-size: 14px; line-height: 1.9; letter-spacing: 0.04em;
+      padding: 16px 18px; border-radius: 12px; resize: vertical; margin-top: 6px;
+    }
+    .lp-note:focus { outline: none; border-color: var(--accent); }
+    .lp-links a {
+      color: var(--accent-dim); text-decoration: none; font-size: 13px;
+      border-bottom: 1px solid rgba(238,240,245,0.25); margin-right: 18px;
+      letter-spacing: 0.05em; padding-bottom: 2px;
+    }
+    .lp-links a:hover { color: var(--accent); border-bottom-color: var(--accent); }
 
     /* ========== 第4屏：拓星 ========== */
     #sec-frontier { background: var(--bg-deep); }
@@ -1246,8 +1311,8 @@
     }
     view.innerHTML = '';
     if (!currentNodes.length) {
-      // 叶子页：学习笔记
-      renderLeaf(view, domainPath[domainPath.length - 1]);
+      // 到达叶子: 打开独立全屏条目页
+      openLeafPage(domainPath[domainPath.length - 1]);
       return;
     }
     currentNodes.forEach(node => {
@@ -1257,13 +1322,70 @@
       const markVal = node.children ? null : domainMarks[domainKey(node)];
       el.innerHTML = `<div class="dv-cn">${node.zh}</div><div class="dv-en">${node.en || ''}</div>` +
         (node.posture ? `<div class="dv-badge">${node.posture}</div>` : '') +
-        (hasKids ? `<div class="dv-arrow">›</div>` : '');
+        (hasKids ? `<div class="dv-arrow">›</div>` : `<div class="dv-badge">条目页</div>`);
       el.onclick = () => {
-        domainPath.push({ id: node.id, zh: node.zh, en: node.en });
-        renderDomains();
+        if (hasKids) {
+          domainPath.push({ id: node.id, zh: node.zh, en: node.en });
+          renderDomains();
+        } else {
+          // 叶子：进入独立条目页
+          openLeafPage(node);
+        }
       };
       view.appendChild(el);
     });
+  }
+
+  // ─── 独立叶子条目页（权威条目式）───
+  let leafCurrent = null;
+  function openLeafPage(node) {
+    leafCurrent = node;
+    const crumb = document.getElementById('lpCrumb');
+    crumb.textContent = domainPath.map(p => p.zh).concat([node.zh]).join(' › ');
+    const key = domainPath.map(p => p.id).concat([node.id]).join('>');
+    const st = domainMarks[key] || 'na';
+    const note = domainNotes[key] || '';
+    const body = document.getElementById('lpBody');
+    let html = `
+      <div class="lp-title">${node.zh}</div>
+      <div class="lp-title-en">${node.en || ''}</div>
+      <div class="lp-marks">
+        <button data-lm="know" class="${st==='know'?'on':''}">熟悉</button>
+        <button data-lm="knowish" class="${st==='knowish'?'on':''}">了解</button>
+        <button data-lm="na" class="${st==='na'?'on':''}">陌生</button>
+      </div>`;
+    if (node.desc) html += `<div class="lp-block"><div class="lp-block-h">定 义 / Definition</div><div class="lp-desc">${node.desc}</div></div>`;
+    if (node.concepts && node.concepts.length) html += `<div class="lp-block"><div class="lp-block-h">核心概念 / Key Concepts</div><div class="lp-concepts">${node.concepts.map(c => `<span class="cc">${c}</span>`).join('')}</div></div>`;
+    if (node.questions && node.questions.length) html += `<div class="lp-block"><div class="lp-block-h">关键问题 / Key Questions</div><ul class="lp-questions">${node.questions.map(q => `<li>${q}</li>`).join('')}</ul></div>`;
+    if (node.books && node.books.length) html += `<div class="lp-block"><div class="lp-block-h">经典书目 / Key Books</div><div class="lp-books">${node.books.map(b => `<div class="bk">${b}</div>`).join('')}</div></div>`;
+    html += `<div class="lp-block"><div class="lp-block-h">我的笔记 / My Notes</div><textarea class="lp-note" placeholder="在这里写下这一叶的学习笔记…">${note.replace(/</g,'&lt;')}</textarea></div>`;
+    if (node.links && node.links.length) html += `<div class="lp-block"><div class="lp-block-h">延伸 / Further Reading</div><div class="lp-links">${node.links.map(l => `<a href="${l[1]}" target="_blank" rel="noopener">${l[0]}</a>`).join('')}</div></div>`;
+    body.innerHTML = html;
+
+    // 标注
+    body.querySelectorAll('.lp-marks button').forEach(btn => {
+      btn.onclick = () => {
+        domainMarks[key] = btn.getAttribute('data-lm');
+        saveDomainMark();
+        body.querySelectorAll('.lp-marks button').forEach(b => b.classList.toggle('on', b === btn));
+      };
+    });
+    // 笔记自动保存
+    const ta = body.querySelector('.lp-note');
+    if (ta) {
+      let t = null;
+      ta.oninput = () => {
+        clearTimeout(t);
+        t = setTimeout(() => { domainNotes[key] = ta.value; saveDomainNotes(); }, 300);
+      };
+    }
+    document.getElementById('leafPage').classList.add('open');
+  }
+  function closeLeafPage() {
+    document.getElementById('leafPage').classList.remove('open');
+    // 返回目录视图
+    domainPath.pop();
+    renderDomains();
   }
 
   function crumbEl(txt, fn) {
@@ -1275,49 +1397,6 @@
     const s = document.createElement('span');
     s.className = 'crumb-sep'; s.textContent = '›';
     return s;
-  }
-
-  function renderLeaf(view, node) {
-    const key = domainPath.map(p => p.id).join('>');
-    const st = domainMarks[key] || 'na';
-    const note = domainNotes[key] || '';
-    const el = document.createElement('div');
-    el.className = 'dv-leaf';
-    el.innerHTML = `
-      <div class="leaf-head">
-        <span class="lf-cn">${node.zh}</span>
-        <span class="lf-en">${node.en || ''}</span>
-      </div>
-      <div class="leaf-marks">
-        <button data-lm="know" class="${st==='know'?'on':''}" data-i18n-lm="熟悉">熟悉</button>
-        <button data-lm="knowish" class="${st==='knowish'?'on':''}">了解</button>
-        <button data-lm="na" class="${st==='na'?'on':''}">陌生</button>
-      </div>
-      <textarea class="leaf-note" placeholder="这里写你的学习笔记…">${note.replace(/</g,'&lt;')}</textarea>
-      <div class="leaf-placeholder" data-i18n-leafhint>这是你的学习叶子页：标注熟悉程度，写下笔记。</div>`;
-    const back = document.createElement('div');
-    back.className = 'dv-badge';
-    back.textContent = '← 返回';
-    back.style.cssText = 'cursor:pointer;margin-top:18px;display:inline-block;';
-    back.onclick = () => { domainPath.pop(); renderDomains(); };
-    el.appendChild(back);
-    // 标注按钮
-    el.querySelectorAll('.leaf-marks button').forEach(btn => {
-      btn.onclick = () => {
-        const m = btn.getAttribute('data-lm');
-        domainMarks[key] = m;
-        saveDomainMark();
-        el.querySelectorAll('.leaf-marks button').forEach(b => b.classList.toggle('on', b === btn));
-      };
-    });
-    // 笔记
-    const ta = el.querySelector('.leaf-note');
-    let t = null;
-    ta.oninput = () => {
-      clearTimeout(t);
-      t = setTimeout(() => { domainNotes[key] = ta.value; saveDomainNotes(); }, 300);
-    };
-    view.appendChild(el);
   }
 
 
@@ -1571,6 +1650,15 @@
   </div>
   <div class="batch-cat" id="batchCat" style="display:none"></div>
   <div class="batch-empty" id="batchEmpty" style="display:none" data-i18n="batchEmpty">没有更多可标记的书 · 换一个搜索</div>
+</div>
+
+<!-- 叶子条目页（独立全屏）-->
+<div class="leaf-page" id="leafPage">
+  <div class="lp-head">
+    <div class="lp-crumb" id="lpCrumb"></div>
+    <div class="lp-close" onclick="closeLeafPage()">×</div>
+  </div>
+  <div class="lp-body" id="lpBody"></div>
 </div>
 
 </body>
