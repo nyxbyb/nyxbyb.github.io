@@ -13,6 +13,10 @@ OUT = os.path.join(BASE, "web/public/data/graph.json")
 WXR = os.path.join(BASE, "data/微信读书/reading_records_full.json")
 # 高中阅读记录(手写整理, 本地)
 HS = os.path.join(BASE, "data/公众号/_backup/highschool_reading.json")
+# 读书笔记提取的书目(本地)
+NB = os.path.join(BASE, "data/公众号/_backup/notes_books.json")
+# 网页添加的 inbox（提交到公开仓库，随时可读）
+INBOX = os.path.join(BASE, "web/public/data/inbox.json")
 
 MODEL = os.environ.get("EMBED_MODEL", "BAAI/bge-small-zh-v1.5")
 
@@ -32,7 +36,7 @@ def make_text(b):
     return " | ".join(parts)
 
 def merge_wechat(books):
-    """把微信读书'读完'记录 + 高中手写阅读记录 并入书单(公开亮起), 新书名补充嵌入。"""
+    """把 微信读书'读完' + 高中手写阅读 + 读书笔记书目 并入书单(公开亮起), 新书名补充嵌入。"""
     wxr = []
     if os.path.exists(WXR):
         try:
@@ -45,30 +49,61 @@ def merge_wechat(books):
             hs = json.load(open(HS))
         except Exception as e:
             print(f"注意: 读取高中阅读记录失败 {e}")
-    if not wxr and not hs:
+    nb = []
+    if os.path.exists(NB):
+        try:
+            nb = json.load(open(NB))
+        except Exception as e:
+            print(f"注意: 读取读书笔记书目失败 {e}")
+    inbox = []
+    if os.path.exists(INBOX):
+        try:
+            inbox = json.load(open(INBOX))
+            if not isinstance(inbox, list): inbox = []
+        except Exception as e:
+            print(f"注意: 读取 inbox 失败 {e}")
+    if not wxr and not hs and not nb and not inbox:
         return books, {}
     by_title = {}
-    for r in list(wxr) + list(hs):
+    notes_map = {}
+    for r in list(wxr) + list(hs) + list(nb):
         by_title.setdefault(r["title"], r)
+    # inbox: 新书/笔记 → 追加为已读(书名), 并记 notes
+    for it in inbox:
+        t = (it.get("title") or "").strip()
+        if not t: continue
+        entry = {"title": t, "finished": (it.get("finished") or ""), "duration_min": None, "duration_text": ""}
+        if t not in by_title:
+            by_title[t] = entry
+        if it.get("type") == "note" or it.get("note"):
+            notes_map.setdefault(t, []).append(it.get("note", "")[:500])
     # 记录已存在书名 → 更新状态为已读; 新书名 → 追加(用书名本身嵌入)
     merged = []
     read_meta = {}
     for b in books:
         rec = by_title.get(b.get("title"))
         if rec:
-            read_meta[b["title"]] = {"source": "wxr", "duration_min": rec.get("duration_min"),
-                                     "finished": rec.get("finished", ""), "duration_text": rec.get("duration_text", "")}
+            m = {"source": "wxr", "duration_min": rec.get("duration_min"),
+                 "finished": rec.get("finished", ""), "duration_text": rec.get("duration_text", "")}
+            if t := b.get("title"):
+                if notes_map.get(t):
+                    m["notes"] = notes_map[t]
+            read_meta[b["title"]] = m
         merged.append(b)
     added = 0
     for title, rec in by_title.items():
         if title and not any(b.get("title") == title for b in books):
-            src_auth = "微信读书 · " if title in [r['title'] for r in wxr] else "高中 · "
+            src_auth = "微信读书 · " if any(r["title"]==title for r in wxr) else (
+                       "高中 · " if any(r["title"]==title for r in hs) else "读书笔记 · ")
             merged.append({"title": title, "author": src_auth + (rec.get("finished") or ""),
                            "rating": None, "source": "read"})
-            read_meta[title] = {"source": "wxr", "duration_min": rec.get("duration_min"),
-                                "finished": rec.get("finished", ""), "duration_text": rec.get("duration_text", "")}
+            m = {"source": "wxr", "duration_min": rec.get("duration_min"),
+                 "finished": rec.get("finished", ""), "duration_text": rec.get("duration_text", "")}
+            if notes_map.get(title):
+                m["notes"] = notes_map[title]
+            read_meta[title] = m
             added += 1
-    print(f"合并已读记录: 微信读书 {len(wxr)} + 高中 {len(hs)}, 新增书目 {added}, 已读标注 {len(read_meta)}")
+    print(f"合并已读记录: 微信读书 {len(wxr)} + 高中 {len(hs)} + 读书笔记 {len(nb)}, 新增书目 {added}, 已读标注 {len(read_meta)}")
     return merged, read_meta
 
 def assign_domain(title, author=""):
@@ -197,6 +232,8 @@ def main():
                 "duration_text": meta.get("duration_text") or "",
                 "finished": meta.get("finished") or "",
             }
+            if meta.get("notes"):
+                node["notes"] = meta["notes"]
         nodes.append(node)
 
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
