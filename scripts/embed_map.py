@@ -134,6 +134,27 @@ def main():
     X = np.array(vecs, dtype=np.float32)
     print(f"维度: {X.shape}")
 
+    # 语义锚轴：用锚文本嵌入与每本书的相似度作为多维语义坐标（供沉浸式选轴）
+    ANCHORS = [
+        ("文学", "小说 诗歌 散文 故事 文学 人生 命运 爱情 叙事"),
+        ("哲学", "哲学 存在 存在主义 形而上学 伦理 真理 思想 意义"),
+        ("心理", "心理学 精神分析 潜意识 情绪 人格 认知 心理"),
+        ("科学", "物理 宇宙 量子 生物 演化 科学 自然 规律"),
+        ("医学", "医学 养生 中医 身体 健康 本草 针灸 内经"),
+        ("数学", "数学 逻辑 算法 证明 数论 几何 计算 推理"),
+        ("历史", "历史 文明 朝代 传记 时代 史学 记忆"),
+        ("社会", "社会 政治 经济 权力 制度 乌合之众 阶层"),
+        ("艺术", "艺术 绘画 音乐 美 视觉 设计 审美"),
+        ("自我", "自我 成长 生活 习惯 人生智慧 超越 内心"),
+    ]
+    anchor_texts = [a[1] for a in ANCHORS]
+    anchor_vecs = list(model.embed(anchor_texts))
+    A = np.array(anchor_vecs, dtype=np.float32)
+    A /= (np.linalg.norm(A, axis=1, keepdims=True) + 1e-9)
+    Xn = X / (np.linalg.norm(X, axis=1, keepdims=True) + 1e-9)
+    SEM = Xn @ A.T  # (n, n_anchor) cosine 相似度
+    print(f"语义锚轴: {[a[0] for a in ANCHORS]}")
+
     print("TSNE 降维到 3D...")
     from sklearn.manifold import TSNE
     perp = min(30, max(5, len(books) // 5))
@@ -146,7 +167,7 @@ def main():
     Y /= Y.max(axis=0)
 
     nodes = []
-    for b, (x, y, z) in zip(books, Y):
+    for i, (b, (x, y, z)) in enumerate(zip(books, Y)):
         meta = read_meta.get(b.get("title"), {})
         node = {
             "id": f"book_{len(nodes):04d}",
@@ -159,6 +180,7 @@ def main():
             "x": round(float(x), 4),
             "y": round(float(y), 4),
             "z": round(float(z), 4),
+            "sem": [round(float(v), 3) for v in SEM[i]],
         }
         if meta:
             node["wechat"] = {
@@ -173,7 +195,7 @@ def main():
     axes = []
     for i in range(3):
         axes.append({"axis": i, "low": AXIS_LABELS[i]["low"], "high": AXIS_LABELS[i]["high"]})
-    json.dump({"nodes": nodes, "axes": axes}, open(OUT, "w"), ensure_ascii=False, indent=1)
+    json.dump({"nodes": nodes, "axes": axes, "semanchors": [a[0] for a in ANCHORS]}, open(OUT, "w"), ensure_ascii=False, indent=1)
     print(f"✅ 已写 {OUT}，{len(nodes)} 个节点")
     print("  轴语义:")
     for a in axes:

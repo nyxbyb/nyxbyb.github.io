@@ -703,6 +703,18 @@
       border-radius: 14px; padding: 16px 20px; backdrop-filter: blur(6px);
     }
     .imm-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .imm-row-axes { justify-content: center; gap: 16px; }
+    .imm-ax { font-size: 12px; color: var(--accent-dim); letter-spacing: 0.12em; }
+    .imm-ax select {
+      margin-left: 8px; background: rgba(14,18,28,0.85); border: 1px solid rgba(238,240,245,0.2);
+      color: var(--ink); font-family: var(--serif); padding: 6px 10px; border-radius: 9px;
+    }
+    .imm-ax select:focus { outline: none; border-color: var(--accent); }
+    .imm-clear {
+      font-size: 11px; color: var(--ink-dim); cursor: pointer; letter-spacing: 0.1em;
+      border: 1px dashed rgba(238,240,245,0.25); padding: 4px 12px; border-radius: 12px;
+    }
+    .imm-clear:hover { color: var(--accent); border-color: var(--accent); }
     #immSearch {
       flex: 1; min-width: 180px; background: rgba(14,18,28,0.8);
       border: 1px solid rgba(238,240,245,0.18); color: var(--ink);
@@ -1023,6 +1035,7 @@
   const ctx = canvas.getContext('2d');
   let nodes = [];
   let axesInfo = [];   // 轴语义标签 [{low, high}]
+  let semAnchors = [];  // 语义锚名称
   let W, H, dpr;
 
   function resize() {
@@ -1055,6 +1068,7 @@
       if (data && data.nodes) {
         nodes = data.nodes;
         axesInfo = data.axes || [];
+        semAnchors = data.semanchors || [];
       }
     } catch (e) {
       console.log('星图数据未找到，使用演示数据');
@@ -1767,6 +1781,7 @@
     imm = document.getElementById('imm-canvas');
     immCtx = imm.getContext('2d');
     immResize();
+    immAxisPopulate();
     immApply();
     renderSuggest();
   }
@@ -1785,13 +1800,41 @@
   }
 
   function immProject(n) {
-    const cx = (n.x - 0.5) * 2, cy = (n.y - 0.5) * 2, cz = (n.z - 0.5) * 2;
+    // 若用户选了语义轴(immAxisMode)，则 x/y 用语义锚得分，z 用 TSNE 深度
+    const cx = immAxisMode ? val(n, immAxisX) : (n.x - 0.5) * 2;
+    const cy = immAxisMode ? val(n, immAxisY) : (n.y - 0.5) * 2;
+    const cz = (n.z - 0.5) * 2;
     let x1 = cx * Math.cos(rotY) + cz * Math.sin(rotY);
     let z1 = -cx * Math.sin(rotY) + cz * Math.cos(rotY);
     let y2 = cy * Math.cos(rotX) - z1 * Math.sin(rotX);
     let z2 = cy * Math.sin(rotX) + z1 * Math.cos(rotX);
     const half = Math.min(innerWidth, innerHeight) / 2 - 80;
     return { sx: innerWidth / 2 + x1 * half, sy: innerHeight / 2 + y2 * half, depth: z2 };
+  }
+
+  // ── 语义轴选择（变换排列）──
+  let immAxisMode = false;
+  let immAxisX = 0, immAxisY = 2;
+  function val(n, idx) { return (n.sem[idx] || 0); }
+  function immAxisPopulate() {
+    if (!semAnchors.length) return;
+    const sx = document.getElementById('immAxisX');
+    const sy = document.getElementById('immAxisY');
+    const opts = semAnchors.map((a, i) => `<option value="${i}">${a}</option>`).join('');
+    sx.innerHTML = opts; sy.innerHTML = opts;
+    sx.value = immAxisX; sy.value = immAxisY;
+  }
+  function immAxisChanged() {
+    immAxisMode = true;
+    immAxisX = +document.getElementById('immAxisX').value;
+    immAxisY = +document.getElementById('immAxisY').value;
+    immApply();
+  }
+  function immAxisReset() {
+    immAxisMode = false;
+    document.getElementById('immAxisX').value = 0;
+    document.getElementById('immAxisY').value = 2;
+    immApply();
   }
 
   function immRender() {
@@ -1904,18 +1947,11 @@
       immLastX = e.clientX; immLastY = e.clientY;
       immRender();
     } else {
-      const dx = e.clientX - innerWidth / 2, dy = e.clientY - innerHeight / 2;
       let best = -1, bd = 24;
-      const half = Math.min(innerWidth, innerHeight) / 2 - 80;
       nodes.forEach((n, i) => {
         if (!immNodeVisible(n)) return;
-        const cx = (n.x - 0.5) * 2, cy = (n.y - 0.5) * 2, cz = (n.z - 0.5) * 2;
-        let x1 = cx * Math.cos(rotY) + cz * Math.sin(rotY);
-        let z1 = -cx * Math.sin(rotY) + cz * Math.cos(rotY);
-        let y2 = cy * Math.cos(rotX) - z1 * Math.sin(rotX);
-        let z2 = cy * Math.sin(rotX) + z1 * Math.cos(rotX);
-        const sx = innerWidth / 2 + x1 * half, sy = innerHeight / 2 + y2 * half;
-        const d = Math.hypot(sx + 40 - e.clientX, sy + 40 - e.clientY) * (1 + Math.abs(z2) * 0.5);
+        const p = immProject(n);
+        const d = Math.hypot(p.sx + 12 - e.clientX, p.sy + 12 - e.clientY) * (1 + Math.abs(p.depth) * 0.5);
         if (d < bd) { bd = d; best = i; }
       });
       if (best !== immHover) { immHover = best; immRender(); }
@@ -1988,6 +2024,11 @@
   <canvas id="imm-canvas"></canvas>
   <!-- 控制面板 -->
   <div class="imm-panel" id="immPanel">
+    <div class="imm-row imm-row-axes">
+      <label class="imm-ax">X 轴 <select id="immAxisX" onchange="immAxisChanged()"></select></label>
+      <label class="imm-ax">Y 轴 <select id="immAxisY" onchange="immAxisChanged()"></select></label>
+      <span class="imm-clear" onclick="immAxisReset()">↺ 语义坐标</span>
+    </div>
     <div class="imm-row imm-row-inputs">
       <input id="immSearch" type="text" placeholder="作者名…" oninput="immApply()" />
       <button onclick="immHighlight('my')">我的光</button>
