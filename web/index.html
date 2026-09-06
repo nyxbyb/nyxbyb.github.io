@@ -92,6 +92,15 @@
       letter-spacing: 0.3em; margin-bottom: 16px;
       opacity: 0; transform: translateY(30px);
       animation: fadeUp 1s ease forwards;
+      text-align: center; line-height: 1.3;
+    }
+    .section-title .title-en {
+      display: block;
+      font-family: var(--sans);
+      font-size: 0.32em; font-weight: 400;
+      letter-spacing: 0.35em; color: var(--accent-dim);
+      text-transform: uppercase;
+      margin-top: 10px;
     }
 
     .section-sub {
@@ -199,37 +208,108 @@
     }
     .map-legend .l-read i { background: var(--accent); }
     .map-legend .l-unread i { background: var(--star-gray); }
+    .map-legend .l-fav i {
+      background: var(--accent);
+      box-shadow: 0 0 8px var(--accent-glow), 0 0 2px var(--accent);
+    }
+
+    /* 批量标记 */
+    .map-tools { position: absolute; top: 120px; right: 6vw; z-index: 5; }
+    .map-batch-btn {
+      font-family: var(--sans); font-size: 12px; letter-spacing: 0.12em;
+      color: var(--accent-dim); cursor: pointer;
+      border: 1px solid rgba(238,240,245,0.25); border-radius: 20px;
+      padding: 7px 18px; background: rgba(10,11,14,0.5); transition: all 0.3s;
+    }
+    .map-batch-btn:hover { color: var(--accent); border-color: var(--accent); }
+    .batch-panel {
+      position: fixed; inset: 0; z-index: 300; display: none;
+      flex-direction: column; background: rgba(5,6,8,0.96);
+      backdrop-filter: blur(6px); padding: 24px 5vw;
+    }
+    .batch-panel.open { display: flex; }
+    .batch-panel-head {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 18px;
+    }
+    .batch-panel-head h3 {
+      font-size: 22px; color: var(--accent); font-weight: 600;
+      letter-spacing: 0.25em;
+    }
+    .batch-close {
+      font-size: 28px; color: var(--ink-dim); cursor: pointer; line-height: 1;
+    }
+    .batch-close:hover { color: var(--accent); }
+    .batch-filters { margin-bottom: 16px; display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+    #batchSearch {
+      flex: 1; min-width: 220px;
+      background: rgba(14,18,28,0.7); border: 1px solid rgba(238,240,245,0.18);
+      color: var(--ink); font-family: inherit; padding: 10px 16px;
+      border-radius: 10px; font-size: 14px; letter-spacing: 0.05em;
+    }
+    #batchSearch:focus { outline: none; border-color: var(--accent); }
+    .batch-filter-chips { display: flex; gap: 8px; }
+    .chip {
+      font-family: var(--sans); font-size: 11px; letter-spacing: 0.12em;
+      color: var(--ink-dim); cursor: pointer;
+      border: 1px solid rgba(238,240,245,0.18); border-radius: 16px;
+      padding: 4px 12px; transition: all 0.25s;
+    }
+    .chip.active { color: var(--accent); border-color: var(--accent); background: rgba(238,240,245,0.06); }
+    .batch-list {
+      flex: 1; overflow-y: auto; padding-right: 8px;
+    }
+    .batch-list::-webkit-scrollbar { width: 6px; }
+    .batch-list::-webkit-scrollbar-thumb { background: rgba(238,240,245,0.15); border-radius: 3px; }
+    .batch-item {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 10px 14px; border-bottom: 1px solid rgba(238,240,245,0.07);
+      transition: background 0.2s;
+    }
+    .batch-item:hover { background: rgba(238,240,245,0.03); }
+    .batch-item .bi-title { font-size: 14px; color: var(--ink); letter-spacing: 0.04em; }
+    .batch-item .bi-author { font-size: 11px; color: var(--ink-dim); margin-top: 2px; }
+    .batch-item .bi-acts { display: flex; gap: 6px; }
+    .batch-item .bi-acts button {
+      font-family: var(--sans); font-size: 11px; letter-spacing: 0.1em;
+      color: var(--ink-dim); background: transparent;
+      border: 1px solid rgba(238,240,245,0.15); border-radius: 14px;
+      padding: 3px 10px; cursor: pointer; transition: all 0.25s;
+    }
+    .batch-item .bi-acts button:hover { color: var(--accent); border-color: var(--accent); }
+    .batch-item .bi-acts button.on { color: var(--accent); border-color: var(--accent); background: rgba(238,240,245,0.08); }
 
     /* ========== 第3屏：星域 ========== */
     #sec-domain { background: var(--bg); }
     .domain-grid {
       display: grid; grid-template-columns: repeat(2, 1fr);
-      gap: 24px; max-width: 900px; width: 100%;
+      gap: 18px; max-width: 860px; width: 100%;
     }
     .domain-card {
-      border: 1px solid rgba(238, 240, 245, 0.12);
-      border-radius: 12px; padding: 28px 32px;
+      border: 1px solid rgba(238,240,245,0.12);
+      border-radius: 12px; padding: 20px 26px;
       background: rgba(10, 14, 22, 0.6);
       backdrop-filter: blur(4px);
       transition: all 0.4s ease; cursor: pointer;
+      height: fit-content;
     }
     .domain-card:hover {
-      border-color: rgba(238, 240, 245, 0.35);
+      border-color: rgba(238,240,245,0.35);
       background: rgba(14, 18, 28, 0.8);
       transform: translateY(-2px);
     }
     .domain-card h3 {
-      font-size: 18px; color: var(--accent); font-weight: 600;
-      letter-spacing: 0.15em; margin-bottom: 8px;
+      font-size: 17px; color: var(--accent); font-weight: 600;
+      letter-spacing: 0.15em; margin-bottom: 6px;
     }
     .domain-card p {
-      font-size: 13px; color: var(--ink-dim); line-height: 1.8;
+      font-size: 12.5px; color: var(--ink-dim); line-height: 1.65;
       letter-spacing: 0.05em;
     }
     .domain-card .domain-en {
-      font-size: 11px; color: rgba(214,216,224,0.3);
+      font-size: 10px; color: rgba(232,234,240,0.3);
       letter-spacing: 0.2em; text-transform: uppercase;
-      margin-top: 12px;
+      margin-top: 8px;
     }
 
     /* ========== 第4屏：拓星 ========== */
@@ -301,6 +381,37 @@
     .lang-toggle:hover { color: var(--accent); border-color: var(--accent); }
     .lang-toggle.active { color: var(--accent); border-color: var(--accent); }
 
+    .frontier-tags {
+      display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+      margin-bottom: 36px;
+    }
+    .frontier-tags span {
+      font-family: var(--sans);
+      font-size: 10px; letter-spacing: 0.18em; color: var(--accent-dim);
+      border: 1px solid rgba(238,240,245,0.2);
+      padding: 5px 14px; border-radius: 20px;
+    }
+    .frontier-more {
+      margin-top: 28px;
+      font-family: var(--sans);
+      font-size: 12px; letter-spacing: 0.15em;
+      color: var(--accent-dim); text-decoration: none;
+      border-bottom: 1px solid rgba(238,240,245,0.3);
+      padding-bottom: 3px; transition: all 0.3s;
+    }
+    .frontier-more:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+    /* 第5屏：理念 */
+    #sec-vision { background: var(--bg); }
+    .vision-quote {
+      max-width: 620px; text-align: center;
+      font-size: 18px; color: var(--ink); line-height: 2.3;
+      letter-spacing: 0.08em; font-weight: 300;
+    }
+    .vision-quote b {
+      color: var(--accent); font-weight: 600;
+    }
+
     /* ========== 响应式 ========== */
     @media (max-width: 768px) {
       .nav { left: 12px; gap: 24px; }
@@ -323,7 +434,8 @@
   <div class="nav-dot" data-label="星图" onclick="goTo(1)"></div>
   <div class="nav-dot" data-label="星域" onclick="goTo(2)"></div>
   <div class="nav-dot" data-label="拓星" onclick="goTo(3)"></div>
-  <div class="nav-dot" data-label="跋" onclick="goTo(4)"></div>
+  <div class="nav-dot" data-label="理念" onclick="goTo(4)"></div>
+  <div class="nav-dot" data-label="跋" onclick="goTo(5)"></div>
 </nav>
 
 <!-- ═══════════ 第 1 屏：序 · 个人名片 ═══════════ -->
@@ -332,23 +444,10 @@
     <div class="intro-symbol" data-i18n="introSymbol">凿 星 图 · C A E L U M</div>
 
     <div class="name-cn">保昱冰</div>
-    <div class="name-en">YUBING BAO · NYXBYB</div>
+    <div class="name-en">YUBING BAO</div>
 
-    <div class="name-zi">字 <span class="zi-char">坚心</span>
+    <div class="name-zi">字 <span class="zi-char" data-i18n="ziChar">坚心</span>
       <span class="zi-source" data-i18n="introZi">—— 取自《周易》「贞」，取义：正固 · 卜问 · 坚定</span>
-    </div>
-
-    <p class="intro-poem" data-i18n="introPoem">
-      名中含「昱」——日光；「冰」——冰雪。光与寒并存，在黑夜中自行发光。我名夜神 Nyx。
-    </p>
-
-    <div class="intro-bio">
-      <p class="bio-zh" data-i18n="introBioZh">计算机科学博士研究生，复旦大学。研究 LLM 系统、并行计算与类脑计算。我相信「为学日益」——而学习的方法，是从一张诚实的星图开始。</p>
-      <p class="bio-en" data-i18n="introBioEn">PhD in Computer Science · Fudan University. LLM Systems · Parallel Computing · Brain-inspired Computing. I believe in understanding — and the way to learn is to begin with an honest star map.</p>
-    </div>
-
-    <div class="intro-tags" data-i18n="introTags">
-      <span>LLM SYSTEM</span><span>PARALLEL COMPUTING</span><span>BRAIN-INSPIRED COMPUTING</span>
     </div>
   </div>
   <div class="intro-hint" data-i18n="introHint">向下滚动</div>
@@ -356,12 +455,16 @@
 
 <!-- ═══════════ 第 2 屏：星图 ═══════════ -->
 <section id="sec-map">
-  <h2 class="section-title" data-i18n="mapTitle">星 图</h2>
+  <h2 class="section-title"><span>星 图</span><span class="title-en">The Starchart</span></h2>
   <p class="section-sub" data-i18n="mapSub">我读过的书，写过的文字，发表的论文</p>
+  <div class="map-tools">
+    <span class="map-batch-btn" onclick="openBatchPanel()">📋 <span data-i18n="batchBtn">批量标记</span></span>
+  </div>
   <div class="map-wrap">
     <canvas id="map-canvas"></canvas>
   </div>
   <div class="map-legend">
+    <span class="l-fav"><i></i><span data-i18n="legendFav">喜爱</span></span>
     <span class="l-read"><i></i><span data-i18n="legendRead">已读</span></span>
     <span class="l-unread"><i></i><span data-i18n="legendUnread">未读</span></span>
   </div>
@@ -369,7 +472,7 @@
 
 <!-- ═══════════ 第 3 屏：星域 ═══════════ -->
 <section id="sec-domain">
-  <h2 class="section-title" data-i18n="domainTitle">星 域</h2>
+  <h2 class="section-title"><span>星 域</span><span class="title-en">The Domains</span></h2>
   <p class="section-sub" data-i18n="domainSub">我眼中的人类知识疆域</p>
   <div class="domain-grid">
     <div class="domain-card">
@@ -397,80 +500,60 @@
 
 <!-- ═══════════ 第 4 屏：拓星 ═══════════ -->
 <section id="sec-frontier">
-  <h2 class="section-title" data-i18n="frontierTitle">拓 星</h2>
-  <p class="section-sub" data-i18n="frontierSub">为世界生成新的知识 · Forging new knowledge for the world</p>
+  <h2 class="section-title"><span>拓 星</span><span class="title-en">The Frontier</span></h2>
+  <p class="section-sub" data-i18n="frontierSub">为世界生成新的知识 · 我的研究</p>
+
+  <!-- 研究方向 -->
+  <div class="frontier-tags">
+    <span>LLM SYSTEMS</span><span>PARALLEL COMPUTING</span><span>BRAIN-INSPIRED COMPUTING</span>
+  </div>
+
+  <!-- 代表作（第一作者） -->
   <div class="frontier-list">
-    <!-- 9 篇论文（Google Scholar）: 按年份倒序 -->
     <a class="frontier-item" href="https://scholar.google.com/citations?user=YubingBao" target="_blank" rel="noopener">
       <div>
-        <div class="fi-title">N-GLARE: A Non-Generative Latent Representation-Efficient LLM Safety Evaluator</div>
-        <div class="fi-meta">ACL 2026 · Z Lin, J Yang, Y Qiu, <em>Y Bao</em>, H Guo, Y Guan</div>
+        <div class="fi-title" data-i18n="rep1t">TPipe：脉冲 Transformer 训练的时间并行与异步流水</div>
+        <div class="fi-meta">INFOCOM 2026 · 第一作者</div>
       </div>
-      <div class="fi-badge">ACL</div>
+      <div class="fi-badge">★ 一作</div>
     </a>
     <a class="frontier-item" href="https://scholar.google.com/citations?user=YubingBao" target="_blank" rel="noopener">
       <div>
-        <div class="fi-title">TimeLiteNet: Empowering Pre-training-Free Small-Sample State-of-Health Prediction of Lithium-Ion Batteries</div>
-        <div class="fi-meta">IEEE TTE 2026 · Y Tan, C Ma, <em>Y Bao</em>, Y Qi</div>
+        <div class="fi-title" data-i18n="rep2t">BMapper：天河超算上的脑模拟加速框架</div>
+        <div class="fi-meta">ICPP 2025 · 第一作者</div>
       </div>
-      <div class="fi-badge">TTE</div>
+      <div class="fi-badge">★ 一作</div>
     </a>
     <a class="frontier-item" href="https://scholar.google.com/citations?user=YubingBao" target="_blank" rel="noopener">
       <div>
-        <div class="fi-title">TPipe: Efficient Spiking Transformer Training with Time Parallelism and Asynchronous Pipeline</div>
-        <div class="fi-meta">INFOCOM 2026 · <em>Y Bao</em>, Z Lu, Q Duan, C Lv, X Du, Z Deng, J Feng, S Liu, Y Chen, X Wang</div>
+        <div class="fi-title" data-i18n="rep3t">口令安全中的领域词效应</div>
+        <div class="fi-meta">ACM TOPS 2024 · 第一作者</div>
       </div>
-      <div class="fi-badge">INFOCOM</div>
-    </a>
-    <a class="frontier-item" href="https://scholar.google.com/citations?user=YubingBao" target="_blank" rel="noopener">
-      <div>
-        <div class="fi-title">Uifv: Data Reconstruction Attack in Vertical Federated Learning</div>
-        <div class="fi-meta">ICWS 2026 · J Yang, P Chen, Z Lu, Q Duan, <em>Y Bao</em></div>
-      </div>
-      <div class="fi-badge">ICWS</div>
-    </a>
-    <a class="frontier-item" href="https://scholar.google.com/citations?user=YubingBao" target="_blank" rel="noopener">
-      <div>
-        <div class="fi-title">BMapper: A Scalable and Efficient Framework for Brain Simulations Acceleration on Supercomputers</div>
-        <div class="fi-meta">ICPP 2025 · <em>Y Bao</em>, Z Lu, Q Duan, X Du, Z Chen, ...</div>
-      </div>
-      <div class="fi-badge">ICPP</div>
-    </a>
-    <a class="frontier-item" href="https://scholar.google.com/citations?user=YubingBao" target="_blank" rel="noopener">
-      <div>
-        <div class="fi-title">Efficient Joint Communication and Computation Placement for Large-scale SNN Simulation on Supercomputers</div>
-        <div class="fi-meta">ICDCS 2025 · <em>Y Bao</em>, Z Lu, X Du, Q Duan, J Yang, ...</div>
-      </div>
-      <div class="fi-badge">ICDCS</div>
-    </a>
-    <a class="frontier-item" href="https://scholar.google.com/citations?user=YubingBao" target="_blank" rel="noopener">
-      <div>
-        <div class="fi-title">Simulation and Assimilation of the Digital Human Brain</div>
-        <div class="fi-meta">Nature Computational Science 4 (12), 890-898, 2024 · W Lu, X Du, J Wang, L Zeng, ...</div>
-      </div>
-      <div class="fi-badge">NAT · CS</div>
-    </a>
-    <a class="frontier-item" href="https://scholar.google.com/citations?user=YubingBao" target="_blank" rel="noopener">
-      <div>
-        <div class="fi-title">The Effect of Domain Terms on Password Security</div>
-        <div class="fi-meta">ACM TOPS 28 (1), 2024 · <em>Y Bao</em>, J Zeng, J Yang, R Yang, Z Lu</div>
-      </div>
-      <div class="fi-badge">TOPS</div>
-    </a>
-    <a class="frontier-item" href="https://scholar.google.com/citations?user=YubingBao" target="_blank" rel="noopener">
-      <div>
-        <div class="fi-title">Mitigating Critical Nodes in Brain Simulations via Edge Removal</div>
-        <div class="fi-meta">Computer Networks 255, 110860, 2024 · <em>Y Bao</em>, X Du, Z Lu, J Yang, SC Huang, J Feng, Q Zheng</div>
-      </div>
-      <div class="fi-badge">CN</div>
+      <div class="fi-badge">★ 一作</div>
     </a>
   </div>
+
+  <a class="frontier-more" href="https://scholar.google.com/citations?user=YubingBao" target="_blank">
+    <span data-i18n="frontierMore">查看完整学术履历</span>
+    &nbsp;→ GOOGLE SCHOLAR
+  </a>
 </section>
-    </div>
+
+<!-- ═══════════ 第 5 屏：理念 ═══════════ -->
+<section id="sec-vision">
+  <h2 class="section-title"><span>理 念</span><span class="title-en">The Vision</span></h2>
+  <p class="section-sub" data-i18n="visionSub">我为何作此星图 · 我的野心</p>
+  <div class="vision-quote" data-i18n="visionQuote">
+    我学习人类所有知识，<br>
+    不是因为博闻强识，<br>
+    而是因为我相信——<br>
+    数学、文学、历史、中医、物理、哲学……<br>
+    <b>各学科的底子，本是相通的。</b><br><br>
+    我要找到一种语言或方法，证明它们相通。
   </div>
 </section>
 
-<!-- ═══════════ 第 5 屏：跋 ═══════════ -->
+<!-- ═══════════ 第 6 屏：跋 ═══════════ -->
 <section id="sec-about">
   <div class="about-inner">
     <div class="about-quote" data-i18n="aboutQuote">
@@ -517,8 +600,19 @@
     introHint: { zh: "向下滚动", en: "Scroll down" },
     mapTitle: { zh: "星 图", en: "THE STARCHART" },
     mapSub: { zh: "我读过的书，写过的文字，发表的论文", en: "What I have read, written, and published" },
+    legendFav: { zh: "喜爱", en: "Loved" },
     legendRead: { zh: "已读", en: "Read" },
     legendUnread: { zh: "未读", en: "Unread" },
+    batchBtn: { zh: "批量标记", en: "Batch Mark" },
+    batchTitle: { zh: "批量标记", en: "Batch Mark" },
+    batchSearchPh: { zh: "搜索书名 / 作者…", en: "Search title / author…" },
+    frontierMore: { zh: "查看完整学术履历", en: "See full academic record" },
+    visionSub: { zh: "我为何作此星图 · 我的野心", en: "Why this star chart · My ambition" },
+    visionQuote: { zh: "我学习人类所有知识，不是因为博闻强识，而是因为我相信——数学、文学、历史、中医、物理、哲学……<b>各学科的底子，本是相通的。</b>我要找到一种语言或方法，证明它们相通。", en: "I study all human knowledge not for erudition, but because I believe — mathematics, literature, history, Chinese medicine, physics, philosophy… <b>their foundations are one.</b> I want to find a language or method that proves them connected." },
+    rep1t: { zh: "TPipe：脉冲 Transformer 训练的时间并行与异步流水", en: "TPipe: Efficient Spiking Transformer Training" },
+    rep2t: { zh: "BMapper：天河超算上的脑模拟加速框架", en: "BMapper: Brain Simulation Acceleration on Supercomputers" },
+    rep3t: { zh: "口令安全中的领域词效应", en: "The Effect of Domain Terms on Password Security" },
+    introPoem: { zh: "名中含「昱」——日光；「冰」——冰雪。光与寒并存，在黑夜中自行发光。我名夜神 Nyx。", en: "Yu — sunlight; Bing — ice. Light and cold together, shining of its own accord in the dark. My name is Nyx." },
     domainTitle: { zh: "星 域", en: "THE CONSTELLATIONS" },
     domainSub: { zh: "我眼中的人类知识疆域", en: "How I divide the map of human knowledge" },
     dom1t: { zh: "形式科学", en: "Formal Sciences" },
@@ -601,11 +695,35 @@
         status: Math.random() > 0.7 ? 'read' : 'unread'
       }));
     }
-    // 从 localStorage 恢复已读标记（与线上版一致：光斑只在你的浏览器里）
-    let readSet = new Set();
-    try { readSet = new Set(JSON.parse(localStorage.getItem('caelum_read') || '[]')); } catch {}
-    nodes.forEach(n => { if (readSet.has(n.title)) n.status = 'read'; });
+    // 从 localStorage 恢复三态标记（喜爱/已读/未读，只在你的浏览器里）
+    // 兼容旧版单一已读集合
+    marks = {};
+    try {
+      const m = JSON.parse(localStorage.getItem('caelum_marks') || '{}');
+      if (m && typeof m === 'object') marks = m;
+    } catch {}
+    try {
+      const oldRead = JSON.parse(localStorage.getItem('caelum_read') || '[]');
+      if (Array.isArray(oldRead)) oldRead.forEach(t => { if (!marks[t]) marks[t] = 'read'; });
+    } catch {}
+    nodes.forEach(n => {
+      n.status = marks[n.title] || 'unread';
+    });
     drawStars();
+  }
+
+  // 三态标记存取
+  let marks = {};
+  function saveMarks() {
+    try { localStorage.setItem('caelum_marks', JSON.stringify(marks)); } catch {}
+  }
+  function markNode(n, st) {
+    if (st === 'unread') delete marks[n.title];
+    else marks[n.title] = st;
+    n.status = st;
+    saveMarks();
+    drawStars();
+    renderBatchList();
   }
 
   // ─── 三维旋转状态 ───
@@ -703,15 +821,18 @@
     const pts = nodes.map((n, i) => ({ n, i, p: project3d(n, center, half) }));
     pts.sort((a, b) => a.p.depth - b.p.depth); // 远 → 近
 
-    // 先画已读光晕
+    // 先画喜爱/已读光晕（喜爱更亮）
     pts.forEach(({ n, p }) => {
-      if (n.status === 'read') {
-        const g = ctx.createRadialGradient(p.sx, p.sy, 0, p.sx, p.sy, 26);
-        g.addColorStop(0, 'rgba(238,240,245,0.22)');
+      const isFav = n.status === 'fav';
+      if (n.status === 'read' || isFav) {
+        const R = isFav ? 34 : 26;
+        const A = isFav ? 0.38 : 0.2;
+        const g = ctx.createRadialGradient(p.sx, p.sy, 0, p.sx, p.sy, R);
+        g.addColorStop(0, `rgba(238,240,245,${A})`);
         g.addColorStop(1, 'rgba(238,240,245,0)');
         ctx.fillStyle = g;
         ctx.beginPath();
-        ctx.arc(p.sx, p.sy, 26, 0, Math.PI * 2);
+        ctx.arc(p.sx, p.sy, R, 0, Math.PI * 2);
         ctx.fill();
       }
     });
@@ -720,11 +841,14 @@
     pts.forEach(({ n, p, i }) => {
       const depthFactor = 1 / (1 + Math.abs(p.depth) * 0.35);
       const isHover = i === hoverIdx;
-      const r = (n.status === 'read' ? 4.2 : 3.1) * depthFactor * (isHover ? 1.5 : 1);
-      if (n.status === 'read') {
-        ctx.fillStyle = 'rgba(238,240,245,0.92)';
+      const base = n.status === 'fav' ? 5 : n.status === 'read' ? 4.2 : 3.1;
+      const r = base * depthFactor * (isHover ? 1.5 : 1);
+      if (n.status === 'fav') {
+        ctx.fillStyle = 'rgba(255,255,255,1)';
+      } else if (n.status === 'read') {
+        ctx.fillStyle = 'rgba(238,240,245,0.85)';
       } else {
-        const a = 0.32 + 0.4 * depthFactor;
+        const a = 0.3 + 0.4 * depthFactor;
         ctx.fillStyle = `rgba(58,66,87,${a})`;
       }
       ctx.beginPath();
@@ -756,7 +880,7 @@
   }
 
   function drawAxisLuminance() {
-    const reads = nodes.filter(n => n.status === 'read').length;
+    const reads = nodes.filter(n => n.status === 'read' || n.status === 'fav').length;
     const bw = 26, gap = 12;
     const totalW = (bw + gap) * 3 - gap;
     const x0 = W / 2 - totalW / 2;
@@ -775,7 +899,7 @@
       if (reads > 0) {
         let pos = 0;
         nodes.forEach(n => {
-          if (n.status === 'read') {
+          if (n.status === 'read' || n.status === 'fav') {
             const v = (ax === 'X' ? n.x : ax === 'Y' ? n.y : n.z ?? 0.5);
             if (v >= 0.5) pos++;
           }
@@ -800,8 +924,60 @@
     if (!reads) {
       ctx.fillStyle = 'rgba(238,240,245,0.3)';
       ctx.font = "11px 'Noto Serif SC', serif";
-      ctx.fillText('标记已读后，此处显现你在各轴上的光', W / 2, y + 48);
+      ctx.fillText('标记喜爱/已读后，此处显现你在各轴上的光', W / 2, y + 48);
     }
+  }
+
+  // ─── 批量标记面板 ───
+  let batchFilter = 'all';
+  const STATUS_ZH = { fav: '喜爱', read: '已读', unread: '未读' };
+
+  function openBatchPanel() {
+    document.getElementById('batchPanel').classList.add('open');
+    renderBatchList();
+  }
+  function closeBatchPanel() {
+    document.getElementById('batchPanel').classList.remove('open');
+  }
+  function setFilter(f, el) {
+    batchFilter = f;
+    document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    renderBatchList();
+  }
+  function renderBatchList() {
+    const list = document.getElementById('batchList');
+    if (!list) return;
+    const q = (document.getElementById('batchSearch')?.value || '').trim().toLowerCase();
+    const box = document.getElementById('batchPanel');
+    // 面板关闭时跳过渲染（但需要仍在 DOM）
+    let filtered = nodes;
+    if (batchFilter !== 'all') filtered = filtered.filter(n => n.status === batchFilter);
+    if (q) filtered = filtered.filter(n => (n.title + (n.author||'')).toLowerCase().includes(q));
+    const frag = document.createDocumentFragment();
+    filtered.forEach((n, ri) => {
+      const item = document.createElement('div');
+      item.className = 'batch-item';
+      const title = document.createElement('div');
+      title.innerHTML = `<div class="bi-title">${n.title}</div><div class="bi-author">${n.author || ''}</div>`;
+      const acts = document.createElement('div');
+      acts.className = 'bi-acts';
+      const st = n.status || 'unread';
+      [['fav','喜'],['read','读'],['unread','未']].forEach(([k, label]) => {
+        const b = document.createElement('button');
+        b.textContent = label;
+        if (st === k) b.classList.add('on');
+        b.onclick = () => markNode(n, k);
+        acts.appendChild(b);
+      });
+      item.appendChild(title);
+      item.appendChild(acts);
+      frag.appendChild(item);
+      void ri;
+    });
+    list.innerHTML = '';
+    list.appendChild(frag);
+    if (!filtered.length) list.innerHTML = '<div class="bi-title" style="padding:20px;color:var(--ink-dim)">（无）</div>';
   }
 
   // ─── 画布交互：拖拽旋转 · 悬停 · 点击标记已读 ───
@@ -848,11 +1024,9 @@
       const idx = hitTest(x, y);
       if (idx >= 0 && nodes[idx]) {
         const n = nodes[idx];
-        n.status = n.status === 'read' ? 'unread' : 'read';
-        let readSet = new Set();
-        try { readSet = new Set(JSON.parse(localStorage.getItem('caelum_read') || '[]')); } catch {}
-        if (n.status === 'read') readSet.add(n.title); else readSet.delete(n.title);
-        localStorage.setItem('caelum_read', JSON.stringify([...readSet]));
+        // 点击循环三态：未读 → 已读 → 喜爱 → 未读
+        const cycle = { unread: 'read', read: 'fav', fav: 'unread' };
+        markNode(n, cycle[n.status] || 'read');
         hoverIdx = idx; drawStars();
       }
     }
@@ -864,6 +1038,24 @@
   resize();
   loadStars();
 </script>
+
+<!-- 批量标记面板 -->
+<div class="batch-panel" id="batchPanel">
+  <div class="batch-panel-head">
+    <h3 data-i18n="batchTitle">批量标记</h3>
+    <div class="batch-close" onclick="closeBatchPanel()">×</div>
+  </div>
+  <div class="batch-filters">
+    <input id="batchSearch" type="text" placeholder="搜索书名 / 作者…" oninput="renderBatchList()" />
+    <div class="batch-filter-chips">
+      <span class="chip active" data-f="all" onclick="setFilter('all', this)">全部</span>
+      <span class="chip" data-f="fav" onclick="setFilter('fav', this)">喜爱</span>
+      <span class="chip" data-f="read" onclick="setFilter('read', this)">已读</span>
+      <span class="chip" data-f="unread" onclick="setFilter('unread', this)">未读</span>
+    </div>
+  </div>
+  <div class="batch-list" id="batchList"></div>
+</div>
 
 </body>
 </html>
