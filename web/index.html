@@ -697,10 +697,17 @@
     .imm-close { font-size: 28px; color: var(--ink-dim); cursor: pointer; line-height: 1; }
     .imm-close:hover { color: var(--accent); }
     .imm-panel {
-      position: absolute; left: 6vw; bottom: 28px; right: 6vw; z-index: 10;
-      display: flex; flex-direction: column; gap: 10px;
-      background: rgba(8,10,18,0.85); border: 1px solid rgba(238,240,245,0.12);
-      border-radius: 14px; padding: 16px 20px; backdrop-filter: blur(6px);
+      position: absolute; right: 24px; top: 90px; bottom: 24px; width: 300px;
+      z-index: 10; display: flex; flex-direction: column; gap: 12px;
+      background: rgba(8,10,18,0.88); border: 1px solid rgba(238,240,245,0.12);
+      border-radius: 14px; padding: 18px 20px; backdrop-filter: blur(6px);
+      overflow-y: auto;
+    }
+    /* 左侧屏幕全部让给星图：画布隐式已全屏，面板只占右侧 */
+    .imm-head {
+      position: absolute; top: 0; right: 0; left: 0; z-index: 10;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 18px 6vw; background: linear-gradient(rgba(4,5,10,0.9), transparent);
     }
     .imm-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
     .imm-row-axes { justify-content: center; gap: 16px; }
@@ -1354,7 +1361,7 @@
       return;
     }
     // 分类顺序: 随笔 > 日记 > 其他
-    const order = ['随笔', '日记'];
+    const order = ['随笔', '读书笔记', '日记'];
     const cats = {};
     arts.forEach(a => { (cats[a.category || '其他'] = cats[a.category || '其他'] || []).push(a); });
     // 每个分类按日期倒序（无日期排后）
@@ -1364,7 +1371,7 @@
     const keys = Object.keys(cats).sort((a, b) => (order.indexOf(a) - order.indexOf(b)) || (order.indexOf(a) === -1 ? -1 : 0));
     wrap.innerHTML = '';
     keys.forEach(cat => {
-      const titleMap = { 随笔: ['随笔', 'Prose'], 日记: ['日记', 'Journal'], 其他: ['篇章', 'Other'] };
+      const titleMap = { 随笔: ['随笔', 'Prose'], 日记: ['日记', 'Journal'], 读书笔记: ['读书笔记', 'Reading Notes'], 其他: ['篇章', 'Other'] };
       const [zh, en] = titleMap[cat] || [cat, 'More'];
       const list = cats[cat];
       const shown = list.slice(0, ESSAY_PREVIEW);
@@ -1780,11 +1787,43 @@
     document.getElementById('immerse').classList.add('open');
     imm = document.getElementById('imm-canvas');
     immCtx = imm.getContext('2d');
+    immBound();
     immResize();
     immAxisPopulate();
     immApply();
     renderSuggest();
   }
+  // 沉浸式画布事件绑定（openImmersive 时执行，确保 canvas 已存在）
+  let immEventBound = false;
+  function immBound() {
+    if (immEventBound) return;
+    immEventBound = true;
+    imm.addEventListener('mousedown', (e) => { immDrag = true; immLastX = e.clientX; immLastY = e.clientY; });
+    window.addEventListener('mousemove', (e) => {
+      if (!document.getElementById('immerse').classList.contains('open')) return;
+      if (immDrag) {
+        rotY += (e.clientX - immLastX) * 0.008;
+        rotX += (e.clientY - immLastY) * 0.008;
+        rotX = Math.max(-1.4, Math.min(1.4, rotX));
+        immLastX = e.clientX; immLastY = e.clientY;
+        immRender();
+      } else {
+        let best = -1, bd = 24;
+        nodes.forEach((n, i) => {
+          if (!immNodeVisible(n)) return;
+          const p = immProject(n);
+          const d = Math.hypot(p.sx + 12 - e.clientX, p.sy + 12 - e.clientY) * (1 + Math.abs(p.depth) * 0.5);
+          if (d < bd) { bd = d; best = i; }
+        });
+        if (best !== immHover) { immHover = best; immRender(); }
+      }
+    });
+    window.addEventListener('mouseup', () => { if (immDrag) immDrag = false; });
+    window.addEventListener('resize', () => {
+      if (document.getElementById('immerse').classList.contains('open')) { immResize(); immRender(); }
+    });
+  }
+
   function closeImmersive() { document.getElementById('immerse').classList.remove('open'); }
   function immResize() {
     const d = window.devicePixelRatio || 1;
@@ -1836,6 +1875,10 @@
     document.getElementById('immAxisY').value = 2;
     immApply();
   }
+  function immSortReset() {
+    document.getElementById('immSort').value = 'none';
+    immApply();
+  }
 
   function immRender() {
     immCtx.clearRect(0, 0, innerWidth, innerHeight);
@@ -1859,14 +1902,25 @@
         immCtx.fillStyle = g; immCtx.beginPath(); immCtx.arc(p.sx, p.sy, R, 0, Math.PI * 2); immCtx.fill();
       }
     });
-    // 节点
+    // 节点（含"影响力"缩放：按阅读时长/评分）
+    const immSortMode = document.getElementById('immSort')?.value || 'none';
+    let immMaxD = 1, immMaxR = 1;
+    if (immSortMode === 'duration') {
+      immMaxD = Math.max(1, ...nodes.map(n => n.wechat ? n.wechat.duration_min || 0 : 0));
+    } else if (immSortMode === 'rating') {
+      immMaxR = Math.max(1, ...nodes.map(n => n.douban_rating || n.rating || 0));
+    }
     vis.forEach(({ n, p, i }) => {
+      let infl = 0;
+      if (immSortMode === 'duration' && n.wechat && n.wechat.duration_min) infl = n.wechat.duration_min / immMaxD;
+      else if (immSortMode === 'rating' && (n.douban_rating || n.rating)) infl = (n.douban_rating || n.rating) / immMaxR;
       const highlighted = immFilter === 'author' && (n.author || '').includes(immAuthor);
       const depthF = 1 / (1 + Math.abs(p.depth) * 0.35);
       let r, col;
-      if (highlighted) { r = 6.5 * depthF; col = '255,255,255'; }
-      else if (n.status === 'fav') { r = 5 * depthF; col = '255,255,255'; }
-      else if (n.status === 'read') { r = 4.2 * depthF; col = '238,240,245'; }
+      const inflBoost = 1 + infl * 3.2;  // 影响越大越亮越大
+      if (highlighted) { r = 6.5 * depthF * inflBoost; col = '255,255,255'; }
+      else if (n.status === 'fav') { r = 5 * depthF * inflBoost; col = '255,255,255'; }
+      else if (n.status === 'read') { r = 4.2 * depthF * inflBoost; col = '238,240,245'; }
       else { r = 3.4 * depthF; col = '58,66,87'; }
       const a = highlighted ? 1 : n.status === 'read' || n.status === 'fav' ? 0.9 : 0.32 + 0.4 * depthF;
       immCtx.fillStyle = `rgba(${col},${a})`;
@@ -1935,35 +1989,6 @@
     immApply();
   }
 
-  // 沉浸式画布交互
-  imm = document.getElementById('imm-canvas');
-  imm && imm.addEventListener('mousedown', (e) => { immDrag = true; immLastX = e.clientX; immLastY = e.clientY; });
-  window.addEventListener('mousemove', (e) => {
-    if (!document.getElementById('immerse').classList.contains('open')) return;
-    if (immDrag) {
-      rotY += (e.clientX - immLastX) * 0.008;
-      rotX += (e.clientY - immLastY) * 0.008;
-      rotX = Math.max(-1.4, Math.min(1.4, rotX));
-      immLastX = e.clientX; immLastY = e.clientY;
-      immRender();
-    } else {
-      let best = -1, bd = 24;
-      nodes.forEach((n, i) => {
-        if (!immNodeVisible(n)) return;
-        const p = immProject(n);
-        const d = Math.hypot(p.sx + 12 - e.clientX, p.sy + 12 - e.clientY) * (1 + Math.abs(p.depth) * 0.5);
-        if (d < bd) { bd = d; best = i; }
-      });
-      if (best !== immHover) { immHover = best; immRender(); }
-    }
-  });
-  window.addEventListener('mouseup', (e) => {
-    if (immDrag) immDrag = false;
-  });
-  window.addEventListener('resize', () => {
-    if (document.getElementById('immerse').classList.contains('open')) { immResize(); immRender(); }
-  });
-
   window.addEventListener('resize', () => { resize(); drawStars(); });
 
   // 初始化
@@ -2028,6 +2053,15 @@
       <label class="imm-ax">X 轴 <select id="immAxisX" onchange="immAxisChanged()"></select></label>
       <label class="imm-ax">Y 轴 <select id="immAxisY" onchange="immAxisChanged()"></select></label>
       <span class="imm-clear" onclick="immAxisReset()">↺ 语义坐标</span>
+    </div>
+    <div class="imm-row imm-row-axes">
+      <label class="imm-ax">排序 <select id="immSort" onchange="immApply()">
+        <option value="none">默认</option>
+        <option value="duration">阅读时长</option>
+        <option value="rating">豆瓣评分</option>
+        <option value="year">书名</option>
+      </select></label>
+      <span class="imm-clear" onclick="immSortReset()">↺ 默认</span>
     </div>
     <div class="imm-row imm-row-inputs">
       <input id="immSearch" type="text" placeholder="作者名…" oninput="immApply()" />

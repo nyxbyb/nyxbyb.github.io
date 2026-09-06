@@ -38,7 +38,7 @@ def parse(h):
 
 def main():
     cats = {}
-    for fn in ["随笔.md","日记.md","社会作用量极值原理.md"]:
+    for fn in ["随笔.md","日记.md","读书笔记.md","社会作用量极值原理.md"]:
         p = os.path.join(src, fn)
         if os.path.exists(p):
             cats[fn.replace('.md','')] = links(p)
