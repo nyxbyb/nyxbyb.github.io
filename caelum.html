@@ -637,6 +637,17 @@
     .essay-item .ei-title { font-size: 14.5px; color: var(--ink); letter-spacing: 0.04em; line-height: 1.5; }
     .essay-item:hover .ei-title { color: var(--accent); }
     .essay-item .ei-desc { font-size: 12px; color: var(--ink-dim); margin-top: 5px; line-height: 1.6; }
+    .essay-item .ei-date {
+      font-size: 11px; color: rgba(238,240,245,0.35); margin-top: 3px;
+      font-family: var(--serif-en); font-style: italic; letter-spacing: 0.1em;
+    }
+    .essay-more {
+      margin: 8px 0 4px; font-size: 12px; color: var(--accent-dim);
+      cursor: pointer; letter-spacing: 0.12em; transition: color 0.2s;
+      text-align: center; padding: 6px; border: 1px dashed rgba(238,240,245,0.2); border-radius: 8px;
+    }
+    .essay-more:hover { color: var(--accent); border-color: var(--accent); }
+    .essay-rest { margin-top: 6px; }
 
     /* 第5屏：理念 · 散落星句 */
     #sec-vision { background: radial-gradient(ellipse at 60% 30%, #0a0e1a 0%, var(--bg) 70%); }
@@ -1210,7 +1221,8 @@
     }
   }
 
-  // ─── 随笔专栏（数据来自 articles.json，随笔置顶）───
+  // ─── 随笔专栏（数据来自 articles.json，随笔置顶；先显示部分可展开）───
+  const ESSAY_PREVIEW = 8; // 每个分类先显示多少篇
   async function loadEssays() {
     const wrap = document.getElementById('essaysWrap');
     if (!wrap) return;
@@ -1229,22 +1241,50 @@
     const order = ['随笔', '日记'];
     const cats = {};
     arts.forEach(a => { (cats[a.category || '其他'] = cats[a.category || '其他'] || []).push(a); });
+    // 每个分类按日期倒序（无日期排后）
+    Object.keys(cats).forEach(k => {
+      cats[k].sort((a, b) => (b.date || '0').localeCompare(a.date || '0'));
+    });
     const keys = Object.keys(cats).sort((a, b) => (order.indexOf(a) - order.indexOf(b)) || (order.indexOf(a) === -1 ? -1 : 0));
     wrap.innerHTML = '';
     keys.forEach(cat => {
       const titleMap = { 随笔: ['随笔', 'Prose'], 日记: ['日记', 'Journal'], 其他: ['篇章', 'Other'] };
       const [zh, en] = titleMap[cat] || [cat, 'More'];
+      const list = cats[cat];
+      const shown = list.slice(0, ESSAY_PREVIEW);
+      const rest = list.slice(ESSAY_PREVIEW);
       const sec = document.createElement('div');
       sec.className = 'essay-cat';
-      sec.innerHTML = `<div class="essay-cat-head">${zh}<span class="ec-en">${en}</span><span class="ec-n">${cats[cat].length}</span></div>`;
-      cats[cat].forEach(a => {
-        const item = document.createElement('a');
-        item.className = 'essay-item';
-        item.href = a.url; item.target = '_blank'; item.rel = 'noopener';
-        item.innerHTML = `<div class="ei-title">${a.title || '未命名'}</div>` +
-          (a.description ? `<div class="ei-desc">${a.description}</div>` : '');
-        sec.appendChild(item);
-      });
+      sec.innerHTML = `<div class="essay-cat-head">${zh}<span class="ec-en">${en}</span><span class="ec-n">${list.length}</span></div>`;
+      const itemsBox = document.createElement('div');
+      const collapse = document.createElement('div');
+      collapse.className = 'essay-rest';
+      collapse.style.display = 'none';
+      const render = (arr, box) => {
+        arr.forEach(a => {
+          const item = document.createElement('a');
+          item.className = 'essay-item';
+          item.href = a.url; item.target = '_blank'; item.rel = 'noopener';
+          item.innerHTML = `<div class="ei-title">${a.title || '未命名'}</div>` +
+            (a.date ? `<div class="ei-date">${a.date}</div>` : '') +
+            (a.description ? `<div class="ei-desc">${a.description}</div>` : '');
+          box.appendChild(item);
+        });
+      };
+      render(shown, itemsBox);
+      sec.appendChild(itemsBox);
+      if (rest.length) {
+        render(rest, collapse);
+        sec.appendChild(collapse);
+        const btn = document.createElement('div');
+        btn.className = 'essay-more';
+        btn.innerHTML = `展开其余 ${rest.length} 篇 ▾`;
+        btn.onclick = () => {
+          collapse.style.display = '';
+          btn.style.display = 'none';
+        };
+        sec.appendChild(btn);
+      }
       wrap.appendChild(sec);
     });
   }

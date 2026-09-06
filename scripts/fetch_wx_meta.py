@@ -27,7 +27,14 @@ def parse(h):
     if jc:
         t = re.sub(r'<[^>]+>', '', jc.group(1))
         body = re.sub(r'\s+', ' ', t).strip()[:150]
-    return {"title": title, "description": desc, "preview": body}
+    # 发布时间
+    pub = ''
+    m = re.search(r"createTime\s*=\s*'([\d-]+ \d+:\d+)", h)
+    if m: pub = m.group(1)
+    if not pub:
+        m = re.search(r'og:release_date"[^>]*content="([^"]+)"', h)
+        if m: pub = m.group(1)
+    return {"title": title, "description": desc, "preview": body, "date": pub}
 
 def main():
     cats = {}
