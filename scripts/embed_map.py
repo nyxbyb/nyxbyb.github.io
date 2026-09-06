@@ -9,6 +9,8 @@ import json, os, sys, time
 BASE = os.path.expanduser("~/Desktop/Caelum")
 RAW = os.path.join(BASE, "corpus/books_raw.json")
 OUT = os.path.join(BASE, "web/public/data/graph.json")
+# 微信读书"读完"记录(本地数据, 不进公开仓库)：并入星图并标已读
+WXR = os.path.join(BASE, "data/微信读书/reading_records_full.json")
 
 MODEL = os.environ.get("EMBED_MODEL", "BAAI/bge-small-zh-v1.5")
 
@@ -27,9 +29,43 @@ def make_text(b):
         parts.append(f"评分{int(b['rating'])}")
     return " | ".join(parts)
 
+def merge_wechat(books):
+    """把微信读书'读完'记录并入书单(公开亮起/卡片显示时长), 新书名则补充嵌入。"""
+    wxr = []
+    if os.path.exists(WXR):
+        try:
+            wxr = json.load(open(WXR))
+        except Exception as e:
+            print(f"注意: 读取微信读书记录失败 {e}")
+    if not wxr:
+        return books, {}
+    by_title = {}
+    for r in wxr:
+        by_title.setdefault(r["title"], r)
+    # 记录已存在书名 → 更新状态为已读; 新书名 → 追加(用书名本身嵌入)
+    merged = []
+    read_meta = {}
+    for b in books:
+        rec = by_title.get(b.get("title"))
+        if rec:
+            read_meta[b["title"]] = {"source": "wxr", "duration_min": rec.get("duration_min"),
+                                     "finished": rec.get("finished", ""), "duration_text": rec.get("duration_text", "")}
+        merged.append(b)
+    added = 0
+    for title, rec in by_title.items():
+        if title and not any(b.get("title") == title for b in books):
+            merged.append({"title": title, "author": "微信读书 · " + (rec.get("finished") or ""),
+                           "rating": None, "source": "wechat"})
+            read_meta[title] = {"source": "wxr", "duration_min": rec.get("duration_min"),
+                                "finished": rec.get("finished", ""), "duration_text": rec.get("duration_text", "")}
+            added += 1
+    print(f"合并微信读书记录: {len(wxr)} 条, 新增书目 {added}, 已读标注 {len(read_meta)}")
+    return merged, read_meta
+
 def main():
     books = load_books()
-    print(f"共 {len(books)} 本书")
+    books, read_meta = merge_wechat(books)
+    print(f"共 {len(books)} 本书（含微信读书并入）")
 
     print("加载嵌入模型...")
     from fastembed import TextEmbedding
@@ -58,18 +94,26 @@ def main():
 
     nodes = []
     for b, (x, y, z) in zip(books, Y):
-        nodes.append({
+        meta = read_meta.get(b.get("title"), {})
+        node = {
             "id": f"book_{len(nodes):04d}",
             "type": "book",
             "title": b.get("title"),
             "author": b.get("author", ""),
             "rating": b.get("rating"),
-            "status": "unread",
+            "status": "read" if meta else "unread",
             "douban_rating": b.get("rating"),
             "x": round(float(x), 4),
             "y": round(float(y), 4),
             "z": round(float(z), 4),
-        })
+        }
+        if meta:
+            node["wechat"] = {
+                "duration_min": meta.get("duration_min"),
+                "duration_text": meta.get("duration_text") or "",
+                "finished": meta.get("finished") or "",
+            }
+        nodes.append(node)
 
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     json.dump({"nodes": nodes}, open(OUT, "w"), ensure_ascii=False, indent=1)

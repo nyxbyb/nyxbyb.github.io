@@ -224,6 +224,28 @@
       box-shadow: 0 0 8px var(--accent-glow), 0 0 2px var(--accent);
     }
 
+    /* 节点详情卡 */
+    .map-card {
+      position: absolute; top: 130px; right: 20px; width: 250px;
+      z-index: 8; background: rgba(10,14,22,0.95);
+      border: 1px solid rgba(238,240,245,0.25); border-radius: 14px;
+      padding: 20px 20px 16px; box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+      color: var(--ink);
+    }
+    .map-card .mc-close { position: absolute; right: 12px; top: 8px; cursor: pointer; color: var(--ink-dim); font-size: 20px; line-height: 1; }
+    .map-card .mc-close:hover { color: var(--accent); }
+    .map-card .mc-title { font-size: 18px; color: var(--accent); letter-spacing: 0.06em; font-weight: 600; padding-right: 22px; line-height: 1.4; }
+    .map-card .mc-sub { font-size: 12px; color: var(--ink-dim); margin: 6px 0 2px; }
+    .map-card .mc-wechat { margin-top: 10px; padding: 8px 10px; border-left: 2px solid var(--accent-dim); font-size: 12px; color: var(--accent-dim); line-height: 1.8; background: rgba(238,240,245,0.04); }
+    .map-card .mc-acts { display: flex; gap: 8px; margin-top: 14px; }
+    .map-card .mc-acts button {
+      flex: 1; font-family: var(--serif); font-size: 12px; letter-spacing: 0.1em;
+      color: var(--ink-dim); background: transparent; cursor: pointer;
+      border: 1px solid rgba(238,240,245,0.2); border-radius: 14px; padding: 6px 0;
+    }
+    .map-card .mc-acts button:hover { color: var(--accent); border-color: var(--accent); }
+    .map-card .mc-acts button.on { color: var(--accent); border-color: var(--accent); background: rgba(238,240,245,0.08); }
+
     /* 批量标记 */
     .map-tools { position: absolute; top: 120px; right: 6vw; z-index: 5; }
     .map-batch-btn {
@@ -523,6 +545,34 @@
     }
     .frontier-more:hover { color: var(--accent); border-bottom-color: var(--accent); }
 
+    /* 第5屏：随笔专栏 */
+    #sec-essays { background: var(--bg-deep); overflow-y: auto; justify-content: flex-start; padding-top: 12vh; }
+    .essays-wrap { width: 100%; max-width: 760px; margin: 0 auto; }
+    .essays-hint { color: var(--ink-dim); font-size: 14px; text-align: center; padding: 40px 0; }
+    .essay-cat {
+      margin-bottom: 26px;
+    }
+    .essay-cat-head {
+      font-size: 15px; color: var(--accent); letter-spacing: 0.18em;
+      margin-bottom: 12px; display: flex; align-items: baseline; gap: 12px;
+      border-bottom: 1px solid rgba(238,240,245,0.12); padding-bottom: 8px;
+    }
+    .essay-cat-head .ec-en {
+      font-family: var(--serif-en); font-style: italic; font-size: 13px;
+      color: var(--accent-dim); font-weight: 400;
+    }
+    .essay-cat-head .ec-n { font-size: 12px; color: var(--ink-dim); }
+    .essay-item {
+      display: block; border: 1px solid rgba(238,240,245,0.1);
+      border-radius: 10px; padding: 14px 18px; margin-bottom: 10px;
+      text-decoration: none; transition: all 0.3s;
+      background: rgba(10,14,22,0.5);
+    }
+    .essay-item:hover { border-color: rgba(238,240,245,0.3); background: rgba(14,18,28,0.8); transform: translateX(3px); }
+    .essay-item .ei-title { font-size: 14.5px; color: var(--ink); letter-spacing: 0.04em; line-height: 1.5; }
+    .essay-item:hover .ei-title { color: var(--accent); }
+    .essay-item .ei-desc { font-size: 12px; color: var(--ink-dim); margin-top: 5px; line-height: 1.6; }
+
     /* 第5屏：理念 · 散落星句 */
     #sec-vision { background: radial-gradient(ellipse at 60% 30%, #0a0e1a 0%, var(--bg) 70%); }
     .vision-stars { position: relative; width: 100%; height: 100%; }
@@ -572,9 +622,10 @@
   <div class="nav-dot active" data-label="序" data-label-en="Prelude" onclick="goTo(0)"></div>
   <div class="nav-dot" data-label="星图" data-label-en="Starchart" onclick="goTo(1)"></div>
   <div class="nav-dot" data-label="星域" data-label-en="Domains" onclick="goTo(2)"></div>
-  <div class="nav-dot" data-label="拓星" data-label-en="Frontier" onclick="goTo(3)"></div>
-  <div class="nav-dot" data-label="理念" data-label-en="Visions" onclick="goTo(4)"></div>
-  <div class="nav-dot" data-label="跋" data-label-en="Coda" onclick="goTo(5)"></div>
+  <div class="nav-dot" data-label="拓星" data-label-en="Research" onclick="goTo(3)"></div>
+  <div class="nav-dot" data-label="随笔" data-label-en="Essays" onclick="goTo(4)"></div>
+  <div class="nav-dot" data-label="理念" data-label-en="Visions" onclick="goTo(5)"></div>
+  <div class="nav-dot" data-label="跋" data-label-en="Coda" onclick="goTo(6)"></div>
 </nav>
 
 <!-- ═══════════ 第 1 屏：序 · 个人名片
@@ -608,6 +659,18 @@
     <span class="l-fav"><i></i><span data-i18n="legendFav">喜爱</span></span>
     <span class="l-read"><i></i><span data-i18n="legendRead">已读</span></span>
     <span class="l-unread"><i></i><span data-i18n="legendUnread">未读</span></span>
+  </div>
+  <!-- 节点详情卡 -->
+  <div class="map-card" id="mapCard" style="display:none">
+    <div class="mc-close" onclick="closeMapCard()">×</div>
+    <div class="mc-title" id="mcTitle"></div>
+    <div class="mc-sub" id="mcSub"></div>
+    <div class="mc-wechat" id="mcWechat" style="display:none"></div>
+    <div class="mc-acts">
+      <button data-m="fav" onclick="cardMark('fav')">喜爱</button>
+      <button data-m="read" onclick="cardMark('read')">已读</button>
+      <button data-m="unread" onclick="cardMark('unread')">未读</button>
+    </div>
   </div>
 </section>
 
@@ -665,7 +728,18 @@
   </a>
 </section>
 
-<!-- ═══════════ 第 5 屏：理念 ═══════════
+<!-- ═══════════ 第 5 屏：随笔 ═══════════
+     ✏️ 编辑入口：随笔/日记的标题、链接在 web/public/data/articles.json。
+     随笔已置顶(你偏爱), 日记在下方。改标题/URL 后重新构建即可。
+     全文不进公开站(只放标题+简介+链接)。 -->
+<section id="sec-essays">
+  <h2 class="section-title"><span>随 笔</span><span class="title-en">Prose · The Words I Wrote</span></h2>
+  <div class="essays-wrap" id="essaysWrap">
+    <div id="essaysLoading" class="essays-hint">…</div>
+  </div>
+</section>
+
+<!-- ═══════════ 第 6 屏：理念 ═══════════
      ✏️ 编辑入口：下面每一句 <p class="vs"> 是一句话，改文字即可；散落位置由 vs-1..vs-10 的CSS控制。
      位置想调整 → 编辑 CSS 里 .vs-1 .. .vs-10 的 top/left/right。 -->
 <section id="sec-vision">
@@ -1071,6 +1145,45 @@
     }
   }
 
+  // ─── 随笔专栏（数据来自 articles.json，随笔置顶）───
+  async function loadEssays() {
+    const wrap = document.getElementById('essaysWrap');
+    if (!wrap) return;
+    let arts = [];
+    for (const p of ['data/articles.json', '/data/articles.json', 'articles.json']) {
+      try {
+        const r = await fetch(p);
+        if (r.ok) { arts = await r.json(); break; }
+      } catch {}
+    }
+    if (!arts.length) {
+      wrap.innerHTML = '<div class="essays-hint" data-i18n="essaysEmpty">待接入文章…</div>';
+      return;
+    }
+    // 分类顺序: 随笔 > 日记 > 其他
+    const order = ['随笔', '日记'];
+    const cats = {};
+    arts.forEach(a => { (cats[a.category || '其他'] = cats[a.category || '其他'] || []).push(a); });
+    const keys = Object.keys(cats).sort((a, b) => (order.indexOf(a) - order.indexOf(b)) || (order.indexOf(a) === -1 ? -1 : 0));
+    wrap.innerHTML = '';
+    keys.forEach(cat => {
+      const titleMap = { 随笔: ['随笔', 'Prose'], 日记: ['日记', 'Journal'], 其他: ['篇章', 'Other'] };
+      const [zh, en] = titleMap[cat] || [cat, 'More'];
+      const sec = document.createElement('div');
+      sec.className = 'essay-cat';
+      sec.innerHTML = `<div class="essay-cat-head">${zh}<span class="ec-en">${en}</span><span class="ec-n">${cats[cat].length}</span></div>`;
+      cats[cat].forEach(a => {
+        const item = document.createElement('a');
+        item.className = 'essay-item';
+        item.href = a.url; item.target = '_blank'; item.rel = 'noopener';
+        item.innerHTML = `<div class="ei-title">${a.title || '未命名'}</div>` +
+          (a.description ? `<div class="ei-desc">${a.description}</div>` : '');
+        sec.appendChild(item);
+      });
+      wrap.appendChild(sec);
+    });
+  }
+
   // ─── 星域：四域下钻导航（数据来自 tree.json）───
   let domainMarks = {};
   try { domainMarks = JSON.parse(localStorage.getItem('caelum_domains') || '{}'); } catch {}
@@ -1386,14 +1499,38 @@
       const { x, y } = canvasPt(e);
       const idx = hitTest(x, y);
       if (idx >= 0 && nodes[idx]) {
-        const n = nodes[idx];
-        // 点击循环三态：未读 → 已读 → 喜爱 → 未读
-        const cycle = { unread: 'read', read: 'fav', fav: 'unread' };
-        markNode(n, cycle[n.status] || 'read');
+        openMapCard(nodes[idx]);
         hoverIdx = idx; drawStars();
       }
     }
   });
+
+  // ─── 节点详情卡（点击星图节点弹出，含微信读书信息）───
+  let cardNode = null;
+  function openMapCard(n) {
+    cardNode = n;
+    document.getElementById('mcTitle').textContent = n.title;
+    document.getElementById('mcSub').textContent = n.author || '';
+    const wc = document.getElementById('mcWechat');
+    if (n.wechat) {
+      wc.style.display = 'block';
+      const txt = [];
+      if (n.wechat.duration_text) txt.push('阅读 ' + n.wechat.duration_text);
+      if (n.wechat.finished) txt.push('微信读书 · ' + n.wechat.finished);
+      wc.textContent = txt.join(' · ');
+    } else {
+      wc.style.display = 'none';
+    }
+    const st = n.status || 'unread';
+    document.querySelectorAll('#mapCard .mc-acts button').forEach(b => b.classList.toggle('on', b.getAttribute('data-m') === st));
+    document.getElementById('mapCard').style.display = 'block';
+  }
+  function closeMapCard() { document.getElementById('mapCard').style.display = 'none'; cardNode = null; }
+  function cardMark(m) {
+    if (!cardNode) return;
+    markNode(cardNode, m);
+    document.querySelectorAll('#mapCard .mc-acts button').forEach(b => b.classList.toggle('on', b.getAttribute('data-m') === m));
+  }
 
   window.addEventListener('resize', () => { resize(); drawStars(); });
 
@@ -1401,6 +1538,7 @@
   resize();
   loadStars();
   loadTree();
+  loadEssays();
 </script>
 
 <!-- 批量标记面板（流式 / 分类 两种模式）-->
