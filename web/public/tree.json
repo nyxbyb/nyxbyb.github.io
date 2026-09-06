@@ -16,27 +16,87 @@
       {
        "id": "logic-classical",
        "zh": "经典逻辑",
-       "en": "Classical Logic"
+       "en": "Classical Logic",
+       "desc": "经典逻辑研究命题与谓词推理的规范系统，是真值保留有效性理论的基石。",
+       "concepts": [
+        "真值函项",
+        "有效性",
+        "命题演算",
+        "一阶谓词逻辑",
+        "自然演绎"
+       ],
+       "questions": [
+        "什么是有效的推理？",
+        "经典逻辑的排中律是否无条件成立？"
+       ]
       },
       {
        "id": "logic-math",
        "zh": "数理逻辑",
-       "en": "Mathematical Logic"
+       "en": "Mathematical Logic",
+       "desc": "数理逻辑用数学方法研究逻辑结构，是逻辑与数学的形式化交汇。",
+       "concepts": [
+        "形式系统",
+        "模型论",
+        "证明论",
+        "递归论",
+        "可判定性"
+       ],
+       "questions": [
+        "一致性意味着什么？",
+        "形式系统能否自我证明无矛盾？"
+       ]
       },
       {
        "id": "logic-modal",
        "zh": "模态逻辑",
-       "en": "Modal Logic"
+       "en": "Modal Logic",
+       "desc": "模态逻辑研究必然、可能等模态词下的推理，是哲学逻辑与计算机形式验证的桥梁。",
+       "concepts": [
+        "必然/可能",
+        "克里普克模型",
+        "可能世界",
+        "可达关系",
+        "模态公理"
+       ],
+       "questions": [
+        "模态语义如何建模概念世界？",
+        "必然性是否蕴含于可能世界之集合？"
+       ]
       },
       {
        "id": "logic-nonclassical",
        "zh": "非经典逻辑",
-       "en": "Non-classical Logic"
+       "en": "Non-classical Logic",
+       "desc": "非经典逻辑偏离经典推理约束（如排中律、单调性），服务于直觉主义、相干与量子等领域。",
+       "concepts": [
+        "直觉主义逻辑",
+        "相干逻辑",
+        "多值逻辑",
+        "量子逻辑",
+        "道义逻辑"
+       ],
+       "questions": [
+        "何为直觉主义的直觉？",
+        "恒定性何时不成立？"
+       ]
       },
       {
        "id": "logic-philosophy",
        "zh": "逻辑哲学",
-       "en": "Philosophy of Logic"
+       "en": "Philosophy of Logic",
+       "desc": "逻辑哲学追问逻辑的本体与认识地位：逻辑是否为世界的一部分，或只是语言之语法？",
+       "concepts": [
+        "逻辑主义",
+        "约定主义",
+        "逻辑真",
+        "一阶/高阶边界",
+        "逻辑的原因"
+       ],
+       "questions": [
+        "逻辑规律是先验的吗？",
+        "应否有多个逻辑系统共存？"
+       ]
       }
      ]
     },
@@ -48,32 +108,104 @@
       {
        "id": "math-algebra",
        "zh": "代数",
-       "en": "Algebra"
+       "en": "Algebra",
+       "desc": "代数研究运算结构与不变量，从多项式方程到抽象代数结构。",
+       "concepts": [
+        "群论",
+        "环论",
+        "域论",
+        "范畴论",
+        "同构"
+       ],
+       "questions": [
+        "对称如何被群刻画？",
+        "结构是否应在射之下保持？"
+       ]
       },
       {
        "id": "math-analysis",
        "zh": "分析",
-       "en": "Analysis"
+       "en": "Analysis",
+       "desc": "分析研究极限、连续、微分与积分，是近代数学的语言。",
+       "concepts": [
+        "极限",
+        "连续性",
+        "微分",
+        "黎曼积分",
+        "级数收敛"
+       ],
+       "questions": [
+        "无穷小可否严密化？",
+        "函数可微性与其光滑度关系？"
+       ]
       },
       {
        "id": "math-geometry",
        "zh": "几何与拓扑",
-       "en": "Geometry & Topology"
+       "en": "Geometry & Topology",
+       "desc": "几何与拓扑研究空间的形状、度量与不变性质。",
+       "concepts": [
+        "欧氏几何",
+        "非欧几何",
+        "流形",
+        "同伦与同调",
+        "纤维丛"
+       ],
+       "questions": [
+        "空间的弯曲是什么含义？",
+        "拓扑不变量如何区分形状？"
+       ]
       },
       {
        "id": "math-number",
        "zh": "数论",
-       "en": "Number Theory"
+       "en": "Number Theory",
+       "desc": "数论研究整数及其性质，从素数分布到代数数论与解析数论。",
+       "concepts": [
+        "素数",
+        "同余",
+        "丢番图方程",
+        "代数数域",
+        "函数域"
+       ],
+       "questions": [
+        "素数的分布有何规律？",
+        "费马大定理如何证明？"
+       ]
       },
       {
        "id": "math-prob",
        "zh": "概率论与统计",
-       "en": "Probability & Statistics"
+       "en": "Probability & Statistics",
+       "desc": "概率论与统计描述随机性与数据分析的数学。",
+       "concepts": [
+        "概率空间",
+        "随机变量",
+        "大数定律",
+        "中心极限定理",
+        "贝叶斯推断"
+       ],
+       "questions": [
+        "随机性是否客观存在？",
+        "推断的不确定性如何量化？"
+       ]
       },
       {
        "id": "math-discrete",
        "zh": "离散数学（组合、图论）",
-       "en": "Discrete Math"
+       "en": "Discrete Math",
+       "desc": "离散数学研究可数结构，是计算机科学的数学基础。",
+       "concepts": [
+        "组合计数",
+        "图论",
+        "格论",
+        "偏序集",
+        "生成函数"
+       ],
+       "questions": [
+        "图的性质能否高效判定？",
+        "离散结构如何编码信息？"
+       ]
       },
       {
        "id": "math-found",
@@ -114,27 +246,87 @@
       {
        "id": "cs-computability",
        "zh": "计算理论",
-       "en": "Theory of Computing"
+       "en": "Theory of Computing",
+       "desc": "计算理论研究可计算性与不可计算性问题。",
+       "concepts": [
+        "图灵机",
+        "可判定性",
+        "递归集",
+        "停机问题",
+        "Church论题"
+       ],
+       "questions": [
+        "哪些函数不可计算？",
+        "算法时间与空间复杂度如何刻画？"
+       ]
       },
       {
        "id": "cs-information",
        "zh": "信息论",
-       "en": "Information Theory"
+       "en": "Information Theory",
+       "desc": "信息论量化信息、熵与通信容量，由香农创立。",
+       "concepts": [
+        "熵",
+        "互信息",
+        "信道容量",
+        "编码定理",
+        "香农极限"
+       ],
+       "questions": [
+        "信息如何量化？",
+        "噪声信道最大可靠速率为何？"
+       ]
       },
       {
        "id": "cs-alg",
        "zh": "算法与数据结构",
-       "en": "Algorithms & Data Structures"
+       "en": "Algorithms & Data Structures",
+       "desc": "算法与数据结构研究计算的系统方法与组织。",
+       "concepts": [
+        "复杂度类",
+        "排序与搜索",
+        "图算法",
+        "动态规划",
+        "哈希"
+       ],
+       "questions": [
+        "何种算法最优？",
+        "数据如何设计以服务查询？"
+       ]
       },
       {
        "id": "cs-automata",
        "zh": "自动机与形式语言",
-       "en": "Automata & Formal Languages"
+       "en": "Automata & Formal Languages",
+       "desc": "自动机与形式语言研究计算的抽象模型与语言的生成识别。",
+       "concepts": [
+        "有限自动机",
+        "下推自动机",
+        "乔姆斯基层级",
+        "上下文无关文发",
+        "正则语言"
+       ],
+       "questions": [
+        "语言层级如何划分？",
+        "识别与生成的对偶关系？"
+       ]
       },
       {
        "id": "cs-types",
        "zh": "类型论与程序设计理论",
-       "en": "Type Theory"
+       "en": "Type Theory",
+       "desc": "类型论与程序设计理论以类型约束程序意义，支撑函数式语言与证明助手。",
+       "concepts": [
+        "类型系统",
+        "不动点组合子",
+        "递归类型",
+        "依赖类型",
+        "Curry-Howard对应"
+       ],
+       "questions": [
+        "程序与证明如何对应？",
+        "静态类型保证何种安全？"
+       ]
       }
      ]
     }
@@ -155,37 +347,120 @@
       {
        "id": "phy-classical",
        "zh": "经典力学",
-       "en": "Classical Mechanics"
+       "en": "Classical Mechanics",
+       "desc": "经典力学以牛顿定律描述质点与刚体的运动，是决定论物理学的基础。",
+       "concepts": [
+        "牛顿三定律",
+        "守恒律",
+        "拉格朗日力学",
+        "哈密顿力学",
+        "相空间"
+       ],
+       "questions": [
+        "运动如何被力决定？",
+        "时间反演对称是否成立？"
+       ]
       },
       {
        "id": "phy-electromag",
        "zh": "电磁学与光学",
-       "en": "Electromagnetism & Optics"
+       "en": "Electromagnetism & Optics",
+       "desc": "电磁学与光学研究电荷、电磁场与光的本性，统一了电、磁与辐射。",
+       "concepts": [
+        "麦克斯韦方程",
+        "电磁波",
+        "光的波粒二象性",
+        "远场与近场"
+       ],
+       "questions": [
+        "光为何兼具波动与粒子性质？",
+        "电磁场如何局域化能量？"
+       ]
       },
       {
        "id": "phy-thermo",
        "zh": "热力学与统计物理",
-       "en": "Thermodynamics & Stat. Mech."
+       "en": "Thermodynamics & Stat. Mech.",
+       "desc": "热力学与统计物理以宏观规律与微观统计解释热、熵与宏观演化。",
+       "concepts": [
+        "热力学三大定律",
+        "熵",
+        "相变",
+        "玻尔兹曼分布",
+        "涨落"
+       ],
+       "questions": [
+        "熵为何只增不减？",
+        "有序如何从熵涌现？"
+       ]
       },
       {
        "id": "phy-quantum",
        "zh": "量子力学",
-       "en": "Quantum Mechanics"
+       "en": "Quantum Mechanics",
+       "desc": "量子力学描述微观世界的叠加、纠缠与不确定性。",
+       "concepts": [
+        "波函数",
+        "薛定谔方程",
+        "不确定性原理",
+        "态叠加",
+        "纠缠"
+       ],
+       "questions": [
+        "观测如何坍缩态？",
+        "纠缠传达了何种非经典关联？"
+       ]
       },
       {
        "id": "phy-relativity",
        "zh": "相对论",
-       "en": "Relativity"
+       "en": "Relativity",
+       "desc": "相对论（狭义+广义）统一时空与引力，颠覆绝对时空观。",
+       "concepts": [
+        "光速不变",
+        "时间膨胀",
+        "质量-能量等价",
+        "测地线",
+        "黎曼曲率"
+       ],
+       "questions": [
+        "时空是否被物质弯曲？",
+        "同时性是否绝对？"
+       ]
       },
       {
        "id": "phy-particle",
        "zh": "粒子物理",
-       "en": "Particle Physics"
+       "en": "Particle Physics",
+       "desc": "粒子物理探索物质最基本的组成与基本力。",
+       "concepts": [
+        "标准模型",
+        "夸克与轻子",
+        "强核力",
+        "希格斯机制",
+        "对称性破缺"
+       ],
+       "questions": [
+        "物质最底层由何组成？",
+        "粒子间怎样通过规范场相互作用？"
+       ]
       },
       {
        "id": "phy-condensed",
        "zh": "凝聚态物理",
-       "en": "Condensed Matter"
+       "en": "Condensed Matter",
+       "desc": "凝聚态物理研究固态与液态物质中的集体行为，如超导、磁性、拓扑相。",
+       "concepts": [
+        "晶格与能带",
+        "超导",
+        "磁性",
+        "拓扑绝缘体",
+        "相变"
+       ],
+       "questions": [
+        "微观组成如何产生宏观有序？",
+        "拓扑相如何保护量子态？"
+       ]
       }
      ]
     },
@@ -197,27 +472,87 @@
       {
        "id": "chem-inorg",
        "zh": "无机化学",
-       "en": "Inorganic Chemistry"
+       "en": "Inorganic Chemistry",
+       "desc": "无机化学研究无机化合物的组成、结构与反应，涵盖金属与配位化学。",
+       "concepts": [
+        "周期律",
+        "配位化学",
+        "氧化还原",
+        "酸碱理论",
+        "晶体场理论"
+       ],
+       "questions": [
+        "元素性质如何随周期变化？",
+        "配合物的稳定性由何决定？"
+       ]
       },
       {
        "id": "chem-org",
        "zh": "有机化学",
-       "en": "Organic Chemistry"
+       "en": "Organic Chemistry",
+       "desc": "有机化学研究含碳化合物的结构、机理与合成。",
+       "concepts": [
+        "官能团",
+        "反应机理",
+        "立体化学",
+        "芳香性",
+        "合成策略"
+       ],
+       "questions": [
+        "分子几何如何决定反应性？",
+        "复杂分子如何逆合成设计？"
+       ]
       },
       {
        "id": "chem-phys",
        "zh": "物理化学",
-       "en": "Physical Chemistry"
+       "en": "Physical Chemistry",
+       "desc": "物理化学从物理原理解释化学现象，连接化学与量子/统计力学。",
+       "concepts": [
+        "热力学函数",
+        "化学反应动力学",
+        "量子化学",
+        "光谱学",
+        "表面化学"
+       ],
+       "questions": [
+        "反应速率由什么控制？",
+        "分子能量态如何被光谱揭示？"
+       ]
       },
       {
        "id": "chem-anal",
        "zh": "分析化学",
-       "en": "Analytical Chemistry"
+       "en": "Analytical Chemistry",
+       "desc": "分析化学发展测定物质组成与结构的方法。",
+       "concepts": [
+        "定量分析",
+        "色谱",
+        "质谱",
+        "光谱法",
+        "滴定"
+       ],
+       "questions": [
+        "如何准确测定痕量组分？",
+        "分离与检测如何协同？"
+       ]
       },
       {
        "id": "chem-bio",
        "zh": "生物化学",
-       "en": "Biochemistry"
+       "en": "Biochemistry",
+       "desc": "生物化学研究生命过程的分子基础，从代谢网络到基因表达。",
+       "concepts": [
+        "蛋白质结构",
+        "酶催化",
+        "代谢途径",
+        "DNA转录翻译",
+        "信号转导"
+       ],
+       "questions": [
+        "生命分子如何自我复制？",
+        "代谢网络如何调控？"
+       ]
       }
      ]
     },
@@ -229,37 +564,121 @@
       {
        "id": "bio-cell",
        "zh": "细胞生物学",
-       "en": "Cell Biology"
+       "en": "Cell Biology",
+       "desc": "细胞生物学研究细胞的结构、功能与生命活动。",
+       "concepts": [
+        "细胞器",
+        "细胞周期",
+        "细胞骨架",
+        "细胞膜运输",
+        "有丝分裂"
+       ],
+       "questions": [
+        "细胞如何分工协作？",
+        "细胞如何决定生死？"
+       ]
       },
       {
        "id": "bio-molec",
        "zh": "分子生物学",
-       "en": "Molecular Biology"
+       "en": "Molecular Biology",
+       "desc": "分子生物学从核酸与蛋白质层面阐释遗传信息的储存与表达。",
+       "concepts": [
+        "DNA双螺旋",
+        "中心法则",
+        "基因表达调控",
+        "分子克隆",
+        "结构预测"
+       ],
+       "questions": [
+        "基因信息如何表达为功能？",
+        "表达如何被环境调控？"
+       ]
       },
       {
        "id": "bio-genetics",
        "zh": "遗传学",
-       "en": "Genetics"
+       "en": "Genetics",
+       "desc": "遗传学研究性状的传递与基因组的变异。",
+       "concepts": [
+        "孟德尔定律",
+        "基因连锁",
+        "突变",
+        "基因组",
+        "群体遗传"
+       ],
+       "questions": [
+        "性状如何跨代传递？",
+        "变异如何驱动演化？"
+       ]
       },
       {
        "id": "bio-physio",
        "zh": "生理学",
-       "en": "Physiology"
+       "en": "Physiology",
+       "desc": "生理学研究生物体器官系统如何协调维持稳态。",
+       "concepts": [
+        "稳态",
+        "神经传导",
+        "血液循环",
+        "内分泌",
+        "内环境"
+       ],
+       "questions": [
+        "机体如何维持内稳态？",
+        "器官间如何进行信息对话？"
+       ]
       },
       {
        "id": "bio-neuro",
        "zh": "神经科学",
-       "en": "Neuroscience"
+       "en": "Neuroscience",
+       "desc": "神经科学研究神经系统如何在细胞与系统层面产生感知、认知与行为。",
+       "concepts": [
+        "神经元信号",
+        "突触传递",
+        "神经可塑性",
+        "脑区功能",
+        "神经编码"
+       ],
+       "questions": [
+        "脑如何产生意识？",
+        "记忆如何被编码与提取？"
+       ]
       },
       {
        "id": "bio-eco",
        "zh": "生态学",
-       "en": "Ecology"
+       "en": "Ecology",
+       "desc": "生态学研究生物多样性与群落、生态系统之间的能量与物质流动。",
+       "concepts": [
+        "食物网",
+        "能量流",
+        "生态位",
+        "生物多样性",
+        "演替"
+       ],
+       "questions": [
+        "生态系统如何自我调节？",
+        "生物如何共存竞争？"
+       ]
       },
       {
        "id": "bio-evo",
        "zh": "进化生物学",
-       "en": "Evolutionary Biology"
+       "en": "Evolutionary Biology",
+       "desc": "进化生物学研究物种起源与适应机制。",
+       "concepts": [
+        "自然选择",
+        "适应",
+        "种系谱系",
+        "漂变",
+        "共同祖先"
+       ],
+       "questions": [
+        "选择如何塑造适应？",
+        "新物种如何形成？"
+       ]
       }
      ]
     },
@@ -271,27 +690,87 @@
       {
        "id": "geo-geology",
        "zh": "地质学",
-       "en": "Geology"
+       "en": "Geology",
+       "desc": "地质学研究地球物质组成、结构与过程。",
+       "concepts": [
+        "岩石循环",
+        "板块构造",
+        "地质年代",
+        "矿物学",
+        "构造运动"
+       ],
+       "questions": [
+        "板块如何漂移？",
+        "岩石如何记录地球历史？"
+       ]
       },
       {
        "id": "geo-atmo",
        "zh": "大气科学",
-       "en": "Atmospheric Science"
+       "en": "Atmospheric Science",
+       "desc": "大气科学研究大气的结构与气候动态。",
+       "concepts": [
+        "环流",
+        "温室效应",
+        "降水机制",
+        "大气层组",
+        "极端天气"
+       ],
+       "questions": [
+        "气候如何被驱动与扰动？",
+        "次ystem预测的局限在哪里？"
+       ]
       },
       {
        "id": "geo-ocean",
        "zh": "海洋科学",
-       "en": "Oceanography"
+       "en": "Oceanography",
+       "desc": "海洋科学研究海水的循环、化学、生物与海底地形。",
+       "concepts": [
+        "洋流",
+        "热盐环流",
+        "海-气交换",
+        "海洋生态",
+        "海底扩张"
+       ],
+       "questions": [
+        "海洋如何调节全球气候？",
+        "深海资源如何可持续利用？"
+       ]
       },
       {
        "id": "geo-geog",
        "zh": "地理学",
-       "en": "Geography"
+       "en": "Geography",
+       "desc": "地理学研究地表格局、环境与人文活动的空间关系。",
+       "concepts": [
+        "自然地理",
+        "人文地理",
+        "空间分布",
+        "GIS",
+        "区域差异"
+       ],
+       "questions": [
+        "空间组织如何受地理约束？",
+        "地形如何塑造文明？"
+       ]
       },
       {
        "id": "geo-env",
        "zh": "环境科学",
-       "en": "Environmental Science"
+       "en": "Environmental Science",
+       "desc": "环境科学研究环境问题与可持续治理。",
+       "concepts": [
+        "污染",
+        "生态承载力",
+        "生命周期评估",
+        "可持续发展",
+        "环境法"
+       ],
+       "questions": [
+        "人类活动如何影响环境？",
+        "修复的边界在哪里？"
+       ]
       }
      ]
     },
@@ -303,17 +782,53 @@
       {
        "id": "as-stars",
        "zh": "恒星与星系",
-       "en": "Stars & Galaxies"
+       "en": "Stars & Galaxies",
+       "desc": "恒星与星系研究天体的结构与演化。",
+       "concepts": [
+        "恒星演化",
+        "光谱分类",
+        "星系分类",
+        "恒星形成",
+        "核聚变"
+       ],
+       "questions": [
+        "恒星如何度过其生命？",
+        "星系如何组装成今天的样子？"
+       ]
       },
       {
        "id": "as-cosmo",
        "zh": "宇宙学",
-       "en": "Cosmology"
+       "en": "Cosmology",
+       "desc": "宇宙学研究宇宙起源、结构与最终命运。",
+       "concepts": [
+        "大爆炸",
+        "暗物质",
+        "暗能量",
+        "宇宙微波背景",
+        "暴胀"
+       ],
+       "questions": [
+        "宇宙从何而来？",
+        "暗物质与暗能量的本质是什么？"
+       ]
       },
       {
        "id": "as-planetary",
        "zh": "行星科学",
-       "en": "Planetary Science"
+       "en": "Planetary Science",
+       "desc": "行星科学研究行星、卫星与小天体的性质与宜居性。",
+       "concepts": [
+        "行星形成",
+        "大气演化",
+        "系外行星",
+        "宜居带",
+        "地外生命"
+       ],
+       "questions": [
+        "行星如何从盘状物形成？",
+        "生命存在的必要条件有哪些？"
+       ]
       }
      ]
     }
@@ -334,17 +849,53 @@
       {
        "id": "phil-china",
        "zh": "中国哲学",
-       "en": "Chinese Philosophy"
+       "en": "Chinese Philosophy",
+       "desc": "中国哲学以儒家、道家与佛学为主线，追问天人关系与修身成德。",
+       "concepts": [
+        "仁义礼",
+        "无为",
+        "中庸",
+        "知行合一",
+        "性善\\性恶"
+       ],
+       "questions": [
+        "天与人如何相合？",
+        "成德之学的日用工夫是什么？"
+       ]
       },
       {
        "id": "phil-west",
        "zh": "西方哲学",
-       "en": "Western Philosophy"
+       "en": "Western Philosophy",
+       "desc": "西方哲学从古希腊到二十世纪，围绕存在与认知展开理性求索。",
+       "concepts": [
+        "本体论",
+        "认识论",
+        "理性主义与经验主义",
+        "德国观念论",
+        "分析哲学"
+       ],
+       "questions": [
+        "思维如何通达存在？",
+        "理性是否给出确定性？"
+       ]
       },
       {
        "id": "phil-meta",
        "zh": "形而上学 / 存在论",
-       "en": "Metaphysics / Ontology"
+       "en": "Metaphysics / Ontology",
+       "desc": "形而上学与存在论追问世界最根本的结构与存在者的存在方式。",
+       "concepts": [
+        "实体",
+        "因果性",
+        "自由与必然",
+        "共相问题",
+        "可能世界"
+       ],
+       "questions": [
+        "何物存在？",
+        "存在本身如何被理解？"
+       ]
       },
       {
        "id": "phil-epist",
@@ -409,17 +960,53 @@
       {
        "id": "phil-aesth",
        "zh": "美学",
-       "en": "Aesthetics"
+       "en": "Aesthetics",
+       "desc": "美学研究美、艺术与审美经验的性质与价值。",
+       "concepts": [
+        "美的本质",
+        "艺术自主性",
+        "崇高与优美",
+        "审美判断",
+        "艺术哲学"
+       ],
+       "questions": [
+        "美是主观感受还是客观属性？",
+        "艺术与道德的关系如何？"
+       ]
       },
       {
        "id": "phil-sci",
        "zh": "科学哲学",
-       "en": "Philosophy of Science"
+       "en": "Philosophy of Science",
+       "desc": "科学哲学考察科学理论的逻辑、经验与进步标准。",
+       "concepts": [
+        "证伪主义",
+        "范式",
+        "解释与预测",
+        "理论与观察",
+        "理论对模型"
+       ],
+       "questions": [
+        "科学如何区别于伪科学？",
+        "理论之真如何被经验修正？"
+       ]
       },
       {
        "id": "phil-mind",
        "zh": "心灵哲学",
-       "en": "Philosophy of Mind"
+       "en": "Philosophy of Mind",
+       "desc": "心灵哲学追问意识、心灵与身体的关系。",
+       "concepts": [
+        "心身问题",
+        "意向性",
+        "意识难题",
+        "功能主义",
+        "涌现"
+       ],
+       "questions": [
+        "意识如何从物理涌现？",
+        "机器能否拥有心灵？"
+       ]
       }
      ]
     },
@@ -460,27 +1047,85 @@
       {
        "id": "psy-cog",
        "zh": "认知心理学",
-       "en": "Cognitive Psychology"
+       "en": "Cognitive Psychology",
+       "desc": "认知心理学研究知觉、注意、记忆、语言与思维的内部过程。",
+       "concepts": [
+        "工作记忆",
+        "注意分配",
+        "表征",
+        "决策偏误",
+        "认知架构"
+       ],
+       "questions": [
+        "思维如何处理信息？",
+        "认知限制如何塑造判断？"
+       ]
       },
       {
        "id": "psy-behav",
        "zh": "行为主义",
-       "en": "Behaviorism"
+       "en": "Behaviorism",
+       "desc": "行为主义主张心理学只应研究可观察行为，强调环境塑造。",
+       "concepts": [
+        "条件反射",
+        "强化与惩罚",
+        "操作性条件作用",
+        "行为矫正"
+       ],
+       "questions": [
+        "行为如何被环境编码？",
+        "内心态能否被允许进入科学？"
+       ]
       },
       {
        "id": "psy-dev",
        "zh": "发展心理学",
-       "en": "Developmental Psychology"
+       "en": "Developmental Psychology",
+       "desc": "发展心理学研究人生各阶段的身心变化。",
+       "concepts": [
+        "依恋理论",
+        "认知发展阶段",
+        "社会情绪发展",
+        "终身发展观"
+       ],
+       "questions": [
+        "各阶段有何发展任务？",
+        "早期经验以何种方式持续影响？"
+       ]
       },
       {
        "id": "psy-social",
        "zh": "社会心理学",
-       "en": "Social Psychology"
+       "en": "Social Psychology",
+       "desc": "社会心理学研究个体在他人与社会情境中的思维与行为。",
+       "concepts": [
+        "从众",
+        "归因",
+        "态度改变",
+        "群体极化",
+        "社会认同"
+       ],
+       "questions": [
+        "情境有多强地塑造行为？",
+        "偏见如何形成与消解？"
+       ]
       },
       {
        "id": "psy-personal",
        "zh": "人格心理学",
-       "en": "Personality Psychology"
+       "en": "Personality Psychology",
+       "desc": "人格心理学试图描述与解释个体稳定的心理特质与动力。",
+       "concepts": [
+        "特质理论",
+        "精神动力",
+        "人本主义",
+        "人格测评",
+        "自我概念"
+       ],
+       "questions": [
+        "人格如何稳定又如何变化？",
+        "个体差异的可测量性如何？"
+       ]
       }
      ]
     },
@@ -492,32 +1137,104 @@
       {
        "id": "hist-china",
        "zh": "中国史",
-       "en": "Chinese History"
+       "en": "Chinese History",
+       "desc": "中国史研究漫长而连续的中华文明之政治、社会与文化进程。",
+       "concepts": [
+        "朝代更替",
+        "制度史",
+        "思想史",
+        "边疆与民族",
+        "近代转型"
+       ],
+       "questions": [
+        "治乱循环背后有何结构？",
+        "全球视野下的中国史如何重写？"
+       ]
       },
       {
        "id": "hist-world",
        "zh": "世界史",
-       "en": "World History"
+       "en": "World History",
+       "desc": "世界史以全球视角研究各文明的联系与变迁。",
+       "concepts": [
+        "全球化",
+        "帝国与殖民",
+        "大航海",
+        "工业革命",
+        "冷战"
+       ],
+       "questions": [
+        "文明如何互联成一体？",
+        "大事件如何被长时段解释？"
+       ]
       },
       {
        "id": "hist-ideas",
        "zh": "思想史",
-       "en": "Intellectual History"
+       "en": "Intellectual History",
+       "desc": "思想史追踪观念、意识形态与思想家的流动。",
+       "concepts": [
+        "观念变迁",
+        "启蒙",
+        "马克思主义",
+        "自由主义",
+        "东-西思想交流"
+       ],
+       "questions": [
+        "观念如何塑造时代？",
+        "思想如何跨文化与时间传播？"
+       ]
       },
       {
        "id": "hist-econ",
        "zh": "经济史",
-       "en": "Economic History"
+       "en": "Economic History",
+       "desc": "经济史研究经济制度、市场与增长的历史轨迹。",
+       "concepts": [
+        "农业革命",
+        "工业化",
+        "经济制度变迁",
+        "贸易与货币",
+        "长波理论"
+       ],
+       "questions": [
+        "增长何以发生？",
+        "制度与增长如何互动？"
+       ]
       },
       {
        "id": "hist-art",
        "zh": "艺术史",
-       "en": "Art History"
+       "en": "Art History",
+       "desc": "艺术史研究视觉艺术的形式演变与其社会语境。",
+       "concepts": [
+        "风格时期",
+        "赞助机制",
+        "图像志",
+        "现代主义",
+        "跨文化传播"
+       ],
+       "questions": [
+        "风格如何回应时代？",
+        "图像再现了何种观念？"
+       ]
       },
       {
        "id": "hist-arch",
        "zh": "考古学",
-       "en": "Archaeology"
+       "en": "Archaeology",
+       "desc": "考古学通过物质遗存重建古代社会生活。",
+       "concepts": [
+        "田野发掘",
+        "年代学",
+        "物质文化",
+        "文化层序",
+        "遗址保护"
+       ],
+       "questions": [
+        "器物如何被解读为生活痕迹？",
+        "考古证据如何补全文献？"
+       ]
       }
      ]
     },
@@ -529,32 +1246,104 @@
       {
        "id": "lit-classical",
        "zh": "中国古典文学",
-       "en": "Classical Chinese Literature"
+       "en": "Classical Chinese Literature",
+       "desc": "中国古典文学涵盖先秦到明清的经典文本与审美传统。",
+       "concepts": [
+        "诗经楚辞",
+        "汉魏乐府",
+        "唐诗宋词",
+        "明清小说",
+        "文以载道"
+       ],
+       "questions": [
+        "古典审美理想如何呈现？",
+        "文本如何成为血脉（如红楼的意象系统）？"
+       ]
       },
       {
        "id": "lit-modern",
        "zh": "中国现当代文学",
-       "en": "Modern Chinese Literature"
+       "en": "Modern Chinese Literature",
+       "desc": "中国现当代文学从五四到当下，反思传统与主体意识的重构。",
+       "concepts": [
+        "白话文运动",
+        "乡土与先锋",
+        "伤痕与寻根",
+        "现代性焦虑",
+        "叙事实验"
+       ],
+       "questions": [
+        "现代主体如何被文学构造？",
+        "文学如何回应时代创伤？"
+       ]
       },
       {
        "id": "lit-foreign",
        "zh": "外国文学",
-       "en": "Foreign Literature"
+       "en": "Foreign Literature",
+       "desc": "外国文学横跨西方与东方，是理解异域精神与他者之镜。",
+       "concepts": [
+        "古希腊悲剧",
+        "俄国小说",
+        "拉美魔幻",
+        "日本物哀",
+        "欧美现代派"
+       ],
+       "questions": [
+        "异域叙事如何照见自我？",
+        "世界文学如何比较而生意义？"
+       ]
       },
       {
        "id": "lit-theory",
        "zh": "文学理论",
-       "en": "Literary Theory"
+       "en": "Literary Theory",
+       "desc": "文学理论提供分析文本的系统框架，从形式主义到后结构主义。",
+       "concepts": [
+        "叙事学",
+        "互文性",
+        "解构主义",
+        "读者反应",
+        "文化研究"
+       ],
+       "questions": [
+        "意义由作者/文本/读者谁赋予？",
+        "形式与历史如何交涉？"
+       ]
       },
       {
        "id": "lit-compare",
        "zh": "比较文学",
-       "en": "Comparative Literature"
+       "en": "Comparative Literature",
+       "desc": "比较文学跨国跨语种比较文学现象与观念。",
+       "concepts": [
+        "平行研究",
+        "影响研究",
+        "翻译研究",
+        "主题母题",
+        "跨媒介"
+       ],
+       "questions": [
+        "可比性从何而来？",
+        "翻译如何重塑文本？"
+       ]
       },
       {
        "id": "lit-poetics",
        "zh": "诗学",
-       "en": "Poetics"
+       "en": "Poetics",
+       "desc": "诗学研究诗歌的结构、声音、意象与成诗规律。",
+       "concepts": [
+        "韵律与格律",
+        "意象与隐喻",
+        "抒情主体",
+        "诗性语言",
+        "跨语种诗学"
+       ],
+       "questions": [
+        "诗为何种语言的特殊状态？",
+        "节奏如何生成意义？"
+       ]
       }
      ]
     },
@@ -566,42 +1355,138 @@
       {
        "id": "lin-phono",
        "zh": "语音学与音系学",
-       "en": "Phonetics & Phonology"
+       "en": "Phonetics & Phonology",
+       "desc": "语音学与音系学分别研究语音的物理/发音与语音系统的结构规则。",
+       "concepts": [
+        "音素",
+        "音节结构",
+        "声调系统",
+        "音系规则",
+        "语音变化"
+       ],
+       "questions": [
+        "语音如何被声道产生与感知？",
+        "语音如何组织成规则的系统？"
+       ]
       },
       {
        "id": "lin-syntax",
        "zh": "句法学",
-       "en": "Syntax"
+       "en": "Syntax",
+       "desc": "句法学研究词组与句子的结构规则。",
+       "concepts": [
+        "短语结构",
+        "句法树",
+        "生成文法",
+        "空语类",
+        "参数化"
+       ],
+       "questions": [
+        "句子如何被结构生成？",
+        "人类句法的普遍约束是什么？"
+       ]
       },
       {
        "id": "lin-semantics",
        "zh": "语义学",
-       "en": "Semantics"
+       "en": "Semantics",
+       "desc": "语义学研究意义的组成、指称与真值条件。",
+       "concepts": [
+        "指称",
+        "真值语义",
+        "涵义与指称",
+        "量词",
+        "意义组合"
+       ],
+       "questions": [
+        "意义如何由部分组成？",
+        "语言与世界如何对应？"
+       ]
       },
       {
        "id": "lin-pragma",
        "zh": "语用学",
-       "en": "Pragmatics"
+       "en": "Pragmatics",
+       "desc": "语用学研究语境中的语言使用、意图与推意。",
+       "concepts": [
+        "言外之意",
+        "合作原则",
+        "指示语",
+        "预设",
+        "礼貌策略"
+       ],
+       "questions": [
+        "说话者意与字面意义如何分离？",
+        "理解如何在语境中被修复？"
+       ]
       },
       {
        "id": "lin-hist",
        "zh": "历史语言学",
-       "en": "Historical Linguistics"
+       "en": "Historical Linguistics",
+       "desc": "历史语言学追溯语言的亲属关系与变化规律。",
+       "concepts": [
+        "音变",
+        "比较法",
+        "语系",
+        "语言接触",
+        "语言档案"
+       ],
+       "questions": [
+        "语言如何随时间演化？",
+        "同源语言如何被重建？"
+       ]
       },
       {
        "id": "lin-social",
        "zh": "社会语言学",
-       "en": "Sociolinguistics"
+       "en": "Sociolinguistics",
+       "desc": "社会语言学考察语言与社会身份、群体的交互。",
+       "concepts": [
+        "方言与变体",
+        "双语与多语",
+        "语言态度",
+        "语言规划",
+        "规范与俗语"
+       ],
+       "questions": [
+        "语言如何使用标记身份？",
+        "语言政策如何影响社会？"
+       ]
       },
       {
        "id": "lin-cogn",
        "zh": "心理语言学",
-       "en": "Psycholinguistics"
+       "en": "Psycholinguistics",
+       "desc": "心理语言学研究语言的理解、产生与习得的心智机制。",
+       "concepts": [
+        "语言加工",
+        "词汇通达",
+        "句法解析",
+        "双语认知",
+        "语言与脑"
+       ],
+       "questions": [
+        "句法解析如何在大脑中实时进行？",
+        "语言是否为独立模块？"
+       ]
       },
       {
        "id": "lin-comp",
        "zh": "计算语言学",
-       "en": "Computational Linguistics"
+       "en": "Computational Linguistics",
+       "desc": "计算语言学以模型与算法处理语言数据。",
+       "concepts": [
+        "NLP",
+        "词向量",
+        "句法分析器",
+        "语料库",
+        "大语言模型"
+       ],
+       "questions": [
+        "语言知识如何被算法表示？",
+        "大模型如何习得语法？"
+       ]
       }
      ]
     },
@@ -613,32 +1498,104 @@
       {
        "id": "econ-micro",
        "zh": "微观经济学",
-       "en": "Microeconomics"
+       "en": "Microeconomics",
+       "desc": "微观经济学研究个体行为与市场配置。",
+       "concepts": [
+        "供需模型",
+        "弹性",
+        "效用与选择",
+        "成本结构与市场结构",
+        "外部性"
+       ],
+       "questions": [
+        "市场如何出清？",
+        "价格如何传递信息？"
+       ]
       },
       {
        "id": "econ-macro",
        "zh": "宏观经济学",
-       "en": "Macroeconomics"
+       "en": "Macroeconomics",
+       "desc": "宏观经济学研究总产出、通胀、就业与经济增长。",
+       "concepts": [
+        "GDP",
+        "货币与财政政策",
+        "通胀与失业",
+        "开放经济",
+        "增长理论"
+       ],
+       "questions": [
+        "总需求如何决定产出？",
+        "政策能否平滑经济波动？"
+       ]
       },
       {
        "id": "econ-etrcs",
        "zh": "计量经济学",
-       "en": "Econometrics"
+       "en": "Econometrics",
+       "desc": "计量经济学以统计方法检验经济关系。",
+       "concepts": [
+        "回归模型",
+        "因果识别",
+        "工具变量",
+        "时间序列",
+        "面板数据"
+       ],
+       "questions": [
+        "相关性如何成为因果？",
+        "识别策略如何应对混淆？"
+       ]
       },
       {
        "id": "econ-behav",
        "zh": "行为经济学",
-       "en": "Behavioral Economics"
+       "en": "Behavioral Economics",
+       "desc": "行为经济学以心理学修正理性人假设。",
+       "concepts": [
+        "启发式与偏差",
+        "前景理论",
+        "锚定效应",
+        "损失厌恶",
+        "助推"
+       ],
+       "questions": [
+        "人在何种情境偏离理性？",
+        "可预测的非理性如何被利用？"
+       ]
       },
       {
        "id": "econ-instit",
        "zh": "制度经济学",
-       "en": "Institutional Economics"
+       "en": "Institutional Economics",
+       "desc": "制度经济学强调规则、组织与历史对经济行为的影响。",
+       "concepts": [
+        "制度变迁",
+        "交易成本",
+        "产权",
+        "路径依赖",
+        "治理"
+       ],
+       "questions": [
+        "制度如何形塑激励？",
+        "制度能否被刻意设计？"
+       ]
       },
       {
        "id": "econ-thought",
        "zh": "经济思想史",
-       "en": "History of Economic Thought"
+       "en": "History of Economic Thought",
+       "desc": "经济思想史梳理经济学说的演变与争论。",
+       "concepts": [
+        "重商主义",
+        "古典经济学",
+        "凯恩斯革命",
+        "边际革命",
+        "芝加哥学派"
+       ],
+       "questions": [
+        "什么是经济学的好问题？",
+        "思想流派的时代烙印何在？"
+       ]
       },
       {
        "id": "econ-game",
@@ -679,22 +1636,70 @@
       {
        "id": "pol-phil",
        "zh": "政治哲学",
-       "en": "Political Philosophy"
+       "en": "Political Philosophy",
+       "desc": "政治哲学追问正义、自由、权力与良好政体的原则。",
+       "concepts": [
+        "正义论",
+        "契约论",
+        "自由主义",
+        "社群主义",
+        "共和主义"
+       ],
+       "questions": [
+        "国家为什么被正当化？",
+        "分配正义应遵从何种原则？"
+       ]
       },
       {
        "id": "pol-compare",
        "zh": "比较政治",
-       "en": "Comparative Politics"
+       "en": "Comparative Politics",
+       "desc": "比较政治学跨国家比较政体、政党与治理绩效。",
+       "concepts": [
+        "政体类型",
+        "选举制度",
+        "政党组织",
+        "威权与民主转型",
+        "治理"
+       ],
+       "questions": [
+        "民主如何成立与巩固？",
+        "制度如何塑造政治后果？"
+       ]
       },
       {
        "id": "pol-ir",
        "zh": "国际关系",
-       "en": "International Relations"
+       "en": "International Relations",
+       "desc": "国际关系研究国家间冲突与合作的世界政治结构。",
+       "concepts": [
+        "现实主义",
+        "自由主义国际秩序",
+        "地缘政治",
+        "国际组织",
+        "安全困境"
+       ],
+       "questions": [
+        "战争是否可被制度约束？",
+        "权力转移如何改造秩序？"
+       ]
       },
       {
        "id": "pol-china",
        "zh": "中国政治",
-       "en": "Chinese Politics"
+       "en": "Chinese Politics",
+       "desc": "中国政治研究中国共产党体制、央地关系与治理逻辑。",
+       "concepts": [
+        "党政体制",
+        "中央与地方",
+        "治理能力",
+        "五年规划",
+        "全过程民主"
+       ],
+       "questions": [
+        "体制如何维持稳定与绩效？",
+        "治理现代化的路径与限度？"
+       ]
       }
      ]
     },
@@ -706,32 +1711,104 @@
       {
        "id": "law-theory",
        "zh": "法理学 / 法哲学",
-       "en": "Jurisprudence"
+       "en": "Jurisprudence",
+       "desc": "法理学与法哲学追问法的本质、效力与正义。",
+       "concepts": [
+        "法的定义",
+        "自然法/实证法",
+        "权利义务",
+        "法律解释",
+        "法治"
+       ],
+       "questions": [
+        "法为何有约束力？",
+        "恶法是否为法？"
+       ]
       },
       {
        "id": "law-constit",
        "zh": "宪法学",
-       "en": "Constitutional Law"
+       "en": "Constitutional Law",
+       "desc": "宪法学研究最高法及其对国家权力的分配与限制。",
+       "concepts": [
+        "宪政秩序",
+        "基本权利",
+        "权力制衡",
+        "违宪审查",
+        "修宪程序"
+       ],
+       "questions": [
+        "宪法如何限制权力？",
+        "基本权利如何被救济？"
+       ]
       },
       {
        "id": "law-civil",
        "zh": "民法学",
-       "en": "Civil Law"
+       "en": "Civil Law",
+       "desc": "民法学调整平等主体间的财产与人身关系。",
+       "concepts": [
+        "物权",
+        "债权",
+        "合同",
+        "侵权责任",
+        "人格权"
+       ],
+       "questions": [
+        "权利如何被界定与救济？",
+        "意思自治与公序良俗如何平衡？"
+       ]
       },
       {
        "id": "law-crim",
        "zh": "刑法学",
-       "en": "Criminal Law"
+       "en": "Criminal Law",
+       "desc": "刑法学研究犯罪构成、责任与刑罚。",
+       "concepts": [
+        "犯罪构成",
+        "正当防卫",
+        "违法性",
+        "罪责原则",
+        "刑罚目的"
+       ],
+       "questions": [
+        "何者应被刑法禁止？",
+        "惩罚的正当性从何而来？"
+       ]
       },
       {
        "id": "law-intl",
        "zh": "国际法",
-       "en": "International Law"
+       "en": "International Law",
+       "desc": "国际法规范国家间关系与国际组织行为。",
+       "concepts": [
+        "国际条约",
+        "主权",
+        "国际法院",
+        "人道法",
+        "习惯国际法"
+       ],
+       "questions": [
+        "国际法何以约束主权国家？",
+        "制裁与人权保护的张力在哪里？"
+       ]
       },
       {
        "id": "law-proc",
        "zh": "程序法",
-       "en": "Procedural Law"
+       "en": "Procedural Law",
+       "desc": "程序法保障实体权利实现的正当过程。",
+       "concepts": [
+        "证据规则",
+        "正当程序",
+        "审判公正",
+        "上诉",
+        "仲裁与调解"
+       ],
+       "questions": [
+        "程序如何保证结果公正？",
+        "效率与公平如何在诉讼中平衡？"
+       ]
       }
      ]
     },
@@ -743,17 +1820,53 @@
       {
        "id": "soc-theory",
        "zh": "社会学理论",
-       "en": "Sociological Theory"
+       "en": "Sociological Theory",
+       "desc": "社会学理论提供解释社会秩序与变迁的宏大视角。",
+       "concepts": [
+        "功能主义",
+        "冲突理论",
+        "结构主义",
+        "交换理论",
+        "现象学社会学"
+       ],
+       "questions": [
+        "社会秩序从何而来？",
+        "个体与结构谁更有因果力？"
+       ]
       },
       {
        "id": "soc-strat",
        "zh": "社会分层",
-       "en": "Social Stratification"
+       "en": "Social Stratification",
+       "desc": "社会分层研究不平等的结构与流动。",
+       "concepts": [
+        "阶级",
+        "地位与声望",
+        "收入不平等",
+        "代际流动",
+        "精英与底层"
+       ],
+       "questions": [
+        "不平等如何被再生产？",
+        "社会流动的门槛在哪里？"
+       ]
       },
       {
        "id": "soc-culture",
        "zh": "文化人类学 / 民族志",
-       "en": "Cultural Anthropology"
+       "en": "Cultural Anthropology",
+       "desc": "文化人类学与民族志通过田野书写理解文化的整体与他性。",
+       "concepts": [
+        "参与观察",
+        "亲属制度",
+        "仪式",
+        "图腾与信仰",
+        "跨文化比较"
+       ],
+       "questions": [
+        "他文化的逻辑如何被理解？",
+        "民族志如何书写真实？"
+       ]
       }
      ]
     },
@@ -765,12 +1878,36 @@
       {
        "id": "edu-phil",
        "zh": "教育哲学",
-       "en": "Philosophy of Education"
+       "en": "Philosophy of Education",
+       "desc": "教育哲学追问教育的目的、价值与知识传递的根据。",
+       "concepts": [
+        "教育目的",
+        "自由与规训",
+        "价值教育",
+        "知识与兴趣",
+        "全人教育"
+       ],
+       "questions": [
+        "教育为何而存在？",
+        "学习应始于欲望抑或规范？"
+       ]
       },
       {
        "id": "edu-learning",
        "zh": "认知与学习科学",
-       "en": "Learning Sciences"
+       "en": "Learning Sciences",
+       "desc": "认知与学习科学研究人如何学习及如何有效设计。",
+       "concepts": [
+        "认知负荷",
+        "迁移",
+        "刻意练习",
+        "动机与元认知",
+        "建构主义"
+       ],
+       "questions": [
+        "学习如何深层发生？",
+        "教育设计如何启动有意义学习？"
+       ]
       }
      ]
     }
@@ -791,27 +1928,87 @@
       {
        "id": "eng-cs",
        "zh": "计算机工程 / 软件",
-       "en": "Computer & Software Engineering"
+       "en": "Computer & Software Engineering",
+       "desc": "计算机工程与软件从算法到系统的工程化实现。",
+       "concepts": [
+        "软件工程",
+        "操作系统",
+        "网络协议",
+        "编译器",
+        "分布式系统"
+       ],
+       "questions": [
+        "软件系统如何被可靠设计？",
+        "抽象如何帮助规模化？"
+       ]
       },
       {
        "id": "eng-ee",
        "zh": "电子工程",
-       "en": "Electronics"
+       "en": "Electronics",
+       "desc": "电子工程研究电路、信号与电子系统。",
+       "concepts": [
+        "模拟电路",
+        "数字逻辑",
+        "信号处理",
+        "嵌入式系统",
+        "芯片设计"
+       ],
+       "questions": [
+        "信号如何被无损处理？",
+        "半导体器件如何工作？"
+       ]
       },
       {
        "id": "eng-mech",
        "zh": "机械工程",
-       "en": "Mechanical Engineering"
+       "en": "Mechanical Engineering",
+       "desc": "机械工程涉及力学、材料与机构设计。",
+       "concepts": [
+        "静力学与动力学",
+        "材料力学",
+        "热传递",
+        "机构与传动",
+        "制造工艺"
+       ],
+       "questions": [
+        "结构如何承受载荷？",
+        "机械系统如何实现精确定位？"
+       ]
       },
       {
        "id": "eng-civil",
        "zh": "土木工程",
-       "en": "Civil Engineering"
+       "en": "Civil Engineering",
+       "desc": "土木工程建造桥梁、道路、建筑与水利等基础设施。",
+       "concepts": [
+        "结构分析",
+        "地基基础",
+        "建筑材料",
+        "防灾设计",
+        "工程项目"
+       ],
+       "questions": [
+        "结构如何安全地立于大地？",
+        "基础设施如何应对灾害与老化？"
+       ]
       },
       {
        "id": "eng-materials",
        "zh": "材料科学",
-       "en": "Materials Science"
+       "en": "Materials Science",
+       "desc": "材料科学研究物质结构-性能关系并设计新材料。",
+       "concepts": [
+        "晶体结构",
+        "相图",
+        "力学性能",
+        "聚合物/陶瓷/金属",
+        "纳米材料"
+       ],
+       "questions": [
+        "微观组织如何决定宏观性能？",
+        "材料如何为新应用而设计？"
+       ]
       }
      ]
     },
@@ -823,27 +2020,87 @@
       {
        "id": "med-basic",
        "zh": "基础医学",
-       "en": "Basic Medical Sciences"
+       "en": "Basic Medical Sciences",
+       "desc": "基础医学从解剖、生理、生化、病理与药理为临床提供机制知识。",
+       "concepts": [
+        "解剖学",
+        "生理机制",
+        "病理生理",
+        "免疫应答",
+        "药理作用"
+       ],
+       "questions": [
+        "疾病如何被机制地解释？",
+        "正常结构与功能为何是认知底线？"
+       ]
       },
       {
        "id": "med-internal",
        "zh": "内科学",
-       "en": "Internal Medicine"
+       "en": "Internal Medicine",
+       "desc": "内科学研究非手术性疾病的诊断与治疗。",
+       "concepts": [
+        "心血管",
+        "内分泌",
+        "呼吸系统",
+        "消化系统",
+        "慢性病管理"
+       ],
+       "questions": [
+        "综合征如何被鉴别？",
+        "多系统疾病的整合诊治如何可能？"
+       ]
       },
       {
        "id": "med-surgery",
        "zh": "外科学",
-       "en": "Surgery"
+       "en": "Surgery",
+       "desc": "外科学研究以手术为主要手段的疾病治疗。",
+       "concepts": [
+        "无菌术",
+        "麻醉",
+        "切口与愈合",
+        "微创手术",
+        "移植"
+       ],
+       "questions": [
+        "手术决策何时优于保守？",
+        "创伤如何影响机体？"
+       ]
       },
       {
        "id": "med-psychiatry",
        "zh": "神经病学与精神病学",
-       "en": "Neurology & Psychiatry"
+       "en": "Neurology & Psychiatry",
+       "desc": "神经病学与精神病学处理神经与精神障碍。",
+       "concepts": [
+        "器质性脑病",
+        "精神分裂症谱系",
+        "情感障碍",
+        "药物-心理治疗",
+        "认知神经损害"
+       ],
+       "questions": [
+        "精神障碍如何被诊断与分类？",
+        "药物与心理治疗如何整合？"
+       ]
       },
       {
        "id": "med-pharma",
        "zh": "药理学",
-       "en": "Pharmacology"
+       "en": "Pharmacology",
+       "desc": "药理学研究药物与机体的相互作用。",
+       "concepts": [
+        "药代动力学",
+        "药效学",
+        "剂量-反应",
+        "受体机制",
+        "不良反应"
+       ],
+       "questions": [
+        "药物如何在体内代谢？",
+        "疗效与安全的平衡取决于什么？"
+       ]
       }
      ]
     },
@@ -885,17 +2142,53 @@
       {
        "id": "tcm-acup",
        "zh": "针灸推拿",
-       "en": "Acupuncture & Moxibustion"
+       "en": "Acupuncture & Moxibustion",
+       "desc": "针灸推拿以经络与腧穴调节血气运行。",
+       "concepts": [
+        "经脉腧穴",
+        "得气",
+        "补泻手法",
+        "督脉与任脉",
+        "推拿手法"
+       ],
+       "questions": [
+        "针刺如何调节气血？",
+        "循经感传的机制为何？"
+       ]
       },
       {
        "id": "tcm-formulas",
        "zh": "方剂学",
-       "en": "Formulas"
+       "en": "Formulas",
+       "desc": "方剂学按君臣佐使组织药物，讲究随证化裁。",
+       "concepts": [
+        "君臣佐使",
+        "方剂配伍",
+        "八纲辨证选方",
+        "药性归经",
+        "经方时方"
+       ],
+       "questions": [
+        "经方为何如此简洁而有力？",
+        "配伍如何照顾病证而调和药性？"
+       ]
       },
       {
        "id": "tcm-meridians",
        "zh": "经络与气",
-       "en": "Meridians & Qi"
+       "en": "Meridians & Qi",
+       "desc": "经络与气研究人体功能网络的运行与调节。",
+       "concepts": [
+        "经络系统",
+        "营卫气",
+        "三焦",
+        "气机升降",
+        "导引行气"
+       ],
+       "questions": [
+        "经络是否对应功能系统的网络？",
+        "气的失衡如何被觉察？"
+       ]
       }
      ]
     },
@@ -907,12 +2200,36 @@
       {
        "id": "agri-crop",
        "zh": "农艺 / 作物学",
-       "en": "Agronomy"
+       "en": "Agronomy",
+       "desc": "农艺与作物学研究作物生长、育种与栽培管理。",
+       "concepts": [
+        "光合作用与产量",
+        "育种",
+        "土壤肥力",
+        "病虫害防治",
+        "可持续种植"
+       ],
+       "questions": [
+        "产量如何在不耗尽天地下提高？",
+        "育种如何应对气候变化？"
+       ]
       },
       {
        "id": "agri-livestock",
        "zh": "畜牧与兽医",
-       "en": "Animal Husbandry"
+       "en": "Animal Husbandry",
+       "desc": "畜牧与兽医研究动物健康与生产。",
+       "concepts": [
+        "动物营养",
+        "繁殖管理",
+        "疫病防控",
+        "兽医临床",
+        "福利养殖"
+       ],
+       "questions": [
+        "畜禽生产如何顺其天性而又高效？",
+        "人畜共患病如何被防控？"
+       ]
       }
      ]
     },
@@ -924,27 +2241,87 @@
       {
        "id": "biz-mgmt",
        "zh": "管理学",
-       "en": "Management"
+       "en": "Management",
+       "desc": "管理学协调组织规划、组织、领导与控制。",
+       "concepts": [
+        "目标管理",
+        "组织结构",
+        "领导力",
+        "流程优化",
+        "绩效管理"
+       ],
+       "questions": [
+        "组织如何既分工又协同？",
+        "激励如何作用于行动？"
+       ]
       },
       {
        "id": "biz-mkt",
        "zh": "市场营销",
-       "en": "Marketing"
+       "en": "Marketing",
+       "desc": "市场营销研究价值的识别、创造与交付。",
+       "concepts": [
+        "目标市场",
+        "定位",
+        "品牌",
+        "消费者行为",
+        "4P/4C"
+       ],
+       "questions": [
+        "品牌为何超越功能？",
+        "痛点如何转化为需求？"
+       ]
       },
       {
        "id": "biz-org",
        "zh": "组织行为",
-       "en": "Organizational Behavior"
+       "en": "Organizational Behavior",
+       "desc": "组织行为学研究组织中人的行为与群体动力。",
+       "concepts": [
+        "动机理论",
+        "团队",
+        "组织文化",
+        "冲突管理",
+        "心理契约"
+       ],
+       "questions": [
+        "个体目标如何与组织一致？",
+        "文化如何被塑造与改变？"
+       ]
       },
       {
        "id": "biz-strategy",
        "zh": "战略管理",
-       "en": "Strategy"
+       "en": "Strategy",
+       "desc": "战略管理研究企业长期竞争优势的来源。",
+       "concepts": [
+        "竞争优势",
+        "波特五力",
+        "核心竞争力",
+        "战略定位",
+        "组织能力"
+       ],
+       "questions": [
+        "资源与位置哪个更决定胜局？",
+        "战略如何随环境演化？"
+       ]
       },
       {
        "id": "biz-finance",
        "zh": "金融学",
-       "en": "Finance"
+       "en": "Finance",
+       "desc": "金融学研究资金的时间价值、风险定价与市场。",
+       "concepts": [
+        "现值与贴现",
+        "资产定价",
+        "风险与收益",
+        "衍生品",
+        "资本结构"
+       ],
+       "questions": [
+        "风险如何被定价？",
+        "市场是有效还是可预测？"
+       ]
       }
      ]
     },
@@ -956,22 +2333,69 @@
       {
        "id": "cr-arch",
        "zh": "建筑",
-       "en": "Architecture"
+       "en": "Architecture",
+       "desc": "建筑以空间、结构与人的栖居为本。",
+       "concepts": [
+        "空间设计",
+        "结构理性",
+        "场所精神",
+        "材料与光影",
+        "城市肌理"
+       ],
+       "questions": [
+        "何处惊险何处安顿？",
+        "建筑如何同时是工程与诗？"
+       ]
       },
       {
        "id": "cr-music",
        "zh": "音乐",
-       "en": "Music"
+       "en": "Music",
+       "desc": "音乐研究声音组织与音响体验，从乐理到作曲与聆听。",
+       "concepts": [
+        "调性与和声",
+        "节奏与织体",
+        "曲式",
+        "对位",
+        "音响美学"
+       ],
+       "questions": [
+        "和声如何牵动情绪？",
+        "确定性乐谱与即兴张力何在？"
+       ]
       },
       {
        "id": "cr-visual",
        "zh": "视觉艺术",
-       "en": "Visual Arts"
+       "en": "Visual Arts",
+       "desc": "视觉艺术涵盖绘画、雕塑与图像之形与意。",
+       "concepts": [
+        "构图与色彩",
+        "再现与抽象",
+        "媒介与物质",
+        "图像叙事"
+       ],
+       "questions": [
+        "图像如何完成再现之外的言说？",
+        "风格是否为时代的眼？"
+       ]
       },
       {
        "id": "cr-theater",
        "zh": "戏剧与表演",
-       "en": "Theater & Performance"
+       "en": "Theater & Performance",
+       "desc": "戏剧与表演以身体与时间在场呈现人的处境。",
+       "concepts": [
+        "剧本结构",
+        "舞台调度",
+        "表演方法",
+        "观众关系",
+        "戏剧张力"
+       ],
+       "questions": [
+        "舞台上何为真实？",
+        "文本与演出谁为主？"
+       ]
       }
      ]
     }

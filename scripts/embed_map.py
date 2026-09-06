@@ -62,6 +62,59 @@ def merge_wechat(books):
     print(f"合并微信读书记录: {len(wxr)} 条, 新增书目 {added}, 已读标注 {len(read_meta)}")
     return merged, read_meta
 
+def assign_domain(title, author=""):
+    """用书名+作者关键词粗判学科域（用于轴语义化）。"""
+    t = (title or "") + " " + (author or "")
+    rules = [
+        ("数学", ["数学", "代数", "几何", "拓扑", "微积分", "概率", "统计", "数论", "算法", "图论"]),
+        ("计算机", ["计算", "计算机", "人工智能", "信息论", "编程", "软件", "数据", "神经网络", "深度", "机器", "脑", "语言模型"]),
+        ("物理", ["物理", "量子", "相对论", "力学", "宇宙", "黑洞", "时间简史", "熵"]),
+        ("化学", ["化学"]),
+        ("生物", ["生物", "基因", "细胞", "神经", "物种", "生态", "进化", "演化"]),
+        ("医学", ["医", "养生", "内经", "伤寒", "本草", "针灸", "药", "健康", "消化", "经络"]),
+        ("文学", ["文学", "小说", "选集", "文集", "全集", "诗集", "散文", "诗", "传", "记", "记", "梦", "上校", "钟楼", "日瓦戈", "远大前程", "百年孤独", "红楼梦", "三国", "水浒", "西游记", "金庸", "笑傲", "射雕", "天龙", "变形记", "城堡", "局外人", "人间失格", "雪国", "围城", "边城", "呐喊", "朝花", "飘", "简爱", "傲慢与偏见", "悲惨世界", "巴黎圣母院", "战争与和平", "安娜", "罪与罚", "卡拉马佐夫", "卡拉马"]),
+        ("哲学", ["哲学", "存在", "沉思录", "理想国", "会饮", "形而上学", "认识", "形而", "尼采", "康德", "海德格尔", "维特根斯坦", "萨特", "加缪", "存在主义", "道德", "伦理学", "逻辑哲学"]),
+        ("心理学", ["心理", "精神分析", "弗洛伊德", "荣格", "自卑", "人格", "情绪", "认知", "梦的解析"]),
+        ("历史", ["史", "通史", "史记", "资治", "年代", "春秋", "战国", "王朝", "帝", "剑桥", "人类简史", "未来简史"]),
+        ("经济", ["经济学", "经济", "资本", "货币", "市场", "金融", "增长", "宏观", "微观", "博弈"]),
+        ("政治", ["政治", "国家", "政体", "社会契约", "利维坦", "君主论", "权力", "民主"]),
+        ("社会", ["社会", "乌合之众", "乡土", "身份", "群体", "文化"]) ,
+        ("传记", ["自传", "回忆录", "传", "访谈"]),
+        ("生活", ["原则", "习惯", "高效能", "财富", "人生的"]),
+    ]
+    for dom, kws in rules:
+        for k in kws:
+            if k and k in t:
+                return dom
+    return "综合"
+
+def describe_axis(Y, books, axis_idx, topn=18):
+    """给一条坐标轴取名：取两端书的学科域分布，归纳'高↔低'两端标签。
+    注意：由于 TSNE random_state=42 固定，坐标稳定，故人工校准标签覆盖自动推断。"""
+    import collections, numpy as np
+    vals = Y[:, axis_idx]
+    order = np.argsort(vals)
+    low = order[:topn]      # 低端
+    high = order[-topn:]    # 高端
+    def doms(idx_list):
+        c = collections.Counter(assign_domain(books[i].get("title",""), books[i].get("author","")) for i in idx_list)
+        return c
+    lc, hc = doms(low), doms(high)
+    def top2(c):
+        return "·".join([k for k,_ in c.most_common(2)])
+    ltag, htag = top2(lc), top2(hc)
+    # 若两端相同则取单一
+    if ltag == htag:
+        ltag, htag = top2(lc), top2(hc)
+    return {"axis": axis_idx, "high": htag, "low": ltag}
+
+# 人工校准轴标签（基于固定 seed 下实际坐标两端书名归纳，seed 变化需重标）
+AXIS_LABELS = [
+    {"low": "文学 · 浪漫", "high": "医学 · 养生"},
+    {"low": "科幻 · 科技", "high": "经典 · 哲学"},
+    {"low": "历史 · 杂览", "high": "心理 · 社会"},
+]
+
 def main():
     books = load_books()
     books, read_meta = merge_wechat(books)
@@ -116,8 +169,15 @@ def main():
         nodes.append(node)
 
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
-    json.dump({"nodes": nodes}, open(OUT, "w"), ensure_ascii=False, indent=1)
+    # 轴语义化：使用人工校准标签（TSNE seed 固定则坐标稳定）
+    axes = []
+    for i in range(3):
+        axes.append({"axis": i, "low": AXIS_LABELS[i]["low"], "high": AXIS_LABELS[i]["high"]})
+    json.dump({"nodes": nodes, "axes": axes}, open(OUT, "w"), ensure_ascii=False, indent=1)
     print(f"✅ 已写 {OUT}，{len(nodes)} 个节点")
+    print("  轴语义:")
+    for a in axes:
+        print(f"    轴{a['axis']}: 低={a['low']} ↔ 高={a['high']}")
 
 if __name__ == "__main__":
     main()
