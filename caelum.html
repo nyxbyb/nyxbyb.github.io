@@ -6,7 +6,7 @@
   <title>凿星图 · Caelum</title>
   <meta name="description" content="凿星图——夜神的星空。记录我的足迹，绘制我的视野。">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;900&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #0a0b0e;
@@ -18,6 +18,7 @@
       --accent-glow: rgba(238, 240, 245, 0.12);
       --star-gray: #3a4257;
       --serif: "Noto Serif SC", "Songti SC", "SimSun", serif;
+      --serif-en: "Cormorant Garamond", Georgia, "Times New Roman", serif;
       --sans: "Inter", "-apple-system", "PingFang SC", sans-serif;
     }
 
@@ -58,23 +59,32 @@
     }
     .nav-dot {
       width: 8px; height: 8px; border-radius: 50%;
-      background: rgba(214, 216, 224, 0.2);
+      background: rgba(232, 234, 240, 0.2);
       cursor: pointer; position: relative;
       transition: all 0.3s ease;
     }
-    .nav-dot::after {
+    .nav-dot::before {
       content: attr(data-label);
       position: absolute; left: 20px; top: 50%; transform: translateY(-50%);
       white-space: nowrap; font-size: 13px; color: var(--ink-dim);
       opacity: 0; transition: opacity 0.3s; pointer-events: none;
       letter-spacing: 0.1em;
     }
+    .nav-dot::after {
+      content: attr(data-label-en);
+      position: absolute; left: 20px; top: 50%; transform: translateY(10px);
+      white-space: nowrap; font-family: var(--serif-en);
+      font-style: italic; font-size: 12px; color: var(--accent-dim);
+      opacity: 0; transition: opacity 0.3s; pointer-events: none;
+      letter-spacing: 0.08em;
+    }
+    .nav-dot:hover::before, .nav-dot.active::before,
     .nav-dot:hover::after, .nav-dot.active::after { opacity: 1; }
     .nav-dot.active {
       background: var(--accent);
       box-shadow: 0 0 12px var(--accent-glow), 0 0 4px var(--accent);
     }
-    .nav-dot.active::after { color: var(--accent); }
+    .nav-dot.active::before { color: var(--accent); }
 
     /* ========== 章节通用 ========== */
     section {
@@ -96,10 +106,11 @@
     }
     .section-title .title-en {
       display: block;
-      font-family: var(--sans);
-      font-size: 0.32em; font-weight: 400;
-      letter-spacing: 0.35em; color: var(--accent-dim);
-      text-transform: uppercase;
+      font-family: var(--serif-en);
+      font-style: italic;
+      font-size: 0.36em; font-weight: 500;
+      letter-spacing: 0.2em; color: var(--accent-dim);
+      text-transform: none;
       margin-top: 10px;
     }
 
@@ -256,61 +267,122 @@
       padding: 4px 12px; transition: all 0.25s;
     }
     .chip.active { color: var(--accent); border-color: var(--accent); background: rgba(238,240,245,0.06); }
-    .batch-list {
-      flex: 1; overflow-y: auto; padding-right: 8px;
+    .batch-list, .batch-flow { flex: 1; overflow-y: auto; padding-right: 8px; }
+
+    .batch-flow {
+      display: flex; flex-direction: column; justify-content: center;
+      max-width: 560px; margin: 0 auto; width: 100%; text-align: center;
+      overflow: visible;
     }
-    .batch-list::-webkit-scrollbar { width: 6px; }
-    .batch-list::-webkit-scrollbar-thumb { background: rgba(238,240,245,0.15); border-radius: 3px; }
-    .batch-item {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 10px 14px; border-bottom: 1px solid rgba(238,240,245,0.07);
-      transition: background 0.2s;
+    .bf-progress {
+      font-size: 12px; color: rgba(232,234,240,0.4);
+      letter-spacing: 0.15em; margin-bottom: 18px;
+      font-family: var(--sans);
     }
-    .batch-item:hover { background: rgba(238,240,245,0.03); }
-    .batch-item .bi-title { font-size: 14px; color: var(--ink); letter-spacing: 0.04em; }
-    .batch-item .bi-author { font-size: 11px; color: var(--ink-dim); margin-top: 2px; }
-    .batch-item .bi-acts { display: flex; gap: 6px; }
-    .batch-item .bi-acts button {
-      font-family: var(--sans); font-size: 11px; letter-spacing: 0.1em;
-      color: var(--ink-dim); background: transparent;
-      border: 1px solid rgba(238,240,245,0.15); border-radius: 14px;
-      padding: 3px 10px; cursor: pointer; transition: all 0.25s;
+    .bf-title {
+      font-size: 26px; color: var(--accent); font-weight: 600;
+      letter-spacing: 0.1em; margin-bottom: 8px; line-height: 1.4;
     }
-    .batch-item .bi-acts button:hover { color: var(--accent); border-color: var(--accent); }
-    .batch-item .bi-acts button.on { color: var(--accent); border-color: var(--accent); background: rgba(238,240,245,0.08); }
+    .bf-author {
+      font-size: 13px; color: var(--ink-dim); letter-spacing: 0.1em;
+      margin-bottom: 26px;
+    }
+    #bfNote {
+      width: 100%; background: rgba(14,18,28,0.7);
+      border: 1px solid rgba(238,240,245,0.18); color: var(--ink);
+      font-family: var(--serif); font-size: 14px; line-height: 1.8;
+      padding: 14px 16px; border-radius: 12px; resize: vertical;
+      letter-spacing: 0.05em; margin-bottom: 26px;
+    }
+    #bfNote:focus { outline: none; border-color: var(--accent); }
+    .bf-acts {
+      display: flex; gap: 16px; justify-content: center; align-items: center;
+    }
+    .bf-acts button {
+      font-family: var(--serif); font-size: 18px; letter-spacing: 0.35em;
+      cursor: pointer; border-radius: 40px; transition: all 0.25s;
+      padding: 16px 0;
+    }
+    .bf-acts .bf-fav {
+      flex: 1.2; color: #fff; background: rgba(238,240,245,0.16);
+      border: 1px solid var(--accent);
+    }
+    .bf-acts .bf-fav:hover { background: rgba(238,240,245,0.28); box-shadow: 0 0 24px var(--accent-glow); }
+    .bf-acts .bf-read {
+      flex: 1.2; color: var(--accent); background: transparent;
+      border: 1px solid rgba(238,240,245,0.5);
+    }
+    .bf-acts .bf-read:hover { background: rgba(238,240,245,0.12); }
+    .bf-acts .bf-skip {
+      flex: 1; font-size: 14px; color: var(--ink-dim);
+      background: transparent; border: 1px solid rgba(238,240,245,0.15);
+    }
+    .bf-acts .bf-skip:hover { color: var(--ink); border-color: rgba(238,240,245,0.4); }
+    .batch-empty {
+      text-align: center; padding: 60px 0; color: var(--ink-dim);
+      font-size: 14px; letter-spacing: 0.1em;
+    }
+    .batch-list, .batch-flow { flex: 1; overflow-y: auto; padding-right: 8px; }
 
     /* ========== 第3屏：星域 ========== */
     #sec-domain { background: var(--bg); }
-    .domain-grid {
-      display: grid; grid-template-columns: repeat(2, 1fr);
-      gap: 18px; max-width: 860px; width: 100%;
+    /* 第3屏：星域 · 分类树 */
+    #sec-domain { background: var(--bg); justify-content: flex-start; padding-top: 12vh; overflow-y: auto; }
+    .tree-wrap {
+      width: 100%; max-width: 760px; margin: 0 auto;
+      font-family: var(--serif);
     }
-    .domain-card {
-      border: 1px solid rgba(238,240,245,0.12);
-      border-radius: 12px; padding: 20px 26px;
-      background: rgba(10, 14, 22, 0.6);
-      backdrop-filter: blur(4px);
-      transition: all 0.4s ease; cursor: pointer;
-      height: fit-content;
+    .tree-branch {
+      margin-bottom: 2px;
     }
-    .domain-card:hover {
-      border-color: rgba(238,240,245,0.35);
-      background: rgba(14, 18, 28, 0.8);
-      transform: translateY(-2px);
+    .tb-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 12px; border-radius: 8px;
+      cursor: pointer; transition: background 0.2s;
+      border-left: 2px solid transparent;
     }
-    .domain-card h3 {
-      font-size: 17px; color: var(--accent); font-weight: 600;
-      letter-spacing: 0.15em; margin-bottom: 6px;
+    .tb-row:hover { background: rgba(238,240,245,0.045); }
+    .tree-branch-open > .tb-row { border-left-color: var(--accent-dim); }
+    .tb-toggle {
+      width: 16px; text-align: center; color: var(--accent-dim);
+      font-size: 13px; user-select: none;
     }
-    .domain-card p {
-      font-size: 12.5px; color: var(--ink-dim); line-height: 1.65;
-      letter-spacing: 0.05em;
+    .tb-name { font-size: 15px; color: var(--ink); letter-spacing: 0.06em; }
+    .tb-name i {
+      font-family: var(--serif-en); font-style: italic;
+      font-size: 0.85em; color: var(--accent-dim); margin-left: 8px;
+      font-weight: 400;
     }
-    .domain-card .domain-en {
-      font-size: 10px; color: rgba(232,234,240,0.3);
-      letter-spacing: 0.2em; text-transform: uppercase;
-      margin-top: 8px;
+    .tb-note {
+      margin-left: auto; font-size: 11px; color: rgba(232,234,240,0.4);
+      letter-spacing: 0.1em; font-family: var(--serif);
     }
+    .tb-children {
+      padding-left: 26px; border-left: 1px solid rgba(238,240,245,0.1);
+      margin-left: 8px; overflow: hidden; max-height: 3000px;
+      transition: max-height 0.4s ease;
+    }
+    .tree-branch:not(.tree-branch-open) > .tb-children { max-height: 0; }
+    .tree-branch:not(.tree-branch-open) > .tb-row .tb-toggle { content: "▸"; }
+    .tree-leaf {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 7px 12px; border-radius: 8px;
+      transition: background 0.2s;
+    }
+    .tree-leaf:hover { background: rgba(238,240,245,0.03); }
+    .tree-leaf .tb-name { font-size: 14px; }
+    .tb-mark { display: flex; gap: 6px; opacity: 0; transition: opacity 0.25s; }
+    .tree-leaf:hover .tb-mark { opacity: 1; }
+    .tb-mark button {
+      font-family: var(--serif); font-size: 11px; letter-spacing: 0.08em;
+      color: var(--ink-dim); background: transparent;
+      border: 1px solid rgba(238,240,245,0.15); border-radius: 12px;
+      padding: 2px 10px; cursor: pointer; transition: all 0.2s;
+    }
+    .tb-mark button:hover { color: var(--accent); border-color: var(--accent); }
+    .tb-mark button[data-m="fav"].on { color: #fff; border-color: var(--accent); background: rgba(238,240,245,0.14); }
+    .tb-mark button[data-m="read"].on { color: var(--accent); border-color: var(--accent); }
+    .tree-leaf .tb-name .leaf-state { font-size: 11px; color: rgba(232,234,240,0.35); margin-left: 6px; }
 
     /* ========== 第4屏：拓星 ========== */
     #sec-frontier { background: var(--bg-deep); }
@@ -330,18 +402,13 @@
       background: rgba(14, 18, 28, 0.7);
     }
     .frontier-item .fi-title {
-      font-size: 15px; color: var(--ink); font-weight: 600;
-      letter-spacing: 0.05em;
+      font-family: var(--serif-en);
+      font-size: 16px; font-weight: 500; color: var(--ink);
+      letter-spacing: 0.02em; line-height: 1.4;
     }
     .frontier-item .fi-meta {
-      font-size: 12px; color: var(--ink-dim); margin-top: 6px;
-      letter-spacing: 0.1em;
-    }
-    .frontier-item .fi-badge {
-      font-size: 11px; color: var(--accent); letter-spacing: 0.15em;
-      border: 1px solid rgba(238, 240, 245, 0.3);
-      padding: 4px 12px; border-radius: 20px;
-      white-space: nowrap;
+      font-size: 12px; color: var(--ink-dim); margin-top: 7px;
+      letter-spacing: 0.04em;
     }
 
     /* ========== 第5屏：跋 ========== */
@@ -401,15 +468,32 @@
     }
     .frontier-more:hover { color: var(--accent); border-bottom-color: var(--accent); }
 
-    /* 第5屏：理念 */
-    #sec-vision { background: var(--bg); }
-    .vision-quote {
-      max-width: 620px; text-align: center;
-      font-size: 18px; color: var(--ink); line-height: 2.3;
-      letter-spacing: 0.08em; font-weight: 300;
+    /* 第5屏：理念 · 散落星句 */
+    #sec-vision { background: radial-gradient(ellipse at 60% 30%, #0a0e1a 0%, var(--bg) 70%); }
+    .vision-stars { position: relative; width: 100%; height: 100%; }
+    .vs {
+      position: absolute; max-width: 340px;
+      font-size: 15px; line-height: 1.9;
+      color: var(--ink-dim); letter-spacing: 0.06em;
+      opacity: 0.75; font-weight: 300;
+      transition: opacity 0.5s, color 0.5s, text-shadow 0.5s;
+      animation: starFloat 7s ease-in-out infinite alternate;
     }
-    .vision-quote b {
-      color: var(--accent); font-weight: 600;
+    .vs:hover { opacity: 1; color: var(--ink); text-shadow: 0 0 12px var(--accent-glow); }
+    /* 各句散布坐标 */
+    .vs-1  { left: 4vw;  top: 14%; animation-delay: 0s; }
+    .vs-2  { left: 58vw; top: 12%; font-style: italic; font-family: var(--serif-en); font-size: 20px; color: var(--accent); animation-delay: 0.4s; }
+    .vs-3  { right: 8vw; top: 26%; text-align: right; animation-delay: 0.8s; }
+    .vs-4  { left: 12vw; top: 38%; font-style: italic; font-family: var(--serif-en); font-size: 22px; color: var(--accent-dim); animation-delay: 1.2s; }
+    .vs-5  { left: 50vw; top: 42%; animation-delay: 1.6s; }
+    .vs-6  { right: 20vw; top: 56%; animation-delay: 2s; }
+    .vs-7  { left: 6vw;  top: 64%; animation-delay: 2.4s; }
+    .vs-8  { left: 38vw; top: 66%; font-style: italic; font-family: var(--serif-en); font-size: 18px; color: var(--accent); animation-delay: 2.8s; }
+    .vs-9  { right: 6vw;  top: 76%; text-align: right; animation-delay: 3.2s; }
+    .vs-10 { left: 22vw; top: 84%; font-style: italic; font-family: var(--serif-en); font-size: 18px; color: var(--accent-dim); animation-delay: 3.6s; }
+    @keyframes starFloat {
+      from { transform: translateY(0); }
+      to   { transform: translateY(-6px); }
     }
 
     /* ========== 响应式 ========== */
@@ -430,12 +514,12 @@
 
 <!-- 左侧导航 -->
 <nav class="nav" id="nav">
-  <div class="nav-dot active" data-label="序" onclick="goTo(0)"></div>
-  <div class="nav-dot" data-label="星图" onclick="goTo(1)"></div>
-  <div class="nav-dot" data-label="星域" onclick="goTo(2)"></div>
-  <div class="nav-dot" data-label="拓星" onclick="goTo(3)"></div>
-  <div class="nav-dot" data-label="理念" onclick="goTo(4)"></div>
-  <div class="nav-dot" data-label="跋" onclick="goTo(5)"></div>
+  <div class="nav-dot active" data-label="序" data-label-en="Prelude" onclick="goTo(0)"></div>
+  <div class="nav-dot" data-label="星图" data-label-en="Starchart" onclick="goTo(1)"></div>
+  <div class="nav-dot" data-label="星域" data-label-en="Domains" onclick="goTo(2)"></div>
+  <div class="nav-dot" data-label="拓星" data-label-en="Frontier" onclick="goTo(3)"></div>
+  <div class="nav-dot" data-label="理念" data-label-en="Visions" onclick="goTo(4)"></div>
+  <div class="nav-dot" data-label="跋" data-label-en="Coda" onclick="goTo(5)"></div>
 </nav>
 
 <!-- ═══════════ 第 1 屏：序 · 个人名片 ═══════════ -->
@@ -470,86 +554,142 @@
   </div>
 </section>
 
-<!-- ═══════════ 第 3 屏：星域 ═══════════ -->
+<!-- ═══════════ 第 3 屏：星域 · 四域分类树 ═══════════ -->
 <section id="sec-domain">
-  <h2 class="section-title"><span>星 域</span><span class="title-en">The Domains</span></h2>
-  <p class="section-sub" data-i18n="domainSub">我眼中的人类知识疆域</p>
-  <div class="domain-grid">
-    <div class="domain-card">
-      <h3 data-i18n="dom1t">形式科学</h3>
-      <p data-i18n="dom1d">逻辑、数学、计算机理论。无需经验便可抵达的纯粹结构，我的母域。</p>
-      <div class="domain-en">FORMAL SCIENCES</div>
+  <h2 class="section-title"><span>星 域</span><span class="title-en">The Domains of Knowledge</span></h2>
+  <div class="tree-wrap" id="treeWrap">
+    <div class="tree-branch tree-branch-open">
+      <div class="tb-row" onclick="toggleBranch(this)">
+        <span class="tb-toggle">▾</span>
+        <span class="tb-name">形式科学 <i>Formal Sciences</i></span>
+        <span class="tb-note">我的母域 · 专业</span>
+      </div>
+      <div class="tb-children">
+        <div class="tree-branch tree-branch-open">
+          <div class="tb-row" onclick="toggleBranch(this)"><span class="tb-toggle">▾</span><span class="tb-name">数学 <i>Mathematics</i></span></div>
+          <div class="tb-children">
+            <div class="tb-leaf"><span class="tb-name">代数 <i>Algebra</i></span><span class="tb-mark" data-leaf="代数"><button data-m="fav">喜爱</button><button data-m="read">已读</button><button data-m="unread">未读</button></span></div>
+            <div class="tb-leaf"><span class="tb-name">分析 <i>Analysis</i></span><span class="tb-mark" data-leaf="分析"><button data-m="fav">喜爱</button><button data-m="read">已读</button><button data-m="unread">未读</button></span></div>
+            <div class="tb-leaf"><span class="tb-name">几何 / 拓扑 <i>Geometry / Topology</i></span><span class="tb-mark" data-leaf="几何拓扑"><button data-m="fav">喜爱</button><button data-m="read">已读</button><button data-m="unread">未读</button></span></div>
+          </div>
+        </div>
+        <div class="tree-leaf"><span class="tb-name">逻辑 <i>Logic</i></span><span class="tb-mark" data-leaf="逻辑"><button data-m="fav">喜爱</button><button data-m="read">已读</button><button data-m="unread">未读</button></span></div>
+        <div class="tree-leaf"><span class="tb-name">计算机理论 <i>Computer Theory</i></span><span class="tb-mark" data-leaf="计算机理论"><button data-m="fav">喜爱</button><button data-m="read">已读</button><button data-m="unread">未读</button></span></div>
+      </div>
     </div>
-    <div class="domain-card">
-      <h3 data-i18n="dom2t">自然科学</h3>
-      <p data-i18n="dom2d">物理、化学、生物。自然如何运行的因果律，我索取图景式的理解。</p>
-      <div class="domain-en">NATURAL SCIENCES</div>
+
+    <div class="tree-branch tree-branch-open">
+      <div class="tb-row" onclick="toggleBranch(this)">
+        <span class="tb-toggle">▾</span>
+        <span class="tb-name">自然科学 <i>Natural Sciences</i></span>
+        <span class="tb-note">图景索取</span>
+      </div>
+      <div class="tb-children">
+        <div class="tree-leaf"><span class="tb-name">物理学 <i>Physics</i></span><span class="tb-mark" data-leaf="物理学"><button data-m="fav">喜爱</button><button data-m="read">已读</button><button data-m="unread">未读</button></span></div>
+        <div class="tree-leaf"><span class="tb-name">化学 <i>Chemistry</i></span><span class="tb-mark" data-leaf="化学"><button data-m="fav">喜爱</button><button data-m="read">已读</button><button data-m="unread">未读</button></span></div>
+        <div class="tree-leaf"><span class="tb-name">生物学 <i>Biology</i></span><span class="tb-mark" data-leaf="生物学"><button data-m="fav">喜爱</button><button data-m="read">已读</button><button data-m="unread">未读</button></span></div>
+        <div class="tree-leaf"><span class="tb-name">地球科学 <i>Earth Sciences</i></span><span class="tb-mark" data-leaf="地球科学"><button data-m="fav">喜爱</button><button data-m="read">已读</button><button data-m="unread">未读</button></span></div>
+      </div>
     </div>
-    <div class="domain-card">
-      <h3 data-i18n="dom3t">人文与社会科学</h3>
-      <p data-i18n="dom3d">哲学、历史、文学、心理学。人类如何构建意义，我投入最深的域。</p>
-      <div class="domain-en">HUMANITIES & SOCIAL</div>
+
+    <div class="tree-branch tree-branch-open">
+      <div class="tb-row" onclick="toggleBranch(this)">
+        <span class="tb-toggle">▾</span>
+        <span class="tb-name">人文与社会科学 <i>Humanities & Social Sciences</i></span>
+        <span class="tb-note">深度投入</span>
+      </div>
+      <div class="tb-children">
+        <div class="tree-branch tree-branch-open">
+          <div class="tb-row" onclick="toggleBranch(this)"><span class="tb-toggle">▾</span><span class="tb-name">哲学 <i>Philosophy</i></span><span class="tb-note">次级域 · 深入</span></div>
+          <div class="tb-children">
+            <div class="tree-leaf"><span class="tb-name">形上 / 存在论 <i>Metaphysics</i></span><span class="tb-mark" data-leaf="形上存在论"><button data-m="fav">喜爱</button><button data-m="read">已读</button><button data-m="unread">未读</button></span></div>
+            <div class="tree-leaf"><span class="tb-name">认识论 <i>Epistemology</i></span><span class="tb-mark" data-leaf="认识论"><button data-m="fav">喜爱</button><button data-m="read">已读</button><button data-m="unread">未读</button></span></div>
+            <div class="tree-leaf"><span class="tb-name">伦理学 <i>Ethics</i></span><span class="tb-mark" data-leaf="伦理学"><button data-m="fav">喜爱</button><button data-m="read">已读</button><button data-m="unread">未读</button></span></div>
+            <div class="tree-leaf"><span class="tb-name">中国哲学 <i>Chinese Philosophy</i></span><span class="tb-mark" data-leaf="中国哲学"><button data-m="fav">喜爱</button><button data-m="read">已读</button><button data-m="unread">未读</button></span></div>
+          </div>
+        </div>
+        <div class="tree-branch">
+          <div class="tb-row" onclick="toggleBranch(this)"><span class="tb-toggle">▸</span><span class="tb-name">心理学 <i>Psychology</i></span><span class="tb-note">切口 · 精神分析</span></div>
+          <div class="tb-children">
+            <div class="tree-leaf"><span class="tb-name">精神分析 <i>Psychoanalysis</i></span><span class="tb-mark" data-leaf="精神分析"><button data-m="fav">喜爱</button><button data-m="read">已读</button><button data-m="unread">未读</button></span></div>
+            <div class="tree-leaf"><span class="tb-name">认知心理 <i>Cognitive Psy.</i></span><span class="tb-mark" data-leaf="认知心理"><button data-m="fav">喜爱</button><button data-m="read">已读</button><button data-m="unread">未读</button></span></div>
+          </div>
+        </div>
+        <div class="tree-leaf"><span class="tb-name">历史 <i>History</i></span><span class="tb-mark" data-leaf="历史"><button data-m="fav">喜爱</button><button data-m="read">已读</button><button data-m="unread">未读</button></span></div>
+        <div class="tree-leaf"><span class="tb-name">文学 <i>Literature</i></span><span class="tb-mark" data-leaf="文学"><button data-m="fav">喜爱</button><button data-m="read">已读</button><button data-m="unread">未读</button></span></div>
+        <div class="tree-leaf"><span class="tb-name">经济学 <i>Economics</i></span><span class="tb-mark" data-leaf="经济学"><button data-m="fav">喜爱</button><button data-m="read">已读</button><button data-m="unread">未读</button></span></div>
+        <div class="tree-leaf"><span class="tb-name">政治学 <i>Political Science</i></span><span class="tb-mark" data-leaf="政治学"><button data-m="fav">喜爱</button><button data-m="read">已读</button><button data-m="unread">未读</button></span></div>
+        <div class="tree-leaf"><span class="tb-name">法学（理论）<i>Law, theory</i></span><span class="tb-mark" data-leaf="法学理论"><button data-m="fav">喜爱</button><button data-m="read">已读</button><button data-m="unread">未读</button></span></div>
+      </div>
     </div>
-    <div class="domain-card">
-      <h3 data-i18n="dom4t">应用科学与技艺</h3>
-      <p data-i18n="dom4d">工程、医学、商学。人如何介入并改造世界，我保持实用的距离。</p>
-      <div class="domain-en">APPLIED SCIENCES</div>
+
+    <div class="tree-branch tree-branch-open">
+      <div class="tb-row" onclick="toggleBranch(this)">
+        <span class="tb-toggle">▾</span>
+        <span class="tb-name">应用科学与技艺 <i>Applied Sciences & Crafts</i></span>
+        <span class="tb-note">实用距离 · 中医学详参</span>
+      </div>
+      <div class="tb-children">
+        <div class="tree-leaf"><span class="tb-name">工程 <i>Engineering</i></span><span class="tb-mark" data-leaf="工程"><button data-m="fav">喜爱</button><button data-m="read">已读</button><button data-m="unread">未读</button></span></div>
+        <div class="tree-leaf"><span class="tb-name">中医学 <i>Chinese Medicine</i></span><span class="tb-mark" data-leaf="中医学"><button data-m="fav">喜爱</button><button data-m="read">已读</button><button data-m="unread">未读</button></span></div>
+        <div class="tree-leaf"><span class="tb-name">医学 <i>Medicine</i></span><span class="tb-mark" data-leaf="医学"><button data-m="fav">喜爱</button><button data-m="read">已读</button><button data-m="unread">未读</button></span></div>
+        <div class="tree-leaf"><span class="tb-name">商学 <i>Business</i></span><span class="tb-mark" data-leaf="商学"><button data-m="fav">喜爱</button><button data-m="read">已读</button><button data-m="unread">未读</button></span></div>
+        <div class="tree-leaf"><span class="tb-name">法学（实践）<i>Law, practice</i></span><span class="tb-mark" data-leaf="法学实践"><button data-m="fav">喜爱</button><button data-m="read">已读</button><button data-m="unread">未读</button></span></div>
+      </div>
     </div>
   </div>
 </section>
 
 <!-- ═══════════ 第 4 屏：拓星 ═══════════ -->
 <section id="sec-frontier">
-  <h2 class="section-title"><span>拓 星</span><span class="title-en">The Frontier</span></h2>
-  <p class="section-sub" data-i18n="frontierSub">为世界生成新的知识 · 我的研究</p>
+  <h2 class="section-title"><span>拓 星</span><span class="title-en">Research</span></h2>
 
-  <!-- 研究方向 -->
-  <div class="frontier-tags">
-    <span>LLM SYSTEMS</span><span>PARALLEL COMPUTING</span><span>BRAIN-INSPIRED COMPUTING</span>
-  </div>
-
-  <!-- 代表作（第一作者） -->
   <div class="frontier-list">
     <a class="frontier-item" href="https://scholar.google.com/citations?user=YubingBao" target="_blank" rel="noopener">
       <div>
-        <div class="fi-title" data-i18n="rep1t">TPipe：脉冲 Transformer 训练的时间并行与异步流水</div>
-        <div class="fi-meta">INFOCOM 2026 · 第一作者</div>
+        <div class="fi-title">TPipe: Efficient Spiking Transformer Training with Time Parallelism and Asynchronous Pipeline</div>
+        <div class="fi-meta">Y. Bao, Z. Lu, Q. Duan, C. Lv, X. Du, et al. — IEEE INFOCOM 2026</div>
       </div>
-      <div class="fi-badge">★ 一作</div>
     </a>
     <a class="frontier-item" href="https://scholar.google.com/citations?user=YubingBao" target="_blank" rel="noopener">
       <div>
-        <div class="fi-title" data-i18n="rep2t">BMapper：天河超算上的脑模拟加速框架</div>
-        <div class="fi-meta">ICPP 2025 · 第一作者</div>
+        <div class="fi-title">BMapper: A Scalable and Efficient Framework for Brain-Simulation Acceleration on Supercomputers</div>
+        <div class="fi-meta">Y. Bao, Z. Lu, Q. Duan, X. Du, Z. Chen, et al. — ICPP 2025</div>
       </div>
-      <div class="fi-badge">★ 一作</div>
     </a>
     <a class="frontier-item" href="https://scholar.google.com/citations?user=YubingBao" target="_blank" rel="noopener">
       <div>
-        <div class="fi-title" data-i18n="rep3t">口令安全中的领域词效应</div>
-        <div class="fi-meta">ACM TOPS 2024 · 第一作者</div>
+        <div class="fi-title">The Effect of Domain Terms on Password Security</div>
+        <div class="fi-meta">Y. Bao, J. Zeng, J. Yang, R. Yang, Z. Lu — ACM TOPS 28(1), 2024</div>
       </div>
-      <div class="fi-badge">★ 一作</div>
+    </a>
+    <a class="frontier-item" href="https://scholar.google.com/citations?user=YubingBao" target="_blank" rel="noopener">
+      <div>
+        <div class="fi-title">Simulation and Assimilation of the Digital Human Brain</div>
+        <div class="fi-meta">W. Lu, X. Du, J. Wang, L. Zeng, et al. — Nature Computational Science 4(12), 2024</div>
+      </div>
     </a>
   </div>
 
   <a class="frontier-more" href="https://scholar.google.com/citations?user=YubingBao" target="_blank">
-    <span data-i18n="frontierMore">查看完整学术履历</span>
+    <span data-i18n="frontierMore">完整学术履历</span>
     &nbsp;→ GOOGLE SCHOLAR
   </a>
 </section>
 
 <!-- ═══════════ 第 5 屏：理念 ═══════════ -->
 <section id="sec-vision">
-  <h2 class="section-title"><span>理 念</span><span class="title-en">The Vision</span></h2>
-  <p class="section-sub" data-i18n="visionSub">我为何作此星图 · 我的野心</p>
-  <div class="vision-quote" data-i18n="visionQuote">
-    我学习人类所有知识，<br>
-    不是因为博闻强识，<br>
-    而是因为我相信——<br>
-    数学、文学、历史、中医、物理、哲学……<br>
-    <b>各学科的底子，本是相通的。</b><br><br>
-    我要找到一种语言或方法，证明它们相通。
+  <div class="vision-stars">
+    <p class="vs vs-1" data-i18n="v1">我不相信知识的尽头有墙。<br>我读数学时看见结构之美，读文学时看见同样的结构。</p>
+    <p class="vs vs-2" data-i18n="v2">万物相通——这不是结论，是出发的方向。</p>
+    <p class="vs vs-3" data-i18n="v3">看见自己的偏见，就是自知的开端。</p>
+    <p class="vs vs-4" data-i18n="v4">准确，先于全面。</p>
+    <p class="vs vs-5" data-i18n="v5">为学日益：学习的方法，往往从一张诚实的星图开始。</p>
+    <p class="vs vs-6" data-i18n="v6">我学习不是为了博闻强识，<br>而是为了找到那一种语言——<br>它能同时言说数学的精密与文学的叹息。</p>
+    <p class="vs vs-7" data-i18n="v7">学科之间的墙壁是暂时的；底层是连通的。</p>
+    <p class="vs vs-8" data-i18n="v8">夜神不需要白昼的掌声。</p>
+    <p class="vs vs-9" data-i18n="v9">一座博物馆，收集的不是藏品，是光。</p>
+    <p class="vs vs-10" data-i18n="v10">我最终想找到一种语言或方法，证明它们相通。</p>
   </div>
 </section>
 
@@ -606,9 +746,22 @@
     batchBtn: { zh: "批量标记", en: "Batch Mark" },
     batchTitle: { zh: "批量标记", en: "Batch Mark" },
     batchSearchPh: { zh: "搜索书名 / 作者…", en: "Search title / author…" },
+    bfFav: { zh: "喜 爱", en: "LOVED" },
+    bfRead: { zh: "已 读", en: "READ" },
+    bfSkip: { zh: "跳 过", en: "SKIP" },
+    batchEmpty: { zh: "没有更多未读的书 · 换个搜索", en: "No more unread books · try another search" },
     frontierMore: { zh: "查看完整学术履历", en: "See full academic record" },
     visionSub: { zh: "我为何作此星图 · 我的野心", en: "Why this star chart · My ambition" },
-    visionQuote: { zh: "我学习人类所有知识，不是因为博闻强识，而是因为我相信——数学、文学、历史、中医、物理、哲学……<b>各学科的底子，本是相通的。</b>我要找到一种语言或方法，证明它们相通。", en: "I study all human knowledge not for erudition, but because I believe — mathematics, literature, history, Chinese medicine, physics, philosophy… <b>their foundations are one.</b> I want to find a language or method that proves them connected." },
+    v1: { zh: "我不相信知识的尽头有墙。<br>我读数学时看见结构之美，读文学时看见同样的结构。", en: "I do not believe knowledge ends in walls.<br>In mathematics I see beauty of structure — literature shows me the same." },
+    v2: { zh: "万物相通——这不是结论，是出发的方向。", en: "All things are united — not a conclusion, but a direction to depart from." },
+    v3: { zh: "看见自己的偏见，就是自知的开端。", en: "To see one's own bias is the beginning of self-knowledge." },
+    v4: { zh: "准确，先于全面。", en: "Accuracy before comprehensiveness." },
+    v5: { zh: "为学日益：学习的方法，往往从一张诚实的星图开始。", en: "Learning daily: the way to learn often begins with an honest star chart." },
+    v6: { zh: "我学习不是为了博闻强识，<br>而是为了找到那一种语言——<br>它能同时言说数学的精密与文学的叹息。", en: "I study not for erudition,<br>but to find that one language —<br>which speaks both mathematics' precision and literature's sigh." },
+    v7: { zh: "学科之间的墙壁是暂时的；底层是连通的。", en: "Walls between disciplines are temporary; the foundations are connected." },
+    v8: { zh: "夜神不需要白昼的掌声。", en: "The night goddess needs no applause of the day." },
+    v9: { zh: "一座博物馆，收集的不是藏品，是光。", en: "A museum collects not artifacts, but light." },
+    v10: { zh: "我最终想找到一种语言或方法，证明它们相通。", en: "I seek, at last, a language or method that proves them one." },
     rep1t: { zh: "TPipe：脉冲 Transformer 训练的时间并行与异步流水", en: "TPipe: Efficient Spiking Transformer Training" },
     rep2t: { zh: "BMapper：天河超算上的脑模拟加速框架", en: "BMapper: Brain Simulation Acceleration on Supercomputers" },
     rep3t: { zh: "口令安全中的领域词效应", en: "The Effect of Domain Terms on Password Security" },
@@ -723,7 +876,7 @@
     n.status = st;
     saveMarks();
     drawStars();
-    renderBatchList();
+    if (typeof renderFlow === 'function') renderFlow();
   }
 
   // ─── 三维旋转状态 ───
@@ -928,56 +1081,114 @@
     }
   }
 
-  // ─── 批量标记面板 ───
-  let batchFilter = 'all';
-  const STATUS_ZH = { fav: '喜爱', read: '已读', unread: '未读' };
+  // ─── 四域分类树 ───
+  let domainMarks = {};
+  try { domainMarks = JSON.parse(localStorage.getItem('caelum_domains') || '{}'); } catch {}
+
+  function toggleBranch(row) {
+    const br = row.parentElement;
+    br.classList.toggle('tree-branch-open');
+    const t = row.querySelector('.tb-toggle');
+    if (t) t.textContent = br.classList.contains('tree-branch-open') ? '▾' : '▸';
+  }
+
+  function saveDomains() {
+    try { localStorage.setItem('caelum_domains', JSON.stringify(domainMarks)); } catch {}
+  }
+
+  document.querySelectorAll('.tb-mark').forEach(mark => {
+    const key = mark.getAttribute('data-leaf');
+    const st = domainMarks[key] || 'unread';
+    mark.querySelectorAll('button').forEach(btn => {
+      const m = btn.getAttribute('data-m');
+      if (m === st) btn.classList.add('on');
+      btn.onclick = (e) => {
+        e.stopPropagation();
+        domainMarks[key] = m;
+        saveDomains();
+        mark.querySelectorAll('button').forEach(b => b.classList.toggle('on', b === btn));
+        markMarkState(key);
+      };
+    });
+    markMarkState(key);
+  });
+
+  function markMarkState(key) {
+    const st = domainMarks[key] || 'unread';
+    const leaf = document.querySelector(`.tb-mark[data-leaf="${key}"]`)?.closest('.tree-leaf');
+    const name = leaf?.querySelector('.tb-name');
+    if (name) {
+      let tag = name.querySelector('.leaf-state');
+      if (!tag) { tag = document.createElement('span'); tag.className = 'leaf-state'; name.appendChild(tag); }
+      const zh = { fav: '喜爱', read: '已读', unread: '未学' }[st];
+      tag.textContent = st === 'unread' ? '' : `· ${zh}`;
+    }
+  }
+
+  // ─── 批量标记面板（流式：一本一本，标完自动下一本）───
+  let batchQueue = [];
+  let batchPos = 0;
+  let batchNoteDraft = '';
+
+  // 标注笔记（书评）存取
+  let notes = {};
+  try { notes = JSON.parse(localStorage.getItem('caelum_notes') || '{}'); } catch {}
 
   function openBatchPanel() {
     document.getElementById('batchPanel').classList.add('open');
-    renderBatchList();
+    batchFlowNext(true);
   }
   function closeBatchPanel() {
     document.getElementById('batchPanel').classList.remove('open');
+    // 关闭时保存未提交的笔记
+    saveCurrentNote();
   }
-  function setFilter(f, el) {
-    batchFilter = f;
-    document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-    el.classList.add('active');
-    renderBatchList();
+  function saveCurrentNote() {
+    if (!batchQueue[batchPos]) return;
+    const n = batchQueue[batchPos];
+    const el = document.getElementById('bfNote');
+    notes[n.title] = (el?.value || '').trim();
+    try { localStorage.setItem('caelum_notes', JSON.stringify(notes)); } catch {}
   }
-  function renderBatchList() {
-    const list = document.getElementById('batchList');
-    if (!list) return;
-    const q = (document.getElementById('batchSearch')?.value || '').trim().toLowerCase();
-    const box = document.getElementById('batchPanel');
-    // 面板关闭时跳过渲染（但需要仍在 DOM）
-    let filtered = nodes;
-    if (batchFilter !== 'all') filtered = filtered.filter(n => n.status === batchFilter);
-    if (q) filtered = filtered.filter(n => (n.title + (n.author||'')).toLowerCase().includes(q));
-    const frag = document.createDocumentFragment();
-    filtered.forEach((n, ri) => {
-      const item = document.createElement('div');
-      item.className = 'batch-item';
-      const title = document.createElement('div');
-      title.innerHTML = `<div class="bi-title">${n.title}</div><div class="bi-author">${n.author || ''}</div>`;
-      const acts = document.createElement('div');
-      acts.className = 'bi-acts';
-      const st = n.status || 'unread';
-      [['fav','喜'],['read','读'],['unread','未']].forEach(([k, label]) => {
-        const b = document.createElement('button');
-        b.textContent = label;
-        if (st === k) b.classList.add('on');
-        b.onclick = () => markNode(n, k);
-        acts.appendChild(b);
-      });
-      item.appendChild(title);
-      item.appendChild(acts);
-      frag.appendChild(item);
-      void ri;
-    });
-    list.innerHTML = '';
-    list.appendChild(frag);
-    if (!filtered.length) list.innerHTML = '<div class="bi-title" style="padding:20px;color:var(--ink-dim)">（无）</div>';
+
+  function batchFlowNext(rebuild) {
+    if (rebuild) {
+      const q = (document.getElementById('batchSearch')?.value || '').trim().toLowerCase();
+      batchQueue = q ? nodes.filter(n => (n.title + (n.author||'')).toLowerCase().includes(q)) : nodes;
+      batchPos = 0;
+    } else {
+      batchPos++;
+    }
+    // 跳过窗口内已标记过的（未读优先展示）
+    renderFlow();
+  }
+
+  function renderFlow() {
+    const flow = document.getElementById('batchFlow');
+    const empty = document.getElementById('batchEmpty');
+    while (batchPos < batchQueue.length && batchQueue[batchPos].status !== 'unread') batchPos++;
+    if (batchPos >= batchQueue.length) {
+      flow.style.display = 'none';
+      empty.style.display = 'block';
+      // 若还有已读/喜爱但无未读，给个提示仍可浏览
+      return;
+    }
+    flow.style.display = 'flex';
+    empty.style.display = 'none';
+    const n = batchQueue[batchPos];
+    document.getElementById('bfPos').textContent = `第 ${batchPos + 1} / ${batchQueue.length} 本`;
+    document.getElementById('bfTitle').textContent = n.title;
+    document.getElementById('bfAuthor').textContent = n.author || '';
+    document.getElementById('bfNote').value = notes[n.title] || '';
+    document.getElementById('bfNote').focus();
+  }
+
+  function batchMark(m) {
+    if (!batchQueue[batchPos]) return;
+    const n = batchQueue[batchPos];
+    saveCurrentNote();
+    markNode(n, m);
+    renderFlow(); // 自动跳到下一本未读
   }
 
   // ─── 画布交互：拖拽旋转 · 悬停 · 点击标记已读 ───
@@ -1039,22 +1250,27 @@
   loadStars();
 </script>
 
-<!-- 批量标记面板 -->
+<!-- 批量标记面板（流式：一本一本标记，标完自动下一本）-->
 <div class="batch-panel" id="batchPanel">
   <div class="batch-panel-head">
     <h3 data-i18n="batchTitle">批量标记</h3>
     <div class="batch-close" onclick="closeBatchPanel()">×</div>
   </div>
   <div class="batch-filters">
-    <input id="batchSearch" type="text" placeholder="搜索书名 / 作者…" oninput="renderBatchList()" />
-    <div class="batch-filter-chips">
-      <span class="chip active" data-f="all" onclick="setFilter('all', this)">全部</span>
-      <span class="chip" data-f="fav" onclick="setFilter('fav', this)">喜爱</span>
-      <span class="chip" data-f="read" onclick="setFilter('read', this)">已读</span>
-      <span class="chip" data-f="unread" onclick="setFilter('unread', this)">未读</span>
+    <input id="batchSearch" type="text" placeholder="搜索书名 / 作者…" oninput="batchFlowNext(true)" />
+  </div>
+  <div class="batch-flow" id="batchFlow">
+    <div class="bf-progress"><span id="bfPos"></span></div>
+    <div class="bf-title" id="bfTitle"></div>
+    <div class="bf-author" id="bfAuthor"></div>
+    <textarea id="bfNote" rows="4" placeholder="粘贴你的书评 / 笔记…"></textarea>
+    <div class="bf-acts">
+      <button class="bf-fav" data-i18n="bfFav" onclick="batchMark('fav')">喜 爱</button>
+      <button class="bf-read" data-i18n="bfRead" onclick="batchMark('read')">已 读</button>
+      <button class="bf-skip" onclick="batchMark('unread')" data-i18n="bfSkip">跳 过</button>
     </div>
   </div>
-  <div class="batch-list" id="batchList"></div>
+  <div class="batch-empty" id="batchEmpty" style="display:none" data-i18n="batchEmpty">没有更多可标记的书 · 换一个搜索</div>
 </div>
 
 </body>
