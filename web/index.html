@@ -681,6 +681,50 @@
       to   { transform: translateY(-6px); }
     }
 
+    /* 沉浸式全屏星图 */
+    .immerse {
+      position: fixed; inset: 0; z-index: 500; display: none;
+      background: #04050a; overflow: hidden;
+    }
+    .immerse.open { display: block; }
+    #imm-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; cursor: grab; }
+    .imm-head {
+      position: absolute; top: 0; left: 0; right: 0; z-index: 10;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 18px 6vw; background: linear-gradient(rgba(4,5,10,0.9), transparent);
+    }
+    .imm-title { font-size: 14px; color: var(--accent-dim); letter-spacing: 0.25em; }
+    .imm-close { font-size: 28px; color: var(--ink-dim); cursor: pointer; line-height: 1; }
+    .imm-close:hover { color: var(--accent); }
+    .imm-panel {
+      position: absolute; left: 6vw; bottom: 28px; right: 6vw; z-index: 10;
+      display: flex; flex-direction: column; gap: 10px;
+      background: rgba(8,10,18,0.85); border: 1px solid rgba(238,240,245,0.12);
+      border-radius: 14px; padding: 16px 20px; backdrop-filter: blur(6px);
+    }
+    .imm-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    #immSearch {
+      flex: 1; min-width: 180px; background: rgba(14,18,28,0.8);
+      border: 1px solid rgba(238,240,245,0.18); color: var(--ink);
+      font-family: var(--serif); padding: 9px 14px; border-radius: 10px; font-size: 14px;
+    }
+    #immSearch:focus { outline: none; border-color: var(--accent); }
+    .imm-row-inputs button {
+      font-family: var(--serif); font-size: 13px; letter-spacing: 0.12em;
+      color: var(--accent-dim); background: transparent; cursor: pointer;
+      border: 1px solid rgba(238,240,245,0.2); border-radius: 16px; padding: 8px 16px;
+      transition: all 0.25s;
+    }
+    .imm-row-inputs button:hover { color: var(--accent); border-color: var(--accent); }
+    .imm-info { font-size: 12px; color: var(--ink-dim); letter-spacing: 0.06em; min-height: 18px; }
+    .imm-suggest { display: flex; gap: 8px; flex-wrap: wrap; }
+    .imm-suggest .chip {
+      font-size: 11px; letter-spacing: 0.1em; color: var(--accent-dim); cursor: pointer;
+      border: 1px solid rgba(238,240,245,0.18); border-radius: 14px; padding: 3px 12px;
+    }
+    .imm-suggest .chip:hover { color: var(--accent); border-color: var(--accent); }
+    .imm-suggest .chip.on { color: var(--accent); border-color: var(--accent); background: rgba(238,240,245,0.08); }
+
     /* ========== 响应式 ========== */
     @media (max-width: 768px) {
       .nav { left: 12px; gap: 24px; }
@@ -726,8 +770,9 @@
 <!-- ═══════════ 第 2 屏：星图 ═══════════ -->
 <section id="sec-map">
   <h2 class="section-title"><span>星 图</span><span class="title-en">The Starchart</span></h2>
-  <p class="section-sub">看见偏见 · See my own bias</p>
+  <p class="section-sub" id="taglineMap"></p>
   <div class="map-tools">
+    <span class="map-batch-btn" onclick="openImmersive()">🎇 <span data-i18n="immersiveBtn">沉浸式</span></span>
     <span class="map-batch-btn" onclick="openBatchPanel()">📋 <span data-i18n="batchBtn">批量标记</span></span>
   </div>
   <div class="map-wrap">
@@ -755,7 +800,7 @@
 <!-- ═══════════ 第 3 屏：星域 · 四域下钻 ═══════════ -->
 <section id="sec-domain">
   <h2 class="section-title"><span>星 域</span><span class="title-en">The Domains of Knowledge</span></h2>
-  <p class="section-sub">我想学遍人类所有知识，然后证明它们是相通的</p>
+  <p class="section-sub" id="taglineDomain"></p>
   <div class="domain-nav">
     <div class="breadcrumb" id="domainCrumb"></div>
     <div class="domain-view" id="domainView"></div>
@@ -768,7 +813,7 @@
      完整学术履历链接地址在下方 frontier-more 里。 -->
 <section id="sec-frontier">
   <h2 class="section-title"><span>拓 星</span><span class="title-en">Research</span></h2>
-  <p class="section-sub">我想为人类创造一点知识</p>
+  <p class="section-sub" id="taglineFrontier"></p>
 
   <!-- 研究方向（✏️ 可改标签文本） -->
   <div class="frontier-tags">
@@ -814,7 +859,7 @@
      全文不进公开站(只放标题+简介+链接)。 -->
 <section id="sec-essays">
   <h2 class="section-title"><span>星 屑</span><span class="title-en">Disard Stardust · The Words I Wrote</span></h2>
-  <p class="section-sub">我反复的思绪，像散落的小行星——各具自己的轨道与光芒</p>
+  <p class="section-sub" id="taglineEssays"></p>
   <div class="essays-wrap" id="essaysWrap">
     <div id="essaysLoading" class="essays-hint">…</div>
   </div>
@@ -965,6 +1010,11 @@
     setEl('linkSpace', g('coda.link_space'));
     setEl('linkTime', g('coda.link_time'));
     setEl('codaFooter', g('coda.footer'));
+    // 每页一句话
+    setEl('taglineMap', g('taglines.map'));
+    setEl('taglineDomain', g('taglines.domain'));
+    setEl('taglineFrontier', g('taglines.frontier'));
+    setEl('taglineEssays', g('taglines.essays'));
   }
   applyLang();
 
@@ -1030,7 +1080,9 @@
       if (Array.isArray(oldRead)) oldRead.forEach(t => { if (!marks[t]) marks[t] = 'read'; });
     } catch {}
     nodes.forEach(n => {
-      n.status = marks[n.title] || 'unread';
+      // 仅当 localStorage 有该书的标记才覆盖，否则保留 graph.json 原 status
+      // （微信读书已读的书在数据里已是 read，不应被未标记覆盖成 unread）
+      if (marks[n.title]) n.status = marks[n.title];
     });
     drawStars();
   }
@@ -1272,7 +1324,7 @@
   }
 
   // ─── 随笔专栏（数据来自 articles.json，随笔置顶；先显示部分可展开）───
-  const ESSAY_PREVIEW = 8; // 每个分类先显示多少篇
+  const ESSAY_PREVIEW = 4; // 星屑页：先显示几篇
   async function loadEssays() {
     const wrap = document.getElementById('essaysWrap');
     if (!wrap) return;
@@ -1701,6 +1753,181 @@
     document.querySelectorAll('#mapCard .mc-acts button').forEach(b => b.classList.toggle('on', b.getAttribute('data-m') === m));
   }
 
+  // ─── 沉浸式全屏星图 ───
+  let imm = null;      // 全屏 canvas
+  let immCtx = null;
+  let immHover = -1;
+  let immDrag = false, immLastX = 0, immLastY = 0;
+  let immFilter = 'all';      // all | my | author
+  let immAuthor = '';
+  let immSelAuthor = '';
+
+  function openImmersive() {
+    document.getElementById('immerse').classList.add('open');
+    imm = document.getElementById('imm-canvas');
+    immCtx = imm.getContext('2d');
+    immResize();
+    immApply();
+    renderSuggest();
+  }
+  function closeImmersive() { document.getElementById('immerse').classList.remove('open'); }
+  function immResize() {
+    const d = window.devicePixelRatio || 1;
+    imm.width = innerWidth * d; imm.height = innerHeight * d;
+    imm.style.width = innerWidth + 'px'; imm.style.height = innerHeight + 'px';
+    immCtx.setTransform(d, 0, 0, d, 0, 0);
+  }
+
+  function immNodeVisible(n) {
+    if (immFilter === 'my') return n.status === 'read' || n.status === 'fav';
+    if (immFilter === 'author') return (n.author || '').includes(immAuthor);
+    return true;
+  }
+
+  function immProject(n) {
+    const cx = (n.x - 0.5) * 2, cy = (n.y - 0.5) * 2, cz = (n.z - 0.5) * 2;
+    let x1 = cx * Math.cos(rotY) + cz * Math.sin(rotY);
+    let z1 = -cx * Math.sin(rotY) + cz * Math.cos(rotY);
+    let y2 = cy * Math.cos(rotX) - z1 * Math.sin(rotX);
+    let z2 = cy * Math.sin(rotX) + z1 * Math.cos(rotX);
+    const half = Math.min(innerWidth, innerHeight) / 2 - 80;
+    return { sx: innerWidth / 2 + x1 * half, sy: innerHeight / 2 + y2 * half, depth: z2 };
+  }
+
+  function immRender() {
+    immCtx.clearRect(0, 0, innerWidth, innerHeight);
+    immCtx.fillStyle = '#04050a';
+    immCtx.fillRect(0, 0, innerWidth, innerHeight);
+    // 星尘
+    immCtx.fillStyle = 'rgba(255,255,255,0.06)';
+    for (let i = 0; i < 400; i++) immCtx.fillRect((i * 137.5) % innerWidth, (i * 89.3) % innerHeight, 1, 1);
+    if (!nodes.length) return;
+    // 可见节点
+    const vis = nodes.map((n, i) => ({ n, i, p: immProject(n) })).filter(o => immNodeVisible(o.n));
+    vis.sort((a, b) => a.p.depth - b.p.depth);
+    // 已读/喜爱光晕 + 高亮
+    vis.forEach(({ n, p }) => {
+      const isLit = n.status === 'read' || n.status === 'fav';
+      if (isLit) {
+        const R = n.status === 'fav' ? 30 : 22;
+        const A = n.status === 'fav' ? 0.4 : 0.2;
+        const g = immCtx.createRadialGradient(p.sx, p.sy, 0, p.sx, p.sy, R);
+        g.addColorStop(0, `rgba(238,240,245,${A})`); g.addColorStop(1, 'rgba(238,240,245,0)');
+        immCtx.fillStyle = g; immCtx.beginPath(); immCtx.arc(p.sx, p.sy, R, 0, Math.PI * 2); immCtx.fill();
+      }
+    });
+    // 节点
+    vis.forEach(({ n, p, i }) => {
+      const highlighted = immFilter === 'author' && (n.author || '').includes(immAuthor);
+      const depthF = 1 / (1 + Math.abs(p.depth) * 0.35);
+      let r, col;
+      if (highlighted) { r = 6.5 * depthF; col = '255,255,255'; }
+      else if (n.status === 'fav') { r = 5 * depthF; col = '255,255,255'; }
+      else if (n.status === 'read') { r = 4.2 * depthF; col = '238,240,245'; }
+      else { r = 3.4 * depthF; col = '58,66,87'; }
+      const a = highlighted ? 1 : n.status === 'read' || n.status === 'fav' ? 0.9 : 0.32 + 0.4 * depthF;
+      immCtx.fillStyle = `rgba(${col},${a})`;
+      if (i === immHover) { r *= 1.5; }
+      immCtx.beginPath(); immCtx.arc(p.sx, p.sy, r, 0, Math.PI * 2); immCtx.fill();
+    });
+    // 悬停标签
+    if (immHover >= 0) {
+      const o = vis.find(v => v.i === immHover);
+      if (o) {
+        const txt = o.n.title + (o.n.author ? ' · ' + o.n.author : '');
+        immCtx.font = "13px 'Noto Serif SC', serif";
+        const w = immCtx.measureText(txt).width + 18;
+        immCtx.fillStyle = 'rgba(8,10,16,0.9)';
+        immCtx.fillRect(o.p.sx - w / 2, o.p.sy + 14, w, 26);
+        immCtx.fillStyle = '#eef0f5'; immCtx.textAlign = 'center';
+        immCtx.fillText(txt, o.p.sx, o.p.sy + 32);
+      }
+    }
+  }
+
+  function immApply() {
+    const q = (document.getElementById('immSearch')?.value || '').trim();
+    if (q) { immFilter = 'author'; immAuthor = q; }
+    // 交集统计
+    const all = nodes.filter(n => immNodeVisible(n));
+    const mine = all.filter(n => n.status === 'read' || n.status === 'fav');
+    const info = document.getElementById('immInfo');
+    if (immFilter === 'author') {
+      const authors = {};
+      all.forEach(n => { const a = (n.author || '').split(/[·•]/)[0].trim(); if (a) authors[a] = (authors[a] || 0) + 1; });
+      const top = Object.entries(authors).sort((x, y) => y[1] - x[1]).slice(0, 30).map(([a]) => a);
+      renderSuggest(top);
+      info.textContent = `作者「${immAuthor}」相关 ${all.length} 本 · 其中你读过 ${mine.length} 本`;
+    } else if (immFilter === 'my') {
+      info.textContent = `你的光斑：已读/喜爱 ${mine.length} 本`;
+    } else {
+      info.textContent = `${all.length} 本 · 拖拽旋转 · 输入作者名点亮`;
+    }
+    immRender();
+  }
+  function immHighlight(mode) {
+    immFilter = mode;
+    document.getElementById('immSearch').value = '';
+    immApply();
+  }
+  function renderSuggest(list) {
+    const box = document.getElementById('immSuggest');
+    if (!list) {
+      // 常用作者
+      const cnt = {};
+      nodes.forEach(n => {
+        const a = (n.author || '').split(/[·•]/)[0].match(/[^\s\[\]【】]?[一-龥A-Za-z·]+/) ? (n.author || '').trim() : '';
+        if (a) cnt[a] = (cnt[a] || 0) + 1;
+      });
+      list = Object.entries(cnt).sort((x, y) => y[1] - x[1]).slice(0, 14).map(([a]) => a);
+    }
+    box.innerHTML = list.map((a, i) => `<span class="chip ${a === immSelAuthor ? 'on' : ''}" onclick="immPick('${a.replace(/'/g, "\\'")}', this)">${a}</span>`).join('');
+  }
+  function immPick(a, el) {
+    immSelAuthor = a;
+    document.getElementById('immSearch').value = a;
+    immFilter = 'author'; immAuthor = a;
+    document.querySelectorAll('#immSuggest .chip').forEach(c => c.classList.remove('on'));
+    el.classList.add('on');
+    immApply();
+  }
+
+  // 沉浸式画布交互
+  imm = document.getElementById('imm-canvas');
+  imm && imm.addEventListener('mousedown', (e) => { immDrag = true; immLastX = e.clientX; immLastY = e.clientY; });
+  window.addEventListener('mousemove', (e) => {
+    if (!document.getElementById('immerse').classList.contains('open')) return;
+    if (immDrag) {
+      rotY += (e.clientX - immLastX) * 0.008;
+      rotX += (e.clientY - immLastY) * 0.008;
+      rotX = Math.max(-1.4, Math.min(1.4, rotX));
+      immLastX = e.clientX; immLastY = e.clientY;
+      immRender();
+    } else {
+      const dx = e.clientX - innerWidth / 2, dy = e.clientY - innerHeight / 2;
+      let best = -1, bd = 24;
+      const half = Math.min(innerWidth, innerHeight) / 2 - 80;
+      nodes.forEach((n, i) => {
+        if (!immNodeVisible(n)) return;
+        const cx = (n.x - 0.5) * 2, cy = (n.y - 0.5) * 2, cz = (n.z - 0.5) * 2;
+        let x1 = cx * Math.cos(rotY) + cz * Math.sin(rotY);
+        let z1 = -cx * Math.sin(rotY) + cz * Math.cos(rotY);
+        let y2 = cy * Math.cos(rotX) - z1 * Math.sin(rotX);
+        let z2 = cy * Math.sin(rotX) + z1 * Math.cos(rotX);
+        const sx = innerWidth / 2 + x1 * half, sy = innerHeight / 2 + y2 * half;
+        const d = Math.hypot(sx + 40 - e.clientX, sy + 40 - e.clientY) * (1 + Math.abs(z2) * 0.5);
+        if (d < bd) { bd = d; best = i; }
+      });
+      if (best !== immHover) { immHover = best; immRender(); }
+    }
+  });
+  window.addEventListener('mouseup', (e) => {
+    if (immDrag) immDrag = false;
+  });
+  window.addEventListener('resize', () => {
+    if (document.getElementById('immerse').classList.contains('open')) { immResize(); immRender(); }
+  });
+
   window.addEventListener('resize', () => { resize(); drawStars(); });
 
   // 初始化
@@ -1750,6 +1977,25 @@
     <div class="lp-close" onclick="closeLeafPage()">×</div>
   </div>
   <div class="lp-body" id="lpBody"></div>
+</div>
+
+<!-- 沉浸式全屏星图 -->
+<div class="immerse" id="immerse">
+  <div class="imm-head">
+    <div id="immTitle" class="imm-title">沉浸式星图 · Immersive</div>
+    <div class="imm-close" onclick="closeImmersive()">×</div>
+  </div>
+  <canvas id="imm-canvas"></canvas>
+  <!-- 控制面板 -->
+  <div class="imm-panel" id="immPanel">
+    <div class="imm-row imm-row-inputs">
+      <input id="immSearch" type="text" placeholder="作者名…" oninput="immApply()" />
+      <button onclick="immHighlight('my')">我的光</button>
+      <button onclick="immHighlight('all')">全部</button>
+    </div>
+    <div class="imm-info" id="immInfo"></div>
+    <div class="imm-suggest" id="immSuggest"></div>
+  </div>
 </div>
 
 </body>
