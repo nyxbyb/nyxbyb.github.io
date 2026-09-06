@@ -45,11 +45,11 @@ def main():
     X = np.array(vecs, dtype=np.float32)
     print(f"维度: {X.shape}")
 
-    print("TSNE 降维到 2D...")
+    print("TSNE 降维到 3D...")
     from sklearn.manifold import TSNE
     perp = min(30, max(5, len(books) // 5))
     t0 = time.time()
-    Y = TSNE(n_components=2, perplexity=perp, random_state=42, init="pca").fit_transform(X)
+    Y = TSNE(n_components=3, perplexity=perp, random_state=42, init="pca").fit_transform(X)
     print(f"降维完成，耗时 {time.time()-t0:.1f}s")
 
     # 缩放到 0~1，便于前端坐标系
@@ -57,7 +57,7 @@ def main():
     Y /= Y.max(axis=0)
 
     nodes = []
-    for b, (x, y) in zip(books, Y):
+    for b, (x, y, z) in zip(books, Y):
         nodes.append({
             "id": f"book_{len(nodes):04d}",
             "type": "book",
@@ -68,6 +68,7 @@ def main():
             "douban_rating": b.get("rating"),
             "x": round(float(x), 4),
             "y": round(float(y), 4),
+            "z": round(float(z), 4),
         })
 
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
