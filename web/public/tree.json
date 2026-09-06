@@ -1,0 +1,214 @@
+{
+  "note": "星域目录树 · 以《中国图书馆分类法》(CLC) 为骨架，融入 Yubing 的四域认知框架。编辑此文件即可改目录；叶子页 = 学习笔记。",
+  "domains": [
+    {
+      "id": "formal",
+      "zh": "形式科学",
+      "en": "Formal Sciences",
+      "posture": "专业视角 · 我的母域",
+      "desc": "不依托经验、靠推演与计算抵达的纯粹结构。",
+      "children": [
+        { "id": "logic", "zh": "逻辑", "en": "Logic", "children": [
+          { "id": "logic-classical", "zh": "经典逻辑", "en": "Classical Logic" },
+          { "id": "logic-math", "zh": "数理逻辑", "en": "Mathematical Logic" },
+          { "id": "logic-modal", "zh": "模态逻辑", "en": "Modal Logic" },
+          { "id": "logic-nonclassical", "zh": "非经典逻辑", "en": "Non-classical Logic" },
+          { "id": "logic-philosophy", "zh": "逻辑哲学", "en": "Philosophy of Logic" }
+        ]},
+        { "id": "math", "zh": "数学", "en": "Mathematics", "children": [
+          { "id": "math-algebra", "zh": "代数", "en": "Algebra" },
+          { "id": "math-analysis", "zh": "分析", "en": "Analysis" },
+          { "id": "math-geometry", "zh": "几何与拓扑", "en": "Geometry & Topology" },
+          { "id": "math-number", "zh": "数论", "en": "Number Theory" },
+          { "id": "math-prob", "zh": "概率论与统计", "en": "Probability & Statistics" },
+          { "id": "math-discrete", "zh": "离散数学（组合、图论）", "en": "Discrete Math" },
+          { "id": "math-found", "zh": "数学基础", "en": "Foundations of Mathematics" }
+        ]},
+        { "id": "cstheory", "zh": "计算机理论", "en": "Computer Science Theory", "children": [
+          { "id": "cs-computability", "zh": "计算理论", "en": "Theory of Computing" },
+          { "id": "cs-information", "zh": "信息论", "en": "Information Theory" },
+          { "id": "cs-alg", "zh": "算法与数据结构", "en": "Algorithms & Data Structures" },
+          { "id": "cs-automata", "zh": "自动机与形式语言", "en": "Automata & Formal Languages" },
+          { "id": "cs-types", "zh": "类型论与程序设计理论", "en": "Type Theory" }
+        ]}
+      ]
+    },
+    {
+      "id": "natural",
+      "zh": "自然科学",
+      "en": "Natural Sciences",
+      "posture": "图景式理解",
+      "desc": "自然如何运行的因果律；我追求的是图景，而非计算。",
+      "children": [
+        { "id": "physics", "zh": "物理学", "en": "Physics", "children": [
+          { "id": "phy-classical", "zh": "经典力学", "en": "Classical Mechanics" },
+          { "id": "phy-electromag", "zh": "电磁学与光学", "en": "Electromagnetism & Optics" },
+          { "id": "phy-thermo", "zh": "热力学与统计物理", "en": "Thermodynamics & Stat. Mech." },
+          { "id": "phy-quantum", "zh": "量子力学", "en": "Quantum Mechanics" },
+          { "id": "phy-relativity", "zh": "相对论", "en": "Relativity" },
+          { "id": "phy-particle", "zh": "粒子物理", "en": "Particle Physics" },
+          { "id": "phy-condensed", "zh": "凝聚态物理", "en": "Condensed Matter" }
+        ]},
+        { "id": "chem", "zh": "化学", "en": "Chemistry", "children": [
+          { "id": "chem-inorg", "zh": "无机化学", "en": "Inorganic Chemistry" },
+          { "id": "chem-org", "zh": "有机化学", "en": "Organic Chemistry" },
+          { "id": "chem-phys", "zh": "物理化学", "en": "Physical Chemistry" },
+          { "id": "chem-anal", "zh": "分析化学", "en": "Analytical Chemistry" },
+          { "id": "chem-bio", "zh": "生物化学", "en": "Biochemistry" }
+        ]},
+        { "id": "bio", "zh": "生物学", "en": "Biology", "children": [
+          { "id": "bio-cell", "zh": "细胞生物学", "en": "Cell Biology" },
+          { "id": "bio-molec", "zh": "分子生物学", "en": "Molecular Biology" },
+          { "id": "bio-genetics", "zh": "遗传学", "en": "Genetics" },
+          { "id": "bio-physio", "zh": "生理学", "en": "Physiology" },
+          { "id": "bio-neuro", "zh": "神经科学", "en": "Neuroscience" },
+          { "id": "bio-eco", "zh": "生态学", "en": "Ecology" },
+          { "id": "bio-evo", "zh": "进化生物学", "en": "Evolutionary Biology" }
+        ]},
+        { "id": "earthsci", "zh": "地球与环境科学", "en": "Earth & Environmental Sci.", "children": [
+          { "id": "geo-geology", "zh": "地质学", "en": "Geology" },
+          { "id": "geo-atmo", "zh": "大气科学", "en": "Atmospheric Science" },
+          { "id": "geo-ocean", "zh": "海洋科学", "en": "Oceanography" },
+          { "id": "geo-geog", "zh": "地理学", "en": "Geography" },
+          { "id": "geo-env", "zh": "环境科学", "en": "Environmental Science" }
+        ]},
+        { "id": "astro", "zh": "天文学", "en": "Astronomy", "children": [
+          { "id": "as-stars", "zh": "恒星与星系", "en": "Stars & Galaxies" },
+          { "id": "as-cosmo", "zh": "宇宙学", "en": "Cosmology" },
+          { "id": "as-planetary", "zh": "行星科学", "en": "Planetary Science" }
+        ]}
+      ]
+    },
+    {
+      "id": "humanities",
+      "zh": "人文与社会科学",
+      "en": "Humanities & Social Sciences",
+      "posture": "深度业余者 · 投入最深",
+      "desc": "人类如何构建意义、如何组织自身。哲学与心理是副域，精神分析是入口。",
+      "children": [
+        { "id": "phil", "zh": "哲学", "en": "Philosophy", "children": [
+          { "id": "phil-china", "zh": "中国哲学", "en": "Chinese Philosophy" },
+          { "id": "phil-west", "zh": "西方哲学", "en": "Western Philosophy" },
+          { "id": "phil-meta", "zh": "形而上学 / 存在论", "en": "Metaphysics / Ontology" },
+          { "id": "phil-epist", "zh": "认识论", "en": "Epistemology" },
+          { "id": "phil-ethics", "zh": "伦理学", "en": "Ethics" },
+          { "id": "phil-aesth", "zh": "美学", "en": "Aesthetics" },
+          { "id": "phil-sci", "zh": "科学哲学", "en": "Philosophy of Science" },
+          { "id": "phil-mind", "zh": "心灵哲学", "en": "Philosophy of Mind" }
+        ]},
+        { "id": "psy", "zh": "心理学", "en": "Psychology", "children": [
+          { "id": "psy-psychoanalysis", "zh": "精神分析", "en": "Psychoanalysis" },
+          { "id": "psy-cog", "zh": "认知心理学", "en": "Cognitive Psychology" },
+          { "id": "psy-behav", "zh": "行为主义", "en": "Behaviorism" },
+          { "id": "psy-dev", "zh": "发展心理学", "en": "Developmental Psychology" },
+          { "id": "psy-social", "zh": "社会心理学", "en": "Social Psychology" },
+          { "id": "psy-personal", "zh": "人格心理学", "en": "Personality Psychology" }
+        ]},
+        { "id": "hist", "zh": "历史", "en": "History", "children": [
+          { "id": "hist-china", "zh": "中国史", "en": "Chinese History" },
+          { "id": "hist-world", "zh": "世界史", "en": "World History" },
+          { "id": "hist-ideas", "zh": "思想史", "en": "Intellectual History" },
+          { "id": "hist-econ", "zh": "经济史", "en": "Economic History" },
+          { "id": "hist-art", "zh": "艺术史", "en": "Art History" },
+          { "id": "hist-arch", "zh": "考古学", "en": "Archaeology" }
+        ]},
+        { "id": "lit", "zh": "文学", "en": "Literature", "children": [
+          { "id": "lit-classical", "zh": "中国古典文学", "en": "Classical Chinese Literature" },
+          { "id": "lit-modern", "zh": "中国现当代文学", "en": "Modern Chinese Literature" },
+          { "id": "lit-foreign", "zh": "外国文学", "en": "Foreign Literature" },
+          { "id": "lit-theory", "zh": "文学理论", "en": "Literary Theory" },
+          { "id": "lit-compare", "zh": "比较文学", "en": "Comparative Literature" },
+          { "id": "lit-poetics", "zh": "诗学", "en": "Poetics" }
+        ]},
+        { "id": "ling", "zh": "语言学", "en": "Linguistics", "children": [
+          { "id": "lin-phono", "zh": "语音学与音系学", "en": "Phonetics & Phonology" },
+          { "id": "lin-syntax", "zh": "句法学", "en": "Syntax" },
+          { "id": "lin-semantics", "zh": "语义学", "en": "Semantics" },
+          { "id": "lin-pragma", "zh": "语用学", "en": "Pragmatics" },
+          { "id": "lin-hist", "zh": "历史语言学", "en": "Historical Linguistics" },
+          { "id": "lin-social", "zh": "社会语言学", "en": "Sociolinguistics" },
+          { "id": "lin-cogn", "zh": "心理语言学", "en": "Psycholinguistics" },
+          { "id": "lin-comp", "zh": "计算语言学", "en": "Computational Linguistics" }
+        ]},
+        { "id": "econ", "zh": "经济学", "en": "Economics", "children": [
+          { "id": "econ-micro", "zh": "微观经济学", "en": "Microeconomics" },
+          { "id": "econ-macro", "zh": "宏观经济学", "en": "Macroeconomics" },
+          { "id": "econ-etrcs", "zh": "计量经济学", "en": "Econometrics" },
+          { "id": "econ-behav", "zh": "行为经济学", "en": "Behavioral Economics" },
+          { "id": "econ-instit", "zh": "制度经济学", "en": "Institutional Economics" },
+          { "id": "econ-thought", "zh": "经济思想史", "en": "History of Economic Thought" },
+          { "id": "econ-game", "zh": "博弈论", "en": "Game Theory" }
+        ]},
+        { "id": "poli", "zh": "政治学", "en": "Political Science", "children": [
+          { "id": "pol-phil", "zh": "政治哲学", "en": "Political Philosophy" },
+          { "id": "pol-compare", "zh": "比较政治", "en": "Comparative Politics" },
+          { "id": "pol-ir", "zh": "国际关系", "en": "International Relations" },
+          { "id": "pol-china", "zh": "中国政治", "en": "Chinese Politics" }
+        ]},
+        { "id": "law", "zh": "法学", "en": "Law", "children": [
+          { "id": "law-theory", "zh": "法理学 / 法哲学", "en": "Jurisprudence" },
+          { "id": "law-constit", "zh": "宪法学", "en": "Constitutional Law" },
+          { "id": "law-civil", "zh": "民法学", "en": "Civil Law" },
+          { "id": "law-crim", "zh": "刑法学", "en": "Criminal Law" },
+          { "id": "law-intl", "zh": "国际法", "en": "International Law" },
+          { "id": "law-proc", "zh": "程序法", "en": "Procedural Law" }
+        ]},
+        { "id": "soc", "zh": "社会学 / 人类学", "en": "Sociology & Anthropology", "children": [
+          { "id": "soc-theory", "zh": "社会学理论", "en": "Sociological Theory" },
+          { "id": "soc-strat", "zh": "社会分层", "en": "Social Stratification" },
+          { "id": "soc-culture", "zh": "文化人类学 / 民族志", "en": "Cultural Anthropology" }
+        ]},
+        { "id": "educ", "zh": "教育学", "en": "Education", "children": [
+          { "id": "edu-phil", "zh": "教育哲学", "en": "Philosophy of Education" },
+          { "id": "edu-learning", "zh": "认知与学习科学", "en": "Learning Sciences" }
+        ]}
+      ]
+    },
+    {
+      "id": "applied",
+      "zh": "应用科学与技艺",
+      "en": "Applied Sciences & Crafts",
+      "posture": "实用距离 · 中医学详参",
+      "desc": "人如何介入并改造世界。概观为主，唯中医学因其整体论身体观而详参。",
+      "children": [
+        { "id": "eng", "zh": "工程", "en": "Engineering", "children": [
+          { "id": "eng-cs", "zh": "计算机工程 / 软件", "en": "Computer & Software Engineering" },
+          { "id": "eng-ee", "zh": "电子工程", "en": "Electronics" },
+          { "id": "eng-mech", "zh": "机械工程", "en": "Mechanical Engineering" },
+          { "id": "eng-civil", "zh": "土木工程", "en": "Civil Engineering" },
+          { "id": "eng-materials", "zh": "材料科学", "en": "Materials Science" }
+        ]},
+        { "id": "med", "zh": "医学", "en": "Medicine", "children": [
+          { "id": "med-basic", "zh": "基础医学", "en": "Basic Medical Sciences" },
+          { "id": "med-internal", "zh": "内科学", "en": "Internal Medicine" },
+          { "id": "med-surgery", "zh": "外科学", "en": "Surgery" },
+          { "id": "med-psychiatry", "zh": "神经病学与精神病学", "en": "Neurology & Psychiatry" },
+          { "id": "med-pharma", "zh": "药理学", "en": "Pharmacology" }
+        ]},
+        { "id": "tcm", "zh": "中医学", "en": "Traditional Chinese Medicine", "children": [
+          { "id": "tcm-classics", "zh": "经典（内经 / 伤寒 / 金匮）", "en": "Classical Texts" },
+          { "id": "tcm-acup", "zh": "针灸推拿", "en": "Acupuncture & Moxibustion" },
+          { "id": "tcm-formulas", "zh": "方剂学", "en": "Formulas" },
+          { "id": "tcm-meridians", "zh": "经络与气", "en": "Meridians & Qi" }
+        ]},
+        { "id": "agri", "zh": "农学", "en": "Agriculture", "children": [
+          { "id": "agri-crop", "zh": "农艺 / 作物学", "en": "Agronomy" },
+          { "id": "agri-livestock", "zh": "畜牧与兽医", "en": "Animal Husbandry" }
+        ]},
+        { "id": "biz", "zh": "商学与管理", "en": "Business & Management", "children": [
+          { "id": "biz-mgmt", "zh": "管理学", "en": "Management" },
+          { "id": "biz-mkt", "zh": "市场营销", "en": "Marketing" },
+          { "id": "biz-org", "zh": "组织行为", "en": "Organizational Behavior" },
+          { "id": "biz-strategy", "zh": "战略管理", "en": "Strategy" },
+          { "id": "biz-finance", "zh": "金融学", "en": "Finance" }
+        ]},
+        { "id": "crafts", "zh": "技艺与艺术", "en": "Crafts & Arts", "children": [
+          { "id": "cr-arch", "zh": "建筑", "en": "Architecture" },
+          { "id": "cr-music", "zh": "音乐", "en": "Music" },
+          { "id": "cr-visual", "zh": "视觉艺术", "en": "Visual Arts" },
+          { "id": "cr-theater", "zh": "戏剧与表演", "en": "Theater & Performance" }
+        ]}
+      ]
+    }
+  ]
+}

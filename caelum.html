@@ -141,8 +141,8 @@
       opacity: 0; animation: fadeUp 1.2s ease 0.4s forwards;
     }
     .name-en {
-      font-family: var(--sans);
-      font-size: 14px; font-weight: 600; letter-spacing: 0.42em;
+      font-family: var(--serif-en);
+      font-size: 16px; font-weight: 500; letter-spacing: 0.42em;
       color: var(--accent-dim); text-transform: uppercase; margin-bottom: 22px;
       opacity: 0; animation: fadeUp 1.2s ease 0.55s forwards;
     }
@@ -247,6 +247,49 @@
       font-size: 22px; color: var(--accent); font-weight: 600;
       letter-spacing: 0.25em;
     }
+    .batch-mode { display: flex; gap: 6px; margin-left: auto; margin-right: 24px; }
+    .bm-tab {
+      font-family: var(--serif); font-size: 13px; letter-spacing: 0.15em;
+      color: var(--ink-dim); cursor: pointer; padding: 5px 16px;
+      border: 1px solid rgba(238,240,245,0.18); border-radius: 18px;
+      transition: all 0.25s;
+    }
+    .bm-tab.active { color: var(--accent); border-color: var(--accent); background: rgba(238,240,245,0.06); }
+    .bm-tab:hover { color: var(--accent); }
+    .batch-cat { flex: 1; overflow-y: auto; padding-right: 8px; }
+    .batch-cat::-webkit-scrollbar { width: 6px; }
+    .batch-cat::-webkit-scrollbar-thumb { background: rgba(238,240,245,0.15); border-radius: 3px; }
+    .cat-group { margin-bottom: 22px; }
+    .cat-head {
+      font-size: 14px; color: var(--accent); letter-spacing: 0.15em;
+      margin-bottom: 8px; border-bottom: 1px solid rgba(238,240,245,0.1);
+      padding-bottom: 6px; display: flex; align-items: baseline; gap: 10px;
+    }
+    .cat-count { font-size: 11px; color: var(--ink-dim); font-family: var(--sans); }
+    .cat-items { display: flex; flex-direction: column; }
+    .cat-row {
+      display: flex; align-items: center; gap: 12px;
+      padding: 7px 10px; border-radius: 8px; transition: background 0.2s;
+    }
+    .cat-row:hover { background: rgba(238,240,245,0.03); }
+    .cat-row .cr-t { flex: 1; font-size: 13px; color: var(--ink); letter-spacing: 0.04em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .cat-row .cr-a { font-size: 11px; color: var(--ink-dim); width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .cat-row .cr-m { display: flex; gap: 5px; }
+    .cat-row .cr-m button {
+      font-family: var(--serif); font-size: 11px; letter-spacing: 0.05em;
+      color: var(--ink-dim); background: transparent; cursor: pointer;
+      border: 1px solid rgba(238,240,245,0.15); border-radius: 12px;
+      padding: 2px 10px; transition: all 0.2s;
+    }
+    .cat-row .cr-m button:hover { color: var(--accent); border-color: var(--accent); }
+    .cat-row .cr-m button.on { color: var(--accent); border-color: var(--accent); background: rgba(238,240,245,0.08); }
+    .cat-empty { color: var(--ink-dim); font-size: 13px; padding: 30px 0; text-align: center; }
+    .batch-filters select {
+      background: rgba(14,18,28,0.7); border: 1px solid rgba(238,240,245,0.18);
+      color: var(--ink); font-family: var(--serif); padding: 8px 12px;
+      border-radius: 10px; font-size: 13px;
+    }
+    .batch-filters select:focus { outline: none; border-color: var(--accent); }
     .batch-close {
       font-size: 28px; color: var(--ink-dim); cursor: pointer; line-height: 1;
     }
@@ -324,65 +367,77 @@
     }
     .batch-list, .batch-flow { flex: 1; overflow-y: auto; padding-right: 8px; }
 
-    /* ========== 第3屏：星域 ========== */
-    #sec-domain { background: var(--bg); }
-    /* 第3屏：星域 · 分类树 */
-    #sec-domain { background: var(--bg); justify-content: flex-start; padding-top: 12vh; overflow-y: auto; }
-    .tree-wrap {
-      width: 100%; max-width: 760px; margin: 0 auto;
-      font-family: var(--serif);
+    /* ========== 第3屏：星域 · 四域下钻 ========== */
+    #sec-domain { background: var(--bg); overflow-y: auto; justify-content: flex-start; padding-top: 12vh; }
+    .domain-nav { width: 100%; max-width: 860px; margin: 0 auto; }
+    .breadcrumb {
+      display: flex; gap: 8px; align-items: center; margin-bottom: 28px;
+      font-size: 12px; color: var(--accent-dim); flex-wrap: wrap;
+      font-family: var(--serif); letter-spacing: 0.08em;
     }
-    .tree-branch {
-      margin-bottom: 2px;
+    .breadcrumb .crumb {
+      cursor: pointer; padding: 4px 4px; border-radius: 4px; transition: color 0.2s;
     }
-    .tb-row {
-      display: flex; align-items: center; gap: 10px;
-      padding: 9px 12px; border-radius: 8px;
-      cursor: pointer; transition: background 0.2s;
-      border-left: 2px solid transparent;
+    .breadcrumb .crumb:hover { color: var(--accent); }
+    .breadcrumb .crumb-sep { color: rgba(238,240,245,0.25); padding: 0 2px; }
+    .breadcrumb .crumb-now { color: var(--accent); cursor: default; }
+    .domain-view { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+    .dv-item {
+      position: relative; border: 1px solid rgba(238,240,245,0.12);
+      border-radius: 12px; padding: 20px 22px; cursor: pointer;
+      background: rgba(10,14,22,0.6); backdrop-filter: blur(4px);
+      transition: all 0.35s ease;
     }
-    .tb-row:hover { background: rgba(238,240,245,0.045); }
-    .tree-branch-open > .tb-row { border-left-color: var(--accent-dim); }
-    .tb-toggle {
-      width: 16px; text-align: center; color: var(--accent-dim);
-      font-size: 13px; user-select: none;
+    .dv-item:hover { border-color: rgba(238,240,245,0.35); background: rgba(14,18,28,0.8); transform: translateY(-2px); }
+    .dv-item .dv-cn { font-size: 17px; color: var(--ink); letter-spacing: 0.1em; }
+    .dv-item .dv-en {
+      font-family: var(--serif-en); font-style: italic; font-size: 13px;
+      color: var(--accent-dim); letter-spacing: 0.06em; margin-top: 5px;
     }
-    .tb-name { font-size: 15px; color: var(--ink); letter-spacing: 0.06em; }
-    .tb-name i {
-      font-family: var(--serif-en); font-style: italic;
-      font-size: 0.85em; color: var(--accent-dim); margin-left: 8px;
-      font-weight: 400;
+    .dv-item .dv-desc {
+      font-size: 12px; color: rgba(232,234,240,0.45); margin-top: 10px; line-height: 1.7;
+      letter-spacing: 0.04em;
     }
-    .tb-note {
-      margin-left: auto; font-size: 11px; color: rgba(232,234,240,0.4);
-      letter-spacing: 0.1em; font-family: var(--serif);
+    .dv-item .dv-arrow {
+      position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
+      color: var(--accent-dim); font-size: 16px;
     }
-    .tb-children {
-      padding-left: 26px; border-left: 1px solid rgba(238,240,245,0.1);
-      margin-left: 8px; overflow: hidden; max-height: 3000px;
-      transition: max-height 0.4s ease;
+    .dv-item .dv-badge {
+      display: inline-block; margin-top: 12px; font-size: 10px;
+      color: var(--accent-dim); letter-spacing: 0.15em;
+      border: 1px solid rgba(238,240,245,0.18); border-radius: 12px; padding: 2px 10px;
     }
-    .tree-branch:not(.tree-branch-open) > .tb-children { max-height: 0; }
-    .tree-branch:not(.tree-branch-open) > .tb-row .tb-toggle { content: "▸"; }
-    .tree-leaf {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 7px 12px; border-radius: 8px;
-      transition: background 0.2s;
+    /* 叶子页 = 学习笔记 */
+    .dv-leaf {
+      display: block; width: 100%; border: 1px solid rgba(238,240,245,0.14);
+      border-radius: 14px; background: rgba(10,14,22,0.6); padding: 26px 28px;
     }
-    .tree-leaf:hover { background: rgba(238,240,245,0.03); }
-    .tree-leaf .tb-name { font-size: 14px; }
-    .tb-mark { display: flex; gap: 6px; opacity: 0; transition: opacity 0.25s; }
-    .tree-leaf:hover .tb-mark { opacity: 1; }
-    .tb-mark button {
-      font-family: var(--serif); font-size: 11px; letter-spacing: 0.08em;
-      color: var(--ink-dim); background: transparent;
-      border: 1px solid rgba(238,240,245,0.15); border-radius: 12px;
-      padding: 2px 10px; cursor: pointer; transition: all 0.2s;
+    .leaf-head { display: flex; align-items: baseline; gap: 14px; justify-content: space-between; }
+    .leaf-head .lf-cn { font-size: 22px; color: var(--accent); letter-spacing: 0.12em; font-weight: 600; }
+    .leaf-head .lf-en {
+      font-family: var(--serif-en); font-style: italic; font-size: 14px; color: var(--accent-dim);
     }
-    .tb-mark button:hover { color: var(--accent); border-color: var(--accent); }
-    .tb-mark button[data-m="fav"].on { color: #fff; border-color: var(--accent); background: rgba(238,240,245,0.14); }
-    .tb-mark button[data-m="read"].on { color: var(--accent); border-color: var(--accent); }
-    .tree-leaf .tb-name .leaf-state { font-size: 11px; color: rgba(232,234,240,0.35); margin-left: 6px; }
+    .leaf-marks { display: flex; gap: 10px; margin: 18px 0; }
+    .leaf-marks button {
+      font-family: var(--serif); font-size: 14px; letter-spacing: 0.2em;
+      color: var(--ink-dim); background: transparent; cursor: pointer;
+      border: 1px solid rgba(238,240,245,0.2); border-radius: 22px;
+      padding: 9px 22px; transition: all 0.25s;
+    }
+    .leaf-marks button:hover { color: var(--accent); border-color: var(--accent); }
+    .leaf-marks button.on { color: var(--accent); border-color: var(--accent); background: rgba(238,240,245,0.1); }
+    .leaf-note {
+      width: 100%; min-height: 120px; background: rgba(5,6,8,0.5);
+      border: 1px solid rgba(238,240,245,0.14); color: var(--ink);
+      font-family: var(--serif); font-size: 14px; line-height: 1.9; letter-spacing: 0.04em;
+      padding: 14px 16px; border-radius: 10px; resize: vertical;
+    }
+    .leaf-note:focus { outline: none; border-color: var(--accent); }
+    .leaf-placeholder {
+      color: var(--ink-dim); font-size: 13px; margin-top: 16px; letter-spacing: 0.05em;
+      border-top: 1px solid rgba(238,240,245,0.08); padding-top: 14px;
+    }
+
 
     /* ========== 第4屏：拓星 ========== */
     #sec-frontier { background: var(--bg-deep); }
@@ -450,7 +505,7 @@
 
     .frontier-tags {
       display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
-      margin-bottom: 36px;
+      margin: 6vh 0 40px;
     }
     .frontier-tags span {
       font-family: var(--sans);
@@ -522,7 +577,9 @@
   <div class="nav-dot" data-label="跋" data-label-en="Coda" onclick="goTo(5)"></div>
 </nav>
 
-<!-- ═══════════ 第 1 屏：序 · 个人名片 ═══════════ -->
+<!-- ═══════════ 第 1 屏：序 · 个人名片
+     ✏️ 编辑入口：名字在 .name-cn / .name-en；字在 .name-zi；
+     下面每处文字是最常改的。英文版在脚本区 I18N 词典里 -->
 <section id="sec-intro">
   <div class="intro-inner">
     <div class="intro-symbol" data-i18n="introSymbol">凿 星 图 · C A E L U M</div>
@@ -554,95 +611,26 @@
   </div>
 </section>
 
-<!-- ═══════════ 第 3 屏：星域 · 四域分类树 ═══════════ -->
+<!-- ═══════════ 第 3 屏：星域 · 四域下钻 ═══════════ -->
 <section id="sec-domain">
   <h2 class="section-title"><span>星 域</span><span class="title-en">The Domains of Knowledge</span></h2>
-  <div class="tree-wrap" id="treeWrap">
-    <div class="tree-branch tree-branch-open">
-      <div class="tb-row" onclick="toggleBranch(this)">
-        <span class="tb-toggle">▾</span>
-        <span class="tb-name">形式科学 <i>Formal Sciences</i></span>
-        <span class="tb-note">我的母域 · 专业</span>
-      </div>
-      <div class="tb-children">
-        <div class="tree-branch tree-branch-open">
-          <div class="tb-row" onclick="toggleBranch(this)"><span class="tb-toggle">▾</span><span class="tb-name">数学 <i>Mathematics</i></span></div>
-          <div class="tb-children">
-            <div class="tb-leaf"><span class="tb-name">代数 <i>Algebra</i></span><span class="tb-mark" data-leaf="代数"><button data-m="fav">喜爱</button><button data-m="read">已读</button><button data-m="unread">未读</button></span></div>
-            <div class="tb-leaf"><span class="tb-name">分析 <i>Analysis</i></span><span class="tb-mark" data-leaf="分析"><button data-m="fav">喜爱</button><button data-m="read">已读</button><button data-m="unread">未读</button></span></div>
-            <div class="tb-leaf"><span class="tb-name">几何 / 拓扑 <i>Geometry / Topology</i></span><span class="tb-mark" data-leaf="几何拓扑"><button data-m="fav">喜爱</button><button data-m="read">已读</button><button data-m="unread">未读</button></span></div>
-          </div>
-        </div>
-        <div class="tree-leaf"><span class="tb-name">逻辑 <i>Logic</i></span><span class="tb-mark" data-leaf="逻辑"><button data-m="fav">喜爱</button><button data-m="read">已读</button><button data-m="unread">未读</button></span></div>
-        <div class="tree-leaf"><span class="tb-name">计算机理论 <i>Computer Theory</i></span><span class="tb-mark" data-leaf="计算机理论"><button data-m="fav">喜爱</button><button data-m="read">已读</button><button data-m="unread">未读</button></span></div>
-      </div>
-    </div>
-
-    <div class="tree-branch tree-branch-open">
-      <div class="tb-row" onclick="toggleBranch(this)">
-        <span class="tb-toggle">▾</span>
-        <span class="tb-name">自然科学 <i>Natural Sciences</i></span>
-        <span class="tb-note">图景索取</span>
-      </div>
-      <div class="tb-children">
-        <div class="tree-leaf"><span class="tb-name">物理学 <i>Physics</i></span><span class="tb-mark" data-leaf="物理学"><button data-m="fav">喜爱</button><button data-m="read">已读</button><button data-m="unread">未读</button></span></div>
-        <div class="tree-leaf"><span class="tb-name">化学 <i>Chemistry</i></span><span class="tb-mark" data-leaf="化学"><button data-m="fav">喜爱</button><button data-m="read">已读</button><button data-m="unread">未读</button></span></div>
-        <div class="tree-leaf"><span class="tb-name">生物学 <i>Biology</i></span><span class="tb-mark" data-leaf="生物学"><button data-m="fav">喜爱</button><button data-m="read">已读</button><button data-m="unread">未读</button></span></div>
-        <div class="tree-leaf"><span class="tb-name">地球科学 <i>Earth Sciences</i></span><span class="tb-mark" data-leaf="地球科学"><button data-m="fav">喜爱</button><button data-m="read">已读</button><button data-m="unread">未读</button></span></div>
-      </div>
-    </div>
-
-    <div class="tree-branch tree-branch-open">
-      <div class="tb-row" onclick="toggleBranch(this)">
-        <span class="tb-toggle">▾</span>
-        <span class="tb-name">人文与社会科学 <i>Humanities & Social Sciences</i></span>
-        <span class="tb-note">深度投入</span>
-      </div>
-      <div class="tb-children">
-        <div class="tree-branch tree-branch-open">
-          <div class="tb-row" onclick="toggleBranch(this)"><span class="tb-toggle">▾</span><span class="tb-name">哲学 <i>Philosophy</i></span><span class="tb-note">次级域 · 深入</span></div>
-          <div class="tb-children">
-            <div class="tree-leaf"><span class="tb-name">形上 / 存在论 <i>Metaphysics</i></span><span class="tb-mark" data-leaf="形上存在论"><button data-m="fav">喜爱</button><button data-m="read">已读</button><button data-m="unread">未读</button></span></div>
-            <div class="tree-leaf"><span class="tb-name">认识论 <i>Epistemology</i></span><span class="tb-mark" data-leaf="认识论"><button data-m="fav">喜爱</button><button data-m="read">已读</button><button data-m="unread">未读</button></span></div>
-            <div class="tree-leaf"><span class="tb-name">伦理学 <i>Ethics</i></span><span class="tb-mark" data-leaf="伦理学"><button data-m="fav">喜爱</button><button data-m="read">已读</button><button data-m="unread">未读</button></span></div>
-            <div class="tree-leaf"><span class="tb-name">中国哲学 <i>Chinese Philosophy</i></span><span class="tb-mark" data-leaf="中国哲学"><button data-m="fav">喜爱</button><button data-m="read">已读</button><button data-m="unread">未读</button></span></div>
-          </div>
-        </div>
-        <div class="tree-branch">
-          <div class="tb-row" onclick="toggleBranch(this)"><span class="tb-toggle">▸</span><span class="tb-name">心理学 <i>Psychology</i></span><span class="tb-note">切口 · 精神分析</span></div>
-          <div class="tb-children">
-            <div class="tree-leaf"><span class="tb-name">精神分析 <i>Psychoanalysis</i></span><span class="tb-mark" data-leaf="精神分析"><button data-m="fav">喜爱</button><button data-m="read">已读</button><button data-m="unread">未读</button></span></div>
-            <div class="tree-leaf"><span class="tb-name">认知心理 <i>Cognitive Psy.</i></span><span class="tb-mark" data-leaf="认知心理"><button data-m="fav">喜爱</button><button data-m="read">已读</button><button data-m="unread">未读</button></span></div>
-          </div>
-        </div>
-        <div class="tree-leaf"><span class="tb-name">历史 <i>History</i></span><span class="tb-mark" data-leaf="历史"><button data-m="fav">喜爱</button><button data-m="read">已读</button><button data-m="unread">未读</button></span></div>
-        <div class="tree-leaf"><span class="tb-name">文学 <i>Literature</i></span><span class="tb-mark" data-leaf="文学"><button data-m="fav">喜爱</button><button data-m="read">已读</button><button data-m="unread">未读</button></span></div>
-        <div class="tree-leaf"><span class="tb-name">经济学 <i>Economics</i></span><span class="tb-mark" data-leaf="经济学"><button data-m="fav">喜爱</button><button data-m="read">已读</button><button data-m="unread">未读</button></span></div>
-        <div class="tree-leaf"><span class="tb-name">政治学 <i>Political Science</i></span><span class="tb-mark" data-leaf="政治学"><button data-m="fav">喜爱</button><button data-m="read">已读</button><button data-m="unread">未读</button></span></div>
-        <div class="tree-leaf"><span class="tb-name">法学（理论）<i>Law, theory</i></span><span class="tb-mark" data-leaf="法学理论"><button data-m="fav">喜爱</button><button data-m="read">已读</button><button data-m="unread">未读</button></span></div>
-      </div>
-    </div>
-
-    <div class="tree-branch tree-branch-open">
-      <div class="tb-row" onclick="toggleBranch(this)">
-        <span class="tb-toggle">▾</span>
-        <span class="tb-name">应用科学与技艺 <i>Applied Sciences & Crafts</i></span>
-        <span class="tb-note">实用距离 · 中医学详参</span>
-      </div>
-      <div class="tb-children">
-        <div class="tree-leaf"><span class="tb-name">工程 <i>Engineering</i></span><span class="tb-mark" data-leaf="工程"><button data-m="fav">喜爱</button><button data-m="read">已读</button><button data-m="unread">未读</button></span></div>
-        <div class="tree-leaf"><span class="tb-name">中医学 <i>Chinese Medicine</i></span><span class="tb-mark" data-leaf="中医学"><button data-m="fav">喜爱</button><button data-m="read">已读</button><button data-m="unread">未读</button></span></div>
-        <div class="tree-leaf"><span class="tb-name">医学 <i>Medicine</i></span><span class="tb-mark" data-leaf="医学"><button data-m="fav">喜爱</button><button data-m="read">已读</button><button data-m="unread">未读</button></span></div>
-        <div class="tree-leaf"><span class="tb-name">商学 <i>Business</i></span><span class="tb-mark" data-leaf="商学"><button data-m="fav">喜爱</button><button data-m="read">已读</button><button data-m="unread">未读</button></span></div>
-        <div class="tree-leaf"><span class="tb-name">法学（实践）<i>Law, practice</i></span><span class="tb-mark" data-leaf="法学实践"><button data-m="fav">喜爱</button><button data-m="read">已读</button><button data-m="unread">未读</button></span></div>
-      </div>
-    </div>
+  <div class="domain-nav">
+    <div class="breadcrumb" id="domainCrumb"></div>
+    <div class="domain-view" id="domainView"></div>
   </div>
 </section>
 
-<!-- ═══════════ 第 4 屏：拓星 ═══════════ -->
+<!-- ═══════════ 第 4 屏：拓星 ═══════════
+     ✏️ 编辑入口：研究方向与代表作改这里。
+     想增删代表作 → 复制/删掉一个 <a class="frontier-item"> 块。
+     完整学术履历链接地址在下方 frontier-more 里。 -->
 <section id="sec-frontier">
   <h2 class="section-title"><span>拓 星</span><span class="title-en">Research</span></h2>
+
+  <!-- 研究方向（✏️ 可改标签文本） -->
+  <div class="frontier-tags">
+    <span>LLM SYSTEMS</span><span>PARALLEL COMPUTING</span><span>BRAIN-INSPIRED COMPUTING</span>
+  </div>
 
   <div class="frontier-list">
     <a class="frontier-item" href="https://scholar.google.com/citations?user=YubingBao" target="_blank" rel="noopener">
@@ -677,7 +665,9 @@
   </a>
 </section>
 
-<!-- ═══════════ 第 5 屏：理念 ═══════════ -->
+<!-- ═══════════ 第 5 屏：理念 ═══════════
+     ✏️ 编辑入口：下面每一句 <p class="vs"> 是一句话，改文字即可；散落位置由 vs-1..vs-10 的CSS控制。
+     位置想调整 → 编辑 CSS 里 .vs-1 .. .vs-10 的 top/left/right。 -->
 <section id="sec-vision">
   <div class="vision-stars">
     <p class="vs vs-1" data-i18n="v1">我不相信知识的尽头有墙。<br>我读数学时看见结构之美，读文学时看见同样的结构。</p>
@@ -1081,49 +1071,142 @@
     }
   }
 
-  // ─── 四域分类树 ───
+  // ─── 星域：四域下钻导航（数据来自 tree.json）───
   let domainMarks = {};
   try { domainMarks = JSON.parse(localStorage.getItem('caelum_domains') || '{}'); } catch {}
+  let domainNotes = {};
+  try { domainNotes = JSON.parse(localStorage.getItem('caelum_domain_notes') || '{}'); } catch {}
+  let treeData = { domains: [] };
+  let domainPath = []; // [{zh, en, id}]
+  let currentNodes = [];
 
-  function toggleBranch(row) {
-    const br = row.parentElement;
-    br.classList.toggle('tree-branch-open');
-    const t = row.querySelector('.tb-toggle');
-    if (t) t.textContent = br.classList.contains('tree-branch-open') ? '▾' : '▸';
+  async function loadTree() {
+    // 加载四域目录树（tree.json）
+    const paths = ['tree.json', '/tree.json', 'data/tree.json', '/data/tree.json'];
+    for (const p of paths) {
+      try {
+        const r = await fetch(p);
+        if (r.ok) { treeData = await r.json(); break; }
+      } catch {}
+    }
+    renderDomains();
   }
 
-  function saveDomains() {
-    try { localStorage.setItem('caelum_domains', JSON.stringify(domainMarks)); } catch {}
+  function saveDomainMark() { try { localStorage.setItem('caelum_domains', JSON.stringify(domainMarks)); } catch {} }
+  function saveDomainNotes() { try { localStorage.setItem('caelum_domain_notes', JSON.stringify(domainNotes)); } catch {} }
+
+  function domainKey(node) {
+    // 叶子标注键: 完整路径
+    return domainPath.map(p => p.id).concat(node.id).join('>');
   }
 
-  document.querySelectorAll('.tb-mark').forEach(mark => {
-    const key = mark.getAttribute('data-leaf');
-    const st = domainMarks[key] || 'unread';
-    mark.querySelectorAll('button').forEach(btn => {
-      const m = btn.getAttribute('data-m');
-      if (m === st) btn.classList.add('on');
-      btn.onclick = (e) => {
-        e.stopPropagation();
+  function renderDomains() {
+    const view = document.getElementById('domainView');
+    const crumb = document.getElementById('domainCrumb');
+    if (!view) return;
+    // 面包屑
+    crumb.innerHTML = '';
+    crumb.appendChild(crumbEl('星域', () => { domainPath = []; renderDomains(); }));
+    domainPath.forEach((p, i) => {
+      crumb.appendChild(sepEl());
+      crumb.appendChild(crumbEl(p.zh, () => { domainPath = domainPath.slice(0, i + 1); renderDomains(); }));
+    });
+    // 当前层节点
+    let parent = null;
+    const findNode = (nodes, idx) => {
+      let cur = nodes;
+      for (let i = 1; i <= idx; i++) {
+        cur = cur.find(n => n.id === domainPath[i].id);
+        if (cur && cur.children) cur = cur.children;
+        else return [];
+      }
+      return cur || [];
+    };
+    if (domainPath.length === 0) {
+      currentNodes = treeData.domains || [];
+    } else {
+      let cur = treeData.domains.find(n => n.id === domainPath[0].id);
+      for (let i = 1; i < domainPath.length; i++) {
+        cur = cur?.children?.find(c => c.id === domainPath[i].id);
+      }
+      currentNodes = cur?.children || [];
+    }
+    view.innerHTML = '';
+    if (!currentNodes.length) {
+      // 叶子页：学习笔记
+      renderLeaf(view, domainPath[domainPath.length - 1]);
+      return;
+    }
+    currentNodes.forEach(node => {
+      const hasKids = node.children && node.children.length;
+      const el = document.createElement('div');
+      el.className = 'dv-item';
+      const markVal = node.children ? null : domainMarks[domainKey(node)];
+      el.innerHTML = `<div class="dv-cn">${node.zh}</div><div class="dv-en">${node.en || ''}</div>` +
+        (node.posture ? `<div class="dv-badge">${node.posture}</div>` : '') +
+        (hasKids ? `<div class="dv-arrow">›</div>` : '');
+      el.onclick = () => {
+        domainPath.push({ id: node.id, zh: node.zh, en: node.en });
+        renderDomains();
+      };
+      view.appendChild(el);
+    });
+  }
+
+  function crumbEl(txt, fn) {
+    const s = document.createElement('span');
+    s.className = 'crumb'; s.textContent = txt; s.onclick = fn;
+    return s;
+  }
+  function sepEl() {
+    const s = document.createElement('span');
+    s.className = 'crumb-sep'; s.textContent = '›';
+    return s;
+  }
+
+  function renderLeaf(view, node) {
+    const key = domainPath.map(p => p.id).join('>');
+    const st = domainMarks[key] || 'na';
+    const note = domainNotes[key] || '';
+    const el = document.createElement('div');
+    el.className = 'dv-leaf';
+    el.innerHTML = `
+      <div class="leaf-head">
+        <span class="lf-cn">${node.zh}</span>
+        <span class="lf-en">${node.en || ''}</span>
+      </div>
+      <div class="leaf-marks">
+        <button data-lm="know" class="${st==='know'?'on':''}" data-i18n-lm="熟悉">熟悉</button>
+        <button data-lm="knowish" class="${st==='knowish'?'on':''}">了解</button>
+        <button data-lm="na" class="${st==='na'?'on':''}">陌生</button>
+      </div>
+      <textarea class="leaf-note" placeholder="这里写你的学习笔记…">${note.replace(/</g,'&lt;')}</textarea>
+      <div class="leaf-placeholder" data-i18n-leafhint>这是你的学习叶子页：标注熟悉程度，写下笔记。</div>`;
+    const back = document.createElement('div');
+    back.className = 'dv-badge';
+    back.textContent = '← 返回';
+    back.style.cssText = 'cursor:pointer;margin-top:18px;display:inline-block;';
+    back.onclick = () => { domainPath.pop(); renderDomains(); };
+    el.appendChild(back);
+    // 标注按钮
+    el.querySelectorAll('.leaf-marks button').forEach(btn => {
+      btn.onclick = () => {
+        const m = btn.getAttribute('data-lm');
         domainMarks[key] = m;
-        saveDomains();
-        mark.querySelectorAll('button').forEach(b => b.classList.toggle('on', b === btn));
-        markMarkState(key);
+        saveDomainMark();
+        el.querySelectorAll('.leaf-marks button').forEach(b => b.classList.toggle('on', b === btn));
       };
     });
-    markMarkState(key);
-  });
-
-  function markMarkState(key) {
-    const st = domainMarks[key] || 'unread';
-    const leaf = document.querySelector(`.tb-mark[data-leaf="${key}"]`)?.closest('.tree-leaf');
-    const name = leaf?.querySelector('.tb-name');
-    if (name) {
-      let tag = name.querySelector('.leaf-state');
-      if (!tag) { tag = document.createElement('span'); tag.className = 'leaf-state'; name.appendChild(tag); }
-      const zh = { fav: '喜爱', read: '已读', unread: '未学' }[st];
-      tag.textContent = st === 'unread' ? '' : `· ${zh}`;
-    }
+    // 笔记
+    const ta = el.querySelector('.leaf-note');
+    let t = null;
+    ta.oninput = () => {
+      clearTimeout(t);
+      t = setTimeout(() => { domainNotes[key] = ta.value; saveDomainNotes(); }, 300);
+    };
+    view.appendChild(el);
   }
+
 
   // ─── 批量标记面板（流式：一本一本，标完自动下一本）───
   let batchQueue = [];
@@ -1191,6 +1274,75 @@
     renderFlow(); // 自动跳到下一本未读
   }
 
+  // ─── 批量标记：分类模式（按作者 / 语言分组）───
+  let batchMode = 'flow';
+  function batchSetMode(mode, el) {
+    batchMode = mode;
+    document.querySelectorAll('.bm-tab').forEach(t => t.classList.toggle('active', t === el));
+    document.getElementById('batchSort').style.display = mode === 'cat' ? '' : 'none';
+    document.getElementById('batchFlow').style.display = mode === 'flow' ? '' : 'none';
+    document.getElementById('batchCat').style.display = mode === 'cat' ? '' : 'none';
+    onBatchSearch();
+  }
+  function onBatchSearch() {
+    if (batchMode === 'cat') renderCat();
+    else batchFlowNext(true);
+  }
+  function inferLang(book) {
+    // 从作者前缀推断语言来源（豆瓣作者形如 "(俄)陀思妥耶夫斯基" "[日] 村上春树"）
+    const a = (book.author || '').trim();
+    const m = a.match(/^([\[【(（])([^\]】)）]{1,12})[\]】)）]/);
+    if (m) {
+      const region = m[2].replace(/国籍|国/g, '');
+      if (/中|华|中国大陆|港|台/.test(region)) return '华文';
+      return region + '文学';
+    }
+    return '华文';
+  }
+  function renderCat() {
+    const wrap = document.getElementById('batchCat');
+    if (!wrap) return;
+    const q = (document.getElementById('batchSearch')?.value || '').trim().toLowerCase();
+    const sortBy = document.getElementById('batchSort')?.value || '作者';
+    let list = nodes;
+    if (q) list = list.filter(n => (n.title + (n.author||'')).toLowerCase().includes(q));
+    const groups = {};
+    if (sortBy === '作者') {
+      list.forEach(n => {
+        const g = n.author || '佚名';
+        (groups[g] = groups[g] || []).push(n);
+      });
+    } else {
+      list.forEach(n => {
+        const g = inferLang(n);
+        (groups[g] = groups[g] || []).push(n);
+      });
+    }
+    wrap.innerHTML = '';
+    Object.keys(groups).sort().forEach(g => {
+      const grp = document.createElement('div');
+      grp.className = 'cat-group';
+      grp.innerHTML = `<div class="cat-head">${g}<span class="cat-count">${groups[g].length}</span></div>`;
+      const items = document.createElement('div');
+      items.className = 'cat-items';
+      groups[g].sort((a, b) => (a.status === 'unread' ? 0 : 1) - (b.status === 'unread' ? 0 : 1)).slice(0, 200).forEach(n => {
+        const row = document.createElement('div');
+        row.className = 'cat-row';
+        const st = n.status || 'unread';
+        const marks = [['fav','喜'],['read','读'],['unread','未']].map(([k,lab]) =>
+          `<button class="${st===k?'on':''}" data-cm="${k}" data-t="${n.title.replace(/"/g,'&quot;')}">${lab}</button>`).join('');
+        row.innerHTML = `<div class="cr-t">${n.title}</div><div class="cr-a">${n.author||''}</div><div class="cr-m">${marks}</div>`;
+        row.querySelectorAll('button').forEach(b => {
+          b.onclick = () => { const t = b.getAttribute('data-t'); const node = nodes.find(x => x.title === t); if (node) markNode(node, b.getAttribute('data-cm')); };
+        });
+        items.appendChild(row);
+      });
+      grp.appendChild(items);
+      wrap.appendChild(grp);
+    });
+    if (!wrap.children.length) wrap.innerHTML = '<div class="cat-empty">（无）</div>';
+  }
+
   // ─── 画布交互：拖拽旋转 · 悬停 · 点击标记已读 ───
   function canvasPt(e) {
     const r = canvas.getBoundingClientRect();
@@ -1248,16 +1400,25 @@
   // 初始化
   resize();
   loadStars();
+  loadTree();
 </script>
 
-<!-- 批量标记面板（流式：一本一本标记，标完自动下一本）-->
+<!-- 批量标记面板（流式 / 分类 两种模式）-->
 <div class="batch-panel" id="batchPanel">
   <div class="batch-panel-head">
     <h3 data-i18n="batchTitle">批量标记</h3>
+    <div class="batch-mode">
+      <span class="bm-tab active" data-bm="flow" onclick="batchSetMode('flow', this)">流式</span>
+      <span class="bm-tab" data-bm="cat" onclick="batchSetMode('cat', this)">分类</span>
+    </div>
     <div class="batch-close" onclick="closeBatchPanel()">×</div>
   </div>
   <div class="batch-filters">
-    <input id="batchSearch" type="text" placeholder="搜索书名 / 作者…" oninput="batchFlowNext(true)" />
+    <input id="batchSearch" type="text" placeholder="搜索书名 / 作者…" oninput="onBatchSearch()" />
+    <select id="batchSort" style="display:none" onchange="renderCat()">
+      <option value="作者">按作者</option>
+      <option value="语言">按语言</option>
+    </select>
   </div>
   <div class="batch-flow" id="batchFlow">
     <div class="bf-progress"><span id="bfPos"></span></div>
@@ -1270,6 +1431,7 @@
       <button class="bf-skip" onclick="batchMark('unread')" data-i18n="bfSkip">跳 过</button>
     </div>
   </div>
+  <div class="batch-cat" id="batchCat" style="display:none"></div>
   <div class="batch-empty" id="batchEmpty" style="display:none" data-i18n="batchEmpty">没有更多可标记的书 · 换一个搜索</div>
 </div>
 
