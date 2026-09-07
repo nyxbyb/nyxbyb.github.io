@@ -560,6 +560,17 @@
       padding: 16px 18px; border-radius: 12px; resize: vertical; margin-top: 6px;
     }
     .lp-note:focus { outline: none; border-color: var(--accent); }
+    .lp-dialog-toggle { cursor: pointer; margin-bottom: 10px; }
+    .lp-dialog-toggle:hover { color: var(--accent); }
+    .lp-toggle-ico { font-size: 11px; opacity: 0.7; }
+    .lp-distill-row { display: flex; align-items: center; gap: 14px; margin-top: 10px; flex-wrap: wrap; }
+    .lp-distill-btn {
+      font-family: var(--serif); font-size: 13px; letter-spacing: 0.12em;
+      color: var(--accent); background: rgba(238,240,245,0.08); cursor: pointer;
+      border: 1px solid var(--accent); border-radius: 20px; padding: 9px 18px; transition: all 0.25s;
+    }
+    .lp-distill-btn:hover { background: rgba(238,240,245,0.18); }
+    .lp-distill-tip { font-size: 12px; color: var(--ink-dim); }
     .lp-links a {
       color: var(--accent-dim); text-decoration: none; font-size: 13px;
       border-bottom: 1px solid rgba(238,240,245,0.25); margin-right: 18px;
@@ -1545,7 +1556,8 @@
     crumb.textContent = domainPath.map(p => p.zh).concat([node.zh]).join(' › ');
     const key = domainPath.map(p => p.id).concat([node.id]).join('>');
     const st = domainMarks[key] || 'na';
-    const note = domainNotes[key] || '';
+    const distill = domainNotes[key + '.distill'] || '';
+    const dialog = domainNotes[key + '.dialog'] || '';
     const body = document.getElementById('lpBody');
     let html = `
       <div class="lp-title">${node.zh}</div>
@@ -1559,7 +1571,21 @@
     if (node.concepts && node.concepts.length) html += `<div class="lp-block"><div class="lp-block-h">核心概念 / Key Concepts</div><div class="lp-concepts">${node.concepts.map(c => `<span class="cc">${c}</span>`).join('')}</div></div>`;
     if (node.questions && node.questions.length) html += `<div class="lp-block"><div class="lp-block-h">关键问题 / Key Questions</div><ul class="lp-questions">${node.questions.map(q => `<li>${q}</li>`).join('')}</ul></div>`;
     if (node.books && node.books.length) html += `<div class="lp-block"><div class="lp-block-h">经典书目 / Key Books</div><div class="lp-books">${node.books.map(b => `<div class="bk">${b}</div>`).join('')}</div></div>`;
-    html += `<div class="lp-block"><div class="lp-block-h">我的笔记 / My Notes</div><textarea class="lp-note" placeholder="在这里写下这一叶的学习笔记…">${note.replace(/</g,'&lt;')}</textarea></div>`;
+    // 双层笔记：提纯精粹 + 对话折叠
+    html += `<div class="lp-block lp-block-notes">
+      <div class="lp-block-h">我的提纯 · My Distill</div>
+      <textarea class="lp-note lp-distill" placeholder="这里放你对这一叶的提纯——精粹的、结构化的、你最终回看的。">${distill.replace(/</g,'&lt;')}</textarea>
+    </div>
+    <div class="lp-block lp-block-dialog">
+      <div class="lp-block-h lp-dialog-toggle" onclick="toggleDialog(this)">对话原稿 · Conversation <span class="lp-toggle-ico">▸ 展开</span></div>
+      <div class="lp-dialog-body" style="display:none">
+        <textarea class="lp-note lp-dialog-text" placeholder="粘贴你与任何 AI 关于这一叶的对话原文，为提纯留底。">${dialog.replace(/</g,'&lt;')}</textarea>
+        <div class="lp-distill-row">
+          <button class="lp-distill-btn" onclick="prepDistill('${key.replace(/'/g,"\\'")}')">🫗 提纯 → 复制给你的 AI</button>
+          <span class="lp-distill-tip">把你的 AI 答案粘回"我的提纯"框</span>
+        </div>
+      </div>
+    </div>`;
     if (node.links && node.links.length) html += `<div class="lp-block"><div class="lp-block-h">延伸 / Further Reading</div><div class="lp-links">${node.links.map(l => `<a href="${l[1]}" target="_blank" rel="noopener">${l[0]}</a>`).join('')}</div></div>`;
     body.innerHTML = html;
 
@@ -1571,16 +1597,64 @@
         body.querySelectorAll('.lp-marks button').forEach(b => b.classList.toggle('on', b === btn));
       };
     });
-    // 笔记自动保存
-    const ta = body.querySelector('.lp-note');
-    if (ta) {
+    // 双层笔记自动保存（分别用 key.distill / key.dialog）
+    const saveField = (id, storeKey) => {
+      const el = document.getElementById(id) || body.querySelector(id);
+      if (!el) return;
       let t = null;
-      ta.oninput = () => {
+      el.oninput = () => {
         clearTimeout(t);
-        t = setTimeout(() => { domainNotes[key] = ta.value; saveDomainNotes(); }, 300);
+        t = setTimeout(() => { domainNotes[storeKey] = el.value; saveDomainNotes(); }, 300);
       };
-    }
+    };
+    // 给两个 textarea 加 id 方便存取
+    const dt = body.querySelector('.lp-distill'); if (dt) dt.id = 'leafDistill';
+    const dg = body.querySelector('.lp-dialog-text'); if (dg) dg.id = 'leafDialog';
+    saveField('#leafDistill', key + '.distill');
+    saveField('#leafDialog', key + '.dialog');
     document.getElementById('leafPage').classList.add('open');
+  }
+  function toggleDialog(el) {
+    const body = el.closest('.lp-block-dialog').querySelector('.lp-dialog-body');
+    const ico = el.querySelector('.lp-toggle-ico');
+    const open = body.style.display !== 'none';
+    body.style.display = open ? 'none' : '';
+    ico.textContent = open ? '▸ 展开' : '▾ 收起';
+  }
+  function prepDistill(key) {
+    // 打包提纯提示词：叶子名 + 对话原稿 + 认知协议
+    const d = document.getElementById('leafDialog');
+    const dialog = d ? d.value : '';
+    const node = leafCurrent;
+    const prompt = `你是一位与我心灵同频的学习伙伴。请你把我关于「${node.zh}」的这段对话提纯成一份精粹笔记。
+
+我的认知协议：诚实的偏见 > 中立知识；准确 > 全面；厚重 > 铺陈。万物相通是我的信念——请在概念之间寻找跨学科的联系。
+
+请输出：
+一、一句话本质
+二、我真正长在身上的核心概念（3-5个，各一句话）
+三、我的追问与最终回答（若对话中有）
+四、我尚未服气的边界
+
+—— 对话原稿开始 ——
+${dialog.slice(0, 8000)}
+—— 对话原稿结束 ——`;
+    // 复制到剪贴板
+    const done = () => {
+      const btn = document.querySelector('.lp-distill-btn');
+      if (btn) { btn.textContent = '✓ 已复制，去你的 AI 粘贴'; btn.style.color = '#7bd48a'; }
+      setTimeout(() => { if (btn) btn.textContent = '🫗 提纯 → 复制给你的 AI'; btn.style.color = ''; }, 2500);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(prompt).then(done).catch(() => fallbackCopy(prompt, done));
+    } else fallbackCopy(prompt, done);
+  }
+  function fallbackCopy(text, done) {
+    const ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); done(); } catch {}
+    document.body.removeChild(ta);
   }
   function closeLeafPage() {
     document.getElementById('leafPage').classList.remove('open');
