@@ -493,6 +493,9 @@
     .rec-item .ri-score { font-size: 12px; color: var(--accent-dim); flex-shrink: 0; padding-top: 2px; }
     .rec-note { font-size: 13px; color: var(--accent-dim); padding: 8px 2px; margin-bottom: 10px; letter-spacing: 0.05em; }
     .rec-empty { color: var(--ink-dim); padding: 40px 0; text-align: center; font-size: 14px; }
+    .today-big { border-color: var(--accent-dim); background: rgba(14,18,28,0.7); padding: 22px 20px; }
+    .today-big .ri-title { font-size: 20px; color: var(--accent); }
+    .today-big .ri-score { color: var(--accent); }
 
     /* ========== 第3屏：星域 · 四域下钻 ========== */
     #sec-domain { background: var(--bg); overflow-y: auto; justify-content: flex-start; padding-top: 12vh; }
@@ -811,23 +814,23 @@
     .imm-head {
       position: absolute; top: 0; left: 0; right: 0; z-index: 10;
       display: flex; justify-content: space-between; align-items: center;
-      padding: 18px 6vw; background: linear-gradient(rgba(4,5,10,0.9), transparent);
+      padding: 18px 24px 18px 6vw; background: linear-gradient(rgba(4,5,10,0.9), transparent);
     }
     .imm-title { font-size: 14px; color: var(--accent-dim); letter-spacing: 0.25em; }
     .imm-close { font-size: 28px; color: var(--ink-dim); cursor: pointer; line-height: 1; }
     .imm-close:hover { color: var(--accent); }
     .imm-panel {
-      position: absolute; right: 24px; top: 90px; bottom: 24px; width: 300px;
-      z-index: 10; display: flex; flex-direction: column; gap: 12px;
-      background: rgba(8,10,18,0.88); border: 1px solid rgba(238,240,245,0.12);
-      border-radius: 14px; padding: 18px 20px; backdrop-filter: blur(6px);
-      overflow-y: auto;
+      position: absolute; right: 24px; top: 90px; bottom: 24px; width: 320px;
+      z-index: 10; display: flex; flex-direction: column; gap: 16px;
+      background: rgba(8,10,18,0.9); border: 1px solid rgba(238,240,245,0.12);
+      border-radius: 16px; padding: 20px 20px; backdrop-filter: blur(10px);
+      overflow-y: auto; box-shadow: 0 18px 60px rgba(0,0,0,0.55);
     }
-    /* 左侧屏幕全部让给星图：画布隐式已全屏，面板只占右侧 */
-    .imm-head {
-      position: absolute; top: 0; right: 0; left: 0; z-index: 10;
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 18px 6vw; background: linear-gradient(rgba(4,5,10,0.9), transparent);
+    .imm-panel::-webkit-scrollbar { width: 5px; }
+    .imm-panel::-webkit-scrollbar-thumb { background: rgba(238,240,245,0.12); border-radius: 3px; }
+    .imm-sec {
+      font-size: 10px; color: var(--accent-dim); letter-spacing: 0.3em;
+      margin-bottom: -8px; padding-left: 2px; opacity: 0.8;
     }
     .imm-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
     .imm-row-axes { justify-content: center; gap: 16px; }
@@ -854,6 +857,9 @@
       border: 1px solid rgba(238,240,245,0.2); border-radius: 16px; padding: 8px 16px;
       transition: all 0.25s;
     }
+    .imm-row-inputs button:hover { color: var(--accent); border-color: var(--accent); }
+    .imm-row-inputs button.on { color: var(--accent); border-color: var(--accent); background: rgba(238,240,245,0.1); }
+    .imm-row-inputs { position: relative; }
     .imm-row-inputs button:hover { color: var(--accent); border-color: var(--accent); }
     .imm-info { font-size: 12px; color: var(--ink-dim); letter-spacing: 0.06em; min-height: 18px; }
     .imm-suggest { display: flex; gap: 8px; flex-wrap: wrap; }
@@ -2099,17 +2105,20 @@ ${dialog.slice(0, 8000)}
   let immFilter = 'all';      // all | my | author
   let immAuthor = '';
   let immSelNode = null;      // 点击选中的节点
+  let immFocus = { x: 0, y: 0 };  // 相机聚焦的世界坐标（-1..1）
   function immProject(n) {
-    // 若用户选了语义轴(immAxisMode)，则 x/y 用语义锚得分，z 用 TSNE 深度
+    // 相机式投影：绕焦点旋转 + 缩放，实现真正的"聚焦"
     const cx = immAxisMode ? val(n, immAxisX) : (n.x - 0.5) * 2;
     const cy = immAxisMode ? val(n, immAxisY) : (n.y - 0.5) * 2;
     const cz = (n.z - 0.5) * 2;
-    let x1 = cx * Math.cos(rotY) + cz * Math.sin(rotY);
-    let z1 = -cx * Math.sin(rotY) + cz * Math.cos(rotY);
-    let y2 = cy * Math.cos(rotX) - z1 * Math.sin(rotX);
-    let z2 = cy * Math.sin(rotX) + z1 * Math.cos(rotX);
-    const half = (Math.min(innerWidth, innerHeight) / 2 - 80) * immZoom;
-    return { sx: innerWidth / 2 + x1 * half, sy: innerHeight / 2 + y2 * half, depth: z2 };
+    let x1 = cx - immFocus.x, y1 = cy - immFocus.y, z1 = cz;
+    // rotY + rotX 旋转
+    let rx = x1 * Math.cos(rotY) + z1 * Math.sin(rotY);
+    let rz = -x1 * Math.sin(rotY) + z1 * Math.cos(rotY);
+    let ry = y1 * Math.cos(rotX) - rz * Math.sin(rotX);
+    let rd = y1 * Math.sin(rotX) + rz * Math.cos(rotX);
+    const half = Math.min(innerWidth, innerHeight) / 2 - 80;
+    return { sx: innerWidth / 2 + rx * half * immZoom, sy: innerHeight / 2 + ry * half * immZoom, depth: rd };
   }
   let immSelAuthor = '';
 
@@ -2117,6 +2126,8 @@ ${dialog.slice(0, 8000)}
     document.getElementById('immerse').classList.add('open');
     imm = document.getElementById('imm-canvas');
     immCtx = imm.getContext('2d');
+    immZoom = 1;
+    immFocus = { x: 0, y: 0 };
     immBound();
     immResize();
     immAxisPopulate();
@@ -2129,19 +2140,41 @@ ${dialog.slice(0, 8000)}
     if (immEventBound) return;
     immEventBound = true;
     imm.addEventListener('mousedown', (e) => { immDrag = true; immMoved = 0; immLastX = e.clientX; immLastY = e.clientY; });
-    // 滚轮缩放
+    // 滚轮缩放：相机聚焦到光标下（缩放后光标所指的星仍在原处）
     imm.addEventListener('wheel', (e) => {
       e.preventDefault();
-      immZoom = Math.min(8, Math.max(0.4, immZoom * (e.deltaY < 0 ? 1.12 : 1 / 1.12)));
+      const rect = imm.getBoundingClientRect();
+      const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+      const half = Math.min(innerWidth, innerHeight) / 2 - 80;
+      const oldZoom = immZoom;
+      // 光标处的旋转前坐标（屏幕偏移 ÷ 缩放）
+      const sxr = (mx - innerWidth / 2) / (half * oldZoom);
+      const sy = (my - innerHeight / 2) / (half * oldZoom);
+      immZoom = Math.min(30, Math.max(0.1, immZoom * (e.deltaY < 0 ? 1.15 : 1 / 1.15)));
+      // 反旋转出"无焦点偏移"的世界坐标（近似，z 忽略）
+      const cosX = Math.cos(rotX), sinX = Math.sin(rotX);
+      const cosY = Math.cos(rotY), sinY = Math.sin(rotY);
+      const y1 = sy / cosX, x1 = sxr / cosY;
+      // 更新焦点使该世界点在缩放后仍映射回光标位置
+      const newHalf = half * immZoom;
+      immFocus.x = x1 - (mx - innerWidth / 2) / newHalf;
+      immFocus.y = y1 - (my - innerHeight / 2) / newHalf;
       immRender();
     }, { passive: false });
     window.addEventListener('mousemove', (e) => {
       if (!document.getElementById('immerse').classList.contains('open')) return;
       if (immDrag) {
         immMoved += Math.abs(e.clientX - immLastX) + Math.abs(e.clientY - immLastY);
-        rotY += (e.clientX - immLastX) * 0.008;
-        rotX += (e.clientY - immLastY) * 0.008;
-        rotX = Math.max(-1.4, Math.min(1.4, rotX));
+        if (immZoom > 1.2) {
+          // 放大后拖拽 = 平移视野（聚焦漫游）
+          const half = Math.min(innerWidth, innerHeight) / 2 - 80;
+          immFocus.x -= (e.clientX - immLastX) / (half * immZoom);
+          immFocus.y -= (e.clientY - immLastY) / (half * immZoom);
+        } else {
+          rotY += (e.clientX - immLastX) * 0.008;
+          rotX += (e.clientY - immLastY) * 0.008;
+          rotX = Math.max(-1.4, Math.min(1.4, rotX));
+        }
         immLastX = e.clientX; immLastY = e.clientY;
         immRender();
       } else {
@@ -2344,6 +2377,8 @@ ${dialog.slice(0, 8000)}
         immCtx.fillText(n.title.length > 10 ? n.title.slice(0, 10) + '…' : n.title, p.sx + r + 3, p.sy + 4);
       }
     });
+    // 阅读轨迹（精神进化线）——画在节点之上、悬停前
+    immDrawTrail();
     // 悬停标签
     if (immHover >= 0) {
       const o = vis.find(v => v.i === immHover);
@@ -2404,6 +2439,53 @@ ${dialog.slice(0, 8000)}
     document.querySelectorAll('#immSuggest .chip').forEach(c => c.classList.remove('on'));
     el.classList.add('on');
     immApply();
+  }
+
+  // 阅读轨迹：精神进化线（按读完年份的质心折线）
+  let immTrailOn = false;
+  function immToggleTrail(btn) {
+    immTrailOn = !immTrailOn;
+    btn.classList.toggle('on', immTrailOn);
+    immRender();
+  }
+  function immDrawTrail() {
+    if (!immTrailOn) return;
+    // 按年份分组质心（已读书，finished 含年份）
+    const byYear = {};
+    nodes.forEach(n => {
+      if (n.status !== 'read' && n.status !== 'fav') return;
+      const y = n.wechat && n.wechat.finished ? +String(n.wechat.finished).slice(0, 4) : NaN;
+      if (!y || isNaN(y)) return;
+      (byYear[y] = byYear[y] || []).push(n);
+    });
+    const years = Object.keys(byYear).map(Number).sort((a, b) => a - b);
+    if (years.length < 2) return;
+    const pts = years.map(y => {
+      const g = byYear[y];
+      return immProject({
+        x: g.reduce((a, n) => a + n.x, 0) / g.length,
+        y: g.reduce((a, n) => a + n.y, 0) / g.length,
+        z: g.reduce((a, n) => a + n.z, 0) / g.length,
+      });
+    });
+    // 画折线（渐亮），端点点年份
+    immCtx.save();
+    immCtx.lineWidth = 2;
+    immCtx.strokeStyle = 'rgba(242,196,109,0.6)';
+    immCtx.setLineDash([6, 4]);
+    immCtx.beginPath();
+    pts.forEach((p, i) => i === 0 ? immCtx.moveTo(p.sx, p.sy) : immCtx.lineTo(p.sx, p.sy));
+    immCtx.stroke();
+    immCtx.setLineDash([]);
+    pts.forEach((p, i) => {
+      immCtx.fillStyle = 'rgba(242,196,109,0.9)';
+      immCtx.beginPath(); immCtx.arc(p.sx, p.sy, 4, 0, Math.PI * 2); immCtx.fill();
+      immCtx.fillStyle = 'rgba(242,196,109,0.85)';
+      immCtx.font = "12px 'Noto Serif SC', serif";
+      immCtx.textAlign = 'center';
+      immCtx.fillText(years[i], p.sx, p.sy - 8);
+    });
+    immCtx.restore();
   }
 
   // 点击选星：显示信息 + 最近邻居（按 3D 距离）
@@ -2471,7 +2553,7 @@ ${dialog.slice(0, 8000)}
             </div>
             <div class="ri-score">${s}</div>
           </div>`).join('');
-    } else {
+    } else if (recMode === 'blind') {
       // 盲区推荐：未读书里距离质心最近的
       const reads = nodes.filter(n => n.status === 'read' || n.status === 'fav');
       if (!reads.length) { body.innerHTML = '<div class="rec-empty">先点亮几本书，才知道你的精神质心在哪。</div>'; return; }
@@ -2492,7 +2574,34 @@ ${dialog.slice(0, 8000)}
               <div class="ri-meta">${n.author || '佚名'}${n.douban_rating ? ' · ' + n.douban_rating : ''}</div>
             </div>
           </div>`).join('');
+    } else if (recMode === 'today') {
+      // 今日之书：以当天日期(YYYYMMDD)为种子做确定性随机，每天猜一颗不同的星
+      const d = new Date();
+      const seed = d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate();
+      const pick = seededPick(nodes, seed);
+      const n = pick.n;
+      const st = n.status === 'fav' ? '～喜爱～' : n.status === 'read' ? '已读' : '未读';
+      const isN = nodes.indexOf(n);
+      body.innerHTML = `
+        <div class="rec-note">以今日为种子，抽中一颗星 —— 或许 与你有缘</div>
+        <div class="rec-item today-big" onclick="recJump(${isN})">
+          <div class="ri-main">
+            <div class="ri-title">《${n.title}》</div>
+            <div class="ri-meta">${n.author || '佚名'}
+              ${n.wechat && n.wechat.duration_text ? ' · 阅读' + n.wechat.duration_text : ''}
+              ${n.douban_rating ? ' · ' + n.douban_rating : ''} · ${st}</div>
+          </div>
+          <div class="ri-score">今日 ✦</div>
+        </div>
+        <div class="rec-note" style="margin-top:6px">点击它，去看它在星图中的位置与邻居 🌌</div>`;
     }
+  }
+  // 以整数种子做确定性伪随机（同一天每次刷新都一样，隔天不同）
+  function seededPick(arr, seed) {
+    let s = seed;
+    const rnd = () => { s = (s * 1103515245 + 12345) & 0x7fffffff; return s / 0x7fffffff; };
+    const i = Math.floor(rnd() * arr.length);
+    return { n: arr[i], i };
   }
   function recJump(idx) {
     // 跳到星图并打开该星卡片
@@ -2549,6 +2658,7 @@ ${dialog.slice(0, 8000)}
     <div class="batch-mode">
       <span class="bm-tab active" data-rm="impact" onclick="recSetMode('impact', this)">影响力榜</span>
       <span class="bm-tab" data-rm="blind" onclick="recSetMode('blind', this)">盲区推荐</span>
+      <span class="bm-tab" data-rm="today" onclick="recSetMode('today', this)">今日之书</span>
     </div>
     <div class="batch-close" onclick="closeRecPanel()">×</div>
   </div>
@@ -2595,11 +2705,13 @@ ${dialog.slice(0, 8000)}
   <canvas id="imm-canvas"></canvas>
   <!-- 控制面板 -->
   <div class="imm-panel" id="immPanel">
+    <div class="imm-sec">空 间 · 坐 标</div>
     <div class="imm-row imm-row-axes">
       <label class="imm-ax">X 轴 <select id="immAxisX" onchange="immAxisChanged()"></select></label>
       <label class="imm-ax">Y 轴 <select id="immAxisY" onchange="immAxisChanged()"></select></label>
-      <span class="imm-clear" onclick="immAxisReset()">↺ 语义坐标</span>
+      <span class="imm-clear" onclick="immAxisReset()">↺ 语义</span>
     </div>
+    <div class="imm-sec">排 序 · 影 响</div>
     <div class="imm-row imm-row-axes">
       <label class="imm-ax">排序 <select id="immSort" onchange="immApply()">
         <option value="none">默认</option>
@@ -2609,10 +2721,12 @@ ${dialog.slice(0, 8000)}
       </select></label>
       <span class="imm-clear" onclick="immSortReset()">↺ 默认</span>
     </div>
+    <div class="imm-sec">筛 选 · 探 索</div>
     <div class="imm-row imm-row-inputs">
       <input id="immSearch" type="text" placeholder="作者名…" oninput="immApply()" />
       <button onclick="immHighlight('my')">我的光</button>
       <button onclick="immHighlight('all')">全部</button>
+      <button id="immTrailBtn" onclick="immToggleTrail(this)" title="按读完年份连成精神进化线">轨迹</button>
     </div>
     <div class="imm-info" id="immInfo"></div>
     <div class="imm-star" id="immStar" style="display:none"></div>
