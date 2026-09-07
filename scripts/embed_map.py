@@ -4,7 +4,7 @@
 用 fastembed 的轻量中文模型嵌入，TSNE 降到 2D，输出前端用的 graph.json。
 首次运行会从 HuggingFace 下载模型（~100MB）。
 """
-import json, os, sys, time
+import json, os, sys, time, re
 
 BASE = os.path.expanduser("~/Desktop/Caelum")
 RAW = os.path.join(BASE, "corpus/books_raw.json")
@@ -199,21 +199,43 @@ def main():
     SEM = Xn @ A.T  # (n, n_anchor) cosine 相似度
     print(f"语义锚轴: {[a[0] for a in ANCHORS]}")
 
-    # 正交语义轴：对 10 锚相似度做 PCA，取前 3 主成分（数学上严格正交），
-    # 每轴按其正负极锚载荷命名（照应豆瓣/Goodreads/Amazon 的类别空间：文学/社科/哲学/科技/艺术…）
-    anchor_names = [a[0] for a in ANCHORS]
-    sem_centered = SEM - SEM.mean(axis=0)
-    from numpy.linalg import svd as _svd
-    U, S, Vt = _svd(sem_centered, full_matrices=False)
-    ORTH = sem_centered @ Vt[:3].T   # 前 3 主成分得分 (n,3)
-    # 各轴载荷
-    orth_axes = []
-    for k in range(3):
-        loadings = Vt[k]
-        high_i = int(np.argmax(loadings)); low_i = int(np.argmin(loadings))
-        orth_axes.append({"axis": k, "high": anchor_names[high_i], "low": anchor_names[low_i],
-                          "explained": round(float(S[k]**2 / (S**2).sum() * 100), 1)})
-    print(f"正交轴(PCA): {[a['low']+'↔'+a['high']+'('+str(a['explained'])+'%)' for a in orth_axes]}")
+    # 三维分类轴（可解释，非抽象主成分；参考豆瓣/Goodreads 分类）
+    # axis0 主题: 人文(文学/哲学/历史) ↔ 科技(科学/数学)
+    # axis1 题材: 学术论著 ↔ 小说诗文（书名关键词判体裁）
+    # axis2 语言: 华文 ↔ 外国翻译（作者前缀 [英]/[俄]/…）
+    a = {x[0]: SEM[:, i] for i, x in enumerate(ANCHORS)}
+    theme = (a.get('文学', 0) + a.get('哲学', 0) + a.get('历史', 0)) / 3 \
+          - (a.get('科学', 0) + a.get('数学', 0)) / 2          # >0 人文, <0 科技
+    def genre_score(title):
+        """书名 → 题材分。 >0 小说/诗文, <0 学术论著。"""
+        t = title or ''
+        if any(k in t for k in ['论', '原理', '导论', '通史', '通识', '学', '哲学', '经济学', '心理学', '社会学', '史']):
+            return -1.0
+        if any(k in t for k in ['小说', '演义', '记', '传', '案', '奇', '诗', '词', '散文', '随笔', '集']):
+            return 1.0
+        return 0.0
+    genre = np.array([genre_score(b.get('title', '')) for b in books], dtype=np.float32)
+    def origin_score(author):
+        # 作者字段含 [英]/[美]/[俄] 等国别标记 → 外国; 否则华文
+        au = author or ''
+        m = re.search(r'[\[【]?\（?\s*([^\]】）\s]{1,6})\s*[\]】）]', au)
+        c = m.group(1) if m else ''
+        if c in '清明唐宋元秦汉晋魏南北朝战国':
+            return 1.0
+        for f in ['英', '美', '俄', '苏', '日', '法', '德', '意', '西', '瑞典', '挪威',
+                  '丹麦', '哥伦比亚', '阿根廷', '智利', '秘鲁', '墨西哥', '巴西', '加拿大',
+                  '澳大利亚', '爱尔兰', '波兰', '捷克', '希腊', '印度', '土耳其', '韩国']:
+            if f in c:
+                return -1.0
+        return 1.0    # 无国别 → 华文(+1)
+    origin = np.array([origin_score(b.get('author', '')) for b in books], dtype=np.float32)
+    ORTH = np.stack([theme, genre, origin], axis=1).astype(np.float32)
+    orth_axes = [
+        {"axis": 0, "name": "主题 · Theme", "low": "科技 · 科学/数学", "high": "人文 · 文学/哲学/历史"},
+        {"axis": 1, "name": "题材 · Genre", "low": "学术论著", "high": "小说诗文"},
+        {"axis": 2, "name": "语言 · Language", "low": "外国翻译", "high": "华文"},
+    ]
+    print(f"分类轴: {[(x['name']) for x in orth_axes]}")
     # 归一到 0~1
     ORTH -= ORTH.min(axis=0); ORTH /= (ORTH.max(axis=0) + 1e-9)
 

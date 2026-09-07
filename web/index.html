@@ -463,6 +463,37 @@
     .add-submit:hover { background: rgba(238,240,245,0.2); }
     .add-note { font-size: 11px; color: var(--ink-dim); letter-spacing: 0.03em; line-height: 1.6; }
 
+    /* 推荐面板 */
+    .rec-panel {
+      position: fixed; inset: 0; z-index: 340; display: none;
+      flex-direction: column; background: rgba(5,6,8,0.97);
+      backdrop-filter: blur(8px); padding: 30px 6vw;
+    }
+    .rec-panel.open { display: flex; }
+    .rec-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; max-width: 680px; width: 100%; margin-left: auto; margin-right: auto; }
+    .rec-head h3 { font-size: 20px; color: var(--accent); letter-spacing: 0.2em; }
+    .rec-head .batch-mode { margin: 0; }
+    .rec-body { max-width: 680px; width: 100%; margin: 0 auto; flex: 1; overflow-y: auto; }
+    .rec-body::-webkit-scrollbar { width: 6px; }
+    .rec-body::-webkit-scrollbar-thumb { background: rgba(238,240,245,0.15); border-radius: 3px; }
+    .rec-item {
+      display: flex; align-items: flex-start; gap: 14px;
+      border: 1px solid rgba(238,240,245,0.1); border-radius: 12px;
+      padding: 14px 18px; margin-bottom: 10px; background: rgba(10,14,22,0.5);
+      transition: all 0.3s;
+    }
+    .rec-item:hover { border-color: rgba(238,240,245,0.3); background: rgba(14,18,28,0.8); }
+    .rec-rank {
+      font-size: 18px; color: var(--accent-dim); font-family: var(--serif-en); font-style: italic;
+      width: 30px; text-align: center; padding-top: 4px; flex-shrink: 0;
+    }
+    .rec-item .ri-main { flex: 1; }
+    .rec-item .ri-title { font-size: 15px; color: var(--ink); letter-spacing: 0.04em; }
+    .rec-item .ri-meta { font-size: 11px; color: var(--ink-dim); margin-top: 4px; line-height: 1.7; }
+    .rec-item .ri-score { font-size: 12px; color: var(--accent-dim); flex-shrink: 0; padding-top: 2px; }
+    .rec-note { font-size: 13px; color: var(--accent-dim); padding: 8px 2px; margin-bottom: 10px; letter-spacing: 0.05em; }
+    .rec-empty { color: var(--ink-dim); padding: 40px 0; text-align: center; font-size: 14px; }
+
     /* ========== 第3屏：星域 · 四域下钻 ========== */
     #sec-domain { background: var(--bg); overflow-y: auto; justify-content: flex-start; padding-top: 12vh; }
     .domain-nav { width: 100%; max-width: 860px; margin: 0 auto; }
@@ -675,7 +706,7 @@
     .lang-toggle:hover { color: var(--accent); border-color: var(--accent); }
     .lang-toggle.active { color: var(--accent); border-color: var(--accent); }
     .theme-toggle {
-      position: fixed; top: 26px; right: 112px; z-index: 200;
+      position: fixed; top: 70px; right: 32px; z-index: 200;
       font-family: var(--sans); font-size: 12px; letter-spacing: 0.15em;
       color: var(--accent-dim); cursor: pointer; user-select: none;
       border: 1px solid rgba(238,240,245,0.25); border-radius: 20px;
@@ -898,15 +929,11 @@
   <div class="map-tools">
     <span class="map-batch-btn" onclick="openImmersive()">🎇 <span data-i18n="immersiveBtn">沉浸式</span></span>
     <span class="map-batch-btn" onclick="openBatchPanel()">📋 <span data-i18n="batchBtn">批量标记</span></span>
+    <span class="map-batch-btn" onclick="openRecPanel()">🎯 <span>推荐</span></span>
     <span class="map-batch-btn" onclick="openAddPanel()">➕ <span>添加</span></span>
   </div>
   <div class="map-wrap">
     <canvas id="map-canvas"></canvas>
-  </div>
-  <div class="map-legend">
-    <span class="l-fav"><i></i><span data-i18n="legendFav">喜爱</span></span>
-    <span class="l-read"><i></i><span data-i18n="legendRead">已读</span></span>
-    <span class="l-unread"><i></i><span data-i18n="legendUnread">未读</span></span>
   </div>
   <!-- 节点详情卡 -->
   <div class="map-card" id="mapCard" style="display:none">
@@ -1395,8 +1422,7 @@
       }
     }
 
-    // ── 每股亮度分布条（看哪个轴上亮得多）──
-    drawAxisLuminance();
+    // 主图底部不再画轴亮度条（细节交给沉浸式），保持开场干净
   }
 
   function drawAxisLuminance() {
@@ -2192,8 +2218,8 @@ ${dialog.slice(0, 8000)}
     // 正交语义轴优先，其次单个锚
     let opts = '';
     if (orthAxes.length) {
-      opts += '<optgroup label="正交语义轴">' + orthAxes.map((a, i) =>
-        `<option value="orth${i}">${a.low} ↔ ${a.high}</option>`).join('') + '</optgroup>';
+      opts += '<optgroup label="分类轴">' + orthAxes.map((a, i) =>
+        `<option value="orth${i}">${a.name}: ${a.low} ↔ ${a.high}</option>`).join('') + '</optgroup>';
     }
     opts += '<optgroup label="语义锚">' + semAnchors.map((a, i) => `<option value="${i}">${a}</option>`).join('') + '</optgroup>';
     sx.innerHTML = opts; sy.innerHTML = opts;
@@ -2226,17 +2252,15 @@ ${dialog.slice(0, 8000)}
     immCtx.fillStyle = 'rgba(255,255,255,0.06)';
     for (let i = 0; i < 400; i++) immCtx.fillRect((i * 137.5) % innerWidth, (i * 89.3) % innerHeight, 1, 1);
     if (!nodes.length) return;
-    // 3D 坐标轴（X/Y/Z 可见线 + 轴端标签）
+    // 3D 坐标轴（X/Y/Z 可见线 + 两端方向标签）
     const halfAx = (Math.min(innerWidth, innerHeight) / 2 - 80) * immZoom;
-    const axLabel = (i) => {
-      if (orthAxes[i]) return orthAxes[i].low + '↔' + orthAxes[i].high;
-      if (axesInfo[i]) return axesInfo[i].low + '↔' + axesInfo[i].high;
-      return '轴' + (i + 1);
-    };
+    const axName = (i) => orthAxes[i] ? orthAxes[i].name : (axesInfo[i] ? '轴' + (i+1) : '轴' + (i+1));
+    const axLow = (i) => orthAxes[i] ? orthAxes[i].low : (axesInfo[i] ? axesInfo[i].low : '');
+    const axHigh = (i) => orthAxes[i] ? orthAxes[i].high : (axesInfo[i] ? axesInfo[i].high : '');
     const axEnds = [
-      { v: [1,0,0], label: axLabel(0) },
-      { v: [0,1,0], label: axLabel(1) },
-      { v: [0,0,1], label: axLabel(2) },
+      { v: [1,0,0], i: 0 },
+      { v: [0,1,0], i: 1 },
+      { v: [0,0,1], i: 2 },
     ];
     const rotAxis = (ax, ay, az) => {
       let x1 = ax * Math.cos(rotY) + az * Math.sin(rotY);
@@ -2244,24 +2268,30 @@ ${dialog.slice(0, 8000)}
       let y2 = ay * Math.cos(rotX) - z1 * Math.sin(rotX);
       return { x: x1, y: y2 };
     };
-    // 三轴连线 + 端点标签
+    // 三轴连线 + 两端方向标签
     const center = { x: innerWidth / 2, y: innerHeight / 2 };
     immCtx.save();
     axEnds.forEach((a, k) => {
       const p = rotAxis(a.v[0], a.v[1], a.v[2]);
       const ex = center.x + p.x * halfAx, ey = center.y + p.y * halfAx;
       const wx = center.x - p.x * halfAx, wy = center.y - p.y * halfAx;
-      const colors = ['rgba(255,120,120,0.55)', 'rgba(120,255,140,0.55)', 'rgba(130,180,255,0.55)'];
-      immCtx.strokeStyle = colors[k]; immCtx.lineWidth = 1.2;
-      immCtx.setLineDash([4, 5]);
+      const colors = ['rgba(255,120,120,0.5)', 'rgba(120,255,150,0.5)', 'rgba(130,180,255,0.5)'];
+      immCtx.strokeStyle = colors[k]; immCtx.lineWidth = 1.3;
+      immCtx.setLineDash([5, 5]);
       immCtx.beginPath(); immCtx.moveTo(wx, wy); immCtx.lineTo(ex, ey); immCtx.stroke();
       immCtx.setLineDash([]);
-      immCtx.fillStyle = 'rgba(255,255,255,0.5)';
-      immCtx.font = "10px 'Noto Serif SC', serif";
+      // 正端=high，负端=low，各带方向
+      immCtx.font = "11px 'Noto Serif SC', serif";
       immCtx.textAlign = 'center';
-      const lab = a.label.length > 14 ? a.label.slice(0, 14) + '..' : a.label;
-      immCtx.fillText(lab, ex + 6, ey - 6);
-      immCtx.fillText('－' + lab, wx - 6, wy + 14);
+      immCtx.fillStyle = 'rgba(255,255,255,0.72)';
+      const hL = axHigh(a.i), lL = axLow(a.i);
+      immCtx.fillText(hL.length > 9 ? hL.slice(0, 9) + '…' : hL, ex + 8, ey - 8);
+      immCtx.fillStyle = 'rgba(255,255,255,0.42)';
+      immCtx.fillText(lL.length > 9 ? lL.slice(0, 9) + '…' : lL, wx - 8, wy + 16);
+      // 轴名（中段小字）
+      immCtx.fillStyle = 'rgba(255,255,255,0.28)';
+      immCtx.font = "10px 'Noto Serif SC', serif";
+      immCtx.fillText(axName(a.i), center.x + p.x * halfAx * 0.55, center.y + p.y * halfAx * 0.55 + 4);
     });
     immCtx.restore();
     // 可见节点
@@ -2287,21 +2317,32 @@ ${dialog.slice(0, 8000)}
       immMaxR = Math.max(1, ...nodes.map(n => n.douban_rating || n.rating || 0));
     }
     vis.forEach(({ n, p, i }) => {
+      // 视口裁剪：放大后只画屏幕内的星
+      if (p.sx < -40 || p.sx > innerWidth + 40 || p.sy < -40 || p.sy > innerHeight + 40) return;
       let infl = 0;
       if (immSortMode === 'duration' && n.wechat && n.wechat.duration_min) infl = n.wechat.duration_min / immMaxD;
       else if (immSortMode === 'rating' && (n.douban_rating || n.rating)) infl = (n.douban_rating || n.rating) / immMaxR;
       const highlighted = immFilter === 'author' && (n.author || '').includes(immAuthor);
       const depthF = 1 / (1 + Math.abs(p.depth) * 0.35);
+      // 半径随放缩增大：放大后星变大、能看清具体书
+      const zoomK = 0.85 + Math.log(1 + immZoom * 0.9);  // zoom=1 → 1.5x; zoom=4 → ~2.3x
       let r, col;
-      const inflBoost = 1 + infl * 3.2;  // 影响越大越亮越大
-      if (highlighted) { r = 6.5 * depthF * inflBoost; col = '255,255,255'; }
-      else if (n.status === 'fav') { r = 5 * depthF * inflBoost; col = '255,255,255'; }
-      else if (n.status === 'read') { r = 4.2 * depthF * inflBoost; col = '238,240,245'; }
-      else { r = 3.4 * depthF; col = '58,66,87'; }
+      const inflBoost = 1 + infl * 3.2;
+      if (highlighted) { r = 6.5 * depthF * inflBoost * zoomK; col = '255,255,255'; }
+      else if (n.status === 'fav') { r = 5 * depthF * inflBoost * zoomK; col = '255,255,255'; }
+      else if (n.status === 'read') { r = 4.2 * depthF * inflBoost * zoomK; col = '238,240,245'; }
+      else { r = 3.4 * depthF * zoomK; col = '58,66,87'; }
       const a = highlighted ? 1 : n.status === 'read' || n.status === 'fav' ? 0.9 : 0.32 + 0.4 * depthF;
       immCtx.fillStyle = `rgba(${col},${a})`;
       if (i === immHover) { r *= 1.5; }
       immCtx.beginPath(); immCtx.arc(p.sx, p.sy, r, 0, Math.PI * 2); immCtx.fill();
+      // 放大足够后：显示书名（眼前几颗星可读内容）
+      if (immZoom >= 2.0) {
+        immCtx.fillStyle = 'rgba(238,240,245,0.55)';
+        immCtx.font = `italic ${11 * Math.min(1.6, immZoom * 0.4)}px 'Noto Serif SC', serif`;
+        immCtx.textAlign = 'left';
+        immCtx.fillText(n.title.length > 10 ? n.title.slice(0, 10) + '…' : n.title, p.sx + r + 3, p.sy + 4);
+      }
     });
     // 悬停标签
     if (immHover >= 0) {
@@ -2390,6 +2431,75 @@ ${dialog.slice(0, 8000)}
     box.style.display = 'block';
   }
 
+  // ─── 推荐：影响力榜 + 盲区推荐 ───
+  let recMode = 'impact';
+  function openRecPanel() { document.getElementById('recPanel').classList.add('open'); recRender(); }
+  function closeRecPanel() { document.getElementById('recPanel').classList.remove('open'); }
+  function recSetMode(m, el) {
+    recMode = m;
+    document.querySelectorAll('.rec-head .bm-tab').forEach(x => x.classList.toggle('active', x === el));
+    recRender();
+  }
+  function recImpactScore(n) {
+    // 影响力 = 阅读时长(分钟归一到1h) * 0.5 + 评分(归一) * 0.3 + 笔记深度 * 0.2
+    let d = 0;
+    if (n.wechat && n.wechat.duration_min) d = Math.min(2, n.wechat.duration_min / 60); // 读满2h给满
+    let r = 0;
+    if (n.douban_rating || n.rating) r = (n.douban_rating || n.rating) / 10;
+    let nt = 0;
+    if (n.notes && n.notes.length) nt = 1;
+    else if (n.wechat && n.wechat.duration_min) nt = 0.5;
+    return Math.round((d * 50 + r * 30 + nt * 20));
+  }
+  function recRender() {
+    const body = document.getElementById('recBody');
+    if (!nodes.length) { body.innerHTML = '<div class="rec-empty">数据加载中…</div>'; return; }
+    if (recMode === 'impact') {
+      // 影响力榜：只看已读/喜爱
+      const read = nodes.filter(n => n.status === 'read' || n.status === 'fav');
+      if (!read.length) { body.innerHTML = '<div class="rec-empty">还没有已读的书，先去星图点亮几本。</div>'; return; }
+      const ranked = read.map(n => ({ n, s: recImpactScore(n) })).sort((a, b) => b.s - a.s).slice(0, 15);
+      body.innerHTML = `<div class="rec-note">按 阅读时长 × 评分 × 笔记深度 综合评出"塑造你的书"（分越高影响越大）</div>` +
+        ranked.map(({ n, s }, idx) => `
+          <div class="rec-item" onclick="recJump(${nodes.indexOf(n)})">
+            <div class="rec-rank">${idx + 1}</div>
+            <div class="ri-main">
+              <div class="ri-title">《${n.title}》</div>
+              <div class="ri-meta">${n.author || '佚名'}
+                ${n.wechat && n.wechat.duration_text ? ' · 阅读' + n.wechat.duration_text : ''}
+                ${n.wechat && n.wechat.finished ? ' · ' + n.wechat.finished : ''}</div>
+            </div>
+            <div class="ri-score">${s}</div>
+          </div>`).join('');
+    } else {
+      // 盲区推荐：未读书里距离质心最近的
+      const reads = nodes.filter(n => n.status === 'read' || n.status === 'fav');
+      if (!reads.length) { body.innerHTML = '<div class="rec-empty">先点亮几本书，才知道你的精神质心在哪。</div>'; return; }
+      const cx = reads.reduce((a, n) => a + n.x, 0) / reads.length;
+      const cy = reads.reduce((a, n) => a + n.y, 0) / reads.length;
+      const cz = reads.reduce((a, n) => a + n.z, 0) / reads.length;
+      const cand = nodes
+        .filter(n => n.status === 'unread')
+        .map(n => ({ n, d: Math.hypot(n.x - cx, n.y - cy, n.z - cz) }))
+        .sort((a, b) => a.d - b.d)
+        .slice(0, 15);
+      body.innerHTML = `<div class="rec-note">距离你的精神质心最近的未读书 —— 真正的"相见恨晚"漏网之鱼</div>` +
+        cand.map(({ n, d }, idx) => `
+          <div class="rec-item" onclick="recJump(${nodes.indexOf(n)})">
+            <div class="rec-rank">${idx + 1}</div>
+            <div class="ri-main">
+              <div class="ri-title">《${n.title}》</div>
+              <div class="ri-meta">${n.author || '佚名'}${n.douban_rating ? ' · ' + n.douban_rating : ''}</div>
+            </div>
+          </div>`).join('');
+    }
+  }
+  function recJump(idx) {
+    // 跳到星图并打开该星卡片
+    closeRecPanel();
+    setTimeout(() => { openImmersive(); immSelect(idx); }, 100);
+  }
+
   window.addEventListener('resize', () => { resize(); drawStars(); });
 
   // 初始化
@@ -2430,6 +2540,19 @@ ${dialog.slice(0, 8000)}
   </div>
   <div class="batch-cat" id="batchCat" style="display:none"></div>
   <div class="batch-empty" id="batchEmpty" style="display:none" data-i18n="batchEmpty">没有更多可标记的书 · 换一个搜索</div>
+</div>
+
+<!-- 推荐面板（影响力榜 + 盲区推荐）-->
+<div class="rec-panel" id="recPanel">
+  <div class="rec-head">
+    <h3>🎯 推荐</h3>
+    <div class="batch-mode">
+      <span class="bm-tab active" data-rm="impact" onclick="recSetMode('impact', this)">影响力榜</span>
+      <span class="bm-tab" data-rm="blind" onclick="recSetMode('blind', this)">盲区推荐</span>
+    </div>
+    <div class="batch-close" onclick="closeRecPanel()">×</div>
+  </div>
+  <div class="rec-body" id="recBody"></div>
 </div>
 
 <!-- 添加内容表单（网页自动入库 · 需密钥验证）-->
