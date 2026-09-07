@@ -38,9 +38,14 @@ def parse_item_html(h):
     m = re.search(r'href="(https://book\.douban\.com/subject/\d+/)"', h)
     link = m.group(1) if m else ""
     m = re.search(r'class="pl">([^<]{0,120})<', h) or re.search(r'class="pub">([^<]{0,120})<', h)
-    author = clean(m.group(1)).split("/")[0] if m else ""
-    m = re.search(r'class="rating_nums">([\d.]+)<', h)
-    rating = float(m.group(1)) if m else None
+    author = ""
+    if m:
+        raw = clean(m.group(1))
+        # 豆瓣分类页格式: 作者 / 出版社 / 年份 / (xxx人评价); 若首段纯为评价数则视为无作者
+        parts = [p.strip() for p in raw.split("/")]
+        if parts and not re.fullmatch(r'\(.*?(人评价|评价)\)|请选择.*', parts[0]):
+            author = parts[0]
+    rating = float(m.group(1)) if (m := re.search(r'class="rating_nums">([\d.]+)<', h)) else None
     return {"title": title, "author": author, "rating": rating, "link": link, "source": "douban"}
 
 def parse_top250(h):

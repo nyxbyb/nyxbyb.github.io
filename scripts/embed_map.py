@@ -199,6 +199,24 @@ def main():
     SEM = Xn @ A.T  # (n, n_anchor) cosine 相似度
     print(f"语义锚轴: {[a[0] for a in ANCHORS]}")
 
+    # 正交语义轴：对 10 锚相似度做 PCA，取前 3 主成分（数学上严格正交），
+    # 每轴按其正负极锚载荷命名（照应豆瓣/Goodreads/Amazon 的类别空间：文学/社科/哲学/科技/艺术…）
+    anchor_names = [a[0] for a in ANCHORS]
+    sem_centered = SEM - SEM.mean(axis=0)
+    from numpy.linalg import svd as _svd
+    U, S, Vt = _svd(sem_centered, full_matrices=False)
+    ORTH = sem_centered @ Vt[:3].T   # 前 3 主成分得分 (n,3)
+    # 各轴载荷
+    orth_axes = []
+    for k in range(3):
+        loadings = Vt[k]
+        high_i = int(np.argmax(loadings)); low_i = int(np.argmin(loadings))
+        orth_axes.append({"axis": k, "high": anchor_names[high_i], "low": anchor_names[low_i],
+                          "explained": round(float(S[k]**2 / (S**2).sum() * 100), 1)})
+    print(f"正交轴(PCA): {[a['low']+'↔'+a['high']+'('+str(a['explained'])+'%)' for a in orth_axes]}")
+    # 归一到 0~1
+    ORTH -= ORTH.min(axis=0); ORTH /= (ORTH.max(axis=0) + 1e-9)
+
     print("TSNE 降维到 3D...")
     from sklearn.manifold import TSNE
     perp = min(30, max(5, len(books) // 5))
@@ -225,6 +243,7 @@ def main():
             "y": round(float(y), 4),
             "z": round(float(z), 4),
             "sem": [round(float(v), 3) for v in SEM[i]],
+            "orth": [round(float(v), 3) for v in ORTH[i]],
         }
         if meta:
             node["wechat"] = {
@@ -241,7 +260,7 @@ def main():
     axes = []
     for i in range(3):
         axes.append({"axis": i, "low": AXIS_LABELS[i]["low"], "high": AXIS_LABELS[i]["high"]})
-    json.dump({"nodes": nodes, "axes": axes, "semanchors": [a[0] for a in ANCHORS]}, open(OUT, "w"), ensure_ascii=False, indent=1)
+    json.dump({"nodes": nodes, "axes": axes, "orthaxes": orth_axes, "semanchors": [a[0] for a in ANCHORS]}, open(OUT, "w"), ensure_ascii=False, indent=1)
     print(f"✅ 已写 {OUT}，{len(nodes)} 个节点")
     print("  轴语义:")
     for a in axes:
