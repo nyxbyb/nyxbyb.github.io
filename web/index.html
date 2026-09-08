@@ -511,7 +511,7 @@
     .breadcrumb .crumb:hover { color: var(--accent); }
     .breadcrumb .crumb-sep { color: rgba(238,240,245,0.25); padding: 0 2px; }
     .breadcrumb .crumb-now { color: var(--accent); cursor: default; }
-    .domain-view { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+    .domain-view { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; width: 100%; }
     .dv-item {
       position: relative; border: 1px solid rgba(238,240,245,0.12);
       border-radius: 12px; padding: 20px 22px; cursor: pointer;
@@ -708,14 +708,44 @@
     }
     .lang-toggle:hover { color: var(--accent); border-color: var(--accent); }
     .lang-toggle.active { color: var(--accent); border-color: var(--accent); }
-    .theme-toggle {
-      position: fixed; top: 70px; right: 32px; z-index: 200;
-      font-family: var(--sans); font-size: 12px; letter-spacing: 0.15em;
-      color: var(--accent-dim); cursor: pointer; user-select: none;
-      border: 1px solid rgba(238,240,245,0.25); border-radius: 20px;
-      padding: 6px 16px; background: rgba(10,11,14,0.4); transition: all 0.3s;
+
+    /* 设置面板 */
+    .set-panel {
+      position: fixed; inset: 0; z-index: 450; display: none;
+      flex-direction: column; background: rgba(5,6,8,0.97);
+      backdrop-filter: blur(8px); padding: 34px 5vw;
     }
-    .theme-toggle:hover { color: var(--accent); border-color: var(--accent); }
+    .set-panel.open { display: flex; }
+    .set-head {
+      display: flex; justify-content: space-between; align-items: center;
+      max-width: 520px; width: 100%; margin: 0 auto 20px;
+    }
+    .set-head h3 { font-size: 22px; color: var(--accent); letter-spacing: 0.25em; }
+    .set-body { max-width: 520px; width: 100%; margin: 0 auto; display: flex; flex-direction: column; gap: 22px; }
+    .set-group { border-top: 1px solid rgba(238,240,245,0.1); padding-top: 16px; }
+    .set-group-h {
+      font-size: 11px; color: var(--accent-dim); letter-spacing: 0.3em;
+      margin-bottom: 12px;
+    }
+    .set-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; flex-wrap: wrap; }
+    .set-label { font-size: 14px; color: var(--ink); min-width: 50px; letter-spacing: 0.1em; }
+    .set-themes { display: flex; gap: 8px; flex-wrap: wrap; }
+    .set-themes .chip {
+      font-size: 12px; letter-spacing: 0.12em; color: var(--ink-dim); cursor: pointer;
+      border: 1px solid rgba(238,240,245,0.2); border-radius: 16px; padding: 6px 16px;
+    }
+    .set-themes .chip.on { color: var(--accent); border-color: var(--accent); background: rgba(238,240,245,0.08); }
+    .set-langs { display: flex; gap: 8px; }
+    .set-btn {
+      font-family: var(--serif); font-size: 13px; letter-spacing: 0.12em;
+      color: var(--ink-dim); background: transparent; cursor: pointer;
+      border: 1px solid rgba(238,240,245,0.2); border-radius: 10px; padding: 8px 16px;
+      transition: all 0.25s;
+    }
+    .set-btn:hover { color: var(--accent); border-color: var(--accent); }
+    .set-btn.wide { width: 100%; text-align: left; padding: 12px 18px; font-size: 14px; }
+    .set-btn.on { color: var(--accent); border-color: var(--accent); background: rgba(238,240,245,0.08); }
+    .set-foot { margin-top: 10px; font-size: 11px; color: rgba(238,240,245,0.3); letter-spacing: 0.15em; text-align: center; }
 
     .frontier-tags {
       display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
@@ -737,17 +767,19 @@
     }
     .frontier-more:hover { color: var(--accent); border-bottom-color: var(--accent); }
 
-    /* 第5屏：随笔专栏 */
-    #sec-essays { background: var(--bg-deep); overflow-y: auto; justify-content: flex-start; padding-top: 12vh; }
-    .essays-wrap { width: 100%; max-width: 760px; margin: 0 auto; }
-    .essays-hint { color: var(--ink-dim); font-size: 14px; text-align: center; padding: 40px 0; }
-    .essay-cat {
-      margin-bottom: 26px;
+    /* 第5屏：随笔专栏 · 多栏目并排 */
+    #sec-essays { background: var(--bg-deep); overflow-y: auto; justify-content: flex-start; padding-top: 10vh; padding-bottom: 8vh; }
+    .essays-wrap {
+      width: 100%; max-width: 1280px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 28px;
+      align-items: start;
     }
+    .essays-hint { color: var(--ink-dim); font-size: 14px; text-align: center; padding: 40px 0; }
+    .essay-col { min-width: 0; }
     .essay-cat-head {
-      font-size: 15px; color: var(--accent); letter-spacing: 0.18em;
+      font-size: 17px; color: var(--accent); letter-spacing: 0.18em;
       margin-bottom: 12px; display: flex; align-items: baseline; gap: 12px;
-      border-bottom: 1px solid rgba(238,240,245,0.12); padding-bottom: 8px;
+      border-bottom: 1px solid rgba(238,240,245,0.14); padding-bottom: 8px;
     }
     .essay-cat-head .ec-en {
       font-family: var(--serif-en); font-style: italic; font-size: 13px;
@@ -756,12 +788,12 @@
     .essay-cat-head .ec-n { font-size: 12px; color: var(--ink-dim); }
     .essay-item {
       display: block; border: 1px solid rgba(238,240,245,0.1);
-      border-radius: 10px; padding: 14px 18px; margin-bottom: 10px;
+      border-radius: 10px; padding: 14px 16px; margin-bottom: 10px;
       text-decoration: none; transition: all 0.3s;
       background: rgba(10,14,22,0.5);
     }
     .essay-item:hover { border-color: rgba(238,240,245,0.3); background: rgba(14,18,28,0.8); transform: translateX(3px); }
-    .essay-item .ei-title { font-size: 14.5px; color: var(--ink); letter-spacing: 0.04em; line-height: 1.5; }
+    .essay-item .ei-title { font-size: 14px; color: var(--ink); letter-spacing: 0.04em; line-height: 1.5; }
     .essay-item:hover .ei-title { color: var(--accent); }
     .essay-item .ei-desc { font-size: 12px; color: var(--ink-dim); margin-top: 5px; line-height: 1.6; }
     .essay-item .ei-date {
@@ -859,8 +891,13 @@
     }
     .imm-row-inputs button:hover { color: var(--accent); border-color: var(--accent); }
     .imm-row-inputs button.on { color: var(--accent); border-color: var(--accent); background: rgba(238,240,245,0.1); }
-    .imm-row-inputs { position: relative; }
-    .imm-row-inputs button:hover { color: var(--accent); border-color: var(--accent); }
+    .imm-rec-btn {
+      width: 100%; font-family: var(--serif); font-size: 13px; letter-spacing: 0.14em;
+      color: var(--accent); background: rgba(238,240,245,0.08); cursor: pointer;
+      border: 1px solid rgba(238,240,245,0.25); border-radius: 10px; padding: 10px 0;
+      transition: all 0.25s;
+    }
+    .imm-rec-btn:hover { background: rgba(238,240,245,0.16); border-color: var(--accent); }
     .imm-info { font-size: 12px; color: var(--ink-dim); letter-spacing: 0.06em; min-height: 18px; }
     .imm-suggest { display: flex; gap: 8px; flex-wrap: wrap; }
     .imm-suggest .chip {
@@ -891,6 +928,7 @@
       .nav-dot::after { display: none; }
       section { padding: 0 5vw; }
       .domain-grid { grid-template-columns: 1fr; }
+      .domain-view { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -898,9 +936,8 @@
 
 <div class="stars-bg"></div>
 
-<!-- 语言切换 -->
-<div class="lang-toggle" id="langToggle" onclick="toggleLang()">中 / EN</div>
-<div class="theme-toggle" id="themeToggle" onclick="toggleTheme()">◐ 主题</div>
+<!-- 设置入口 -->
+<div class="lang-toggle" id="langToggle" onclick="openSettings()">⚙ 设置</div>
 
 <!-- 左侧导航 -->
 <nav class="nav" id="nav">
@@ -932,13 +969,7 @@
 <section id="sec-map">
   <h2 class="section-title"><span>星 图</span><span class="title-en">The Starchart</span></h2>
   <p class="section-sub" id="taglineMap"></p>
-  <div class="map-tools">
-    <span class="map-batch-btn" onclick="openImmersive()">🎇 <span data-i18n="immersiveBtn">沉浸式</span></span>
-    <span class="map-batch-btn" onclick="openBatchPanel()">📋 <span data-i18n="batchBtn">批量标记</span></span>
-    <span class="map-batch-btn" onclick="openRecPanel()">🎯 <span>推荐</span></span>
-    <span class="map-batch-btn" onclick="openAddPanel()">➕ <span>添加</span></span>
-  </div>
-  <div class="map-wrap">
+  <div class="map-wrap" onclick="openImmersive()" title="点击进入沉浸式星图">
     <canvas id="map-canvas"></canvas>
   </div>
   <!-- 节点详情卡 -->
@@ -1120,28 +1151,54 @@
   const toggle = document.getElementById('langToggle');
   let textData = null; // 从 text.json 读：序/理念/跋
 
-  // ─── 主题切换 ───
+  // ─── 主题 / 设置 ───
   const THEMES = ['night', 'dawn', 'mist', 'ink'];
   const THEME_LABEL = { night: '夜', dawn: '曙', mist: '雾', ink: '墨' };
   function applyTheme(t) {
     document.documentElement.setAttribute('data-theme', t);
     localStorage.setItem('caelum_theme', t);
-    const el = document.getElementById('themeToggle');
-    if (el) el.textContent = '◐ ' + THEME_LABEL[t];
+    // 更新设置面板主题 chips
+    const box = document.getElementById('setThemes');
+    if (box) {
+      box.innerHTML = THEMES.map(th =>
+        `<span class="chip ${th === t ? 'on' : ''}" onclick="setTheme('${th}', this)">${THEME_LABEL[th]}</span>`).join('');
+    }
   }
-  function toggleTheme() {
-    const cur = localStorage.getItem('caelum_theme') || 'night';
-    const i = THEMES.indexOf(cur);
-    applyTheme(THEMES[(i + 1) % THEMES.length]);
+  function setTheme(t, el) {
+    applyTheme(t);
   }
   applyTheme(localStorage.getItem('caelum_theme') || 'night');
+  function openSettings() {
+    document.getElementById('setPanel').classList.add('open');
+    // 主题 chips
+    applyTheme(localStorage.getItem('caelum_theme') || 'night');
+    // 语言按钮高亮
+    document.querySelectorAll('#setPanel .set-langs .set-btn').forEach(b =>
+      b.classList.toggle('on', b.getAttribute('data-lang') === lang));
+  }
+  function closeSettings() { document.getElementById('setPanel').classList.remove('open'); }
+  function setLang(l, el) {
+    if (lang !== l) {
+      lang = l;
+      localStorage.setItem('caelum_lang', lang);
+      applyLang();
+    }
+    document.querySelectorAll('#setPanel .set-langs .set-btn').forEach(b =>
+      b.classList.toggle('on', b.getAttribute('data-lang') === lang));
+  }
+  function openManual() {
+    window.open('https://nyxbyb.github.io/docs/更新指南.md', '_blank');
+  }
   function applyLang() {
     document.querySelectorAll('[data-i18n]').forEach(el => {
       const key = el.getAttribute('data-i18n');
       if (I18N[key]) el.innerHTML = I18N[key][lang].replace(/\n/g, '<br>');
     });
     toggle.classList.toggle('active', lang === 'en');
-    toggle.textContent = lang === 'zh' ? '中 / EN' : '中文 / EN';
+    toggle.textContent = lang === 'zh' ? '⚙ 设置' : '⚙ SETTINGS';
+    // 设置面板语言按钮高亮
+    document.querySelectorAll('#setPanel .set-langs .set-btn').forEach(b =>
+      b.classList.toggle('on', b.getAttribute('data-lang') === lang));
     renderText(); // 渲染 text.json 控制的序/理念/跋
   }
   function toggleLang() {
@@ -1276,7 +1333,6 @@
     n.status = st;
     saveMarks();
     drawStars();
-    if (typeof renderFlow === 'function') renderFlow();
   }
 
   // ─── 三维旋转状态 ───
@@ -1431,82 +1487,15 @@
     // 主图底部不再画轴亮度条（细节交给沉浸式），保持开场干净
   }
 
-  function drawAxisLuminance() {
-    const reads = nodes.filter(n => n.status === 'read' || n.status === 'fav').length;
-    const bw = 26, gap = 12;
-    const totalW = (bw + gap) * 3 - gap;
-    const x0 = W / 2 - totalW / 2;
-    const y = H - 46;
-
-    ctx.font = "11px 'Noto Serif SC', serif";
-    ctx.textAlign = 'center';
-
-    const axisNames = ['轴1', '轴2', '轴3'];
-    [['x','y','z']][0].forEach((dim, k) => {
-      const bx = x0 + k * (bw + gap);
-      // 柱背景
-      ctx.fillStyle = 'rgba(238,240,245,0.06)';
-      ctx.fillRect(bx, y - 30, bw, 30);
-      // 该轴上的已读占比（靠正半轴上的已读 / 总已读）
-      let lit = 0;
-      if (reads > 0) {
-        let pos = 0;
-        nodes.forEach(n => {
-          if (n.status === 'read' || n.status === 'fav') {
-            const v = n[dim] ?? 0.5;
-            if (v >= 0.5) pos++;
-          }
-        });
-        lit = pos / reads;
-      } else {
-        lit = 0;
-      }
-      // 亮条 + 轴名 + 两端语义标签
-      ctx.fillStyle = 'rgba(238,240,245,0.5)';
-      ctx.fillRect(bx, y - 30 * lit, bw, 30 * lit);
-      ctx.strokeStyle = 'rgba(238,240,245,0.25)';
-      ctx.lineWidth = 1;
-      ctx.strokeRect(bx, y - 30, bw, 30);
-      const info = axesInfo[k];
-      const lowT = info ? info.low : '';
-      const highT = info ? info.high : '';
-      // 低端标签（下方，暗）
-      ctx.fillStyle = 'rgba(238,240,245,0.45)';
-      ctx.font = "11px 'Noto Serif SC', serif";
-      ctx.fillText(reads ? (Math.round(lit * 100) + '%') : '·', bx + bw / 2, y + 13);
-      // 低端文字若过窄则分行
-      const label = lowT + ' ↔ ' + highT;
-      if (label.length > 12) {
-        ctx.font = "10px 'Noto Serif SC', serif";
-        ctx.fillText(lowT, bx + bw / 2, y + 34);
-        ctx.fillText('↔  ' + highT, bx + bw / 2, y + 47);
-      } else {
-        ctx.fillText(label, bx + bw / 2, y + 40);
-      }
-      ctx.fillStyle = 'rgba(238,240,245,0.25)';
-      ctx.font = "10px 'Noto Serif SC', serif";
-    });
-
-    // 轴语义总览（放最下方，优先用正交语义）
-    if (orthAxes.length) {
-      ctx.fillStyle = 'rgba(238,240,245,0.35)';
-      ctx.font = "11px 'Noto Serif SC', serif";
-      const desc = orthAxes.map((a, i) => `轴${i+1}: ${a.low} ↔ ${a.high}(${a.explained}%)`).join('  ');
-      ctx.fillText(desc, W / 2, y + 64);
-    } else if (axesInfo.length) {
-      ctx.fillStyle = 'rgba(238,240,245,0.35)';
-      ctx.font = "11px 'Noto Serif SC', serif";
-      const desc = axesInfo.map((a, i) => `轴${i+1}: ${a.low} ↔ ${a.high}`).join('  ');
-      ctx.fillText(desc, W / 2, y + 64);
-    } else if (!reads) {
-      ctx.fillStyle = 'rgba(238,240,245,0.3)';
-      ctx.font = "11px 'Noto Serif SC', serif";
-      ctx.fillText('标记喜爱/已读后，此处显现你在各轴上的光', W / 2, y + 48);
-    }
-  }
-
-  // ─── 随笔专栏（数据来自 articles.json，随笔置顶；先显示部分可展开）───
-  const ESSAY_PREVIEW = 4; // 星屑页：先显示几篇
+  // ─── 星屑页（数据来自 articles.json，多栏目并排：年终总结 / 随笔 / 日记）───
+  const ESSAY_COLS = ['年终总结', '随笔', '日记'];   // 栏目顺序（从左到右）
+  const ESSAY_LABEL = {
+    年终总结: ['年终总结', 'Year in Review'],
+    随笔: ['随笔', 'Prose'],
+    日记: ['日记', 'Journal'],
+    读书笔记: ['读书笔记', 'Reading Notes'],
+    其他: ['篇章', 'Other'],
+  };
   async function loadEssays() {
     const wrap = document.getElementById('essaysWrap');
     if (!wrap) return;
@@ -1521,55 +1510,54 @@
       wrap.innerHTML = '<div class="essays-hint" data-i18n="essaysEmpty">待接入文章…</div>';
       return;
     }
-    // 分类顺序: 随笔 > 日记 > 其他
-    const order = ['随笔', '读书笔记', '日记'];
+    // 分类
     const cats = {};
     arts.forEach(a => { (cats[a.category || '其他'] = cats[a.category || '其他'] || []).push(a); });
-    // 每个分类按日期倒序（无日期排后）
     Object.keys(cats).forEach(k => {
       cats[k].sort((a, b) => (b.date || '0').localeCompare(a.date || '0'));
     });
-    const keys = Object.keys(cats).sort((a, b) => (order.indexOf(a) - order.indexOf(b)) || (order.indexOf(a) === -1 ? -1 : 0));
+    // 栏目顺序：年终总结 / 随笔 / 日记；其余排后
+    const keys = Object.keys(cats).sort((a, b) => {
+      const ia = ESSAY_COLS.indexOf(a), ib = ESSAY_COLS.indexOf(b);
+      if (ia === -1 && ib === -1) return 0;
+      if (ia === -1) return 1;
+      if (ib === -1) return -1;
+      return ia - ib;
+    });
     wrap.innerHTML = '';
     keys.forEach(cat => {
-      const titleMap = { 随笔: ['随笔', 'Prose'], 日记: ['日记', 'Journal'], 读书笔记: ['读书笔记', 'Reading Notes'], 其他: ['篇章', 'Other'] };
-      const [zh, en] = titleMap[cat] || [cat, 'More'];
+      const [zh, en] = ESSAY_LABEL[cat] || [cat, 'More'];
       const list = cats[cat];
-      const shown = list.slice(0, ESSAY_PREVIEW);
-      const rest = list.slice(ESSAY_PREVIEW);
-      const sec = document.createElement('div');
-      sec.className = 'essay-cat';
-      sec.innerHTML = `<div class="essay-cat-head">${zh}<span class="ec-en">${en}</span><span class="ec-n">${list.length}</span></div>`;
+      const col = document.createElement('div');
+      col.className = 'essay-col';
+      col.innerHTML = `<div class="essay-cat-head">${zh}<span class="ec-en">${en}</span><span class="ec-n">${list.length}</span></div>`;
       const itemsBox = document.createElement('div');
-      const collapse = document.createElement('div');
-      collapse.className = 'essay-rest';
-      collapse.style.display = 'none';
-      const render = (arr, box) => {
-        arr.forEach(a => {
-          const item = document.createElement('a');
-          item.className = 'essay-item';
-          item.href = a.url; item.target = '_blank'; item.rel = 'noopener';
-          item.innerHTML = `<div class="ei-title">${a.title || '未命名'}</div>` +
-            (a.date ? `<div class="ei-date">${a.date}</div>` : '') +
-            (a.description ? `<div class="ei-desc">${a.description}</div>` : '');
-          box.appendChild(item);
-        });
+      // 每列最多显示 5 篇，超出折叠
+      const shown = list.slice(0, 5);
+      const rest = list.slice(5);
+      const mk = a => {
+        const item = document.createElement('a');
+        item.className = 'essay-item';
+        item.href = a.url; item.target = '_blank'; item.rel = 'noopener';
+        item.innerHTML = `<div class="ei-title">${a.title || '未命名'}</div>` +
+          (a.date ? `<div class="ei-date">${a.date}</div>` : '') +
+          (a.description ? `<div class="ei-desc">${a.description}</div>` : '');
+        return item;
       };
-      render(shown, itemsBox);
-      sec.appendChild(itemsBox);
+      shown.forEach(a => itemsBox.appendChild(mk(a)));
+      col.appendChild(itemsBox);
       if (rest.length) {
-        render(rest, collapse);
-        sec.appendChild(collapse);
+        const collapse = document.createElement('div');
+        collapse.className = 'essay-rest'; collapse.style.display = 'none';
+        rest.forEach(a => collapse.appendChild(mk(a)));
+        col.appendChild(collapse);
         const btn = document.createElement('div');
         btn.className = 'essay-more';
         btn.innerHTML = `展开其余 ${rest.length} 篇 ▾`;
-        btn.onclick = () => {
-          collapse.style.display = '';
-          btn.style.display = 'none';
-        };
-        sec.appendChild(btn);
+        btn.onclick = () => { collapse.style.display = ''; btn.style.display = 'none'; };
+        col.appendChild(btn);
       }
-      wrap.appendChild(sec);
+      wrap.appendChild(col);
     });
   }
 
@@ -1787,239 +1775,6 @@ ${dialog.slice(0, 8000)}
   }
 
 
-  // ─── 批量标记面板（流式：一本一本，标完自动下一本）───
-  let batchQueue = [];
-  let batchPos = 0;
-  let batchNoteDraft = '';
-
-  // 标注笔记（书评）存取
-  let notes = {};
-  try { notes = JSON.parse(localStorage.getItem('caelum_notes') || '{}'); } catch {}
-
-  function openBatchPanel() {
-    document.getElementById('batchPanel').classList.add('open');
-    batchFlowNext(true);
-  }
-  function closeBatchPanel() {
-    document.getElementById('batchPanel').classList.remove('open');
-    // 关闭时保存未提交的笔记
-    saveCurrentNote();
-  }
-  function saveCurrentNote() {
-    if (!batchQueue[batchPos]) return;
-    const n = batchQueue[batchPos];
-    const el = document.getElementById('bfNote');
-    notes[n.title] = (el?.value || '').trim();
-    try { localStorage.setItem('caelum_notes', JSON.stringify(notes)); } catch {}
-  }
-
-  function batchFlowNext(rebuild) {
-    if (rebuild) {
-      const q = (document.getElementById('batchSearch')?.value || '').trim().toLowerCase();
-      batchQueue = q ? nodes.filter(n => (n.title + (n.author||'')).toLowerCase().includes(q)) : nodes;
-      batchPos = 0;
-    } else {
-      batchPos++;
-    }
-    // 跳过窗口内已标记过的（未读优先展示）
-    renderFlow();
-  }
-
-  function renderFlow() {
-    const flow = document.getElementById('batchFlow');
-    const empty = document.getElementById('batchEmpty');
-    while (batchPos < batchQueue.length && batchQueue[batchPos].status !== 'unread') batchPos++;
-    if (batchPos >= batchQueue.length) {
-      flow.style.display = 'none';
-      empty.style.display = 'block';
-      // 若还有已读/喜爱但无未读，给个提示仍可浏览
-      return;
-    }
-    flow.style.display = 'flex';
-    empty.style.display = 'none';
-    const n = batchQueue[batchPos];
-    document.getElementById('bfPos').textContent = `第 ${batchPos + 1} / ${batchQueue.length} 本`;
-    document.getElementById('bfTitle').textContent = n.title;
-    document.getElementById('bfAuthor').textContent = n.author || '';
-    document.getElementById('bfNote').value = notes[n.title] || '';
-    document.getElementById('bfNote').focus();
-  }
-
-  function batchMark(m) {
-    if (!batchQueue[batchPos]) return;
-    const n = batchQueue[batchPos];
-    saveCurrentNote();
-    markNode(n, m);
-    renderFlow(); // 自动跳到下一本未读
-  }
-
-  // ─── 批量标记：分类模式（按作者 / 语言分组）───
-  let batchMode = 'flow';
-  function batchSetMode(mode, el) {
-    batchMode = mode;
-    document.querySelectorAll('.bm-tab').forEach(t => t.classList.toggle('active', t === el));
-    document.getElementById('batchSort').style.display = mode === 'cat' ? '' : 'none';
-    document.getElementById('batchFlow').style.display = mode === 'flow' ? '' : 'none';
-    document.getElementById('batchCat').style.display = mode === 'cat' ? '' : 'none';
-    onBatchSearch();
-  }
-  function onBatchSearch() {
-    if (batchMode === 'cat') renderCat();
-    else batchFlowNext(true);
-  }
-  function inferLang(book) {
-    // 从作者前缀推断语言来源（豆瓣作者形如 "(俄)陀思妥耶夫斯基" "[日] 村上春树"）
-    const a = (book.author || '').trim();
-    const m = a.match(/^([\[【(（])([^\]】)）]{1,12})[\]】)）]/);
-    if (m) {
-      const region = m[2].replace(/国籍|国/g, '');
-      if (/中|华|中国大陆|港|台/.test(region)) return '华文';
-      return region + '文学';
-    }
-    return '华文';
-  }
-  function renderCat() {
-    const wrap = document.getElementById('batchCat');
-    if (!wrap) return;
-    const q = (document.getElementById('batchSearch')?.value || '').trim().toLowerCase();
-    const sortBy = document.getElementById('batchSort')?.value || '作者';
-    let list = nodes;
-    if (q) list = list.filter(n => (n.title + (n.author||'')).toLowerCase().includes(q));
-    const groups = {};
-    if (sortBy === '作者') {
-      list.forEach(n => {
-        const g = n.author || '佚名';
-        (groups[g] = groups[g] || []).push(n);
-      });
-    } else {
-      list.forEach(n => {
-        const g = inferLang(n);
-        (groups[g] = groups[g] || []).push(n);
-      });
-    }
-    wrap.innerHTML = '';
-    Object.keys(groups).sort().forEach(g => {
-      const grp = document.createElement('div');
-      grp.className = 'cat-group';
-      grp.innerHTML = `<div class="cat-head">${g}<span class="cat-count">${groups[g].length}</span></div>`;
-      const items = document.createElement('div');
-      items.className = 'cat-items';
-      groups[g].sort((a, b) => (a.status === 'unread' ? 0 : 1) - (b.status === 'unread' ? 0 : 1)).slice(0, 200).forEach(n => {
-        const row = document.createElement('div');
-        row.className = 'cat-row';
-        const st = n.status || 'unread';
-        const marks = [['fav','喜'],['read','读'],['unread','未']].map(([k,lab]) =>
-          `<button class="${st===k?'on':''}" data-cm="${k}" data-t="${n.title.replace(/"/g,'&quot;')}">${lab}</button>`).join('');
-        row.innerHTML = `<div class="cr-t">${n.title}</div><div class="cr-a">${n.author||''}</div><div class="cr-m">${marks}</div>`;
-        row.querySelectorAll('button').forEach(b => {
-          b.onclick = () => { const t = b.getAttribute('data-t'); const node = nodes.find(x => x.title === t); if (node) markNode(node, b.getAttribute('data-cm')); };
-        });
-        items.appendChild(row);
-      });
-      grp.appendChild(items);
-      wrap.appendChild(grp);
-    });
-    if (!wrap.children.length) wrap.innerHTML = '<div class="cat-empty">（无）</div>';
-  }
-
-  // ─── 添加内容（网页自动入库 · 自设密钥验证 + token 直写仓库）───
-  let addType = 'book';
-  function openAddPanel() {
-    document.getElementById('addPanel').classList.add('open');
-    // 预填记住的 token
-    const saved = localStorage.getItem('caelum_admin_token') || '';
-    if (saved) document.getElementById('addToken').value = saved;
-    addRenderFields();
-  }
-  function closeAddPanel() { document.getElementById('addPanel').classList.remove('open'); }
-  function addSetType(t, el) {
-    addType = t;
-    document.querySelectorAll('.add-tab').forEach(x => x.classList.toggle('active', x === el));
-    addRenderFields();
-  }
-  function addRenderFields() {
-    const box = document.getElementById('addFields');
-    if (addType === 'book') {
-      box.innerHTML = `<input id="addBook" type="text" placeholder="书名（必填）" />
-        <input id="addAuthor" type="text" placeholder="作者（可选）" />
-        <textarea id="addBookNote" placeholder="你的读书笔记 / 感想（可选）"></textarea>`;
-    } else if (addType === 'note') {
-      box.innerHTML = `<input id="addNoteBook" type="text" placeholder="书名（必填）" />
-        <textarea id="addNoteBody" placeholder="读书笔记全文（必填）"></textarea>`;
-    } else {
-      box.innerHTML = `<input id="addEssayUrl" type="text" placeholder="公众号文章链接（必填）" />
-        <input id="addEssayTitle" type="text" placeholder="文章标题（可选，留空自动抓取）" />`;
-    }
-    document.getElementById('addStatus').textContent = '';
-    document.getElementById('addStatus').className = 'add-status';
-  }
-  function addSubmit() {
-    const status = document.getElementById('addStatus');
-    status.className = 'add-status';
-    // 密钥验证：首次任意设（存入 localStorage），之后必须一致
-    const key = document.getElementById('addKey').value.trim();
-    if (!key) { status.textContent = '请输入管理密钥（首次任意设置，之后用它）'; status.className = 'add-status err'; return; }
-    const storedKey = localStorage.getItem('caelum_admin_key') || '';
-    if (!storedKey) localStorage.setItem('caelum_admin_key', key);
-    else if (key !== storedKey) { status.textContent = '✗ 密钥不对'; status.className = 'add-status err'; return; }
-    const token = document.getElementById('addToken').value.trim();
-    if (!token) { status.textContent = '请输入 GitHub token（只给本仓库写权限）'; status.className = 'add-status err'; return; }
-    // 收集待入库内容
-    const get = (id) => document.getElementById(id)?.value.trim() || '';
-    let item = null;
-    if (addType === 'book') {
-      const t = get('addBook'), a = get('addAuthor'), n = get('addBookNote');
-      if (!t) { status.textContent = '请填书名'; status.className = 'add-status err'; return; }
-      item = { type: 'book', title: t, author: a, note: n, at: new Date().toISOString() };
-    } else if (addType === 'note') {
-      const t = get('addNoteBook'), b = get('addNoteBody');
-      if (!t || !b) { status.textContent = '请填书名和笔记正文'; status.className = 'add-status err'; return; }
-      item = { type: 'note', title: t, note: b, at: new Date().toISOString() };
-    } else {
-      const u = get('addEssayUrl'), tt = get('addEssayTitle');
-      if (!u) { status.textContent = '请填公众号链接'; status.className = 'add-status err'; return; }
-      item = { type: 'essay', url: u, title: tt, at: new Date().toISOString() };
-    }
-    status.textContent = '正在写入仓库…';
-    commitToRepo(token, item, status);
-  }
-  async function commitToRepo(token, item, status) {
-    // 读现有 inbox → 追加 → 写回（GitHub contents API）
-    const repo = 'nyxbyb/nyxbyb.github.io';
-    const path = 'web/public/data/inbox.json';
-    const base = 'https://api.github.com/repos/' + repo + '/contents/' + path;
-    let sha = null, list = [];
-    try {
-      const got = await fetch(base, { headers: { Authorization: 'Bearer ' + token } });
-      if (got.ok) {
-        const j = await got.json();
-        sha = j.sha;
-        list = JSON.parse(atob(j.content));
-      } else if (got.status !== 404) {
-        throw new Error('读取失败 ' + got.status);
-      }
-    } catch (e) { status.textContent = '✗ ' + e.message; status.className = 'add-status err'; return; }
-    if (!Array.isArray(list)) list = [];
-    list.push(item);
-    const body = {
-      message: 'add: 网页添加 (' + item.type + ')',
-      content: btoa(unescape(encodeURIComponent(JSON.stringify(list, null, 1)))),
-    };
-    if (sha) body.sha = sha;
-    try {
-      const put = await fetch(base, {
-        method: 'PUT',
-        headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-      });
-      if (!put.ok) throw new Error('写入失败 ' + put.status);
-      status.textContent = '✅ 已写入 inbox.json，触发 GitHub Actions 自动更新';
-      status.className = 'add-status done';
-      localStorage.setItem('caelum_admin_token', token); // 记住 token 减少重复输
-      setTimeout(closeAddPanel, 1500);
-    } catch (e) { status.textContent = '✗ ' + e.message; status.className = 'add-status err'; }
-  }
-
   // ─── 画布交互：拖拽旋转 · 悬停 · 点击标记已读 ───
   function canvasPt(e) {
     const r = canvas.getBoundingClientRect();
@@ -2058,14 +1813,9 @@ ${dialog.slice(0, 8000)}
   window.addEventListener('mouseup', (e) => {
     if (!isRotating) return;
     isRotating = false;
-    // 点击（无拖拽）→ 标记已读/未读
+    // 点击（无拖拽）→ 进入沉浸式星图（详情在沉浸式里点星查看）
     if (Math.abs(e.clientX - rotLastX) < 4 && Math.abs(e.clientY - rotLastY) < 4) {
-      const { x, y } = canvasPt(e);
-      const idx = hitTest(x, y);
-      if (idx >= 0 && nodes[idx]) {
-        openMapCard(nodes[idx]);
-        hoverIdx = idx; drawStars();
-      }
+      openImmersive();
     }
   });
 
@@ -2222,19 +1972,6 @@ ${dialog.slice(0, 8000)}
     if (immFilter === 'my') return n.status === 'read' || n.status === 'fav';
     if (immFilter === 'author') return (n.author || '').includes(immAuthor);
     return true;
-  }
-
-  function immProject(n) {
-    // 若用户选了语义轴(immAxisMode)，则 x/y 用语义锚得分，z 用 TSNE 深度
-    const cx = immAxisMode ? val(n, immAxisX) : (n.x - 0.5) * 2;
-    const cy = immAxisMode ? val(n, immAxisY) : (n.y - 0.5) * 2;
-    const cz = (n.z - 0.5) * 2;
-    let x1 = cx * Math.cos(rotY) + cz * Math.sin(rotY);
-    let z1 = -cx * Math.sin(rotY) + cz * Math.cos(rotY);
-    let y2 = cy * Math.cos(rotX) - z1 * Math.sin(rotX);
-    let z2 = cy * Math.sin(rotX) + z1 * Math.cos(rotX);
-    const half = Math.min(innerWidth, innerHeight) / 2 - 80;
-    return { sx: innerWidth / 2 + x1 * half, sy: innerHeight / 2 + y2 * half, depth: z2 };
   }
 
   // ── 语义轴选择（变换排列）──
@@ -2619,38 +2356,6 @@ ${dialog.slice(0, 8000)}
   loadText();
 </script>
 
-<!-- 批量标记面板（流式 / 分类 两种模式）-->
-<div class="batch-panel" id="batchPanel">
-  <div class="batch-panel-head">
-    <h3 data-i18n="batchTitle">批量标记</h3>
-    <div class="batch-mode">
-      <span class="bm-tab active" data-bm="flow" onclick="batchSetMode('flow', this)">流式</span>
-      <span class="bm-tab" data-bm="cat" onclick="batchSetMode('cat', this)">分类</span>
-    </div>
-    <div class="batch-close" onclick="closeBatchPanel()">×</div>
-  </div>
-  <div class="batch-filters">
-    <input id="batchSearch" type="text" placeholder="搜索书名 / 作者…" oninput="onBatchSearch()" />
-    <select id="batchSort" style="display:none" onchange="renderCat()">
-      <option value="作者">按作者</option>
-      <option value="语言">按语言</option>
-    </select>
-  </div>
-  <div class="batch-flow" id="batchFlow">
-    <div class="bf-progress"><span id="bfPos"></span></div>
-    <div class="bf-title" id="bfTitle"></div>
-    <div class="bf-author" id="bfAuthor"></div>
-    <textarea id="bfNote" rows="4" placeholder="粘贴你的书评 / 笔记…"></textarea>
-    <div class="bf-acts">
-      <button class="bf-fav" data-i18n="bfFav" onclick="batchMark('fav')">喜 爱</button>
-      <button class="bf-read" data-i18n="bfRead" onclick="batchMark('read')">已 读</button>
-      <button class="bf-skip" onclick="batchMark('unread')" data-i18n="bfSkip">跳 过</button>
-    </div>
-  </div>
-  <div class="batch-cat" id="batchCat" style="display:none"></div>
-  <div class="batch-empty" id="batchEmpty" style="display:none" data-i18n="batchEmpty">没有更多可标记的书 · 换一个搜索</div>
-</div>
-
 <!-- 推荐面板（影响力榜 + 盲区推荐）-->
 <div class="rec-panel" id="recPanel">
   <div class="rec-head">
@@ -2728,9 +2433,49 @@ ${dialog.slice(0, 8000)}
       <button onclick="immHighlight('all')">全部</button>
       <button id="immTrailBtn" onclick="immToggleTrail(this)" title="按读完年份连成精神进化线">轨迹</button>
     </div>
+    <div class="imm-row">
+      <button class="imm-rec-btn" onclick="openRecPanel()">🎯 推荐 · 影响 / 盲区 / 今日</button>
+    </div>
     <div class="imm-info" id="immInfo"></div>
     <div class="imm-star" id="immStar" style="display:none"></div>
     <div class="imm-suggest" id="immSuggest"></div>
+  </div>
+</div>
+
+<!-- 设置面板 -->
+<div class="set-panel" id="setPanel">
+  <div class="set-head">
+    <h3>⚙ 设置</h3>
+    <div class="batch-close" onclick="closeSettings()">×</div>
+  </div>
+  <div class="set-body">
+    <div class="set-group">
+      <div class="set-group-h">外 观</div>
+      <div class="set-row">
+        <span class="set-label">主题</span>
+        <div class="set-themes" id="setThemes"></div>
+      </div>
+      <div class="set-row">
+        <span class="set-label">语言</span>
+        <div class="set-langs">
+          <button class="set-btn" data-lang="zh" onclick="setLang('zh', this)">中文</button>
+          <button class="set-btn" data-lang="en" onclick="setLang('en', this)">English</button>
+        </div>
+      </div>
+    </div>
+    <div class="set-group">
+      <div class="set-group-h">添 加 内 容</div>
+      <div class="set-row">
+        <button class="set-btn wide" onclick="openAddPanel()">➕ 添加书 / 读书笔记 / 随笔链接</button>
+      </div>
+    </div>
+    <div class="set-group">
+      <div class="set-group-h">常 用</div>
+      <div class="set-row">
+        <button class="set-btn wide" onclick="openManual(this)">📖 更新指南</button>
+      </div>
+    </div>
+    <div class="set-foot">凿星图 · Caelum · 认识你自己</div>
   </div>
 </div>
 
