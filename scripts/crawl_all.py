@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """凿星图 · 豆瓣书目爬虫（统一版）
-抓取 豆瓣 Top250 + 各分类热门榜，输出前端用 books_raw.json。
+抓取 豆瓣 Top250 + 各分类热门榜 + 分类标签全量翻页，输出前端用 books_raw.json。
 兼容两种 HTML 结构：
   - Top250:      <tr class="item"> ... </tr>
   - 分类标签页:  <li class="subject-item"> ... </li>
 只抓 title/author/rating/link，去重后合并。礼貌限速。
+可加 --deep 翻更多页（每标签 0..180，步长 20），目标 5000-10000 本。
 """
 import json, os, re, sys, time, html as htmlmod, urllib.request, urllib.parse
 
@@ -13,9 +14,18 @@ BASE = os.path.expanduser("~/Desktop/Caelum")
 OUT = os.path.join(BASE, "corpus/books_raw.json")
 
 TAGS = ["文学", "小说", "哲学", "历史", "科幻", "诗歌", "心理学", "社会学",
-        "传记", "艺术", "思想", "随笔", "中国文学", "外国文学"]
+        "传记", "艺术", "思想", "随笔", "中国文学", "外国文学",
+        # deep 模式扩展标签（覆盖更全知识版图）
+        "经典", "推理", "武侠", "漫画", "喜剧", "散文", "杂文",
+        "科普", "科学", "数学", "物理", "生物", "医学", "中医",
+        "经济学", "政治", "法律", "人类学", "宗教学", "语言学",
+        "人工智能", "计算机", "编程", "互联网", "投资", "金融",
+        "成长", "心灵", "生活", "旅行", "美食", "设计", "建筑", "音乐", "电影", "摄影",
+        "儿童文学", "青春", "爱情", "战争", "历史小说", "奇幻",
+        "德国", "法国", "英国", "美国", "俄国", "日本", "拉美"]
 TOP250_PAGES = [0, 25, 50, 75, 100, 125, 150, 175, 200, 225]
 TAG_PAGES = [0, 20, 40, 60]
+DEEP_PAGES = list(range(0, 200, 20))   # deep: 每标签 10 页 ≈ 200 本/标签
 
 def fetch(url):
     req = urllib.request.Request(url, headers={"User-Agent": UA})
@@ -47,7 +57,6 @@ def parse_item_html(h):
             author = parts[0]
     rating = float(m.group(1)) if (m := re.search(r'class="rating_nums">([\d.]+)<', h)) else None
     return {"title": title, "author": author, "rating": rating, "link": link, "source": "douban"}
-
 def parse_top250(h):
     out = []
     for blk in re.findall(r'<tr class="item">.*?</tr>', h, re.S):
@@ -65,7 +74,16 @@ def parse_tag(h):
     return out
 
 def main():
+    deep = "--deep" in sys.argv
     books, seen = [], set()
+    # 断点续爬：已有文件则读入，seen 去重后追加
+    if os.path.exists(OUT):
+        try:
+            books = json.load(open(OUT))
+            seen = {b["title"] for b in books}
+            print(f"续爬: 已有 {len(books)} 本")
+        except Exception:
+            books, seen = [], set()
 
     print("== Top250（10页）==")
     for start in TOP250_PAGES:
@@ -79,21 +97,30 @@ def main():
         time.sleep(1.5)
     print()
 
-    print("== 分类榜（%d 个标签）==" % len(TAGS))
+    pages = DEEP_PAGES if deep else TAG_PAGES
+    print("== 分类榜（%d 个标签 × %d 页%s）==" % (len(TAGS), len(pages), " deep" if deep else ""))
     for tag in TAGS:
-        for start in TAG_PAGES:
+        for start in pages:
             h = fetch("https://book.douban.com/tag/%s?start=%d&type=T" % (urllib.parse.quote(tag), start))
             items = parse_tag(h)
             for it in items:
                 if it["title"] not in seen:
                     seen.add(it["title"]); books.append(it)
+            # 深爬时每个标签写一次盘（断点安全）
+            if deep:
+                os.makedirs(os.path.dirname(OUT), exist_ok=True)
+                json.dump(books, open(OUT, "w"), ensure_ascii=False, indent=1)
+            time.sleep(1.2 if deep else 1.5)
         sys.stdout.write("  %-8s 累计 %d\n" % (tag, len(books)))
         sys.stdout.flush()
-        time.sleep(1.5)
+
+    # 7 分筛选统计（不删数据——低分书留给盲区推荐，只报告分布）
+    hi = [b for b in books if (b.get("rating") or 0) >= 7]
+    print(f"\n评分≥7: {len(hi)} / {len(books)}")
 
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     json.dump(books, open(OUT, "w"), ensure_ascii=False, indent=1)
-    print(f"\n✅ 共 {len(books)} 本（去重后）→ {OUT}")
+    print(f"✅ 共 {len(books)} 本（去重后）→ {OUT}")
     # 简要展示
     for b in books[:3]:
         print(f"   {b['title']} / {b['author'][:12]} / {b['rating']}")
