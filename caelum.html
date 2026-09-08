@@ -283,29 +283,7 @@
     .map-card .mc-acts button:hover { color: var(--accent); border-color: var(--accent); }
     .map-card .mc-acts button.on { color: var(--accent); border-color: var(--accent); background: rgba(238,240,245,0.08); }
 
-    /* 批量标记 */
-    .map-tools { position: absolute; top: 120px; right: 6vw; z-index: 5; }
-    .map-batch-btn {
-      font-family: var(--sans); font-size: 12px; letter-spacing: 0.12em;
-      color: var(--accent-dim); cursor: pointer;
-      border: 1px solid rgba(238,240,245,0.25); border-radius: 20px;
-      padding: 7px 18px; background: rgba(10,11,14,0.5); transition: all 0.3s;
-    }
-    .map-batch-btn:hover { color: var(--accent); border-color: var(--accent); }
-    .batch-panel {
-      position: fixed; inset: 0; z-index: 300; display: none;
-      flex-direction: column; background: rgba(5,6,8,0.96);
-      backdrop-filter: blur(6px); padding: 24px 5vw;
-    }
-    .batch-panel.open { display: flex; }
-    .batch-panel-head {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 18px;
-    }
-    .batch-panel-head h3 {
-      font-size: 22px; color: var(--accent); font-weight: 600;
-      letter-spacing: 0.25em;
-    }
+    /* 面板通用 tab */
     .batch-mode { display: flex; gap: 6px; margin-left: auto; margin-right: 24px; }
     .bm-tab {
       font-family: var(--serif); font-size: 13px; letter-spacing: 0.15em;
@@ -315,53 +293,10 @@
     }
     .bm-tab.active { color: var(--accent); border-color: var(--accent); background: rgba(238,240,245,0.06); }
     .bm-tab:hover { color: var(--accent); }
-    .batch-cat { flex: 1; overflow-y: auto; padding-right: 8px; }
-    .batch-cat::-webkit-scrollbar { width: 6px; }
-    .batch-cat::-webkit-scrollbar-thumb { background: rgba(238,240,245,0.15); border-radius: 3px; }
-    .cat-group { margin-bottom: 22px; }
-    .cat-head {
-      font-size: 14px; color: var(--accent); letter-spacing: 0.15em;
-      margin-bottom: 8px; border-bottom: 1px solid rgba(238,240,245,0.1);
-      padding-bottom: 6px; display: flex; align-items: baseline; gap: 10px;
-    }
-    .cat-count { font-size: 11px; color: var(--ink-dim); font-family: var(--sans); }
-    .cat-items { display: flex; flex-direction: column; }
-    .cat-row {
-      display: flex; align-items: center; gap: 12px;
-      padding: 7px 10px; border-radius: 8px; transition: background 0.2s;
-    }
-    .cat-row:hover { background: rgba(238,240,245,0.03); }
-    .cat-row .cr-t { flex: 1; font-size: 13px; color: var(--ink); letter-spacing: 0.04em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .cat-row .cr-a { font-size: 11px; color: var(--ink-dim); width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .cat-row .cr-m { display: flex; gap: 5px; }
-    .cat-row .cr-m button {
-      font-family: var(--serif); font-size: 11px; letter-spacing: 0.05em;
-      color: var(--ink-dim); background: transparent; cursor: pointer;
-      border: 1px solid rgba(238,240,245,0.15); border-radius: 12px;
-      padding: 2px 10px; transition: all 0.2s;
-    }
-    .cat-row .cr-m button:hover { color: var(--accent); border-color: var(--accent); }
-    .cat-row .cr-m button.on { color: var(--accent); border-color: var(--accent); background: rgba(238,240,245,0.08); }
-    .cat-empty { color: var(--ink-dim); font-size: 13px; padding: 30px 0; text-align: center; }
-    .batch-filters select {
-      background: rgba(14,18,28,0.7); border: 1px solid rgba(238,240,245,0.18);
-      color: var(--ink); font-family: var(--serif); padding: 8px 12px;
-      border-radius: 10px; font-size: 13px;
-    }
-    .batch-filters select:focus { outline: none; border-color: var(--accent); }
     .batch-close {
       font-size: 28px; color: var(--ink-dim); cursor: pointer; line-height: 1;
     }
     .batch-close:hover { color: var(--accent); }
-    .batch-filters { margin-bottom: 16px; display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
-    #batchSearch {
-      flex: 1; min-width: 220px;
-      background: rgba(14,18,28,0.7); border: 1px solid rgba(238,240,245,0.18);
-      color: var(--ink); font-family: inherit; padding: 10px 16px;
-      border-radius: 10px; font-size: 14px; letter-spacing: 0.05em;
-    }
-    #batchSearch:focus { outline: none; border-color: var(--accent); }
-    .batch-filter-chips { display: flex; gap: 8px; }
     .chip {
       font-family: var(--sans); font-size: 11px; letter-spacing: 0.12em;
       color: var(--ink-dim); cursor: pointer;
@@ -369,62 +304,6 @@
       padding: 4px 12px; transition: all 0.25s;
     }
     .chip.active { color: var(--accent); border-color: var(--accent); background: rgba(238,240,245,0.06); }
-    .batch-list, .batch-flow { flex: 1; overflow-y: auto; padding-right: 8px; }
-
-    .batch-flow {
-      display: flex; flex-direction: column; justify-content: center;
-      max-width: 560px; margin: 0 auto; width: 100%; text-align: center;
-      overflow: visible;
-    }
-    .bf-progress {
-      font-size: 12px; color: rgba(232,234,240,0.4);
-      letter-spacing: 0.15em; margin-bottom: 18px;
-      font-family: var(--sans);
-    }
-    .bf-title {
-      font-size: 26px; color: var(--accent); font-weight: 600;
-      letter-spacing: 0.1em; margin-bottom: 8px; line-height: 1.4;
-    }
-    .bf-author {
-      font-size: 13px; color: var(--ink-dim); letter-spacing: 0.1em;
-      margin-bottom: 26px;
-    }
-    #bfNote {
-      width: 100%; background: rgba(14,18,28,0.7);
-      border: 1px solid rgba(238,240,245,0.18); color: var(--ink);
-      font-family: var(--serif); font-size: 14px; line-height: 1.8;
-      padding: 14px 16px; border-radius: 12px; resize: vertical;
-      letter-spacing: 0.05em; margin-bottom: 26px;
-    }
-    #bfNote:focus { outline: none; border-color: var(--accent); }
-    .bf-acts {
-      display: flex; gap: 16px; justify-content: center; align-items: center;
-    }
-    .bf-acts button {
-      font-family: var(--serif); font-size: 18px; letter-spacing: 0.35em;
-      cursor: pointer; border-radius: 40px; transition: all 0.25s;
-      padding: 16px 0;
-    }
-    .bf-acts .bf-fav {
-      flex: 1.2; color: #fff; background: rgba(238,240,245,0.16);
-      border: 1px solid var(--accent);
-    }
-    .bf-acts .bf-fav:hover { background: rgba(238,240,245,0.28); box-shadow: 0 0 24px var(--accent-glow); }
-    .bf-acts .bf-read {
-      flex: 1.2; color: var(--accent); background: transparent;
-      border: 1px solid rgba(238,240,245,0.5);
-    }
-    .bf-acts .bf-read:hover { background: rgba(238,240,245,0.12); }
-    .bf-acts .bf-skip {
-      flex: 1; font-size: 14px; color: var(--ink-dim);
-      background: transparent; border: 1px solid rgba(238,240,245,0.15);
-    }
-    .bf-acts .bf-skip:hover { color: var(--ink); border-color: rgba(238,240,245,0.4); }
-    .batch-empty {
-      text-align: center; padding: 60px 0; color: var(--ink-dim);
-      font-size: 14px; letter-spacing: 0.1em;
-    }
-    .batch-list, .batch-flow { flex: 1; overflow-y: auto; padding-right: 8px; }
 
     /* 添加内容表单 */
     .add-panel {
@@ -1107,13 +986,6 @@
     legendFav: { zh: "喜爱", en: "Loved" },
     legendRead: { zh: "已读", en: "Read" },
     legendUnread: { zh: "未读", en: "Unread" },
-    batchBtn: { zh: "批量标记", en: "Batch Mark" },
-    batchTitle: { zh: "批量标记", en: "Batch Mark" },
-    batchSearchPh: { zh: "搜索书名 / 作者…", en: "Search title / author…" },
-    bfFav: { zh: "喜 爱", en: "LOVED" },
-    bfRead: { zh: "已 读", en: "READ" },
-    bfSkip: { zh: "跳 过", en: "SKIP" },
-    batchEmpty: { zh: "没有更多未读的书 · 换个搜索", en: "No more unread books · try another search" },
     frontierMore: { zh: "查看完整学术履历", en: "See full academic record" },
     visionSub: { zh: "我为何作此星图 · 我的野心", en: "Why this star chart · My ambition" },
     v1: { zh: "我不相信知识的尽头有墙。<br>我读数学时看见结构之美，读文学时看见同样的结构。", en: "I do not believe knowledge ends in walls.<br>In mathematics I see beauty of structure — literature shows me the same." },
