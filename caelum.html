@@ -307,7 +307,7 @@
 
     /* 添加内容表单 */
     .add-panel {
-      position: fixed; inset: 0; z-index: 350; display: none;
+      position: fixed; inset: 0; z-index: 600; display: none;
       flex-direction: column; background: rgba(5,6,8,0.97);
       backdrop-filter: blur(8px); padding: 30px 5vw;
     }
@@ -344,7 +344,7 @@
 
     /* 推荐面板 */
     .rec-panel {
-      position: fixed; inset: 0; z-index: 340; display: none;
+      position: fixed; inset: 0; z-index: 600; display: none;
       flex-direction: column; background: rgba(5,6,8,0.97);
       backdrop-filter: blur(8px); padding: 30px 6vw;
     }
@@ -590,7 +590,7 @@
 
     /* 设置面板 */
     .set-panel {
-      position: fixed; inset: 0; z-index: 450; display: none;
+      position: fixed; inset: 0; z-index: 600; display: none;
       flex-direction: column; background: rgba(5,6,8,0.97);
       backdrop-filter: blur(8px); padding: 34px 5vw;
     }
@@ -745,6 +745,24 @@
     }
     .imm-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
     .imm-row-axes { justify-content: center; gap: 16px; }
+    .imm-ax-row {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .imm-ax-k {
+      font-size: 12px; color: var(--accent-dim); letter-spacing: 0.1em; width: 18px; text-align: center;
+    }
+    .imm-ax-row select {
+      flex: 1; width: 100%; max-width: 220px; background: rgba(14,18,28,0.85); border: 1px solid rgba(238,240,245,0.2);
+      color: var(--ink); font-family: var(--serif); padding: 6px 10px; border-radius: 9px;
+      font-size: 12px; text-overflow: ellipsis;
+    }
+    .imm-ax-row select:focus { outline: none; border-color: var(--accent); }
+    .imm-ax-reset {
+      font-size: 11px; color: var(--ink-dim); cursor: pointer; letter-spacing: 0.1em;
+      border: 1px dashed rgba(238,240,245,0.25); padding: 4px 12px; border-radius: 12px;
+      text-align: center; transition: all 0.25s;
+    }
+    .imm-ax-reset:hover { color: var(--accent); border-color: var(--accent); }
     .imm-ax { font-size: 12px; color: var(--accent-dim); letter-spacing: 0.12em; }
     .imm-ax select {
       margin-left: 8px; background: rgba(14,18,28,0.85); border: 1px solid rgba(238,240,245,0.2);
@@ -1211,6 +1229,20 @@
   let rotX = -0.5, rotY = 0.6;   // radians
   let isRotating = false, rotLastX = 0, rotLastY = 0;
   let hoverIdx = -1;
+  // 主图闲置自转：4 秒无交互后缓慢旋转（鼠标移到页面其他区域也算静止）
+  let mapIdleStart = performance.now();
+  function mapIdleLoop() {
+    const sec = document.getElementById('sec-map');
+    if (sec && nodes.length && !isRotating && hoverIdx < 0) {
+      const inView = sec.getBoundingClientRect().bottom > 0 && sec.getBoundingClientRect().top < innerHeight;
+      if (inView && performance.now() - mapIdleStart > 4000) {
+        rotY += 0.0008;
+        drawStars();
+      }
+    }
+    requestAnimationFrame(mapIdleLoop);
+  }
+  requestAnimationFrame(mapIdleLoop);
 
   function project3d(n, center, half) {
     // 绕 Y 再绕 X 旋转，正交投影到 2D（含 z 深度）
@@ -1668,8 +1700,10 @@ ${dialog.slice(0, 8000)}
 
   canvas.addEventListener('mousedown', (e) => {
     isRotating = true; rotLastX = e.clientX; rotLastY = e.clientY;
+    mapIdleStart = performance.now();
   });
   window.addEventListener('mousemove', (e) => {
+    mapIdleStart = performance.now();
     if (isRotating) {
       rotY += (e.clientX - rotLastX) * 0.008;
       rotX += (e.clientY - rotLastY) * 0.008;
@@ -1728,6 +1762,21 @@ ${dialog.slice(0, 8000)}
   let immAuthor = '';
   let immSelNode = null;      // 点击选中的节点
   let immFocus = { x: 0, y: 0 };  // 相机聚焦的世界坐标（-1..1）
+  // 闲置自转：交互后 4 秒无操作，星空缓慢自转；任何交互重置
+  let immIdleStart = 0;
+  let immUserActed = false;
+  function immIdleLoop() {
+    if (document.getElementById('immerse').classList.contains('open')) {
+      const idle = performance.now() - immIdleStart;
+      if (idle > 4000 && !immDrag) {
+        rotY += 0.0012;
+        immRender();
+      }
+    }
+    requestAnimationFrame(immIdleLoop);
+  }
+  requestAnimationFrame(immIdleLoop);
+  function immTouch() { immIdleStart = performance.now(); immUserActed = true; }
   function immProject(n) {
     // 相机式投影：绕焦点旋转 + 缩放，实现真正的"聚焦"
     const cx = immAxisMode ? val(n, immAxisX) : (n.x - 0.5) * 2;
@@ -1748,23 +1797,39 @@ ${dialog.slice(0, 8000)}
     document.getElementById('immerse').classList.add('open');
     imm = document.getElementById('imm-canvas');
     immCtx = imm.getContext('2d');
-    immZoom = 1;
-    immFocus = { x: 0, y: 0 };
     immBound();
     immResize();
     immAxisPopulate();
     immApply();
     renderSuggest();
+    // 星空绽放：从深处 zoom 0.02 缓动展开到 1，如星云在眼前绽开
+    immZoom = 0.02;
+    immFocus = { x: 0, y: 0 };
+    rotY = 0.6; rotX = -0.35;
+    const t0 = performance.now();
+    const DUR = 2200;
+    function bloom(t) {
+      const k = Math.min(1, (t - t0) / DUR);
+      const e = 1 - Math.pow(1 - k, 4);   // easeOutQuart
+      immZoom = 0.02 + 0.98 * e;
+      rotY = 0.6 + k * 0.9;
+      rotX = -0.35 + k * 0.15;
+      immRender();
+      if (k < 1 && !immUserActed) requestAnimationFrame(bloom);
+      else if (k >= 1) immIdleStart = performance.now();
+    }
+    requestAnimationFrame(bloom);
   }
   // 沉浸式画布事件绑定（openImmersive 时执行，确保 canvas 已存在）
   let immEventBound = false;
   function immBound() {
     if (immEventBound) return;
     immEventBound = true;
-    imm.addEventListener('mousedown', (e) => { immDrag = true; immMoved = 0; immLastX = e.clientX; immLastY = e.clientY; });
+    imm.addEventListener('mousedown', (e) => { immDrag = true; immMoved = 0; immLastX = e.clientX; immLastY = e.clientY; immTouch(); });
     // 滚轮缩放：相机聚焦到光标下（缩放后光标所指的星仍在原处）
     imm.addEventListener('wheel', (e) => {
       e.preventDefault();
+      immTouch();
       const rect = imm.getBoundingClientRect();
       const mx = e.clientX - rect.left, my = e.clientY - rect.top;
       const half = Math.min(innerWidth, innerHeight) / 2 - 80;
@@ -1785,6 +1850,7 @@ ${dialog.slice(0, 8000)}
     }, { passive: false });
     window.addEventListener('mousemove', (e) => {
       if (!document.getElementById('immerse').classList.contains('open')) return;
+      immTouch();
       if (immDrag) {
         immMoved += Math.abs(e.clientX - immLastX) + Math.abs(e.clientY - immLastY);
         if (immZoom > 1.2) {
@@ -1857,13 +1923,13 @@ ${dialog.slice(0, 8000)}
     if (!semAnchors.length) return;
     const sx = document.getElementById('immAxisX');
     const sy = document.getElementById('immAxisY');
-    // 正交语义轴优先，其次单个锚
+    // 正交语义轴优先，其次单个锚（option 只显轴名，两端语义进 title）
     let opts = '';
     if (orthAxes.length) {
       opts += '<optgroup label="分类轴">' + orthAxes.map((a, i) =>
-        `<option value="orth${i}">${a.name}: ${a.low} ↔ ${a.high}</option>`).join('') + '</optgroup>';
+        `<option value="orth${i}" title="${a.low} ↔ ${a.high}">${a.name}</option>`).join('') + '</optgroup>';
     }
-    opts += '<optgroup label="语义锚">' + semAnchors.map((a, i) => `<option value="${i}">${a}</option>`).join('') + '</optgroup>';
+    opts += '<optgroup label="语义锚">' + semAnchors.map((a, i) => `<option value="${i}" title="按「${a}」语义相似度排布">${a}</option>`).join('') + '</optgroup>';
     sx.innerHTML = opts; sy.innerHTML = opts;
     sx.value = 'orth0'; sy.value = 'orth1';
     immAxisX = 'orth0'; immAxisY = 'orth1';
@@ -2282,31 +2348,25 @@ ${dialog.slice(0, 8000)}
   <canvas id="imm-canvas"></canvas>
   <!-- 控制面板 -->
   <div class="imm-panel" id="immPanel">
-    <div class="imm-sec">空 间 · 坐 标</div>
-    <div class="imm-row imm-row-axes">
-      <label class="imm-ax">X 轴 <select id="immAxisX" onchange="immAxisChanged()"></select></label>
-      <label class="imm-ax">Y 轴 <select id="immAxisY" onchange="immAxisChanged()"></select></label>
-      <span class="imm-clear" onclick="immAxisReset()">↺ 语义</span>
-    </div>
-    <div class="imm-sec">排 序 · 影 响</div>
-    <div class="imm-row imm-row-axes">
-      <label class="imm-ax">排序 <select id="immSort" onchange="immApply()">
-        <option value="none">默认</option>
-        <option value="duration">阅读时长</option>
-        <option value="rating">豆瓣评分</option>
-        <option value="year">书名</option>
-      </select></label>
-      <span class="imm-clear" onclick="immSortReset()">↺ 默认</span>
-    </div>
-    <div class="imm-sec">筛 选 · 探 索</div>
+    <div class="imm-sec">视 角</div>
+    <label class="imm-ax-row"><span class="imm-ax-k">X</span><select id="immAxisX" onchange="immAxisChanged()"></select></label>
+    <label class="imm-ax-row"><span class="imm-ax-k">Y</span><select id="immAxisY" onchange="immAxisChanged()"></select></label>
+    <label class="imm-ax-row"><span class="imm-ax-k">序</span><select id="immSort" onchange="immApply()">
+      <option value="none">默认</option>
+      <option value="duration">阅读时长</option>
+      <option value="rating">豆瓣评分</option>
+      <option value="year">书名</option>
+    </select></label>
+    <div class="imm-ax-reset" onclick="immAxisReset();immSortReset()">↺ 还原视角</div>
+    <div class="imm-sec">探 索</div>
+    <input id="immSearch" type="text" placeholder="作者名…" oninput="immApply()" />
     <div class="imm-row imm-row-inputs">
-      <input id="immSearch" type="text" placeholder="作者名…" oninput="immApply()" />
       <button onclick="immHighlight('my')">我的光</button>
       <button onclick="immHighlight('all')">全部</button>
       <button id="immTrailBtn" onclick="immToggleTrail(this)" title="按读完年份连成精神进化线">轨迹</button>
     </div>
     <div class="imm-row">
-      <button class="imm-rec-btn" onclick="openRecPanel()">🎯 推荐 · 影响 / 盲区 / 今日</button>
+      <button class="imm-rec-btn" onclick="openRecPanel()">✦ 推荐 · 盲区 / 今日之书</button>
     </div>
     <div class="imm-info" id="immInfo"></div>
     <div class="imm-star" id="immStar" style="display:none"></div>

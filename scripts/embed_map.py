@@ -231,9 +231,9 @@ def main():
     origin = np.array([origin_score(b.get('author', '')) for b in books], dtype=np.float32)
     ORTH = np.stack([theme, genre, origin], axis=1).astype(np.float32)
     orth_axes = [
-        {"axis": 0, "name": "主题 · Theme", "low": "科技 · 科学/数学", "high": "人文 · 文学/哲学/历史"},
-        {"axis": 1, "name": "题材 · Genre", "low": "学术论著", "high": "小说诗文"},
-        {"axis": 2, "name": "语言 · Language", "low": "外国翻译", "high": "华文"},
+        {"axis": 0, "name": "主题", "low": "科技 · 科学/数学", "high": "人文 · 文学/哲学/历史"},
+        {"axis": 1, "name": "题材", "low": "学术论著", "high": "小说诗文"},
+        {"axis": 2, "name": "语言", "low": "外国翻译", "high": "华文"},
     ]
     print(f"分类轴: {[(x['name']) for x in orth_axes]}")
     # 归一到 0~1
