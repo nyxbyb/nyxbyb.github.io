@@ -19,11 +19,19 @@ NB = os.path.join(BASE, "data/公众号/_backup/notes_books.json")
 INBOX = os.path.join(BASE, "web/public/data/inbox.json")
 
 MODEL = os.environ.get("EMBED_MODEL", "BAAI/bge-small-zh-v1.5")
+# 星图只收豆瓣有评分且 ≥7 分的书（0 = 不过滤）。低分/无评分留在 books_raw.json 备用。
+RATING_MIN = float(os.environ.get("RATING_MIN", "7"))
 
 def load_books():
     if not os.path.exists(RAW):
         sys.exit(f"找不到 {RAW}，先跑爬虫生成 books_raw.json")
     books = json.load(open(RAW))
+    if RATING_MIN > 0:
+        # 无评分 ≠ 经典：deep 爬虫里大量无评分条目是冷门技术书，一并剔除。
+        # 用户真实读过的书由 merge_wechat 补回（不受此过滤影响）。
+        n0 = len(books)
+        books = [b for b in books if (b.get("rating") is not None and b.get("rating") >= RATING_MIN)]
+        print(f"评分筛选 ≥{RATING_MIN}（无评分剔除）: {n0} → {len(books)} (剔除 {n0 - len(books)} 本)")
     return books
 
 def make_text(b):
@@ -156,11 +164,14 @@ def describe_axis(Y, books, axis_idx, topn=18):
         ltag, htag = top2(lc), top2(hc)
     return {"axis": axis_idx, "high": htag, "low": ltag}
 
-# 人工校准轴标签（基于固定 seed 下实际坐标两端书名归纳，seed 变化需重标）
+# 人工校准轴标签（基于固定 seed 下实际坐标两端书名归纳，seed/书目变化需重标）
+# 轴0: 低端 脑科学/认知/心理科普 → 高端 文学/漫画/人文杂览
+# 轴1: 低端 中医/针灸/身体经典   → 高端 小说/世界名著/漫画
+# 轴2: 低端 散文/生活/影像杂览   → 高端 科学/经济/理性之书
 AXIS_LABELS = [
-    {"low": "文学 · 浪漫", "high": "医学 · 养生"},
-    {"low": "科幻 · 科技", "high": "经典 · 哲学"},
-    {"low": "历史 · 杂览", "high": "心理 · 社会"},
+    {"low": "认知 · 脑科学", "high": "人文 · 漫画文学"},
+    {"low": "中医 · 针灸", "high": "小说 · 世界名著"},
+    {"low": "生活 · 散文影像", "high": "理性 · 科学经济"},
 ]
 
 def main():
