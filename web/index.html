@@ -334,6 +334,20 @@
     .add-status { font-size: 13px; color: var(--ink-dim); min-height: 20px; letter-spacing: 0.05em; }
     .add-status.done { color: #7bd48a; }
     .add-status.err { color: #e08585; }
+    /* 文案编辑器 */
+    .tf-item { margin-bottom: 16px; }
+    .tf-label { font-size: 12px; color: var(--accent-dim); letter-spacing: 0.12em; margin-bottom: 6px; }
+    #textFields textarea, #addFields input, #addFields textarea {
+      width: 100%; box-sizing: border-box; background: rgba(14,18,28,0.8);
+      border: 1px solid rgba(238,240,245,0.18); color: var(--ink);
+      font-family: var(--serif); font-size: 14px; line-height: 1.7;
+      padding: 10px 14px; border-radius: 10px; margin-bottom: 10px;
+      resize: vertical; letter-spacing: 0.04em;
+    }
+    #textFields textarea:focus, #addFields input:focus, #addFields textarea:focus { outline: none; border-color: var(--accent); }
+    .add-acts2 { display: flex; gap: 12px; }
+    .add-acts2 .add-submit { flex: 1; }
+    .add-secondary { opacity: 0.75; }
     .add-submit {
       font-family: var(--serif); font-size: 15px; letter-spacing: 0.2em; color: var(--accent);
       background: rgba(238,240,245,0.1); border: 1px solid var(--accent); border-radius: 28px;
@@ -687,7 +701,7 @@
     .essay-more:hover { color: var(--accent); border-color: var(--accent); }
     .essay-rest { margin-top: 6px; }
 
-    /* 第5屏：理念 · 散落星句 */
+    /* 第5屏：星愿 · 散落星句 */
     #sec-vision { background: radial-gradient(ellipse at 60% 30%, #0a0e1a 0%, var(--bg) 70%); }
     .vision-stars { position: relative; width: 100%; height: 100%; }
     .vs {
@@ -843,7 +857,7 @@
   <div class="nav-dot" data-label="星域" data-label-en="Domains" onclick="goTo(2)"></div>
   <div class="nav-dot" data-label="拓星" data-label-en="Research" onclick="goTo(3)"></div>
   <div class="nav-dot" data-label="星屑" data-label-en="Stardust" onclick="goTo(4)"></div>
-  <div class="nav-dot" data-label="理念" data-label-en="Visions" onclick="goTo(5)"></div>
+  <div class="nav-dot" data-label="星愿" data-label-en="Stellar Vows" onclick="goTo(5)"></div>
   <div class="nav-dot" data-label="跋" data-label-en="Coda" onclick="goTo(6)"></div>
 </nav>
 
@@ -951,7 +965,7 @@
   </div>
 </section>
 
-<!-- ═══════════ 第 6 屏：理念 ═══════════
+<!-- ═══════════ 第 6 屏：星愿 ═══════════
      ✏️ 编辑入口：每一句文字在 web/public/data/text.json 的 vision 数组里 -->
 <section id="sec-vision">
   <div class="vision-stars" id="visionStars"></div>
@@ -1039,7 +1053,7 @@
 
   let lang = localStorage.getItem('caelum_lang') || 'zh';
   const toggle = document.getElementById('langToggle');
-  let textData = null; // 从 text.json 读：序/理念/跋
+  let textData = null; // 从 text.json 读：序/星愿/跋
 
   // ─── 主题 / 设置 ───
   const THEMES = ['night', 'dawn', 'mist', 'ink'];
@@ -1089,7 +1103,7 @@
     // 设置面板语言按钮高亮
     document.querySelectorAll('#setPanel .set-langs .set-btn').forEach(b =>
       b.classList.toggle('on', b.getAttribute('data-lang') === lang));
-    renderText(); // 渲染 text.json 控制的序/理念/跋
+    renderText(); // 渲染 text.json 控制的序/星愿/跋
   }
   function toggleLang() {
     lang = lang === 'zh' ? 'en' : 'zh';
@@ -1120,7 +1134,7 @@
     setEl('introZiSource', g('intro.zi_source'));
     setEl('introTagline', g('intro.tagline'));
     setEl('introHint', g('intro.hint'));
-    // 理念（散布星句）
+    // 星愿（散布星句）
     const stars = document.getElementById('visionStars');
     if (stars && textData.vision) {
       stars.innerHTML = textData.vision.map((v, i) =>
@@ -2292,6 +2306,183 @@ ${dialog.slice(0, 8000)}
   loadTree();
   loadEssays();
   loadText();
+
+  // ─── 管理密钥 / GitHub token（localStorage，只在你的浏览器）───
+  function getKey(k) { try { return localStorage.getItem(k) || ''; } catch { return ''; } }
+  function setKey(k, v) { try { v ? localStorage.setItem(k, v) : localStorage.removeItem(k); } catch {} }
+  async function ghGet(path) {
+    const r = await fetch('https://api.github.com/repos/nyxbyb/nyxbyb.github.io/contents/' + path, {
+      headers: { 'Accept': 'application/vnd.github+json' }
+    });
+    if (!r.ok) throw new Error('GET ' + path + ' → ' + r.status);
+    return r.json();
+  }
+  async function ghPut(path, contentB64, message, token) {
+    const r = await fetch('https://api.github.com/repos/nyxbyb/nyxbyb.github.io/contents/' + path, {
+      method: 'PUT',
+      headers: { 'Accept': 'application/vnd.github+json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify({ message, content: contentB64 })
+    });
+    if (!r.ok) { const t = await r.text(); throw new Error('PUT ' + path + ' → ' + r.status + ' ' + t.slice(0, 200)); }
+    return r.json();
+  }
+  const b64enc = (s) => btoa(unescape(encodeURIComponent(s)));
+  const b64dec = (s) => decodeURIComponent(escape(atob(s.replace(/\n/g, ''))));
+
+  // ─── 添加内容面板（书 / 读书笔记 / 随笔链接 → inbox.json）───
+  let addType = 'book';
+  function openAddPanel() {
+    closeSettings();
+    document.getElementById('addPanel').classList.add('open');
+    document.getElementById('addKey').value = getKey('caelum_admin_key');
+    document.getElementById('addToken').value = getKey('caelum_admin_token');
+    addRenderFields();
+  }
+  function closeAddPanel() { document.getElementById('addPanel').classList.remove('open'); }
+  function addSetType(t, el) {
+    addType = t;
+    document.querySelectorAll('#addPanel .add-tab').forEach(x => x.classList.toggle('active', x === el));
+    addRenderFields();
+  }
+  function addRenderFields() {
+    const f = document.getElementById('addFields');
+    if (addType === 'book') {
+      f.innerHTML = `
+        <input id="afTitle" type="text" placeholder="书名《…》" />
+        <input id="afAuthor" type="text" placeholder="作者（可选）" />
+        <input id="afFin" type="text" placeholder="读完时间（如 2024年5月，可选）" />`;
+    } else if (addType === 'note') {
+      f.innerHTML = `
+        <input id="afTitle" type="text" placeholder="书名《…》（与读书笔记文章对应）" />
+        <textarea id="afNote" rows="3" placeholder="一句话笔记（可选）"></textarea>`;
+    } else {
+      f.innerHTML = `
+        <input id="afTitle" type="text" placeholder="标题" />
+        <input id="afUrl" type="text" placeholder="链接 https://mp.weixin.qq.com/s/…" />
+        <input id="afDesc" type="text" placeholder="一句话简介（可选）" />`;
+    }
+  }
+  async function addSubmit() {
+    const key = document.getElementById('addKey').value.trim();
+    const token = document.getElementById('addToken').value.trim();
+    const st = document.getElementById('addStatus');
+    if (!key || !token) { st.textContent = '⚠️ 请填写密钥和 GitHub token'; st.style.color = '#e0876a'; return; }
+    setKey('caelum_admin_key', key); setKey('caelum_admin_token', token);
+    st.style.color = 'var(--ink-dim)'; st.textContent = '提交中…';
+    try {
+      // 密钥校验（inbox.json 里存着 key 的哈希）
+      const meta = await ghGet('data/inbox.json');
+      const inbox = JSON.parse(b64dec(meta.content));
+      const keyHash = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(key)).then(b => [...new Uint8Array(b)].map(x => x.toString(16).padStart(2, '0')).join(''));
+      const stored = inbox._key_hash || '';
+      if (stored && stored !== keyHash) { st.textContent = '⚠️ 密钥不符'; st.style.color = '#e0876a'; return; }
+      if (!stored) inbox._key_hash = keyHash;   // 首次设置
+      // 组装条目
+      const g = id => (document.getElementById(id)?.value || '').trim();
+      let item = null;
+      if (addType === 'book') {
+        const t = g('afTitle'); if (!t) { st.textContent = '⚠️ 请填书名'; return; }
+        item = { type: 'book', title: t, author: g('afAuthor'), finished: g('afFin'), date: new Date().toISOString().slice(0, 10) };
+      } else if (addType === 'note') {
+        const t = g('afTitle'); if (!t) { st.textContent = '⚠️ 请填书名'; return; }
+        item = { type: 'note', title: t, note: g('afNote'), date: new Date().toISOString().slice(0, 10) };
+      } else {
+        const t = g('afTitle'), u = g('afUrl'); if (!t || !u) { st.textContent = '⚠️ 请填标题和链接'; return; }
+        item = { type: 'essay', title: t, url: u, description: g('afDesc'), category: '随笔', date: new Date().toISOString().slice(0, 10) };
+      }
+      inbox.items = inbox.items || [];
+      inbox.items.push(item);
+      await ghPut('data/inbox.json', b64enc(JSON.stringify(inbox, null, 2)), 'web-add: ' + item.type + ' ' + item.title, token);
+      st.textContent = '✅ 已入库，构建后生效（约 1 分钟）'; st.style.color = '#9fd0a0';
+    } catch (e) {
+      st.textContent = '❌ ' + e.message; st.style.color = '#e0876a';
+    }
+  }
+
+  // ─── 文案编辑器（text.json 在线编辑 + 密钥推送）───
+  // 字段清单：路径 → 中文说明（.zh/.en 双语字段自动展开两个输入框）
+  const TEXT_FIELDS = [
+    ['taglines.map', '星图页一句话'],
+    ['taglines.domain', '星域页一句话'],
+    ['taglines.frontier', '拓星页一句话'],
+    ['taglines.essays', '星屑页一句话'],
+    ['intro.tagline', '封面 tagline'],
+    ['vision', '星愿（每行一句，中英用 -- 分隔）'],
+    ['coda.quote', '跋 · 引文'],
+  ];
+  let textDraft = null;
+  function openTextEdit() {
+    closeSettings();
+    document.getElementById('textPanel').classList.add('open');
+    const st = document.getElementById('textStatus');
+    st.textContent = textData ? '' : '文案加载中…';
+    if (textData) textRenderEditor();
+    else textData && 0;
+    if (!textData) { const t = setInterval(() => { if (textData) { clearInterval(t); textRenderEditor(); st.textContent = ''; } }, 300); }
+  }
+  function closeTextEdit() { document.getElementById('textPanel').classList.remove('open'); }
+  function textRenderEditor() {
+    const f = document.getElementById('textFields');
+    let html = '';
+    TEXT_FIELDS.forEach(([path, label]) => {
+      if (path === 'vision') {
+        const zh = (textData.vision || []).map(v => v.zh.replace(/<br>/g, '\n')).join('\n----\n');
+        const en = (textData.vision || []).map(v => (v.en || '').replace(/<br>/g, '\n')).join('\n----\n');
+        html += `<div class="tf-item"><div class="tf-label">${label}（段落用 ---- 分隔）</div>
+          <textarea id="tf_vision_zh" rows="6">${zh}</textarea>
+          <textarea id="tf_vision_en" rows="6" placeholder="English…">${en}</textarea></div>`;
+      } else {
+        const parts = path.split('.');
+        const o = parts.reduce((a, b) => a && a[b], textData) || {};
+        html += `<div class="tf-item"><div class="tf-label">${label}</div>
+          <textarea id="tf_${path.replace(/\./g, '_')}_zh" rows="2">${(o.zh || '').replace(/<br>/g, '\n')}</textarea>
+          <textarea id="tf_${path.replace(/\./g, '_')}_en" rows="2" placeholder="English…">${(o.en || '').replace(/<br>/g, '\n')}</textarea></div>`;
+      }
+    });
+    f.innerHTML = html;
+  }
+  function textCollect() {
+    const g = id => (document.getElementById(id)?.value || '').replace(/\n/g, '<br>');
+    TEXT_FIELDS.forEach(([path]) => {
+      if (path === 'vision') {
+        const zh = (document.getElementById('tf_vision_zh')?.value || '').split(/\n?----\n?/).map(s => s.trim().replace(/\n/g, '<br>')).filter(Boolean);
+        const en = (document.getElementById('tf_vision_en')?.value || '').split(/\n?----\n?/).map(s => s.trim().replace(/\n/g, '<br>')).filter(Boolean);
+        textData.vision = zh.map((z, i) => ({ id: 'v' + (i + 1), zh: z, en: en[i] || z }));
+      } else {
+        const parts = path.split('.');
+        const o = parts.reduce((a, b) => a && a[b], textData);
+        if (o) { o.zh = g('tf_' + path.replace(/\./g, '_') + '_zh'); o.en = g('tf_' + path.replace(/\./g, '_') + '_en'); }
+      }
+    });
+  }
+  async function textPush() {
+    const key = getKey('caelum_admin_key') || prompt('管理密钥：') || '';
+    const token = getKey('caelum_admin_token') || prompt('GitHub token：') || '';
+    const st = document.getElementById('textStatus');
+    if (!key || !token) { st.textContent = '⚠️ 需要密钥和 token'; st.style.color = '#e0876a'; return; }
+    setKey('caelum_admin_key', key); setKey('caelum_admin_token', token);
+    textCollect();
+    st.style.color = 'var(--ink-dim)'; st.textContent = '推送中…';
+    try {
+      // 预览确认
+      const ok = confirm('将以下文案推送到 GitHub 仓库（构建约 1 分钟生效）：\n\n' +
+        TEXT_FIELDS.map(([p]) => p).join('、') + '\n\n确认推送？');
+      if (!ok) { st.textContent = '已取消'; return; }
+      const meta = await ghGet('data/text.json');
+      await ghPut('data/text.json', b64enc(JSON.stringify(textData, null, 2)), 'web-edit: 文案更新（设置面板）', token);
+      st.textContent = '✅ 已推送，构建后生效'; st.style.color = '#9fd0a0';
+    } catch (e) {
+      st.textContent = '❌ ' + e.message; st.style.color = '#e0876a';
+    }
+  }
+  function textDownload() {
+    textCollect();
+    const blob = new Blob([JSON.stringify(textData, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'text.json';
+    a.click();
+  }
 </script>
 
 <!-- 推荐面板（影响力榜 + 盲区推荐）-->
@@ -2327,6 +2518,23 @@ ${dialog.slice(0, 8000)}
     <div class="add-status" id="addStatus"></div>
     <button class="add-submit" onclick="addSubmit()">提交 → 入库</button>
     <p class="add-note">⚠️ 提交会直接写入你的 GitHub 仓库。token 存于本浏览器，用完建议删除。</p>
+  </div>
+</div>
+
+<!-- 文案编辑器（text.json 在线编辑 · 密钥推送）-->
+<div class="add-panel" id="textPanel">
+  <div class="add-head">
+    <h3>✎ 编辑文案</h3>
+    <div class="batch-close" onclick="closeTextEdit()">×</div>
+  </div>
+  <div class="add-body">
+    <div id="textFields"></div>
+    <div class="add-status" id="textStatus"></div>
+    <div class="add-acts2">
+      <button class="add-submit" onclick="textPush()">推送到 GitHub →</button>
+      <button class="add-submit add-secondary" onclick="textDownload()">下载 text.json</button>
+    </div>
+    <p class="add-note">每页一句话 / 封面 tagline / 星愿 / 跋。改动推送到仓库后，构建约 1 分钟生效。token 存于本浏览器。</p>
   </div>
 </div>
 
@@ -2399,6 +2607,12 @@ ${dialog.slice(0, 8000)}
       <div class="set-group-h">添 加 内 容</div>
       <div class="set-row">
         <button class="set-btn wide" onclick="openAddPanel()">➕ 添加书 / 读书笔记 / 随笔链接</button>
+      </div>
+    </div>
+    <div class="set-group">
+      <div class="set-group-h">文 案 · 推 送</div>
+      <div class="set-row">
+        <button class="set-btn wide" onclick="openTextEdit()">✎ 编辑文案（每页一句话 / 序 / 星愿 / 跋）</button>
       </div>
     </div>
     <div class="set-group">

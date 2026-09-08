@@ -58,8 +58,12 @@ def merge_wechat(books):
     inbox = []
     if os.path.exists(INBOX):
         try:
-            inbox = json.load(open(INBOX))
-            if not isinstance(inbox, list): inbox = []
+            raw = json.load(open(INBOX))
+            # dict 格式: {_key_hash, items:[…]}；旧格式直接是 list
+            if isinstance(raw, dict):
+                inbox = raw.get("items") or []
+            elif isinstance(raw, list):
+                inbox = raw
         except Exception as e:
             print(f"注意: 读取 inbox 失败 {e}")
     if not wxr and not hs and not nb and not inbox:
