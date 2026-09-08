@@ -20,6 +20,7 @@
       --serif: "Noto Serif SC", "Songti SC", "SimSun", serif;
       --serif-en: "Cormorant Garamond", Georgia, "Times New Roman", serif;
       --sans: "Inter", "-apple-system", "PingFang SC", sans-serif;
+      --ui: "PingFang SC", "Microsoft YaHei", "Inter", "-apple-system", sans-serif;
     }
     /* 主题：曙（暖金） */
     html[data-theme="dawn"] {
@@ -276,7 +277,7 @@
     .map-card .mc-wechat { margin-top: 10px; padding: 8px 10px; border-left: 2px solid var(--accent-dim); font-size: 12px; color: var(--accent-dim); line-height: 1.8; background: rgba(238,240,245,0.04); }
     .map-card .mc-acts { display: flex; gap: 8px; margin-top: 14px; }
     .map-card .mc-acts button {
-      flex: 1; font-family: var(--serif); font-size: 12px; letter-spacing: 0.1em;
+      flex: 1; font-family: var(--ui); font-size: 12px; letter-spacing: 0.1em;
       color: var(--ink-dim); background: transparent; cursor: pointer;
       border: 1px solid rgba(238,240,245,0.2); border-radius: 14px; padding: 6px 0;
     }
@@ -286,7 +287,7 @@
     /* 面板通用 tab */
     .batch-mode { display: flex; gap: 6px; margin-left: auto; margin-right: 24px; }
     .bm-tab {
-      font-family: var(--serif); font-size: 13px; letter-spacing: 0.15em;
+      font-family: var(--ui); font-size: 13px; letter-spacing: 0.15em;
       color: var(--ink-dim); cursor: pointer; padding: 5px 16px;
       border: 1px solid rgba(238,240,245,0.18); border-radius: 18px;
       transition: all 0.25s;
@@ -317,16 +318,19 @@
     .add-body {
       max-width: 460px; width: 100%; margin: 0 auto; display: flex; flex-direction: column; gap: 12px;
       flex: 1; justify-content: flex-start; padding-top: 10px;
+      overflow-y: auto; padding-bottom: 40px;
     }
+    .add-body::-webkit-scrollbar { width: 6px; }
+    .add-body::-webkit-scrollbar-thumb { background: rgba(238,240,245,0.15); border-radius: 3px; }
     .add-mode { display: flex; gap: 8px; }
     .add-tab {
-      font-family: var(--serif); font-size: 13px; letter-spacing: 0.15em; color: var(--ink-dim);
+      font-family: var(--ui); font-size: 13px; letter-spacing: 0.15em; color: var(--ink-dim);
       cursor: pointer; padding: 6px 18px; border: 1px solid rgba(238,240,245,0.18); border-radius: 18px;
     }
     .add-tab.active { color: var(--accent); border-color: var(--accent); background: rgba(238,240,245,0.06); }
     .add-body input, .add-body textarea {
       width: 100%; background: rgba(14,18,28,0.7); border: 1px solid rgba(238,240,245,0.18);
-      color: var(--ink); font-family: var(--serif); padding: 10px 14px; border-radius: 10px; font-size: 14px;
+      color: var(--ink); font-family: var(--ui); padding: 10px 14px; border-radius: 10px; font-size: 14px;
     }
     .add-body textarea { resize: vertical; min-height: 90px; line-height: 1.8; }
     .add-body input:focus, .add-body textarea:focus { outline: none; border-color: var(--accent); }
@@ -349,7 +353,7 @@
     .add-acts2 .add-submit { flex: 1; }
     .add-secondary { opacity: 0.75; }
     .add-submit {
-      font-family: var(--serif); font-size: 15px; letter-spacing: 0.2em; color: var(--accent);
+      font-family: var(--ui); font-size: 15px; letter-spacing: 0.2em; color: var(--accent);
       background: rgba(238,240,245,0.1); border: 1px solid var(--accent); border-radius: 28px;
       padding: 12px 0; cursor: pointer; transition: all 0.25s;
     }
@@ -396,7 +400,7 @@
     .breadcrumb {
       display: flex; gap: 8px; align-items: center; margin-bottom: 28px;
       font-size: 12px; color: var(--accent-dim); flex-wrap: wrap;
-      font-family: var(--serif); letter-spacing: 0.08em;
+      font-family: var(--ui); letter-spacing: 0.08em;
     }
     .breadcrumb .crumb {
       cursor: pointer; padding: 4px 4px; border-radius: 4px; transition: color 0.2s;
@@ -442,7 +446,7 @@
     }
     .leaf-marks { display: flex; gap: 10px; margin: 18px 0; }
     .leaf-marks button {
-      font-family: var(--serif); font-size: 14px; letter-spacing: 0.2em;
+      font-family: var(--ui); font-size: 14px; letter-spacing: 0.2em;
       color: var(--ink-dim); background: transparent; cursor: pointer;
       border: 1px solid rgba(238,240,245,0.2); border-radius: 22px;
       padding: 9px 22px; transition: all 0.25s;
@@ -485,7 +489,7 @@
     }
     .lp-marks { display: flex; gap: 12px; margin: 22px 0; }
     .lp-marks button {
-      font-family: var(--serif); font-size: 14px; letter-spacing: 0.2em;
+      font-family: var(--ui); font-size: 14px; letter-spacing: 0.2em;
       color: var(--ink-dim); background: transparent; cursor: pointer;
       border: 1px solid rgba(238,240,245,0.2); border-radius: 22px;
       padding: 9px 24px; transition: all 0.25s;
@@ -525,7 +529,7 @@
     .lp-toggle-ico { font-size: 11px; opacity: 0.7; }
     .lp-distill-row { display: flex; align-items: center; gap: 14px; margin-top: 10px; flex-wrap: wrap; }
     .lp-distill-btn {
-      font-family: var(--serif); font-size: 13px; letter-spacing: 0.12em;
+      font-family: var(--ui); font-size: 13px; letter-spacing: 0.12em;
       color: var(--accent); background: rgba(238,240,245,0.08); cursor: pointer;
       border: 1px solid var(--accent); border-radius: 20px; padding: 9px 18px; transition: all 0.25s;
     }
@@ -630,7 +634,7 @@
     .set-themes .chip.on { color: var(--accent); border-color: var(--accent); background: rgba(238,240,245,0.08); }
     .set-langs { display: flex; gap: 8px; }
     .set-btn {
-      font-family: var(--serif); font-size: 13px; letter-spacing: 0.12em;
+      font-family: var(--ui); font-size: 13px; letter-spacing: 0.12em;
       color: var(--ink-dim); background: transparent; cursor: pointer;
       border: 1px solid rgba(238,240,245,0.2); border-radius: 10px; padding: 8px 16px;
       transition: all 0.25s;
@@ -750,7 +754,9 @@
       background: rgba(8,10,18,0.9); border: 1px solid rgba(238,240,245,0.12);
       border-radius: 16px; padding: 20px 20px; backdrop-filter: blur(10px);
       overflow-y: auto; box-shadow: 0 18px 60px rgba(0,0,0,0.55);
+      font-family: var(--ui);
     }
+    .imm-panel select, .imm-panel input, .imm-panel button { font-family: var(--ui); }
     .imm-panel::-webkit-scrollbar { width: 5px; }
     .imm-panel::-webkit-scrollbar-thumb { background: rgba(238,240,245,0.12); border-radius: 3px; }
     .imm-sec {
@@ -767,7 +773,7 @@
     }
     .imm-ax-row select {
       flex: 1; width: 100%; max-width: 220px; background: rgba(14,18,28,0.85); border: 1px solid rgba(238,240,245,0.2);
-      color: var(--ink); font-family: var(--serif); padding: 6px 10px; border-radius: 9px;
+      color: var(--ink); padding: 6px 10px; border-radius: 9px;
       font-size: 12px; text-overflow: ellipsis;
     }
     .imm-ax-row select:focus { outline: none; border-color: var(--accent); }
@@ -780,7 +786,7 @@
     .imm-ax { font-size: 12px; color: var(--accent-dim); letter-spacing: 0.12em; }
     .imm-ax select {
       margin-left: 8px; background: rgba(14,18,28,0.85); border: 1px solid rgba(238,240,245,0.2);
-      color: var(--ink); font-family: var(--serif); padding: 6px 10px; border-radius: 9px;
+      color: var(--ink); padding: 6px 10px; border-radius: 9px;
     }
     .imm-ax select:focus { outline: none; border-color: var(--accent); }
     .imm-clear {
@@ -791,11 +797,11 @@
     #immSearch {
       flex: 1; min-width: 180px; background: rgba(14,18,28,0.8);
       border: 1px solid rgba(238,240,245,0.18); color: var(--ink);
-      font-family: var(--serif); padding: 9px 14px; border-radius: 10px; font-size: 14px;
+      padding: 9px 14px; border-radius: 10px; font-size: 14px;
     }
     #immSearch:focus { outline: none; border-color: var(--accent); }
     .imm-row-inputs button {
-      font-family: var(--serif); font-size: 13px; letter-spacing: 0.12em;
+      font-family: var(--ui); font-size: 13px; letter-spacing: 0.12em;
       color: var(--accent-dim); background: transparent; cursor: pointer;
       border: 1px solid rgba(238,240,245,0.2); border-radius: 16px; padding: 8px 16px;
       transition: all 0.25s;
@@ -803,7 +809,7 @@
     .imm-row-inputs button:hover { color: var(--accent); border-color: var(--accent); }
     .imm-row-inputs button.on { color: var(--accent); border-color: var(--accent); background: rgba(238,240,245,0.1); }
     .imm-rec-btn {
-      width: 100%; font-family: var(--serif); font-size: 13px; letter-spacing: 0.14em;
+      width: 100%; font-family: var(--ui); font-size: 13px; letter-spacing: 0.14em;
       color: var(--accent); background: rgba(238,240,245,0.08); cursor: pointer;
       border: 1px solid rgba(238,240,245,0.25); border-radius: 10px; padding: 10px 0;
       transition: all 0.25s;
@@ -1338,7 +1344,7 @@
     // 轴标签
     axisPts.forEach(a => {
       ctx.fillStyle = 'rgba(238,240,245,0.55)';
-      ctx.font = "13px 'Noto Serif SC', serif";
+      ctx.font = "13px 'PingFang SC', 'Microsoft YaHei', sans-serif";
       ctx.textAlign = 'center';
       ctx.fillText(a.label, a.x, a.y - 8);
     });
@@ -1387,7 +1393,7 @@
     if (hoverIdx >= 0 && nodes[hoverIdx]) {
       const { n, p } = pts.find(x => x.i === hoverIdx) || {};
       if (n) {
-        ctx.font = "12px 'Noto Serif SC', serif";
+        ctx.font = "12px 'PingFang SC', 'Microsoft YaHei', sans-serif";
         const txt = n.title + (n.author ? ' · ' + n.author : '');
         const w = ctx.measureText(txt).width + 18;
         ctx.fillStyle = 'rgba(8,10,16,0.9)';
@@ -1816,9 +1822,10 @@ ${dialog.slice(0, 8000)}
     immAxisPopulate();
     immApply();
     renderSuggest();
-    // 星空绽放：从深处 zoom 0.02 缓动展开到 1，如星云在眼前绽开
+    // 星空绽放：从深处 zoom 0.02 缓动展开到 1，如星云在眼前绽开（每次进入都绽放）
     immZoom = 0.02;
     immFocus = { x: 0, y: 0 };
+    immUserActed = false;
     rotY = 0.6; rotX = -0.35;
     const t0 = performance.now();
     const DUR = 2200;
@@ -2003,7 +2010,7 @@ ${dialog.slice(0, 8000)}
       immCtx.beginPath(); immCtx.moveTo(wx, wy); immCtx.lineTo(ex, ey); immCtx.stroke();
       immCtx.setLineDash([]);
       // 正端=high，负端=low，各带方向
-      immCtx.font = "11px 'Noto Serif SC', serif";
+      immCtx.font = "11px 'PingFang SC', 'Microsoft YaHei', sans-serif";
       immCtx.textAlign = 'center';
       immCtx.fillStyle = 'rgba(255,255,255,0.72)';
       const hL = axHigh(a.i), lL = axLow(a.i);
@@ -2012,7 +2019,7 @@ ${dialog.slice(0, 8000)}
       immCtx.fillText(lL.length > 9 ? lL.slice(0, 9) + '…' : lL, wx - 8, wy + 16);
       // 轴名（中段小字）
       immCtx.fillStyle = 'rgba(255,255,255,0.28)';
-      immCtx.font = "10px 'Noto Serif SC', serif";
+      immCtx.font = "10px 'PingFang SC', 'Microsoft YaHei', sans-serif";
       immCtx.fillText(axName(a.i), center.x + p.x * halfAx * 0.55, center.y + p.y * halfAx * 0.55 + 4);
     });
     immCtx.restore();
@@ -2061,7 +2068,7 @@ ${dialog.slice(0, 8000)}
       // 放大足够后：显示书名（眼前几颗星可读内容）
       if (immZoom >= 2.0) {
         immCtx.fillStyle = 'rgba(238,240,245,0.55)';
-        immCtx.font = `italic ${11 * Math.min(1.6, immZoom * 0.4)}px 'Noto Serif SC', serif`;
+        immCtx.font = `${11 * Math.min(1.6, immZoom * 0.4)}px 'PingFang SC', 'Microsoft YaHei', sans-serif`;
         immCtx.textAlign = 'left';
         immCtx.fillText(n.title.length > 10 ? n.title.slice(0, 10) + '…' : n.title, p.sx + r + 3, p.sy + 4);
       }
@@ -2073,7 +2080,7 @@ ${dialog.slice(0, 8000)}
       const o = vis.find(v => v.i === immHover);
       if (o) {
         const txt = o.n.title + (o.n.author ? ' · ' + o.n.author : '');
-        immCtx.font = "13px 'Noto Serif SC', serif";
+        immCtx.font = "13px 'PingFang SC', 'Microsoft YaHei', sans-serif";
         const w = immCtx.measureText(txt).width + 18;
         immCtx.fillStyle = 'rgba(8,10,16,0.9)';
         immCtx.fillRect(o.p.sx - w / 2, o.p.sy + 14, w, 26);
@@ -2170,7 +2177,7 @@ ${dialog.slice(0, 8000)}
       immCtx.fillStyle = 'rgba(242,196,109,0.9)';
       immCtx.beginPath(); immCtx.arc(p.sx, p.sy, 4, 0, Math.PI * 2); immCtx.fill();
       immCtx.fillStyle = 'rgba(242,196,109,0.85)';
-      immCtx.font = "12px 'Noto Serif SC', serif";
+      immCtx.font = "12px 'PingFang SC', 'Microsoft YaHei', sans-serif";
       immCtx.textAlign = 'center';
       immCtx.fillText(years[i], p.sx, p.sy - 8);
     });
