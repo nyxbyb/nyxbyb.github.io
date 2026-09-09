@@ -80,6 +80,19 @@ def merge_wechat(books):
     notes_map = {}
     for r in list(wxr) + list(hs) + list(nb):
         by_title.setdefault(r["title"], r)
+    # 人工补作者（OCR 抓不到作者，豆瓣匿名搜索被挡）：data/公众号/_backup/read_authors_manual.py
+    manual_auth = {}
+    MA = os.path.join(BASE, "data/公众号/_backup/read_authors_manual.py")
+    if os.path.exists(MA):
+        try:
+            ns = {}
+            exec(open(MA).read(), ns)
+            manual_auth = ns.get("AUTHORS", {})
+        except Exception as e:
+            print(f"注意: 读取人工作者表失败 {e}")
+    def real_author(title):
+        a = (manual_auth.get(title) or "").strip()
+        return a if a and not a.startswith(("读书笔记", "微信读书", "高中")) else ""
     # inbox: 新书/笔记 → 追加为已读(书名), 并记 notes
     for it in inbox:
         t = (it.get("title") or "").strip()
@@ -105,9 +118,8 @@ def merge_wechat(books):
     added = 0
     for title, rec in by_title.items():
         if title and not any(b.get("title") == title for b in books):
-            src_auth = "微信读书 · " if any(r["title"]==title for r in wxr) else (
-                       "高中 · " if any(r["title"]==title for r in hs) else "读书笔记 · ")
-            merged.append({"title": title, "author": src_auth + (rec.get("finished") or ""),
+            # 作者：人工对照表优先；没有则不写占位符（避免污染作者标签云）
+            merged.append({"title": title, "author": real_author(title),
                            "rating": None, "source": "read"})
             m = {"source": "wxr", "duration_min": rec.get("duration_min"),
                  "finished": rec.get("finished", ""), "duration_text": rec.get("duration_text", "")}

@@ -1847,7 +1847,8 @@ ${dialog.slice(0, 8000)}
     if (immEventBound) return;
     immEventBound = true;
     imm.addEventListener('mousedown', (e) => { immDrag = true; immMoved = 0; immLastX = e.clientX; immLastY = e.clientY; immTouch(); });
-    // 滚轮缩放：相机聚焦到光标下（缩放后光标所指的星仍在原处）
+    // 滚轮缩放：以光标下那颗星为锚——缩放后它仍在光标处
+    // （数学：屏幕位移只依赖 R(Δ) 的 x/y 分量，z 不影响投影 → 解线性方程即可，与星深无关）
     imm.addEventListener('wheel', (e) => {
       e.preventDefault();
       immTouch();
@@ -1855,18 +1856,17 @@ ${dialog.slice(0, 8000)}
       const mx = e.clientX - rect.left, my = e.clientY - rect.top;
       const half = Math.min(innerWidth, innerHeight) / 2 - 80;
       const oldZoom = immZoom;
-      // 光标处的旋转前坐标（屏幕偏移 ÷ 缩放）
-      const sxr = (mx - innerWidth / 2) / (half * oldZoom);
-      const sy = (my - innerHeight / 2) / (half * oldZoom);
       immZoom = Math.min(30, Math.max(0.1, immZoom * (e.deltaY < 0 ? 1.15 : 1 / 1.15)));
-      // 反旋转出"无焦点偏移"的世界坐标（近似，z 忽略）
-      const cosX = Math.cos(rotX), sinX = Math.sin(rotX);
-      const cosY = Math.cos(rotY), sinY = Math.sin(rotY);
-      const y1 = sy / cosX, x1 = sxr / cosY;
-      // 更新焦点使该世界点在缩放后仍映射回光标位置
-      const newHalf = half * immZoom;
-      immFocus.x = x1 - (mx - innerWidth / 2) / newHalf;
-      immFocus.y = y1 - (my - innerHeight / 2) / newHalf;
+      if (immZoom === oldZoom) return;
+      const cx0 = innerWidth / 2, cy0 = innerHeight / 2;
+      const dx = mx - cx0, dy = my - cy0;                 // 光标屏幕偏移
+      const k = (1 - immZoom / oldZoom) / (half * immZoom); // 缩放引起的位移系数
+      // 需要 R(Δ) 前两分量 = (−dx·k, −dy·k)；R = rotY∘rotX，z 分量不影响投影
+      const cy = Math.cos(rotY), sy = Math.sin(rotY);
+      const cx = Math.cos(rotX), sx = Math.sin(rotX);
+      const tx = -dx * k, ty = -dy * k;
+      immFocus.x += tx / cy;
+      immFocus.y += (ty - (tx / cy) * sy * sx) / cx;
       immRender();
     }, { passive: false });
     window.addEventListener('mousemove', (e) => {
@@ -1875,10 +1875,15 @@ ${dialog.slice(0, 8000)}
       if (immDrag) {
         immMoved += Math.abs(e.clientX - immLastX) + Math.abs(e.clientY - immLastY);
         if (immZoom > 1.2) {
-          // 放大后拖拽 = 平移视野（聚焦漫游）
+          // 放大后拖拽 = 平移视野（聚焦漫游）；与滚轮同解：内容跟手
           const half = Math.min(innerWidth, innerHeight) / 2 - 80;
-          immFocus.x -= (e.clientX - immLastX) / (half * immZoom);
-          immFocus.y -= (e.clientY - immLastY) / (half * immZoom);
+          const cyr = Math.cos(rotY), syr = Math.sin(rotY);
+          const cxr = Math.cos(rotX), sxr = Math.sin(rotX);
+          const tx = -(e.clientX - immLastX) / (half * immZoom);
+          const ty = -(e.clientY - immLastY) / (half * immZoom);
+          const dpx = tx / cyr;
+          immFocus.x += dpx;
+          immFocus.y += (ty - dpx * syr * sxr) / cxr;
         } else {
           rotY += (e.clientX - immLastX) * 0.008;
           rotX += (e.clientY - immLastY) * 0.008;
@@ -2099,7 +2104,13 @@ ${dialog.slice(0, 8000)}
     const info = document.getElementById('immInfo');
     if (immFilter === 'author') {
       const authors = {};
-      all.forEach(n => { const a = (n.author || '').split(/[·•]/)[0].trim(); if (a) authors[a] = (authors[a] || 0) + 1; });
+      all.forEach(n => {
+        let a = (n.author || '').trim();
+        if (!a || /^(微信读书|高中|读书笔记)/.test(a)) return;
+        a = a.replace(/^[\[【][^\]】]*[\]】]\s*/, '').replace(/^[（(][^）)]*[）)]\s*/, '').trim();
+        if (!a || a.length > 20 || /\d月读完/.test(a)) return;
+        authors[a] = (authors[a] || 0) + 1;
+      });
       const top = Object.entries(authors).sort((x, y) => y[1] - x[1]).slice(0, 30).map(([a]) => a);
       renderSuggest(top);
       info.textContent = `作者「${immAuthor}」相关 ${all.length} 本 · 其中你读过 ${mine.length} 本`;
@@ -2118,13 +2129,18 @@ ${dialog.slice(0, 8000)}
   function renderSuggest(list) {
     const box = document.getElementById('immSuggest');
     if (!list) {
-      // 常用作者
+      // 常用作者：真实人名（剔除"微信读书/高中/读书笔记"来源占位与国别前缀），按书目数排
       const cnt = {};
       nodes.forEach(n => {
-        const a = (n.author || '').split(/[·•]/)[0].match(/[^\s\[\]【】]?[一-龥A-Za-z·]+/) ? (n.author || '').trim() : '';
-        if (a) cnt[a] = (cnt[a] || 0) + 1;
+        let a = (n.author || '').trim();
+        if (!a || /^(微信读书|高中|读书笔记)/.test(a)) return;
+        // "[英] 阿加莎·克里斯蒂" → "阿加莎·克里斯蒂"；"(清)曹雪芹" → "曹雪芹"
+        a = a.replace(/^[\[【][^\]】]*[\]】]\s*/, '').replace(/^[（(][^）)]*[）)]\s*/, '').trim();
+        // 读书记录里 "微信读书 · 2023年8月读完" 已被上面滤掉；纯作者一般 ≤ 20 字
+        if (!a || a.length > 20 || /\d月读完/.test(a)) return;
+        cnt[a] = (cnt[a] || 0) + 1;
       });
-      list = Object.entries(cnt).sort((x, y) => y[1] - x[1]).slice(0, 14).map(([a]) => a);
+      list = Object.entries(cnt).filter(([, c]) => c >= 2).sort((x, y) => y[1] - x[1]).slice(0, 16).map(([a]) => a);
     }
     box.innerHTML = list.map((a, i) => `<span class="chip ${a === immSelAuthor ? 'on' : ''}" onclick="immPick('${a.replace(/'/g, "\\'")}', this)">${a}</span>`).join('');
   }
