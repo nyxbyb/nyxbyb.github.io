@@ -51,6 +51,54 @@ jobs:
     steps:
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
+      - name: Wait for legacy Pages publishers
+        uses: actions/github-script@v7
+        timeout-minutes: 9
+        with:
+          script: |
+            // Compatibility for repositories still publishing from a branch.
+            // Pages Source = GitHub Actions remains the permanent fix.
+            const deadline = Date.now() + 8 * 60 * 1000;
+            const interval = 20 * 1000;
+            const endpoint = `https://api.github.com/repos/${context.repo.owner}/${context.repo.repo}/actions/runs?head_sha=${context.sha}&per_page=100`;
+            let settledChecks = 0;
+            let previousStatus = '';
+            while (Date.now() < deadline) {
+              const response = await fetch(endpoint, {
+                signal: AbortSignal.timeout(15000),
+                cache: 'no-store',
+                headers: {
+                  Accept: 'application/vnd.github+json',
+                  'X-GitHub-Api-Version': '2022-11-28',
+                  'User-Agent': 'Caelum-Pages-compatibility',
+                },
+              });
+              if (!response.ok) {
+                throw new Error(`Cannot verify legacy Pages publishers (HTTP ${response.status}); deployment stopped. Set Pages Source to GitHub Actions or retry after public API access recovers.`);
+              }
+              const data = await response.json();
+              if (!Array.isArray(data.workflow_runs) || data.total_count > data.workflow_runs.length) {
+                throw new Error('Incomplete public workflow history; cannot safely order Pages deployment. Set Pages Source to GitHub Actions.');
+              }
+              const pending = data.workflow_runs.filter(run =>
+                run.head_sha === context.sha &&
+                run.path === 'dynamic/pages/pages-build-deployment' &&
+                run.status !== 'completed'
+              );
+              const status = pending.map(run => `${run.id}:${run.status}`).sort().join(', ');
+              if (status !== previousStatus || !status) {
+                core.info(status ? `Waiting for legacy Pages publishers: ${status}` : 'No unfinished legacy Pages publisher for this commit.');
+                previousStatus = status;
+              }
+              settledChecks = pending.length ? 0 : settledChecks + 1;
+              // Confirm twice so a briefly stale API response cannot skip a publisher.
+              if (settledChecks >= 2) {
+                core.info('Legacy Pages publishers settled; publishing the verified artifact last.');
+                return;
+              }
+              await new Promise(resolve => setTimeout(resolve, Math.min(interval, Math.max(0, deadline - Date.now()))));
+            }
+            throw new Error('Legacy Pages publisher did not settle within 8 minutes; deployment stopped. Set Pages Source to GitHub Actions, then rerun this workflow.');
       - name: Deploy verified artifact
         id: deployment
         uses: actions/deploy-pages@v4
