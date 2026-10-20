@@ -42,5 +42,5 @@ export function mountDesignDossier(container,{getLanguage,getRoom,onSelect,downl
   }
   if(focused)container.querySelector(`.house-zone[data-id="${focused}"]`)?.focus({preventScroll:true});else if(focusedKey)[...container.querySelectorAll('button')].find(b=>b.dataset.focusKey===focusedKey)?.focus({preventScroll:true});container.scrollTop=scroll;
  }
- render();return {render,openChapter(id){if(DESIGN_CHAPTERS.some(c=>c.id===id))chapter=id;container.scrollTop=0;render();},destroy(){plan?.destroy();container.replaceChildren();}};
+ render();return {render,openChapter(id,options={}){if(DESIGN_CHAPTERS.some(c=>c.id===id))chapter=id;if(id==='coordination'&&['furniture','routes','openings','cameras'].includes(options.layer))coordLayer=options.layer;container.scrollTop=0;render();},destroy(){plan?.destroy();container.replaceChildren();}};
 }
