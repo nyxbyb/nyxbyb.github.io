@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "intro": {
+    "zh": "一间有书、有茶、有音乐、有植物的房间。傍晚回来，把日子过得慢一些。",
+    "en": "A room with books, tea, music, and a little green. Come home at dusk and let the evening unfold."
+  },
+  "quote": {
+    "zh": "在很大的世界里，\n安放很小的自己。",
+    "en": "A small place of your own,\nin a very big world."
+  },
+  "reading": {
+    "titles": ["悉达多", "瓦尔登湖", "树上的男爵"],
+    "limit": 3
+  },
+  "tea": {
+    "title": {"zh": "等一壶茶的时间", "en": "Time for a pot of tea"},
+    "note": {"zh": "温杯、注水、等候、分茶。一个留给未来日常的小仪式，不必赶着完成。", "en": "Warm the cup, add water, wait, and pour. A small ritual for a future everyday life, with no need to hurry."},
+    "steps": [
+      {"zh": "温杯 · 让器物先暖起来", "en": "Warm the cup"},
+      {"zh": "注水 · 看茶叶慢慢舒展", "en": "Add water and let the leaves open"},
+      {"zh": "分茶 · 为此刻留一杯", "en": "Pour a cup for this moment"}
+    ]
+  },
+  "music": {
+    "note": {"zh": "给安静一点声音。这里先放一段轻柔的合成雨声，未来再慢慢收进喜欢的唱片。", "en": "A little sound for the quiet. Start with soft synthesized rain; leave room for records to come."},
+    "playlist": []
+  },
+  "plant": {
+    "name": {"zh": "一小片绿色", "en": "A little green"},
+    "note": {"zh": "观察一片新叶，也是在观察时间。为这间未来的房间，留下一条今天的植物札记。", "en": "To notice a new leaf is to notice time. Leave a small plant observation for this future room."}
+  }
+}

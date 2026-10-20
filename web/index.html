@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>凿星图 · Caelum</title>
+  <link rel="canonical" href="https://nyxbyb.github.io/web/">
+  <link rel="stylesheet" href="./room/navigation.css">
   <meta name="description" content="凿星图——夜神的星空。记录我的足迹，绘制我的视野。">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;900&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
@@ -832,6 +834,7 @@
     .imm-star-n { font-size: 11px; color: var(--accent-dim); letter-spacing: 0.15em; margin-bottom: 6px; }
     .imm-nbs { display: flex; flex-direction: column; gap: 3px; }
     .imm-nb {
+      background: transparent; border: 0; text-align: left; font-family: var(--ui);
       font-size: 12px; color: var(--ink-dim); cursor: pointer; padding: 4px 6px; border-radius: 6px;
       transition: all 0.2s; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
     }
@@ -847,24 +850,42 @@
       .domain-grid { grid-template-columns: 1fr; }
       .domain-view { grid-template-columns: 1fr; }
     }
+    .map-status { color: var(--ink-dim); font-family: var(--ui); font-size: 12px; margin-top: 12px; }
+    #map-canvas, #imm-canvas { touch-action: none; }
+    button.imm-close { background: transparent; border: 0; font: inherit; color: var(--ink); }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+    }
   </style>
 </head>
 <body>
+<a class="caelum-skip" href="#sec-map">跳到星图 · Skip to the starchart</a>
+<header class="caelum-header">
+  <a class="caelum-brand" href="./" aria-label="Caelum 首页"><span>✳</span> 凿星图 <i>Caelum</i></a>
+  <nav aria-label="主要内容 · Main navigation">
+    <a href="#sec-map" data-i18n="siteMap">阅读星图</a>
+    <a href="#sec-frontier" data-i18n="siteResearch">科研</a>
+    <a href="#sec-essays" data-i18n="siteWriting">文字</a>
+    <a class="caelum-room-link" href="./room.html" data-i18n="siteRoom">未来的房间 ↗</a>
+  </nav>
+</header>
 
 <div class="stars-bg"></div>
 
 <!-- 设置入口 -->
-<div class="lang-toggle" id="langToggle" onclick="openSettings()">⚙ 设置</div>
+<button type="button" class="lang-toggle" id="langToggle" onclick="openSettings()">⚙ 设置</button>
 
 <!-- 左侧导航 -->
 <nav class="nav" id="nav">
-  <div class="nav-dot active" data-label="序" data-label-en="Prelude" onclick="goTo(0)"></div>
-  <div class="nav-dot" data-label="星图" data-label-en="Starchart" onclick="goTo(1)"></div>
-  <div class="nav-dot" data-label="星域" data-label-en="Domains" onclick="goTo(2)"></div>
-  <div class="nav-dot" data-label="拓星" data-label-en="Research" onclick="goTo(3)"></div>
-  <div class="nav-dot" data-label="星屑" data-label-en="Stardust" onclick="goTo(4)"></div>
-  <div class="nav-dot" data-label="星愿" data-label-en="Stellar Vows" onclick="goTo(5)"></div>
-  <div class="nav-dot" data-label="跋" data-label-en="Coda" onclick="goTo(6)"></div>
+  <button type="button" class="nav-dot active" data-label="序" data-label-en="Prelude" aria-label="序 · Prelude" onclick="goTo(0)"></button>
+  <button type="button" class="nav-dot" data-label="星图" data-label-en="Starchart" aria-label="星图 · Starchart" onclick="goTo(1)"></button>
+  <button type="button" class="nav-dot" data-label="星域" data-label-en="Domains" aria-label="星域 · Domains" onclick="goTo(2)"></button>
+  <button type="button" class="nav-dot" data-label="拓星" data-label-en="Research" aria-label="拓星 · Research" onclick="goTo(3)"></button>
+  <button type="button" class="nav-dot" data-label="星屑" data-label-en="Stardust" aria-label="星屑 · Stardust" onclick="goTo(4)"></button>
+  <button type="button" class="nav-dot" data-label="星愿" data-label-en="Stellar Vows" aria-label="星愿 · Stellar Vows" onclick="goTo(5)"></button>
+  <button type="button" class="nav-dot" data-label="跋" data-label-en="Coda" aria-label="跋 · Coda" onclick="goTo(6)"></button>
 </nav>
 
 <!-- ═══════════ 第 1 屏：序 · 个人名片
@@ -879,6 +900,10 @@
     </div>
     <div class="intro-tagline" id="introTagline">认识你自己 · γνῶθι σεαυτόν</div>
   </div>
+  <div class="intro-paths">
+    <a href="#sec-map" data-i18n="introExplore">沿星图，认识我的阅读与研究 ↓</a>
+    <a href="./room.html" data-i18n="introRoom">在房间，停留一会儿 ↗</a>
+  </div>
   <div class="intro-hint" id="introHint">向下滚动</div>
 </section>
 
@@ -886,9 +911,10 @@
 <section id="sec-map">
   <h2 class="section-title"><span>星 图</span><span class="title-en">The Starchart</span></h2>
   <p class="section-sub" id="taglineMap"></p>
-  <div class="map-wrap" onclick="openImmersive()" title="点击进入沉浸式星图">
+  <div class="map-wrap" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openImmersive()}" aria-label="进入沉浸式星图" title="点击进入沉浸式星图">
     <canvas id="map-canvas"></canvas>
   </div>
+  <p id="mapStatus" class="map-status" role="status">正在加载星图…</p>
   <!-- 节点详情卡 -->
   <div class="map-card" id="mapCard" style="display:none">
     <div class="mc-close" onclick="closeMapCard()">×</div>
@@ -953,7 +979,7 @@
     </a>
   </div>
 
-  <a class="frontier-more" href="https://scholar.google.com/citations?user=YubingBao" target="_blank">
+  <a class="frontier-more" href="https://scholar.google.com/citations?user=YubingBao" target="_blank" rel="noopener noreferrer">
     <span data-i18n="frontierMore">完整学术履历</span>
     &nbsp;→ GOOGLE SCHOLAR
   </a>
@@ -985,7 +1011,7 @@
     <div class="about-links">
       <a href="docs/空间手册.md" target="_blank" id="linkSpace">空间手册</a>
       <a href="docs/时间手册.md" target="_blank" id="linkTime">时间手册</a>
-      <a href="https://github.com/nyxbyb/nyxbyb.github.io" target="_blank">GitHub</a>
+      <a href="https://github.com/nyxbyb/nyxbyb.github.io" target="_blank" rel="noopener noreferrer">GitHub</a>
     </div>
   </div>
   <div class="about-footer" id="codaFooter">凿星图 · CAELUM · NYXBYB</div>
@@ -997,7 +1023,7 @@
   const sections = document.querySelectorAll('section');
 
   function goTo(i) {
-    sections[i].scrollIntoView({ behavior: 'smooth' });
+    if (sections[i]) sections[i].scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
   }
 
   const observer = new IntersectionObserver((entries) => {
@@ -1013,6 +1039,12 @@
 
   // ─── 中英双语 ───
   const I18N = {
+    siteMap: { zh: "阅读星图", en: "Starchart" },
+    siteResearch: { zh: "科研", en: "Research" },
+    siteWriting: { zh: "文字", en: "Writing" },
+    siteRoom: { zh: "未来的房间 ↗", en: "The Room ↗" },
+    introExplore: { zh: "沿星图，认识我的阅读与研究 ↓", en: "Explore my reading and research ↓" },
+    introRoom: { zh: "在房间，停留一会儿 ↗", en: "Stay a while in the room ↗" },
     introSymbol: { zh: "凿 星 图 · C A E L U M", en: "C A E L U M · THE CHISEL" },
     introZi: { zh: "—— 取自《周易》「贞」，取义：正固 · 卜问 · 坚定", en: "— from Zhouyi's zhen: steadfast · inquiring · resolute" },
     introPoem: { zh: "名中含「昱」——日光；「冰」——冰雪。光与寒并存，在黑夜中自行发光。我名夜神 Nyx。", en: "Yu — sunlight; Bing — ice. Light and cold together, shining of its own accord in the dark. My name is Nyx." },
@@ -1057,49 +1089,72 @@
     linkTime: { zh: "时间手册", en: "Book of Time" },
   };
 
-  let lang = localStorage.getItem('caelum_lang') || 'zh';
+  // JSON content is text. Only explicit line breaks may become markup.
+  function escapeHTML(value) {
+    return String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+  function textHTML(value) {
+    return escapeHTML(String(value ?? '').replace(/<br\s*\/?\s*>/gi, '\n')).replace(/\n/g, '<br>');
+  }
+  function safeURL(value) {
+    if (typeof value !== 'string' || !value.trim()) return '';
+    try {
+      const url = new URL(String(value), document.baseURI);
+      return ['https:', 'http:'].includes(url.protocol) ? url.href : '';
+    } catch { return ''; }
+  }
+  function storageGet(key) { try { return localStorage.getItem(key); } catch { return null; } }
+  function storageSet(key, value) { try { localStorage.setItem(key, value); } catch {} }
+  // Remove credentials saved by older versions. Tokens live only in password fields.
+  try { localStorage.removeItem('caelum_admin_key'); localStorage.removeItem('caelum_admin_token'); } catch {}
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let lang = storageGet('caelum_lang') === 'en' ? 'en' : 'zh';
   const toggle = document.getElementById('langToggle');
+  let textLoadedSnapshot = '';
   let textData = null; // 从 text.json 读：序/星愿/跋
 
   // ─── 主题 / 设置 ───
   const THEMES = ['night', 'dawn', 'mist', 'ink'];
   const THEME_LABEL = { night: '夜', dawn: '曙', mist: '雾', ink: '墨' };
   function applyTheme(t) {
+    t = THEMES.includes(t) ? t : 'night';
     document.documentElement.setAttribute('data-theme', t);
-    localStorage.setItem('caelum_theme', t);
+    storageSet('caelum_theme', t);
     // 更新设置面板主题 chips
     const box = document.getElementById('setThemes');
     if (box) {
       box.innerHTML = THEMES.map(th =>
-        `<span class="chip ${th === t ? 'on' : ''}" onclick="setTheme('${th}', this)">${THEME_LABEL[th]}</span>`).join('');
+        `<button type="button" class="chip ${th === t ? 'on' : ''}" aria-label="主题：${THEME_LABEL[th]}" onclick="setTheme('${th}', this)">${THEME_LABEL[th]}</button>`).join('');
     }
   }
   function setTheme(t, el) {
     applyTheme(t);
   }
-  applyTheme(localStorage.getItem('caelum_theme') || 'night');
+  applyTheme(storageGet('caelum_theme') || 'night');
   function openSettings() {
     document.getElementById('setPanel').classList.add('open');
     // 主题 chips
-    applyTheme(localStorage.getItem('caelum_theme') || 'night');
+    applyTheme(storageGet('caelum_theme') || 'night');
     // 语言按钮高亮
     document.querySelectorAll('#setPanel .set-langs .set-btn').forEach(b =>
       b.classList.toggle('on', b.getAttribute('data-lang') === lang));
   }
   function closeSettings() { document.getElementById('setPanel').classList.remove('open'); }
   function setLang(l, el) {
+    if (!['zh', 'en'].includes(l)) return;
     if (lang !== l) {
       lang = l;
-      localStorage.setItem('caelum_lang', lang);
+      storageSet('caelum_lang', lang);
       applyLang();
     }
     document.querySelectorAll('#setPanel .set-langs .set-btn').forEach(b =>
       b.classList.toggle('on', b.getAttribute('data-lang') === lang));
   }
   function openManual() {
-    window.open('https://nyxbyb.github.io/docs/更新指南.md', '_blank');
+    window.open('./docs/更新指南.md', '_blank', 'noopener,noreferrer');
   }
   function applyLang() {
+    document.documentElement.lang = lang === 'en' ? 'en' : 'zh-CN';
     document.querySelectorAll('[data-i18n]').forEach(el => {
       const key = el.getAttribute('data-i18n');
       if (I18N[key]) el.innerHTML = I18N[key][lang].replace(/\n/g, '<br>');
@@ -1113,14 +1168,14 @@
   }
   function toggleLang() {
     lang = lang === 'zh' ? 'en' : 'zh';
-    localStorage.setItem('caelum_lang', lang);
+    storageSet('caelum_lang', lang);
     applyLang();
   }
   async function loadText() {
     for (const p of ['data/text.json', '/data/text.json', 'text.json']) {
       try {
         const r = await fetch(p);
-        if (r.ok) { textData = await r.json(); break; }
+        if (r.ok) { textData = await r.json(); textLoadedSnapshot = JSON.stringify(textData); break; }
       } catch {}
     }
     renderText();
@@ -1132,7 +1187,7 @@
       const o = k.split('.').reduce((a, b) => a && a[b], textData);
       return o ? (o[lang] || o.zh || (typeof o === 'string' ? o : '')) : '';
     };
-    const setEl = (id, v) => { const el = document.getElementById(id); if (el) el.innerHTML = v; };
+    const setEl = (id, v) => { const el = document.getElementById(id); if (el) el.innerHTML = textHTML(v); };
     setEl('introSymbol', g('intro.symbol'));
     setEl('introNameCn', g('intro.name_cn'));
     setEl('introNameEn', g('intro.name_en'));
@@ -1144,7 +1199,7 @@
     const stars = document.getElementById('visionStars');
     if (stars && textData.vision) {
       stars.innerHTML = textData.vision.map((v, i) =>
-        `<p class="vs vs-${i + 1}" data-vid="${v.id}">${(v[lang] || v.zh)}</p>`).join('');
+        `<p class="vs vs-${i + 1}" data-vid="${escapeHTML(v.id)}">${textHTML(v[lang] || v.zh)}</p>`).join('');
     }
     // 跋
     setEl('codaQuote', g('coda.quote'));
@@ -1169,14 +1224,14 @@
   let W, H, dpr;
 
   function resize() {
-    dpr = window.devicePixelRatio || 1;
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
     const rect = canvas.parentElement.getBoundingClientRect();
     W = rect.width; H = rect.height;
     canvas.width = W * dpr;
     canvas.height = H * dpr;
     canvas.style.width = W + 'px';
     canvas.style.height = H + 'px';
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    if (ctx) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
 
   async function loadStars() {
@@ -1195,51 +1250,46 @@
           if (r.ok) { data = await r.json(); break; }
         } catch {}
       }
+      if (!data || !Array.isArray(data.nodes)) throw new Error('Invalid graph');
       if (data && data.nodes) {
-        nodes = data.nodes;
+        nodes = data.nodes.filter(n => n && typeof n.title === 'string' && Number.isFinite(n.x) && Number.isFinite(n.y))
+          .map(n => ({ ...n, z: Number.isFinite(n.z) ? n.z : 0.5, status: ['read', 'fav'].includes(n.status) ? n.status : 'unread' }));
         axesInfo = data.axes || [];
         orthAxes = data.orthaxes || [];
         semAnchors = data.semanchors || [];
       }
     } catch (e) {
-      console.log('星图数据未找到，使用演示数据');
-      // 生成演示数据：模拟 200 个随机节点
-      nodes = Array.from({ length: 200 }, (_, i) => ({
-        title: `书 ${i}`,
-        author: '作者',
-        x: Math.random(),
-        y: Math.random(),
-        z: Math.random(),
-        status: Math.random() > 0.7 ? 'read' : 'unread'
-      }));
+      document.getElementById('mapStatus').textContent = '星图数据暂时无法加载，请刷新重试。';
+      return;
     }
     // 从 localStorage 恢复三态标记（喜爱/已读/未读，只在你的浏览器里）
     // 兼容旧版单一已读集合
-    marks = {};
+    marks = Object.create(null);
     try {
-      const m = JSON.parse(localStorage.getItem('caelum_marks') || '{}');
-      if (m && typeof m === 'object') marks = m;
+      const m = JSON.parse(storageGet('caelum_marks') || '{}');
+      if (m && typeof m === 'object' && !Array.isArray(m)) Object.assign(marks, m);
     } catch {}
     try {
-      const oldRead = JSON.parse(localStorage.getItem('caelum_read') || '[]');
+      const oldRead = JSON.parse(storageGet('caelum_read') || '[]');
       if (Array.isArray(oldRead)) oldRead.forEach(t => { if (!marks[t]) marks[t] = 'read'; });
     } catch {}
     nodes.forEach(n => {
       // 仅当 localStorage 有该书的标记才覆盖，否则保留 graph.json 原 status
       // （微信读书已读的书在数据里已是 read，不应被未标记覆盖成 unread）
-      if (marks[n.title]) n.status = marks[n.title];
+      if (['read', 'fav', 'unread'].includes(marks[n.title])) n.status = marks[n.title];
     });
+    document.getElementById('mapStatus').textContent = nodes.length ? `${nodes.length} 本书 · 拖拽旋转 · 点击进入` : '暂无书目';
     drawStars();
   }
 
   // 三态标记存取
-  let marks = {};
+  let marks = Object.create(null);
   function saveMarks() {
-    try { localStorage.setItem('caelum_marks', JSON.stringify(marks)); } catch {}
+    try { storageSet('caelum_marks', JSON.stringify(marks)); } catch {}
   }
   function markNode(n, st) {
-    if (st === 'unread') delete marks[n.title];
-    else marks[n.title] = st;
+    if (!['read', 'fav', 'unread'].includes(st)) return;
+    marks[n.title] = st;
     n.status = st;
     saveMarks();
     drawStars();
@@ -1247,13 +1297,13 @@
 
   // ─── 三维旋转状态 ───
   let rotX = -0.5, rotY = 0.6;   // radians
-  let isRotating = false, rotLastX = 0, rotLastY = 0;
+  let isRotating = false, rotLastX = 0, rotLastY = 0, mapMoved = 0;
   let hoverIdx = -1;
   // 主图闲置自转：4 秒无交互后缓慢旋转（鼠标移到页面其他区域也算静止）
   let mapIdleStart = performance.now();
   function mapIdleLoop() {
     const sec = document.getElementById('sec-map');
-    if (sec && nodes.length && !isRotating && hoverIdx < 0) {
+    if (!document.hidden && !reducedMotion.matches && sec && nodes.length && !isRotating && hoverIdx < 0) {
       const inView = sec.getBoundingClientRect().bottom > 0 && sec.getBoundingClientRect().top < innerHeight;
       if (inView && performance.now() - mapIdleStart > 4000) {
         rotY += 0.0008;
@@ -1427,7 +1477,7 @@
     for (const p of ['data/articles.json', '/data/articles.json', 'articles.json']) {
       try {
         const r = await fetch(p);
-        if (r.ok) { arts = await r.json(); break; }
+        if (r.ok) { const data = await r.json(); if (Array.isArray(data)) { arts = data.filter(a => a && typeof a.title === 'string'); break; } }
       } catch {}
     }
     if (!arts.length) {
@@ -1435,7 +1485,7 @@
       return;
     }
     // 分类
-    const cats = {};
+    const cats = Object.create(null);
     arts.forEach(a => { (cats[a.category || '其他'] = cats[a.category || '其他'] || []).push(a); });
     Object.keys(cats).forEach(k => {
       cats[k].sort((a, b) => (b.date || '0').localeCompare(a.date || '0'));
@@ -1454,7 +1504,7 @@
       const list = cats[cat];
       const col = document.createElement('div');
       col.className = 'essay-col';
-      col.innerHTML = `<div class="essay-cat-head">${zh}<span class="ec-en">${en}</span><span class="ec-n">${list.length}</span></div>`;
+      col.innerHTML = `<div class="essay-cat-head">${escapeHTML(zh)}<span class="ec-en">${escapeHTML(en)}</span><span class="ec-n">${list.length}</span></div>`;
       const itemsBox = document.createElement('div');
       // 每列最多显示 5 篇，超出折叠
       const shown = list.slice(0, 5);
@@ -1462,10 +1512,11 @@
       const mk = a => {
         const item = document.createElement('a');
         item.className = 'essay-item';
-        item.href = a.url; item.target = '_blank'; item.rel = 'noopener';
-        item.innerHTML = `<div class="ei-title">${a.title || '未命名'}</div>` +
-          (a.date ? `<div class="ei-date">${a.date}</div>` : '') +
-          (a.description ? `<div class="ei-desc">${a.description}</div>` : '');
+        item.href = safeURL(a.url) || '#'; item.target = '_blank'; item.rel = 'noopener noreferrer';
+        if (!safeURL(a.url)) { item.removeAttribute('href'); item.setAttribute('aria-disabled', 'true'); }
+        item.innerHTML = `<div class="ei-title">${escapeHTML(a.title || '未命名')}</div>` +
+          (a.date ? `<div class="ei-date">${escapeHTML(a.date)}</div>` : '') +
+          (a.description ? `<div class="ei-desc">${escapeHTML(a.description)}</div>` : '');
         return item;
       };
       shown.forEach(a => itemsBox.appendChild(mk(a)));
@@ -1487,27 +1538,27 @@
 
   // ─── 星域：四域下钻导航（数据来自 tree.json）───
   let domainMarks = {};
-  try { domainMarks = JSON.parse(localStorage.getItem('caelum_domains') || '{}'); } catch {}
+  try { domainMarks = JSON.parse(storageGet('caelum_domains') || '{}'); } catch {}
   let domainNotes = {};
-  try { domainNotes = JSON.parse(localStorage.getItem('caelum_domain_notes') || '{}'); } catch {}
+  try { domainNotes = JSON.parse(storageGet('caelum_domain_notes') || '{}'); } catch {}
   let treeData = { domains: [] };
   let domainPath = []; // [{zh, en, id}]
   let currentNodes = [];
 
   async function loadTree() {
     // 加载四域目录树（tree.json）
-    const paths = ['tree.json', '/tree.json', 'data/tree.json', '/data/tree.json'];
+    const paths = ['tree.json', 'data/tree.json', '/tree.json', '/data/tree.json'];
     for (const p of paths) {
       try {
         const r = await fetch(p);
-        if (r.ok) { treeData = await r.json(); break; }
+        if (r.ok) { const data = await r.json(); if (Array.isArray(data.domains)) { treeData = data; break; } }
       } catch {}
     }
     renderDomains();
   }
 
-  function saveDomainMark() { try { localStorage.setItem('caelum_domains', JSON.stringify(domainMarks)); } catch {} }
-  function saveDomainNotes() { try { localStorage.setItem('caelum_domain_notes', JSON.stringify(domainNotes)); } catch {} }
+  function saveDomainMark() { try { storageSet('caelum_domains', JSON.stringify(domainMarks)); } catch {} }
+  function saveDomainNotes() { try { storageSet('caelum_domain_notes', JSON.stringify(domainNotes)); } catch {} }
 
   function domainKey(node) {
     // 叶子标注键: 完整路径
@@ -1547,8 +1598,7 @@
     }
     view.innerHTML = '';
     if (!currentNodes.length) {
-      // 到达叶子: 打开独立全屏条目页
-      openLeafPage(domainPath[domainPath.length - 1]);
+      view.textContent = '此目录暂无条目，或数据暂时无法加载。请刷新重试。';
       return;
     }
     currentNodes.forEach(node => {
@@ -1556,8 +1606,8 @@
       const el = document.createElement('div');
       el.className = 'dv-item';
       const markVal = node.children ? null : domainMarks[domainKey(node)];
-      el.innerHTML = `<div class="dv-cn">${node.zh}</div><div class="dv-en">${node.en || ''}</div>` +
-        (node.posture ? `<div class="dv-badge">${node.posture}</div>` : '') +
+      el.innerHTML = `<div class="dv-cn">${escapeHTML(node.zh)}</div><div class="dv-en">${escapeHTML(node.en || '')}</div>` +
+        (node.posture ? `<div class="dv-badge">${escapeHTML(node.posture)}</div>` : '') +
         (hasKids ? `<div class="dv-arrow">›</div>` : `<div class="dv-badge">条目页</div>`);
       el.onclick = () => {
         if (hasKids) {
@@ -1575,6 +1625,7 @@
   // ─── 独立叶子条目页（权威条目式）───
   let leafCurrent = null;
   function openLeafPage(node) {
+    if (!node) return;
     leafCurrent = node;
     const crumb = document.getElementById('lpCrumb');
     crumb.textContent = domainPath.map(p => p.zh).concat([node.zh]).join(' › ');
@@ -1584,33 +1635,33 @@
     const dialog = domainNotes[key + '.dialog'] || '';
     const body = document.getElementById('lpBody');
     let html = `
-      <div class="lp-title">${node.zh}</div>
-      <div class="lp-title-en">${node.en || ''}</div>
+      <div class="lp-title">${escapeHTML(node.zh)}</div>
+      <div class="lp-title-en">${escapeHTML(node.en || '')}</div>
       <div class="lp-marks">
         <button data-lm="know" class="${st==='know'?'on':''}">熟悉</button>
         <button data-lm="knowish" class="${st==='knowish'?'on':''}">了解</button>
         <button data-lm="na" class="${st==='na'?'on':''}">陌生</button>
       </div>`;
-    if (node.desc) html += `<div class="lp-block"><div class="lp-block-h">定 义 / Definition</div><div class="lp-desc">${node.desc}</div></div>`;
-    if (node.concepts && node.concepts.length) html += `<div class="lp-block"><div class="lp-block-h">核心概念 / Key Concepts</div><div class="lp-concepts">${node.concepts.map(c => `<span class="cc">${c}</span>`).join('')}</div></div>`;
-    if (node.questions && node.questions.length) html += `<div class="lp-block"><div class="lp-block-h">关键问题 / Key Questions</div><ul class="lp-questions">${node.questions.map(q => `<li>${q}</li>`).join('')}</ul></div>`;
-    if (node.books && node.books.length) html += `<div class="lp-block"><div class="lp-block-h">经典书目 / Key Books</div><div class="lp-books">${node.books.map(b => `<div class="bk">${b}</div>`).join('')}</div></div>`;
+    if (node.desc) html += `<div class="lp-block"><div class="lp-block-h">定 义 / Definition</div><div class="lp-desc">${escapeHTML(node.desc)}</div></div>`;
+    if (node.concepts && node.concepts.length) html += `<div class="lp-block"><div class="lp-block-h">核心概念 / Key Concepts</div><div class="lp-concepts">${node.concepts.map(c => `<span class="cc">${escapeHTML(c)}</span>`).join('')}</div></div>`;
+    if (node.questions && node.questions.length) html += `<div class="lp-block"><div class="lp-block-h">关键问题 / Key Questions</div><ul class="lp-questions">${node.questions.map(q => `<li>${escapeHTML(q)}</li>`).join('')}</ul></div>`;
+    if (node.books && node.books.length) html += `<div class="lp-block"><div class="lp-block-h">经典书目 / Key Books</div><div class="lp-books">${node.books.map(b => `<div class="bk">${escapeHTML(b)}</div>`).join('')}</div></div>`;
     // 双层笔记：提纯精粹 + 对话折叠
     html += `<div class="lp-block lp-block-notes">
       <div class="lp-block-h">我的提纯 · My Distill</div>
-      <textarea class="lp-note lp-distill" placeholder="这里放你对这一叶的提纯——精粹的、结构化的、你最终回看的。">${distill.replace(/</g,'&lt;')}</textarea>
+      <textarea class="lp-note lp-distill" placeholder="这里放你对这一叶的提纯——精粹的、结构化的、你最终回看的。">${escapeHTML(distill)}</textarea>
     </div>
     <div class="lp-block lp-block-dialog">
       <div class="lp-block-h lp-dialog-toggle" onclick="toggleDialog(this)">对话原稿 · Conversation <span class="lp-toggle-ico">▸ 展开</span></div>
       <div class="lp-dialog-body" style="display:none">
-        <textarea class="lp-note lp-dialog-text" placeholder="粘贴你与任何 AI 关于这一叶的对话原文，为提纯留底。">${dialog.replace(/</g,'&lt;')}</textarea>
+        <textarea class="lp-note lp-dialog-text" placeholder="粘贴你与任何 AI 关于这一叶的对话原文，为提纯留底。">${escapeHTML(dialog)}</textarea>
         <div class="lp-distill-row">
-          <button class="lp-distill-btn" onclick="prepDistill('${key.replace(/'/g,"\\'")}')">🫗 提纯 → 复制给你的 AI</button>
+          <button class="lp-distill-btn" onclick="prepDistill()">🫗 提纯 → 复制给你的 AI</button>
           <span class="lp-distill-tip">把你的 AI 答案粘回"我的提纯"框</span>
         </div>
       </div>
     </div>`;
-    if (node.links && node.links.length) html += `<div class="lp-block"><div class="lp-block-h">延伸 / Further Reading</div><div class="lp-links">${node.links.map(l => `<a href="${l[1]}" target="_blank" rel="noopener">${l[0]}</a>`).join('')}</div></div>`;
+    if (node.links && node.links.length) html += `<div class="lp-block"><div class="lp-block-h">延伸 / Further Reading</div><div class="lp-links">${node.links.map(l => `<a href="${escapeHTML(safeURL(l[1]) || '#')}" target="_blank" rel="noopener noreferrer">${escapeHTML(l[0])}</a>`).join('')}</div></div>`;
     body.innerHTML = html;
 
     // 标注
@@ -1683,7 +1734,6 @@ ${dialog.slice(0, 8000)}
   function closeLeafPage() {
     document.getElementById('leafPage').classList.remove('open');
     // 返回目录视图
-    domainPath.pop();
     renderDomains();
   }
 
@@ -1718,13 +1768,16 @@ ${dialog.slice(0, 8000)}
     return best;
   }
 
-  canvas.addEventListener('mousedown', (e) => {
+  canvas.addEventListener('pointerdown', (e) => {
+    if (!e.isPrimary || e.button > 0) return;
+    canvas.setPointerCapture(e.pointerId); mapMoved = 0;
     isRotating = true; rotLastX = e.clientX; rotLastY = e.clientY;
     mapIdleStart = performance.now();
   });
-  window.addEventListener('mousemove', (e) => {
+  window.addEventListener('pointermove', (e) => {
     mapIdleStart = performance.now();
     if (isRotating) {
+      mapMoved += Math.abs(e.clientX - rotLastX) + Math.abs(e.clientY - rotLastY);
       rotY += (e.clientX - rotLastX) * 0.008;
       rotX += (e.clientY - rotLastY) * 0.008;
       rotX = Math.max(-1.5, Math.min(1.5, rotX));
@@ -1736,11 +1789,12 @@ ${dialog.slice(0, 8000)}
       if (h !== hoverIdx) { hoverIdx = h; drawStars(); }
     }
   });
-  window.addEventListener('mouseup', (e) => {
+  canvas.addEventListener('pointercancel', () => { isRotating = false; });
+  window.addEventListener('pointerup', (e) => {
     if (!isRotating) return;
     isRotating = false;
     // 点击（无拖拽）→ 进入沉浸式星图（详情在沉浸式里点星查看）
-    if (Math.abs(e.clientX - rotLastX) < 4 && Math.abs(e.clientY - rotLastY) < 4) {
+    if (mapMoved < 6) {
       openImmersive();
     }
   });
@@ -1786,7 +1840,7 @@ ${dialog.slice(0, 8000)}
   let immIdleStart = 0;
   let immUserActed = false;
   function immIdleLoop() {
-    if (document.getElementById('immerse').classList.contains('open')) {
+    if (!document.hidden && !reducedMotion.matches && document.getElementById('immerse')?.classList.contains('open')) {
       const idle = performance.now() - immIdleStart;
       if (idle > 4000 && !immDrag) {
         rotY += 0.0012;
@@ -1823,7 +1877,7 @@ ${dialog.slice(0, 8000)}
     immApply();
     renderSuggest();
     // 星空绽放：从深处 zoom 0.02 缓动展开到 1，如星云在眼前绽开（每次进入都绽放）
-    immZoom = 0.02;
+    immZoom = reducedMotion.matches ? 1 : 0.02;
     immFocus = { x: 0, y: 0 };
     immUserActed = false;
     rotY = 0.6; rotX = -0.35;
@@ -1836,17 +1890,18 @@ ${dialog.slice(0, 8000)}
       rotY = 0.6 + k * 0.9;
       rotX = -0.35 + k * 0.15;
       immRender();
-      if (k < 1 && !immUserActed) requestAnimationFrame(bloom);
+      if (k < 1 && !immUserActed && document.getElementById('immerse')?.classList.contains('open')) requestAnimationFrame(bloom);
       else if (k >= 1) immIdleStart = performance.now();
     }
-    requestAnimationFrame(bloom);
+    if (!reducedMotion.matches) requestAnimationFrame(bloom);
+    else immRender();
   }
   // 沉浸式画布事件绑定（openImmersive 时执行，确保 canvas 已存在）
   let immEventBound = false;
   function immBound() {
     if (immEventBound) return;
     immEventBound = true;
-    imm.addEventListener('mousedown', (e) => { immDrag = true; immMoved = 0; immLastX = e.clientX; immLastY = e.clientY; immTouch(); });
+    imm.addEventListener('pointerdown', (e) => { if (!e.isPrimary || e.button > 0) return; imm.setPointerCapture(e.pointerId); immDrag = true; immMoved = 0; immLastX = e.clientX; immLastY = e.clientY; immTouch(); });
     // 滚轮缩放：以光标下那颗星为锚——缩放后它仍在光标处
     // （数学：屏幕位移只依赖 R(Δ) 的 x/y 分量，z 不影响投影 → 解线性方程即可，与星深无关）
     imm.addEventListener('wheel', (e) => {
@@ -1865,12 +1920,15 @@ ${dialog.slice(0, 8000)}
       const cy = Math.cos(rotY), sy = Math.sin(rotY);
       const cx = Math.cos(rotX), sx = Math.sin(rotX);
       const tx = -dx * k, ty = -dy * k;
-      immFocus.x += tx / cy;
-      immFocus.y += (ty - (tx / cy) * sy * sx) / cx;
+      if (Math.abs(cy) > 0.1 && Math.abs(cx) > 0.1) {
+        immFocus.x += tx / cy;
+        immFocus.y += (ty - (tx / cy) * sy * sx) / cx;
+      }
       immRender();
     }, { passive: false });
-    window.addEventListener('mousemove', (e) => {
-      if (!document.getElementById('immerse').classList.contains('open')) return;
+    imm.addEventListener('pointercancel', () => { immDrag = false; });
+    window.addEventListener('pointermove', (e) => {
+      if (!document.getElementById('immerse')?.classList.contains('open')) return;
       immTouch();
       if (immDrag) {
         immMoved += Math.abs(e.clientX - immLastX) + Math.abs(e.clientY - immLastY);
@@ -1881,9 +1939,11 @@ ${dialog.slice(0, 8000)}
           const cxr = Math.cos(rotX), sxr = Math.sin(rotX);
           const tx = -(e.clientX - immLastX) / (half * immZoom);
           const ty = -(e.clientY - immLastY) / (half * immZoom);
-          const dpx = tx / cyr;
-          immFocus.x += dpx;
-          immFocus.y += (ty - dpx * syr * sxr) / cxr;
+          if (Math.abs(cyr) > 0.1 && Math.abs(cxr) > 0.1) {
+            const dpx = tx / cyr;
+            immFocus.x += dpx;
+            immFocus.y += (ty - dpx * syr * sxr) / cxr;
+          }
         } else {
           rotY += (e.clientX - immLastX) * 0.008;
           rotX += (e.clientY - immLastY) * 0.008;
@@ -1896,13 +1956,13 @@ ${dialog.slice(0, 8000)}
         nodes.forEach((n, i) => {
           if (!immNodeVisible(n)) return;
           const p = immProject(n);
-          const d = Math.hypot(p.sx + 12 - e.clientX, p.sy + 12 - e.clientY) * (1 + Math.abs(p.depth) * 0.5);
+          const d = Math.hypot(p.sx - e.clientX, p.sy - e.clientY) * (1 + Math.abs(p.depth) * 0.5);
           if (d < bd) { bd = d; best = i; }
         });
         if (best !== immHover) { immHover = best; immRender(); }
       }
     });
-    window.addEventListener('mouseup', (e) => {
+    window.addEventListener('pointerup', (e) => {
       if (!immDrag) return;
       const wasDrag = immMoved > 6;
       immDrag = false;
@@ -1913,20 +1973,21 @@ ${dialog.slice(0, 8000)}
         nodes.forEach((n, i) => {
           if (!immNodeVisible(n)) return;
           const p = immProject(n);
-          const d = Math.hypot(p.sx + 12 - e.clientX, p.sy + 12 - e.clientY) * (1 + Math.abs(p.depth) * 0.5);
+          const d = Math.hypot(p.sx - e.clientX, p.sy - e.clientY) * (1 + Math.abs(p.depth) * 0.5);
           if (d < bd) { bd = d; best = i; }
         });
         immSelect(best);
       }
     });
     window.addEventListener('resize', () => {
-      if (document.getElementById('immerse').classList.contains('open')) { immResize(); immRender(); }
+      if (document.getElementById('immerse')?.classList.contains('open')) { immResize(); immRender(); }
     });
   }
 
-  function closeImmersive() { document.getElementById('immerse').classList.remove('open'); }
+  function closeImmersive() { immUserActed = true; immDrag = false; document.getElementById('immerse').classList.remove('open'); }
+  function immZoomBy(factor) { immTouch(); immZoom = Math.min(30, Math.max(0.1, immZoom * factor)); immRender(); }
   function immResize() {
-    const d = window.devicePixelRatio || 1;
+    const d = Math.min(window.devicePixelRatio || 1, 2);
     imm.width = innerWidth * d; imm.height = innerHeight * d;
     imm.style.width = innerWidth + 'px'; imm.style.height = innerHeight + 'px';
     immCtx.setTransform(d, 0, 0, d, 0, 0);
@@ -1943,7 +2004,7 @@ ${dialog.slice(0, 8000)}
   let immAxisX = 0, immAxisY = 2;
   function val(n, idx) {
     if (typeof idx === 'string' && idx.startsWith('orth')) return (n.orth ? n.orth[+idx.slice(4)] : 0);
-    return (n.sem[idx] || 0);
+    return (n.sem?.[idx] || 0);
   }
   function immAxisPopulate() {
     if (!semAnchors.length) return;
@@ -1953,9 +2014,9 @@ ${dialog.slice(0, 8000)}
     let opts = '';
     if (orthAxes.length) {
       opts += '<optgroup label="分类轴">' + orthAxes.map((a, i) =>
-        `<option value="orth${i}" title="${a.low} ↔ ${a.high}">${a.name}</option>`).join('') + '</optgroup>';
+        `<option value="orth${i}" title="${escapeHTML(a.low)} ↔ ${escapeHTML(a.high)}">${escapeHTML(a.name)}</option>`).join('') + '</optgroup>';
     }
-    opts += '<optgroup label="语义锚">' + semAnchors.map((a, i) => `<option value="${i}" title="按「${a}」语义相似度排布">${a}</option>`).join('') + '</optgroup>';
+    opts += '<optgroup label="语义锚">' + semAnchors.map((a, i) => `<option value="${i}" title="按「${escapeHTML(a)}」语义相似度排布">${escapeHTML(a)}</option>`).join('') + '</optgroup>';
     sx.innerHTML = opts; sy.innerHTML = opts;
     sx.value = 'orth0'; sy.value = 'orth1';
     immAxisX = 'orth0'; immAxisY = 'orth1';
@@ -2098,12 +2159,13 @@ ${dialog.slice(0, 8000)}
   function immApply() {
     const q = (document.getElementById('immSearch')?.value || '').trim();
     if (q) { immFilter = 'author'; immAuthor = q; }
+    else if (immFilter === 'author') { immFilter = 'all'; immAuthor = ''; immSelAuthor = ''; }
     // 交集统计
     const all = nodes.filter(n => immNodeVisible(n));
     const mine = all.filter(n => n.status === 'read' || n.status === 'fav');
     const info = document.getElementById('immInfo');
     if (immFilter === 'author') {
-      const authors = {};
+      const authors = Object.create(null);
       all.forEach(n => {
         let a = (n.author || '').trim();
         if (!a || /^(微信读书|高中|读书笔记)/.test(a)) return;
@@ -2130,7 +2192,7 @@ ${dialog.slice(0, 8000)}
     const box = document.getElementById('immSuggest');
     if (!list) {
       // 常用作者：真实人名（剔除"微信读书/高中/读书笔记"来源占位与国别前缀），按书目数排
-      const cnt = {};
+      const cnt = Object.create(null);
       nodes.forEach(n => {
         let a = (n.author || '').trim();
         if (!a || /^(微信读书|高中|读书笔记)/.test(a)) return;
@@ -2142,7 +2204,14 @@ ${dialog.slice(0, 8000)}
       });
       list = Object.entries(cnt).filter(([, c]) => c >= 2).sort((x, y) => y[1] - x[1]).slice(0, 16).map(([a]) => a);
     }
-    box.innerHTML = list.map((a, i) => `<span class="chip ${a === immSelAuthor ? 'on' : ''}" onclick="immPick('${a.replace(/'/g, "\\'")}', this)">${a}</span>`).join('');
+    box.replaceChildren();
+    list.forEach(a => {
+      const button = document.createElement('button');
+      button.className = 'chip' + (a === immSelAuthor ? ' on' : '');
+      button.textContent = a;
+      button.onclick = () => immPick(a, button);
+      box.appendChild(button);
+    });
   }
   function immPick(a, el) {
     immSelAuthor = a;
@@ -2208,21 +2277,32 @@ ${dialog.slice(0, 8000)}
     const n = immSelNode;
     // 邻居：3D 欧氏距离
     const nb = nodes
-      .map((o, i) => ({ o, i, d: Math.hypot((o.x-n.x)**2 || 0, (o.y-n.y)**2, (o.z-n.z)**2) }))
+      .map((o, i) => ({ o, i, d: Math.hypot(o.x - n.x, o.y - n.y, o.z - n.z) }))
       .filter(x => x.i !== idx)
       .sort((a, b) => a.d - b.d)
       .slice(0, 6);
     const readState = n.status === 'fav' ? '喜爱' : n.status === 'read' ? '已读' : '未读';
-    let html = `<div class="imm-star-t">《${n.title}》</div>
-      <div class="imm-star-m">${n.author || '佚名'}${n.status === 'read' || n.status === 'fav' ? ' · ' + readState : ''}${n.wechat && n.wechat.duration_text ? ' · 阅读' + n.wechat.duration_text : ''}${n.douban_rating ? ' · ' + n.douban_rating : ''}</div>
+    let html = `<div class="imm-star-t">《${escapeHTML(n.title)}》</div>
+      <div class="imm-star-m">${escapeHTML(n.author || '佚名')}${n.status === 'read' || n.status === 'fav' ? ' · ' + readState : ''}${n.wechat && n.wechat.duration_text ? ' · 阅读' + escapeHTML(n.wechat.duration_text) : ''}${n.douban_rating ? ' · ' + escapeHTML(n.douban_rating) : ''}</div>
       <div class="imm-star-n">邻居书 ↷</div>
       <div class="imm-nbs">`;
-    nb.forEach(({ o }) => {
-      html += `<div class="imm-nb" onclick="immSelect(${o.i})">${o.title}${o.status === 'read' ? ' · ✓已读' : ''}</div>`;
+    nb.forEach(({ o, i }) => {
+      html += `<button type="button" class="imm-nb" onclick="immSelect(${i})">${escapeHTML(o.title)}${o.status === 'read' ? ' · ✓已读' : ''}</button>`;
     });
-    html += `</div><div class="imm-star-x" onclick="document.getElementById('immStar').style.display='none'">关闭</div>`;
+    html += `</div><div class="imm-row">
+      <button onclick="immMark('fav')" aria-pressed="${n.status === 'fav'}">喜爱</button>
+      <button onclick="immMark('read')" aria-pressed="${n.status === 'read'}">已读</button>
+      <button onclick="immMark('unread')" aria-pressed="${n.status === 'unread'}">未读</button>
+      </div><div class="imm-star-x" onclick="document.getElementById('immStar').style.display='none'">关闭</div>`;
     box.innerHTML = html;
     box.style.display = 'block';
+  }
+
+  function immMark(status) {
+    if (!immSelNode) return;
+    const index = nodes.indexOf(immSelNode);
+    markNode(immSelNode, status);
+    immSelect(index); immApply();
   }
 
   // ─── 推荐：影响力榜 + 盲区推荐 ───
@@ -2258,10 +2338,10 @@ ${dialog.slice(0, 8000)}
           <div class="rec-item" onclick="recJump(${nodes.indexOf(n)})">
             <div class="rec-rank">${idx + 1}</div>
             <div class="ri-main">
-              <div class="ri-title">《${n.title}》</div>
-              <div class="ri-meta">${n.author || '佚名'}
-                ${n.wechat && n.wechat.duration_text ? ' · 阅读' + n.wechat.duration_text : ''}
-                ${n.wechat && n.wechat.finished ? ' · ' + n.wechat.finished : ''}</div>
+              <div class="ri-title">《${escapeHTML(n.title)}》</div>
+              <div class="ri-meta">${escapeHTML(n.author || '佚名')}
+                ${n.wechat && n.wechat.duration_text ? ' · 阅读' + escapeHTML(n.wechat.duration_text) : ''}
+                ${n.wechat && n.wechat.finished ? ' · ' + escapeHTML(n.wechat.finished) : ''}</div>
             </div>
             <div class="ri-score">${s}</div>
           </div>`).join('');
@@ -2282,8 +2362,8 @@ ${dialog.slice(0, 8000)}
           <div class="rec-item" onclick="recJump(${nodes.indexOf(n)})">
             <div class="rec-rank">${idx + 1}</div>
             <div class="ri-main">
-              <div class="ri-title">《${n.title}》</div>
-              <div class="ri-meta">${n.author || '佚名'}${n.douban_rating ? ' · ' + n.douban_rating : ''}</div>
+              <div class="ri-title">《${escapeHTML(n.title)}》</div>
+              <div class="ri-meta">${escapeHTML(n.author || '佚名')}${n.douban_rating ? ' · ' + escapeHTML(n.douban_rating) : ''}</div>
             </div>
           </div>`).join('');
     } else if (recMode === 'today') {
@@ -2298,10 +2378,10 @@ ${dialog.slice(0, 8000)}
         <div class="rec-note">以今日为种子，抽中一颗星 —— 或许 与你有缘</div>
         <div class="rec-item today-big" onclick="recJump(${isN})">
           <div class="ri-main">
-            <div class="ri-title">《${n.title}》</div>
-            <div class="ri-meta">${n.author || '佚名'}
-              ${n.wechat && n.wechat.duration_text ? ' · 阅读' + n.wechat.duration_text : ''}
-              ${n.douban_rating ? ' · ' + n.douban_rating : ''} · ${st}</div>
+            <div class="ri-title">《${escapeHTML(n.title)}》</div>
+            <div class="ri-meta">${escapeHTML(n.author || '佚名')}
+              ${n.wechat && n.wechat.duration_text ? ' · 阅读' + escapeHTML(n.wechat.duration_text) : ''}
+              ${n.douban_rating ? ' · ' + escapeHTML(n.douban_rating) : ''} · ${st}</div>
           </div>
           <div class="ri-score">今日 ✦</div>
         </div>
@@ -2322,6 +2402,11 @@ ${dialog.slice(0, 8000)}
   }
 
   window.addEventListener('resize', () => { resize(); drawStars(); });
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Escape') return;
+    closeImmersive(); closeSettings(); closeRecPanel(); closeAddPanel(); closeTextEdit();
+    if (document.getElementById('leafPage').classList.contains('open')) closeLeafPage();
+  });
 
   // 初始化
   resize();
@@ -2330,23 +2415,30 @@ ${dialog.slice(0, 8000)}
   loadEssays();
   loadText();
 
-  // ─── 管理密钥 / GitHub token（localStorage，只在你的浏览器）───
-  function getKey(k) { try { return localStorage.getItem(k) || ''; } catch { return ''; } }
-  function setKey(k, v) { try { v ? localStorage.setItem(k, v) : localStorage.removeItem(k); } catch {} }
-  async function ghGet(path) {
-    const r = await fetch('https://api.github.com/repos/nyxbyb/nyxbyb.github.io/contents/' + path, {
-      headers: { 'Accept': 'application/vnd.github+json' }
-    });
-    if (!r.ok) throw new Error('GET ' + path + ' → ' + r.status);
+  // GitHub authorizes writes. Never persist the token or publish a passphrase/hash.
+  const EDIT_PATHS = ['web/public/data/inbox.json', 'web/public/data/text.json'];
+  function githubHeaders(token) {
+    return { 'Accept': 'application/vnd.github+json', 'Authorization': 'Bearer ' + token, 'X-GitHub-Api-Version': '2022-11-28' };
+  }
+  function githubError(status) {
+    if (status === 401 || status === 403) return new Error('GitHub 拒绝访问：请检查 token 的仓库与 Contents 写入权限。');
+    if (status === 409 || status === 422) return new Error('文件版本已变化，请刷新页面后重试，避免覆盖他人的修改。');
+    return new Error('GitHub 请求失败（' + status + '），请稍后重试。');
+  }
+  async function ghGet(path, token) {
+    if (!EDIT_PATHS.includes(path)) throw new Error('不允许写入此路径');
+    const r = await fetch('https://api.github.com/repos/nyxbyb/nyxbyb.github.io/contents/' + path, { headers: githubHeaders(token), cache: 'no-store' });
+    if (!r.ok) throw githubError(r.status);
     return r.json();
   }
-  async function ghPut(path, contentB64, message, token) {
+  async function ghPut(path, contentB64, message, token, sha) {
+    if (!EDIT_PATHS.includes(path) || !sha) throw new Error('缺少文件版本，已停止写入');
     const r = await fetch('https://api.github.com/repos/nyxbyb/nyxbyb.github.io/contents/' + path, {
       method: 'PUT',
-      headers: { 'Accept': 'application/vnd.github+json', 'Authorization': 'Bearer ' + token },
-      body: JSON.stringify({ message, content: contentB64 })
+      headers: { ...githubHeaders(token), 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message, content: contentB64, sha })
     });
-    if (!r.ok) { const t = await r.text(); throw new Error('PUT ' + path + ' → ' + r.status + ' ' + t.slice(0, 200)); }
+    if (!r.ok) throw githubError(r.status);
     return r.json();
   }
   const b64enc = (s) => btoa(unescape(encodeURIComponent(s)));
@@ -2357,11 +2449,11 @@ ${dialog.slice(0, 8000)}
   function openAddPanel() {
     closeSettings();
     document.getElementById('addPanel').classList.add('open');
-    document.getElementById('addKey').value = getKey('caelum_admin_key');
-    document.getElementById('addToken').value = getKey('caelum_admin_token');
+    document.getElementById('addToken').value = '';
+    document.getElementById('addStatus').textContent = '';
     addRenderFields();
   }
-  function closeAddPanel() { document.getElementById('addPanel').classList.remove('open'); }
+  function closeAddPanel() { document.getElementById('addToken').value = ''; document.getElementById('addPanel').classList.remove('open'); }
   function addSetType(t, el) {
     addType = t;
     document.querySelectorAll('#addPanel .add-tab').forEach(x => x.classList.toggle('active', x === el));
@@ -2385,44 +2477,44 @@ ${dialog.slice(0, 8000)}
         <input id="afDesc" type="text" placeholder="一句话简介（可选）" />`;
     }
   }
+  let addSubmitting = false;
   async function addSubmit() {
-    const key = document.getElementById('addKey').value.trim();
+    if (addSubmitting) return;
     const token = document.getElementById('addToken').value.trim();
     const st = document.getElementById('addStatus');
-    if (!key || !token) { st.textContent = '⚠️ 请填写密钥和 GitHub token'; st.style.color = '#e0876a'; return; }
-    setKey('caelum_admin_key', key); setKey('caelum_admin_token', token);
+    const g = id => (document.getElementById(id)?.value || '').trim();
+    if (!token) { st.textContent = '请填写仅限此仓库的 GitHub token'; return; }
+    const title = g('afTitle');
+    if (!title || title.length > 300) { st.textContent = '标题必填，最多 300 字'; return; }
+    const date = new Date().toISOString().slice(0, 10);
+    let item;
+    if (addType === 'book') item = { type: 'book', title, author: g('afAuthor'), finished: g('afFin'), date };
+    else if (addType === 'note') item = { type: 'note', title, note: g('afNote'), date };
+    else {
+      const url = safeURL(g('afUrl'));
+      if (!/^https?:\/\//i.test(g('afUrl')) || !url) { st.textContent = '请填写有效的 https:// 或 http:// 链接'; return; }
+      item = { type: 'essay', title, url, description: g('afDesc'), category: '随笔', date };
+    }
+    addSubmitting = true;
+    document.getElementById('addToken').value = '';
     st.style.color = 'var(--ink-dim)'; st.textContent = '提交中…';
     try {
-      // 密钥校验（inbox.json 里存着 key 的哈希）
-      const meta = await ghGet('data/inbox.json');
+      const path = 'web/public/data/inbox.json';
+      const meta = await ghGet(path, token);
       const inbox = JSON.parse(b64dec(meta.content));
-      const keyHash = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(key)).then(b => [...new Uint8Array(b)].map(x => x.toString(16).padStart(2, '0')).join(''));
-      const stored = inbox._key_hash || '';
-      if (stored && stored !== keyHash) { st.textContent = '⚠️ 密钥不符'; st.style.color = '#e0876a'; return; }
-      if (!stored) inbox._key_hash = keyHash;   // 首次设置
-      // 组装条目
-      const g = id => (document.getElementById(id)?.value || '').trim();
-      let item = null;
-      if (addType === 'book') {
-        const t = g('afTitle'); if (!t) { st.textContent = '⚠️ 请填书名'; return; }
-        item = { type: 'book', title: t, author: g('afAuthor'), finished: g('afFin'), date: new Date().toISOString().slice(0, 10) };
-      } else if (addType === 'note') {
-        const t = g('afTitle'); if (!t) { st.textContent = '⚠️ 请填书名'; return; }
-        item = { type: 'note', title: t, note: g('afNote'), date: new Date().toISOString().slice(0, 10) };
-      } else {
-        const t = g('afTitle'), u = g('afUrl'); if (!t || !u) { st.textContent = '⚠️ 请填标题和链接'; return; }
-        item = { type: 'essay', title: t, url: u, description: g('afDesc'), category: '随笔', date: new Date().toISOString().slice(0, 10) };
-      }
-      inbox.items = inbox.items || [];
-      inbox.items.push(item);
-      await ghPut('data/inbox.json', b64enc(JSON.stringify(inbox, null, 2)), 'web-add: ' + item.type + ' ' + item.title, token);
-      st.textContent = '✅ 已入库，构建后生效（约 1 分钟）'; st.style.color = '#9fd0a0';
+      // Accept the legacy array format without losing any queued entries.
+      const queue = Array.isArray(inbox) ? { items: inbox } : inbox;
+      if (!queue || !Array.isArray(queue.items)) throw new Error('收件箱格式异常，已停止写入');
+      queue.items.push(item);
+      await ghPut(path, b64enc(JSON.stringify(queue, null, 2)), 'web-add: ' + item.type + ' ' + item.title, token, meta.sha);
+      st.textContent = '已写入待处理收件箱；整理并发布后出现在星图或文章中。'; st.style.color = '#9fd0a0';
+      addRenderFields();
     } catch (e) {
-      st.textContent = '❌ ' + e.message; st.style.color = '#e0876a';
-    }
+      st.textContent = '提交失败：' + e.message; st.style.color = '#e0876a';
+    } finally { addSubmitting = false; }
   }
 
-  // ─── 文案编辑器（text.json 在线编辑 + 密钥推送）───
+  // ─── 文案编辑器（text.json 在线编辑 + GitHub 授权推送）───
   // 字段清单：路径 → 中文说明（.zh/.en 双语字段自动展开两个输入框）
   const TEXT_FIELDS = [
     ['taglines.map', '星图页一句话'],
@@ -2434,16 +2526,17 @@ ${dialog.slice(0, 8000)}
     ['coda.quote', '跋 · 引文'],
   ];
   let textDraft = null;
-  function openTextEdit() {
+  async function openTextEdit() {
     closeSettings();
     document.getElementById('textPanel').classList.add('open');
+    document.getElementById('textToken').value = '';
     const st = document.getElementById('textStatus');
     st.textContent = textData ? '' : '文案加载中…';
-    if (textData) textRenderEditor();
-    else textData && 0;
-    if (!textData) { const t = setInterval(() => { if (textData) { clearInterval(t); textRenderEditor(); st.textContent = ''; } }, 300); }
+    if (!textData) await loadText();
+    if (textData) { textRenderEditor(); st.textContent = ''; }
+    else st.textContent = '文案加载失败，请检查网络并重新打开编辑器。';
   }
-  function closeTextEdit() { document.getElementById('textPanel').classList.remove('open'); }
+  function closeTextEdit() { document.getElementById('textToken').value = ''; document.getElementById('textPanel').classList.remove('open'); }
   function textRenderEditor() {
     const f = document.getElementById('textFields');
     let html = '';
@@ -2452,14 +2545,14 @@ ${dialog.slice(0, 8000)}
         const zh = (textData.vision || []).map(v => v.zh.replace(/<br>/g, '\n')).join('\n----\n');
         const en = (textData.vision || []).map(v => (v.en || '').replace(/<br>/g, '\n')).join('\n----\n');
         html += `<div class="tf-item"><div class="tf-label">${label}（段落用 ---- 分隔）</div>
-          <textarea id="tf_vision_zh" rows="6">${zh}</textarea>
-          <textarea id="tf_vision_en" rows="6" placeholder="English…">${en}</textarea></div>`;
+          <textarea id="tf_vision_zh" rows="6">${escapeHTML(zh)}</textarea>
+          <textarea id="tf_vision_en" rows="6" placeholder="English…">${escapeHTML(en)}</textarea></div>`;
       } else {
         const parts = path.split('.');
         const o = parts.reduce((a, b) => a && a[b], textData) || {};
         html += `<div class="tf-item"><div class="tf-label">${label}</div>
-          <textarea id="tf_${path.replace(/\./g, '_')}_zh" rows="2">${(o.zh || '').replace(/<br>/g, '\n')}</textarea>
-          <textarea id="tf_${path.replace(/\./g, '_')}_en" rows="2" placeholder="English…">${(o.en || '').replace(/<br>/g, '\n')}</textarea></div>`;
+          <textarea id="tf_${path.replace(/\./g, '_')}_zh" rows="2">${escapeHTML((o.zh || '').replace(/<br>/g, '\n'))}</textarea>
+          <textarea id="tf_${path.replace(/\./g, '_')}_en" rows="2" placeholder="English…">${escapeHTML((o.en || '').replace(/<br>/g, '\n'))}</textarea></div>`;
       }
     });
     f.innerHTML = html;
@@ -2478,33 +2571,39 @@ ${dialog.slice(0, 8000)}
       }
     });
   }
+  let textSubmitting = false;
   async function textPush() {
-    const key = getKey('caelum_admin_key') || prompt('管理密钥：') || '';
-    const token = getKey('caelum_admin_token') || prompt('GitHub token：') || '';
+    if (textSubmitting || !textData) return;
+    const token = document.getElementById('textToken').value.trim();
     const st = document.getElementById('textStatus');
-    if (!key || !token) { st.textContent = '⚠️ 需要密钥和 token'; st.style.color = '#e0876a'; return; }
-    setKey('caelum_admin_key', key); setKey('caelum_admin_token', token);
+    if (!token) { st.textContent = '请填写仅限此仓库的 GitHub token'; return; }
     textCollect();
+    const draft = JSON.stringify(textData, null, 2);
+    if (!confirm('将编辑后的文案推送到 GitHub 仓库？部署完成后生效。')) { st.textContent = '已取消'; return; }
+    textSubmitting = true;
+    document.getElementById('textToken').value = '';
     st.style.color = 'var(--ink-dim)'; st.textContent = '推送中…';
     try {
-      // 预览确认
-      const ok = confirm('将以下文案推送到 GitHub 仓库（构建约 1 分钟生效）：\n\n' +
-        TEXT_FIELDS.map(([p]) => p).join('、') + '\n\n确认推送？');
-      if (!ok) { st.textContent = '已取消'; return; }
-      const meta = await ghGet('data/text.json');
-      await ghPut('data/text.json', b64enc(JSON.stringify(textData, null, 2)), 'web-edit: 文案更新（设置面板）', token);
-      st.textContent = '✅ 已推送，构建后生效'; st.style.color = '#9fd0a0';
-    } catch (e) {
-      st.textContent = '❌ ' + e.message; st.style.color = '#e0876a';
-    }
+      const path = 'web/public/data/text.json';
+      const meta = await ghGet(path, token);
+      // Do not silently replace remote edits made since this page loaded.
+      const remote = JSON.parse(b64dec(meta.content));
+      if (textLoadedSnapshot && JSON.stringify(remote) !== textLoadedSnapshot) throw new Error('仓库文案已更新，请先下载当前草稿，再刷新页面重试。');
+      await ghPut(path, b64enc(draft), 'web-edit: 文案更新（设置面板）', token, meta.sha);
+      textLoadedSnapshot = JSON.stringify(textData);
+      renderText();
+      st.textContent = '已推送，部署完成后生效'; st.style.color = '#9fd0a0';
+    } catch (e) { st.textContent = '推送失败：' + e.message; st.style.color = '#e0876a'; }
+    finally { textSubmitting = false; }
   }
   function textDownload() {
+    if (!textData) return;
     textCollect();
     const blob = new Blob([JSON.stringify(textData, null, 2)], { type: 'application/json' });
     const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'text.json';
-    a.click();
+    const url = URL.createObjectURL(blob);
+    a.href = url; a.download = 'text.json'; a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
 </script>
 
@@ -2517,16 +2616,16 @@ ${dialog.slice(0, 8000)}
       <span class="bm-tab" data-rm="blind" onclick="recSetMode('blind', this)">盲区推荐</span>
       <span class="bm-tab" data-rm="today" onclick="recSetMode('today', this)">今日之书</span>
     </div>
-    <div class="batch-close" onclick="closeRecPanel()">×</div>
+    <button type="button" class="batch-close" aria-label="关闭面板 · Close panel" onclick="closeRecPanel()">×</button>
   </div>
   <div class="rec-body" id="recBody"></div>
 </div>
 
-<!-- 添加内容表单（网页自动入库 · 需密钥验证）-->
+<!-- 添加内容表单（GitHub Contents 权限授权）-->
 <div class="add-panel" id="addPanel">
   <div class="add-head">
     <h3>＋ 添加内容</h3>
-    <div class="batch-close" onclick="closeAddPanel()">×</div>
+    <button type="button" class="batch-close" aria-label="关闭面板 · Close panel" onclick="closeAddPanel()">×</button>
   </div>
   <div class="add-body">
     <div class="add-mode">
@@ -2534,30 +2633,30 @@ ${dialog.slice(0, 8000)}
       <span class="add-tab" data-am="note" onclick="addSetType('note', this)">读书笔记</span>
       <span class="add-tab" data-am="essay" onclick="addSetType('essay', this)">随笔链接</span>
     </div>
-    <input id="addKey" type="password" placeholder="管理密钥（首次任意设置，之后用它）" />
-    <input id="addToken" type="password" placeholder="GitHub token（只给该仓库写权限）" />
+    <input id="addToken" type="password" autocomplete="off" aria-label="GitHub token" placeholder="GitHub token（只给该仓库写权限）" />
     <hr class="add-hr" />
     <div id="addFields"></div>
     <div class="add-status" id="addStatus"></div>
-    <button class="add-submit" onclick="addSubmit()">提交 → 入库</button>
-    <p class="add-note">⚠️ 提交会直接写入你的 GitHub 仓库。token 存于本浏览器，用完建议删除。</p>
+    <button class="add-submit" onclick="addSubmit()">提交到待处理收件箱</button>
+    <p class="add-note">⚠️ 提交会写入公开仓库的待处理收件箱，整理书目坐标或文章后再发布。仅使用此仓库的细粒度 token（Contents 读写权限）。token 不保存，提交或关闭面板后清空。</p>
   </div>
 </div>
 
-<!-- 文案编辑器（text.json 在线编辑 · 密钥推送）-->
+<!-- 文案编辑器（text.json 在线编辑 · GitHub 授权推送）-->
 <div class="add-panel" id="textPanel">
   <div class="add-head">
     <h3>✎ 编辑文案</h3>
-    <div class="batch-close" onclick="closeTextEdit()">×</div>
+    <button type="button" class="batch-close" aria-label="关闭面板 · Close panel" onclick="closeTextEdit()">×</button>
   </div>
   <div class="add-body">
+    <input id="textToken" type="password" autocomplete="off" aria-label="GitHub token" placeholder="GitHub token（仅此仓库 Contents 读写权限）" />
     <div id="textFields"></div>
     <div class="add-status" id="textStatus"></div>
     <div class="add-acts2">
       <button class="add-submit" onclick="textPush()">推送到 GitHub →</button>
       <button class="add-submit add-secondary" onclick="textDownload()">下载 text.json</button>
     </div>
-    <p class="add-note">每页一句话 / 封面 tagline / 星愿 / 跋。改动推送到仓库后，构建约 1 分钟生效。token 存于本浏览器。</p>
+    <p class="add-note">每页一句话 / 封面 tagline / 星愿 / 跋。改动推送到仓库，部署完成后生效。token 不保存，提交或关闭面板后清空。GitHub 权限是唯一授权依据。</p>
   </div>
 </div>
 
@@ -2565,7 +2664,7 @@ ${dialog.slice(0, 8000)}
 <div class="leaf-page" id="leafPage">
   <div class="lp-head">
     <div class="lp-crumb" id="lpCrumb"></div>
-    <div class="lp-close" onclick="closeLeafPage()">×</div>
+    <button type="button" class="lp-close" aria-label="关闭面板 · Close panel" onclick="closeLeafPage()">×</button>
   </div>
   <div class="lp-body" id="lpBody"></div>
 </div>
@@ -2574,7 +2673,7 @@ ${dialog.slice(0, 8000)}
 <div class="immerse" id="immerse">
   <div class="imm-head">
     <div id="immTitle" class="imm-title">沉浸式星图 · Immersive</div>
-    <div class="imm-close" onclick="closeImmersive()">×</div>
+    <button type="button" class="imm-close" aria-label="关闭沉浸式星图" onclick="closeImmersive()">×</button>
   </div>
   <canvas id="imm-canvas"></canvas>
   <!-- 控制面板 -->
@@ -2589,6 +2688,7 @@ ${dialog.slice(0, 8000)}
       <option value="year">书名</option>
     </select></label>
     <div class="imm-ax-reset" onclick="immAxisReset();immSortReset()">↺ 还原视角</div>
+    <div class="imm-row"><button onclick="immZoomBy(1.5)" aria-label="放大星图">＋ 放大</button><button onclick="immZoomBy(1/1.5)" aria-label="缩小星图">− 缩小</button></div>
     <div class="imm-sec">探 索</div>
     <input id="immSearch" type="text" placeholder="作者名…" oninput="immApply()" />
     <div class="imm-row imm-row-inputs">
@@ -2609,7 +2709,7 @@ ${dialog.slice(0, 8000)}
 <div class="set-panel" id="setPanel">
   <div class="set-head">
     <h3>⚙ 设置</h3>
-    <div class="batch-close" onclick="closeSettings()">×</div>
+    <button type="button" class="batch-close" aria-label="关闭面板 · Close panel" onclick="closeSettings()">×</button>
   </div>
   <div class="set-body">
     <div class="set-group">
