@@ -1,0 +1,99 @@
+{
+  "version": 1,
+  "title": { "zh": "未来之家", "en": "A home in the making" },
+  "assumptions": {
+    "stage": "concept",
+    "grossFloorArea": 200,
+    "netProgramArea": 166,
+    "wallAndServiceAllowance": 34,
+    "courtyardArea": 30,
+    "enclosedRooms": 4,
+    "orientation": { "zh": "图示北向仅为采光与动线推演，尚无实际地块。", "en": "North is a planning assumption; no actual site has been selected." },
+    "areaNote": { "zh": "约 200㎡ 总建面的单层独栋工作模型：净功能分区 166㎡，另预留 34㎡ 给墙体、结构与机电。庭院 30㎡ 单独列示，不计入这 200㎡。图中尺寸为概念控制线，并非可施工的净尺寸。", "en": "A single-storey, approximately 200 m² gross-floor-area working model: 166 m² of net program plus a provisional 34 m² for walls, structure and services. The 30 m² courtyard is outdoors and separate. Dimensions are conceptual control lines, not construction clearances." },
+    "capacity": { "zh": "先满足一个人的日常，也为伴侣、来客与未来变化留下余地。四间可关门的房间是主卧、书房、客房／多用室与预留室，并非四间卧室。", "en": "Designed first for one person's daily life, with room for a partner, guests and future changes. Four enclosed rooms mean a bedroom, a study, a guest / multipurpose room and a reserve room—not four bedrooms." },
+    "feasibility": { "zh": "建筑师需结合地块、朝向、气候、结构、消防、排水与当地审批重做方案和施工图。面积与家具尺度仅用于讨论。", "en": "An architect must revise the design for the actual site, climate, structure, fire safety, drainage and local approvals. Areas and furniture sizes are discussion tools." }
+  },
+  "rooms": [
+    {
+      "id": "living", "label": { "zh": "起居 · 书与茶", "en": "Living · books & tea" },
+      "subtitle": { "zh": "朝庭院展开的公共核心", "en": "The shared heart, open to the courtyard" },
+      "area": 40, "zone": "public", "size": { "w": 10, "d": 3.4, "note": "L-shaped; includes a 4 × 1.5 m return" },
+      "dimensions": { "zh": "10 × 3.4m 主区，加 4 × 1.5m 转角", "en": "10 × 3.4 m main bay, plus a 4 × 1.5 m return" },
+      "narrative": { "zh": "把一天里最好的光留给读书、喝茶和相处。低矮家具让视线越过窗台；藏书沿回廊一侧展开，庭院成为房间的远景。客厅不以电视墙为中心，而围绕书、茶桌和窗外的树组织。", "en": "Reserve the best light for reading, tea and time together. Low furniture keeps the view open; books line the gallery edge and the courtyard supplies the distant view. The room gathers around books, a tea table and a tree rather than a television wall." },
+      "materials": { "zh": ["浅色橡木", "矿物质感白墙", "亚麻", "耐磨木地板"], "en": ["Pale oak", "Mineral-textured plaster", "Linen", "Durable timber flooring"] },
+      "practical": { "zh": ["茶区靠近餐厨，减少端水距离。", "长窗设置外遮阳与可开启扇，避免只追求整面玻璃。", "主通道目标至少 1.0–1.2m；书墙承重与防潮需单独核算。"], "en": ["Keep tea close to the kitchen and water.", "Combine large windows with external shading and operable sections.", "Aim for 1.0–1.2 m main routes; check book loads and moisture separately."] }
+    },
+    {
+      "id": "study", "label": { "zh": "独立书房", "en": "Independent study" },
+      "subtitle": { "zh": "可以真正关上门的深度工作空间", "en": "A door that protects focused work" },
+      "area": 14, "zone": "private", "size": { "w": 4, "d": 3.5 },
+      "dimensions": { "zh": "约 4 × 3.5m", "en": "Approximately 4 × 3.5 m" },
+      "narrative": { "zh": "计算机、写作与阅读拥有一间安静的房间。书桌侧向庭院取光，墙面保留给书架、草图与思考。白天有自然光，夜间可独立开灯，不必让工作扩散进卧室。", "en": "A quiet room for computing, writing and reading. The desk receives side light from the courtyard; walls hold books, sketches and unfinished thoughts. Work can continue under its own light without taking over the bedroom." },
+      "materials": { "zh": ["橡木书桌", "可替换吸音软装", "哑光墙面", "可调工作灯"], "en": ["Oak desk", "Replaceable acoustic textiles", "Matt walls", "Adjustable task lighting"] },
+      "practical": { "zh": ["预留 1.8–2.2m 宽、0.75–0.85m 深的桌面与显示器距离。", "数据、插座、网线和散热路径在装修前确定。", "门缝、隔墙与通风消声共同决定隔音，不能只加吸音板。"], "en": ["Allow a 1.8–2.2 m desk width and 0.75–0.85 m depth.", "Plan data, power and equipment cooling before finishes.", "Acoustic privacy depends on the door, partitions and ventilation—not panels alone."] }
+    },
+    {
+      "id": "bedroom", "label": { "zh": "主卧", "en": "Primary bedroom" },
+      "subtitle": { "zh": "安睡优先，减少功能侵入", "en": "Rest takes priority" },
+      "area": 17.64, "zone": "private", "size": { "w": 4.2, "d": 4.2 },
+      "dimensions": { "zh": "约 4.2 × 4.2m", "en": "Approximately 4.2 × 4.2 m" },
+      "narrative": { "zh": "卧室只保留睡眠、穿衣和放松。整面收纳消化杂物，床边留出真实的通行空间。窗外的光经过纱帘与遮光帘逐层进入，不把整间房变成需要表演的展示间。", "en": "Keep sleep, dressing and quiet rest here. A continuous wardrobe absorbs clutter and genuine walking space remains around the bed. Sheer and blackout curtains temper the light, leaving a bedroom that can be lived in." },
+      "materials": { "zh": ["低饱和木色", "棉麻床品", "温润墙面", "遮光织物"], "en": ["Muted timber", "Cotton and linen", "Warm matt walls", "Blackout textiles"] },
+      "practical": { "zh": ["图中床为 1.8 × 2.0m 示意，柜深约 0.6m。", "保留两侧下床与开柜空间，避免把净面积全给床。", "卧室新风、空调噪声和夜间遮光应进入设备方案。"], "en": ["The plan shows a 1.8 × 2.0 m bed and approximately 0.6 m-deep wardrobe.", "Keep space to get out on both sides and open storage.", "Include ventilation, equipment noise and blackout in the services design."] }
+    },
+    {
+      "id": "kitchen", "label": { "zh": "餐厨", "en": "Kitchen & dining" },
+      "subtitle": { "zh": "可以每日做饭，也能招待几位朋友", "en": "Everyday cooking, room for friends" },
+      "area": 21.6, "zone": "public", "size": { "w": 4, "d": 5.4 },
+      "dimensions": { "zh": "约 4 × 5.4m", "en": "Approximately 4 × 5.4 m" },
+      "narrative": { "zh": "餐桌成为工作、吃饭与谈话之间温和的过渡。厨房靠服务边布置，水、电与排烟集中；面向起居区保持交流，同时预留未来加玻璃移门的可能。", "en": "A dining table forms a gentle transition between work, meals and conversation. Water, power and extraction share a service edge. The kitchen stays connected to living, with the option of a future glazed sliding partition." },
+      "materials": { "zh": ["易维护台面", "木色柜门", "耐污地面", "暖色工作照明"], "en": ["Maintainable counters", "Timber cabinet fronts", "Stain-resistant flooring", "Warm task lighting"] },
+      "practical": { "zh": ["洗、切、炒连续布置，操作区与餐椅活动范围分别核对。", "图中餐桌为 0.9 × 1.8m，通常 4–6 人使用。", "明火或重油烟需求可能影响开敞厨房与门窗方案。"], "en": ["Keep wash, prep and cooking in sequence; check counter and dining-chair clearances separately.", "The schematic 0.9 × 1.8 m table serves about four to six people.", "Fuel and cooking habits may change the open-kitchen and extraction strategy."] }
+    },
+    {
+      "id": "flex", "label": { "zh": "客房 · 多用室", "en": "Guest · multipurpose" },
+      "subtitle": { "zh": "来客时住人，平日留白", "en": "Guest-ready, useful every day" },
+      "area": 13.86, "zone": "private", "size": { "w": 3.3, "d": 4.2 },
+      "dimensions": { "zh": "约 3.3 × 4.2m", "en": "Approximately 3.3 × 4.2 m" },
+      "narrative": { "zh": "不用为偶尔来客长期空置一间标准客房。可展开的床、整洁收纳和一张小桌，让它平日用于伸展、阅读或临时合作，来客时又能关门独处。", "en": "An occasional guest should not leave a room idle all year. A fold-out bed, tidy storage and a small desk support stretching, reading or temporary collaboration, then provide privacy when someone stays." },
+      "materials": { "zh": ["浅木", "可清洗织物", "柔和漫射光", "连续地面"], "en": ["Pale timber", "Washable textiles", "Soft diffuse light", "Continuous flooring"] },
+      "practical": { "zh": ["展开床后仍应保留到门与窗的通道。", "不要用高低差或固定榻榻米阻断未来家具变化。", "若将来变为长期卧室，须重新核验采光、通风与收纳。"], "en": ["Keep a route to the door and window with the bed unfolded.", "Avoid fixed raised platforms that prevent future furniture changes.", "Recheck daylight, ventilation and storage if it becomes a permanent bedroom."] }
+    },
+    {
+      "id": "reserve", "label": { "zh": "未来预留室", "en": "A room for later" },
+      "subtitle": { "zh": "先保留改变生活的余地", "en": "Space for a life that may change" },
+      "area": 15.54, "zone": "private", "size": { "w": 3.7, "d": 4.2 },
+      "dimensions": { "zh": "约 3.7 × 4.2m", "en": "Approximately 3.7 × 4.2 m" },
+      "narrative": { "zh": "这里不替未来预设唯一答案。它可以成为第二工作室、家人的房间或长期来客的卧室；前期仅完成基础照明、通风、电路与可调整收纳，让真正的需要慢慢出现。", "en": "This room does not prescribe one future. It could become another studio, a family room or a long-stay bedroom. Begin with light, ventilation, power and adaptable storage, allowing real needs to emerge." },
+      "materials": { "zh": ["中性墙面", "通用木地板", "可移动家具", "预留电路"], "en": ["Neutral walls", "Versatile timber flooring", "Movable furniture", "Spare electrical capacity"] },
+      "practical": { "zh": ["先做可逆的软装，避免为尚未确定的功能定制大量柜体。", "门窗位置支持日后放床、工作桌和衣柜三种基本布局。", "不预埋未经设备需求验证的大型专用管线。"], "en": ["Start with reversible furnishing rather than extensive custom joinery.", "Place doors and windows to support a bed, a desk or a wardrobe layout.", "Avoid large dedicated service runs before equipment needs are known."] }
+    },
+    {
+      "id": "bath", "label": { "zh": "两处卫浴", "en": "Two bathrooms" },
+      "subtitle": { "zh": "完整浴室与独立客用洗手间", "en": "A full bathroom and a guest WC" },
+      "area": 11.76, "zone": "service", "size": { "w": 2.8, "d": 4.2 },
+      "dimensions": { "zh": "约 2.8 × 4.2m 的集中湿区", "en": "A shared wet core of approximately 2.8 × 4.2 m" },
+      "narrative": { "zh": "完整浴室和独立客用洗手间共享管线，朋友来访时不用进入卧室。分开的两扇门减少早晚冲突；小前室让回廊视线不直接对着洁具。", "en": "A full bathroom and a separate guest WC share services, so visitors need not enter a bedroom. Separate doors reduce morning conflicts and a small lobby keeps fixtures out of the gallery's direct view." },
+      "materials": { "zh": ["防滑矿物地面", "耐水墙面", "不锈钢五金", "易清洁台盆"], "en": ["Slip-resistant mineral flooring", "Water-resistant walls", "Stainless fittings", "Easy-clean basins"] },
+      "practical": { "zh": ["完整浴室约 7㎡，客用洗手间约 2.72㎡，小前室约 2.04㎡。", "防水、排水坡度、检修、热水距离与强制排风优先于视觉效果。", "当前客用洗手间为紧凑布局，并非已验证的无障碍卫生间。"], "en": ["Approximately 7 m² for the full bathroom, 2.72 m² for the guest WC and 2.04 m² for its lobby.", "Waterproofing, drainage, access, hot-water runs and mechanical extraction come first.", "The compact guest WC is not a verified accessible bathroom."] }
+    },
+    {
+      "id": "entry", "label": { "zh": "玄关 · 家务 · 回廊", "en": "Entry · utility · gallery" },
+      "subtitle": { "zh": "让收纳、家务与交通被认真设计", "en": "Give storage and daily routines real space" },
+      "area": 31.6, "zone": "service", "size": { "w": 4, "d": 3 },
+      "dimensions": { "zh": "玄关家务区 12㎡ ＋ 1.4 × 14m 回廊 19.6㎡", "en": "12 m² entry / utility plus a 1.4 × 14 m gallery of 19.6 m²" },
+      "narrative": { "zh": "回家先放下包、换鞋，再进入公共空间。洗衣、清洁用品和日常杂物有自己的位置。北侧房间由一条明确的回廊连接，它也可以陈列作品，但不会假装这部分交通面积不存在。", "en": "Put down a bag and change shoes before entering the shared rooms. Laundry, cleaning equipment and everyday clutter have places of their own. A clear gallery connects the northern rooms and can display work; its circulation area is counted honestly." },
+      "materials": { "zh": ["耐磨入口地面", "木质收纳柜", "便于检修的设备柜", "低位夜灯"], "en": ["Hard-wearing entry floor", "Timber storage", "Serviceable utility cabinets", "Low-level night lighting"] },
+      "practical": { "zh": ["其中玄关／洗衣／收纳 12㎡，回廊交通 19.6㎡；后续可继续优化交通占比。", "1.4m 回廊不应再放深柜堵窄主通道，书柜优先嵌入相邻房间。", "洗衣机、烘干机需核对排水、排风、振动与检修净空。"], "en": ["Includes 12 m² of entry, laundry and storage and 19.6 m² of gallery circulation; the latter remains open to optimization.", "Do not narrow the 1.4 m gallery with deep storage; recess shelving into adjacent rooms.", "Verify appliance drainage, ventilation, vibration and service clearances."] }
+    },
+    {
+      "id": "garden", "label": { "zh": "内庭 · 雨与树", "en": "Courtyard · rain & trees" },
+      "subtitle": { "zh": "L 形室内围合的开放留白", "en": "An outdoor room held by the L-shaped plan" },
+      "area": 30, "zone": "outdoor", "size": { "w": 6, "d": 5 },
+      "dimensions": { "zh": "约 6 × 5m；不计入室内或总建面", "en": "Approximately 6 × 5 m; separate from indoor and gross floor areas" },
+      "narrative": { "zh": "留一棵会长大的树、一段可坐的檐下与能感知雨水的地面。庭院不急着塞满景观物件，先成为起居室和书房共同观看的空白。它接住光、风与四季，也需要真实的排水和维护。", "en": "Make room for a tree that can grow, a sheltered place to sit and ground that makes rain visible. The courtyard need not fill with objects: first let it become a shared view from living and study. It receives light, wind and seasons—and needs real drainage and care." },
+      "materials": { "zh": ["透水地面", "气候适配植物", "局部木平台", "可维护排水沟"], "en": ["Permeable ground", "Climate-suitable plants", "A modest timber deck", "Maintainable drainage"] },
+      "practical": { "zh": ["庭院属于独立室外面积，场地退界、围护和雨棚计容需当地核实。", "树种与根系距离根据气候和基础位置确定。", "大窗前应同时考虑夏季遮阳、雨水反溅、隐私与安全。"], "en": ["Confirm local setbacks, enclosure and canopy area rules.", "Select trees and root distances for the climate and foundations.", "Check summer shading, rain splash, privacy and security at large windows."] }
+    }
+  ]
+}

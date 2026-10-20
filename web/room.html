@@ -3,58 +3,59 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#222820">
-  <title>未来的房间 · Caelum</title>
-  <meta name="description" content="走进一间关于未来生活的房间。木、茶、书、音乐与傍晚的光。">
+  <meta name="theme-color" content="#f1eee7">
+  <title>未来的家 · Caelum</title>
+  <meta name="description" content="一份关于未来生活的住宅设计册。约200平方米的庭院住宅，空间、材料、光线与尚未确定的生活。">
   <link rel="canonical" href="https://nyxbyb.github.io/web/room.html">
   <link rel="stylesheet" href="./room/room.css">
   <script type="module" src="./room/room.js"></script>
 </head>
-<body data-time="dusk" data-lamp="on" data-style="oak">
-  <a class="skip-link" href="#object-nav">跳到房间物件 · Skip to objects</a>
-  <main class="room-experience" id="room-experience">
-    <div class="scene-shell" id="scene-shell" role="group" aria-label="可探索的室内空间 · Explore the room">
-      <div class="scene-art" id="scene-art"><img src="./room/assets/interior-dusk.jpg" alt="自然木质的安静室内，书墙、茶席与落日窗景。"></div>
-      <div class="world-host" id="world-host"></div>
-      <div class="scene-shade" aria-hidden="true"></div>
-      <div class="hotspots" id="hotspots" hidden>
-        <button class="hotspot" data-object="books" style="--x:32.9%;--y:39%"><span class="hotspot-dot">＋</span><span class="hotspot-label" data-i18n="books">书架</span></button>
-        <button class="hotspot" data-object="window" style="--x:68.5%;--y:25%"><span class="hotspot-dot">＋</span><span class="hotspot-label" data-i18n="window">窗外</span></button>
-        <button class="hotspot" data-object="lamp" style="--x:44%;--y:31%"><span class="hotspot-dot">＋</span><span class="hotspot-label" data-i18n="lamp">落地灯</span></button>
-        <button class="hotspot" data-object="music" style="--x:73.7%;--y:43%"><span class="hotspot-dot">＋</span><span class="hotspot-label" data-i18n="music">音乐</span></button>
-        <button class="hotspot" data-object="tea" style="--x:52.5%;--y:61%"><span class="hotspot-dot">＋</span><span class="hotspot-label" data-i18n="tea">茶桌</span></button>
-        <button class="hotspot" data-object="plant" style="--x:78.3%;--y:52%"><span class="hotspot-dot">＋</span><span class="hotspot-label" data-i18n="plant">植物</span></button>
-      </div>
-      <noscript><p class="noscript-note">房间可以静静观看。开启 JavaScript 后可探索物件与灯光。<a href="./">返回凿星图 →</a></p></noscript>
-    </div>
-    <header class="room-header room-hud">
-      <a class="room-back" href="./"><span aria-hidden="true">↖</span><span>凿星图 <i>Caelum</i></span></a>
-      <div class="room-header-controls">
-        <div class="time-options" role="group" aria-label="时间 · Time of day"><button data-time="dawn" aria-pressed="false" data-i18n="dawn">清晨</button><button data-time="dusk" aria-pressed="true" data-i18n="dusk">傍晚</button><button data-time="night" aria-pressed="false" data-i18n="night">夜晚</button></div>
-        <button class="quiet-button" id="design-toggle" aria-expanded="false" aria-controls="design-panel" data-i18n="design">空间设定</button>
-        <button class="quiet-button" id="fullscreen" aria-label="切换全屏 · Toggle fullscreen" title="全屏">⤢</button>
-        <button class="quiet-button" id="language" aria-label="Switch to English">EN</button>
-      </div>
+<body data-time="dusk" data-lamp="on">
+  <a class="skip-link" href="#room-nav">跳到空间目录 · Skip to rooms</a>
+  <div id="house-app" class="house-app">
+    <header class="atlas-header">
+      <a class="back-link" href="./"><span aria-hidden="true">↖</span> 凿星图 <i>Caelum</i></a>
+      <div class="atlas-identity"><span data-i18n="identity">未来的家</span><small>A HOUSE, IMAGINED</small></div>
+      <div class="header-tools"><button id="reference-open" data-i18n="references">设计脉络</button><button id="quiet-toggle" data-i18n="quiet">静看</button><button id="language" aria-label="Switch to English">EN</button></div>
     </header>
-    <div class="room-intro room-hud" id="room-intro"><p class="eyebrow">CAELUM / A ROOM TO LIVE IN</p><h1 data-i18n="title">未来的房间</h1><p class="room-intro-description" data-i18n="description">有一扇好窗，有书，有茶。日子慢慢来。</p><p class="time-caption"><span class="status-dot"></span><span id="time-caption">傍晚 · 日光渐慢</span></p></div>
-    <div class="room-loading" id="room-loading" role="status"><span class="loading-line"></span><p data-i18n="preparing">正在把傍晚的光带进来…</p></div>
-    <div class="room-help room-hud" id="room-help"><span data-i18n="navigationHint">拖动环顾 · 滚轮靠近 · 点一件小物</span><button id="hide-ui" data-i18n="quietView">静看 · H</button></div>
-    <div class="room-dock room-hud"><button class="dock-reset" id="reset" data-i18n="overview">全景</button><div class="object-nav" id="object-nav" role="group" aria-label="房间物件 · Room objects"><button data-object="books" data-i18n="books">书架</button><button data-object="tea" data-i18n="tea">茶桌</button><button data-object="music" data-i18n="music">音乐</button><button data-object="plant" data-i18n="plant">植物</button><button data-object="window" data-i18n="window">窗外</button><button data-object="lamp" data-i18n="lamp">落地灯</button></div></div>
-    <button class="restore-ui" id="show-ui" hidden data-i18n="showControls">显示控制 · H</button>
-    <aside class="room-content" id="room-content" tabindex="-1" aria-labelledby="content-title" hidden>
-      <div class="content-head"><p class="panel-kicker" id="panel-kicker">A QUIET MOMENT</p><button class="panel-close" id="close-content" aria-label="收起内容 · Close content">×</button></div>
-      <div id="panel"><h2 id="content-title">未来的房间</h2><p>书、茶、音乐，和一小片绿色。</p></div>
-    </aside>
-    <aside class="design-panel room-hud" id="design-panel" aria-labelledby="design-title" hidden>
-      <div class="content-head"><h2 id="design-title" data-i18n="design">空间设定</h2><button class="panel-close" id="close-design" aria-label="关闭空间设定 · Close design settings">×</button></div>
-      <p class="design-copy" data-i18n="designCopy">一间房，先把生活安顿好。</p>
-      <p class="design-label" data-i18n="material">材质与色调</p>
-      <div class="material-options" role="group" aria-label="材质 · Materials"><button data-material="oak" aria-pressed="true"><span class="material-swatch oak"></span><span data-i18n="oak">自然橡木</span></button><button data-material="walnut" aria-pressed="false"><span class="material-swatch walnut"></span><span data-i18n="walnut">温润胡桃</span></button><button data-material="plaster" aria-pressed="false"><span class="material-swatch plaster"></span><span data-i18n="plaster">浅木灰泥</span></button></div>
-      <p class="design-foot" data-i18n="designFoot">窗边阅读、中央茶席、音乐与绿意。房间之外，留给以后。</p>
-    </aside>
-    <p class="feedback" id="feedback" role="status" aria-live="polite"></p>
-    <div class="load-error room-hud" id="load-error" hidden><span id="load-error-text"></span><button id="retry" data-i18n="retry">重新加载</button></div>
-    <div class="render-error room-hud" id="render-error" hidden><span data-i18n="renderFallback">当前设备使用静态房间，物件内容仍可探索。</span><button id="retry-world" data-i18n="retryScene">重试空间渲染</button></div>
-  </main>
+    <main class="atlas-layout">
+      <section class="visual-column" aria-label="空间图册 · Spatial atlas">
+        <div class="visual-stage" id="visual-stage">
+          <div class="photo-stage" id="photo-stage">
+            <img id="room-image" src="./room/assets/interior-dusk.jpg" alt="自然木质的起居茶室概念影像" fetchpriority="high">
+            <div class="photo-shade" aria-hidden="true"></div><div class="lamp-tone" aria-hidden="true"></div>
+            <div class="image-caption"><span id="image-index">01 / LIVING</span><h1 id="image-title">起居 · 茶 · 书</h1><p id="image-subtitle">把最好的光，留给醒着的日常。</p></div>
+            <span class="image-credit" data-i18n="imageCredit">原创概念影像 · 非建成实景</span>
+          </div>
+          <div class="plan-stage" id="plan-stage" hidden>
+            <div class="plan-heading"><p>CAELUM / COURTYARD HOUSE</p><h2 data-i18n="planHeading">让日常，围着一棵树展开。</h2><span data-i18n="planCaption">约200㎡建面工作模型 · 庭院另列 · 方位待基地确认</span></div>
+            <div class="floorplan" id="floorplan"></div>
+            <div class="plan-foot-row"><p class="plan-foot" data-i18n="planFoot">点选房间，查看生活设想与落地笔记。图中为概念净尺度，非施工图。</p><button id="plan-expand" data-i18n="expandPlan">放大查看 ↗</button></div>
+          </div>
+          <div class="view-switch" role="group" aria-label="图册视图 · Atlas view"><button id="view-image" aria-pressed="true" data-i18n="imageView">空间影像</button><button id="view-plan" aria-pressed="false" data-i18n="planView">全屋平面</button></div>
+          <button class="restore-ui" id="restore-ui" hidden data-i18n="restore">显示界面 · H</button>
+          <p class="image-error" id="image-error" hidden data-i18n="imageError">这张影像暂未载入，仍可查看平面与设计笔记。</p>
+        </div>
+        <nav class="room-nav" id="room-nav" aria-label="空间目录 · Room directory"></nav>
+      </section>
+      <aside class="design-sidebar" id="design-sidebar" aria-label="住宅设计笔记 · Design notes">
+        <div class="sidebar-top"><p class="eyebrow">A PLACE FOR THE YEARS AHEAD</p><p class="house-intro" data-i18n="houseIntro">为现在的自己，<br>也为尚未发生的生活。</p><div class="house-metrics"><span><b>200</b><small data-i18n="grossArea">㎡ 概念建面</small></span><span><b>4</b><small data-i18n="closedRooms">间独立空间</small></span><span><b>30</b><small data-i18n="courtArea">㎡ 室外庭院</small></span></div></div>
+        <div class="room-heading"><span class="room-number" id="room-number">01</span><div><h2 id="room-title">起居 · 茶 · 书</h2><p id="room-en">LIVING / TEA / LIBRARY</p></div><span class="room-area" id="room-area">40<small>㎡</small></span></div>
+        <div class="detail-tabs" role="tablist" aria-label="设计内容 · Design detail"><button role="tab" id="tab-space" aria-selected="true" aria-controls="detail-space" data-tab="space" data-i18n="spaceTab">空间</button><button role="tab" id="tab-practical" aria-selected="false" aria-controls="detail-practical" data-tab="practical" data-i18n="practicalTab">落地</button><button role="tab" id="tab-notes" aria-selected="false" aria-controls="detail-notes" data-tab="notes" data-i18n="notesTab">我的札记</button></div>
+        <div class="detail-content">
+          <section id="detail-space" role="tabpanel" aria-labelledby="tab-space"><p class="room-description" id="room-description"></p><div class="detail-rule"></div><p class="detail-label" data-i18n="spatialIdea">空间的想法</p><p id="room-idea" class="detail-copy"></p><div id="room-materials" class="materials"></div></section>
+          <section id="detail-practical" role="tabpanel" aria-labelledby="tab-practical" hidden><p class="detail-label" data-i18n="practicalLabel">把画面带进真实生活</p><ul id="room-practical" class="practical-list"></ul><p class="dimension-note" id="dimension-note"></p></section>
+          <section id="detail-notes" role="tabpanel" aria-labelledby="tab-notes" hidden><label for="design-note" class="detail-label" data-i18n="noteLabel">想保留的，想改变的</label><textarea id="design-note" maxlength="4000" placeholder="例如：书桌需要双屏；不喜欢开放式衣柜；窗外想种一棵树。"></textarea><p class="note-privacy" data-i18n="notePrivacy">只保存在当前浏览器。导出后，可带给未来的建筑师。</p><button class="line-button" id="save-note" data-i18n="saveNote">保存这间的札记 ↗</button><button class="text-button" id="export-notes" data-i18n="exportNotes">导出整本设计札记 ↓</button></section>
+        </div>
+        <div class="sidebar-bottom"><button id="daily-open" class="daily-link"><span data-i18n="daily">在这里，过一会儿</span><span aria-hidden="true">↗</span></button><p data-i18n="conceptNote">原创住宅研究 · 166㎡净功能 + 34㎡构造预留<br>影像研究氛围，平面研究关系；二者不作精确对应。</p><button class="text-button brief-link" id="lineage-open" data-i18n="lineageOpen">设计脉络与官方案例 ↗</button><button class="text-button brief-link" id="brief-open" data-i18n="briefOpen">阅读完整设计简报 ↗</button></div>
+      </aside>
+    </main>
+  </div>
+  <p class="feedback" id="feedback" role="status" aria-live="polite"></p>
+  <p class="data-error" id="data-error" hidden data-i18n="dataError">部分设计文字暂未载入，平面和空间影像仍可浏览。</p>
+  <dialog id="reference-dialog" class="reference-dialog" aria-labelledby="reference-title"><div class="dialog-head"><p>DESIGN LINEAGE / 01</p><button class="dialog-close" data-close="reference-dialog" aria-label="关闭设计脉络 · Close references">×</button></div><h2 id="reference-title" data-i18n="referenceTitle">借鉴一种思考方式。</h2><p class="reference-intro" data-i18n="referenceIntro">从建筑师的真实作品中，学习空间、材料和光。下面是原则的原创转译，并非原作者为此住宅设计，也不复制其图纸与摄影。</p><div id="reference-list" class="reference-list"></div><div class="reference-footer"><p data-i18n="siteNote">基地、朝向、气候、预算和居住人数尚待确定。这是一份可与建筑师继续深化的设计研究，面积与构造均需结合项目重新核实。</p><button id="export-brief" class="line-button" data-i18n="exportBrief">下载住宅设计简报 ↓</button></div></dialog>
+  <dialog id="daily-dialog" class="daily-dialog" aria-labelledby="daily-title"><div class="dialog-head"><p data-i18n="dailyKicker">A LITTLE EVERYDAY LIFE</p><button class="dialog-close" data-close="daily-dialog" aria-label="关闭日常 · Close daily life">×</button></div><nav id="daily-nav" class="daily-nav" aria-label="日常物件 · Everyday objects"></nav><div id="daily-content"><h2 id="daily-title">书页之间</h2></div><p id="daily-status" class="daily-status" role="status" aria-live="polite"></p><p id="daily-error" class="note-privacy" hidden></p></dialog>
+  <dialog id="plan-dialog" class="plan-dialog" aria-labelledby="large-plan-title"><div class="dialog-head"><div><h2 id="large-plan-title" data-i18n="largePlan">全屋平面 · 近看</h2><p id="plan-selection"></p></div><button class="dialog-close" data-close="plan-dialog" aria-label="关闭放大平面 · Close enlarged plan">×</button></div><div class="plan-zoom-tools" role="group" aria-label="平面缩放 · Plan zoom"><button id="plan-smaller" aria-label="缩小平面 · Zoom out">−</button><output id="plan-scale">100%</output><button id="plan-larger" aria-label="放大平面 · Zoom in">＋</button><button id="plan-fit" data-i18n="fitPlan">适应窗口</button><button id="plan-download" data-i18n="downloadPlan">下载矢量图 ↓</button></div><div class="plan-pan" id="plan-pan"><div id="large-floorplan" class="large-floorplan"></div></div><p class="enlarged-foot" data-i18n="panHint">滚动查看细部；触屏可横向移动。点选空间后，关闭此图查看对应笔记。</p></dialog>
+  <noscript><p class="no-script">空间影像可以静静观看。开启 JavaScript 后可浏览全屋平面和设计笔记。<a href="./">返回 Caelum →</a></p></noscript>
 </body>
 </html>

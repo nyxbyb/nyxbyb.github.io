@@ -1,236 +1,71 @@
-import scene from './scene.svg?raw';
-import interior from './assets/interior-dusk.jpg';
-import { safeURL, readPreference, writePreference, selectBooks, validateRoom } from './helpers.js';
+import livingImage from './assets/interior-dusk.jpg';
+import studyImage from './assets/house/study.jpg';
+import bedroomImage from './assets/house/bedroom.jpg';
+import kitchenImage from './assets/house/kitchen.jpg';
+import bathImage from './assets/house/bath.jpg';
+import flexImage from './assets/house/flex.jpg';
+import {createHousePlan} from './house-plan.js';
+import {mountDailyLife} from './daily-life.js';
+import {readPreference,writePreference,safeURL,validateHouse} from './helpers.js';
 
-const $ = id => document.getElementById(id);
-const dict = {
-  starchart:['星图','Starchart'],research:['科研','Research'],writing:['文字','Writing'],room:['房间','The Room'],
-  title:['未来的房间','A room of one’s own.'],description:['有一扇好窗，有书，有茶。日子慢慢来。','A good window, a few books, and tea. Let life take its time.'],
-  design:['空间设定','The interior'],designCopy:['一间房，先把生活安顿好。','One room. A little space for living well.'],designFoot:['窗边阅读、中央茶席、音乐与绿意。房间之外，留给以后。','Reading by the window, tea, music, and a little green. The rest can wait.'],material:['材质与色调','Material & colour'],oak:['自然橡木','Natural oak'],walnut:['温润胡桃','Warm walnut'],plaster:['浅木灰泥','Pale oak & plaster'],preparing:['正在把傍晚的光带进来…','Letting the evening light in…'],navigationHint:['拖动环顾 · 滚轮靠近 · 点一件小物','Drag to look around · Scroll to approach · Choose an object'],quietView:['静看 · H','Just look · H'],showControls:['显示控制 · H','Show controls · H'],overview:['全景','Room'],overviewNote:['回到房间，慢慢看。','Back to the room. Take your time.'],renderFallback:['当前设备使用静态房间，物件内容仍可探索。','A still room is available on this device. The objects remain yours to explore.'],retryScene:['重试空间渲染','Try the room again'],fullscreenError:['当前浏览器没有开启全屏，房间仍铺满窗口。','The room fills this window; browser fullscreen is unavailable.'],
-  stillNavigation:['点选一件小物，慢慢探索','Choose an object. Take your time.'],
-  light:['窗外的光','The light outside'],dawn:['清晨','Dawn'],dusk:['傍晚','Dusk'],night:['夜晚','Night'],
-  books:['书架','Books'],tea:['茶桌','Tea'],music:['音乐','Music'],plant:['植物','Plant'],window:['窗外','Window'],lamp:['落地灯','Lamp'],
-  explore:['点亮一件小物，走进一段日常。','Choose an object. Stay for a little while.'],reset:['回到初见 ↺','Start anew ↺'],footer:['向外探索，向内生活。','Explore the world. Make room for life.'],back:['返回星图 ↗','Back to Caelum ↗'],retry:['重新加载','Try again'],
-  homeTitle:['未来的房间','The Room, someday'],homeFoot:['一间关于未来日常的小小想象。','A small imagining of an everyday life to come.'],
-  bookTitle:['书页之间','Between the pages'],bookIntro:['从已有的阅读星图里，取几本书放在手边。','A few books from the existing reading constellation, kept close at hand.'],
-  bookLink:['走进阅读星图 ↗','Explore the reading constellation ↗'],noteLink:['更多读书笔记与文字 ↗','More notes and writing ↗'],readingNotes:['书页之外 · 读书笔记','Beyond the pages · Reading notes'],loading:['正在从星图取书…','Bringing a few books from the constellation…'],
-  noBooks:['书目暂时没能取回，阅读星图仍在原处。','The books could not be loaded. The constellation is still there.'],
-  brew:['为自己泡一壶茶','Make a pot of tea'],brewing:['正在泡茶…','Making tea…'],ready:['茶好了。慢慢喝。','Tea is ready. Take your time.'],again:['再泡一壶','Make another pot'],cancelTea:['结束这次泡茶','End this ritual'],
-  teaEnded:['泡茶已结束。','The tea ritual has ended.'],
-  ambientStart:['播放轻柔雨声','Play gentle rain'],ambientStop:['暂停雨声','Pause the rain'],ambientDetail:['浏览器实时合成 · 无人声 · 不自动播放','Synthesized in your browser · No voices · Starts only on request'],
-  audioError:['这个浏览器暂时无法播放环境声。','Ambient audio is unavailable in this browser.'],
-  plantLabel:['今天观察到了什么？','What did you notice today?'],plantPlaceholder:['一片新叶，一点光，或只是今天的心情…','A new leaf, a patch of light, or a passing thought…'],saveNote:['保存这条札记','Save this observation'],notePrivacy:['只保存在当前浏览器，不上传。','Saved in this browser only. Never uploaded.'],noteSaved:['札记已保存在当前浏览器。','Observation saved in this browser.'],noteFailed:['浏览器禁止了本地保存，请先复制札记。','Local saving is blocked. Please copy your observation.'],
-  windowTitle:['让光走慢一点','Let the light linger'],windowNote:['窗外没有时钟，只有光的变化。选择一种光，让房间陪你停留。','No clock outside, just the changing light. Choose a time and stay a while.'],
-  lampTitle:['留一盏灯','Leave a light on'],lampNote:['读书时，为自己留一小圈温暖。','A small circle of warmth, for a few more pages.'],lampOn:['关掉落地灯','Turn the lamp off'],lampOff:['点亮落地灯','Turn the lamp on'],
-  duskCaption:['傍晚 · 日光渐慢','Dusk · The light softens'],nightCaption:['夜晚 · 万物渐静','Night · The world settles'],dawnCaption:['清晨 · 一日将起','Dawn · A day begins'],
-  configError:['房间内容暂时无法加载；仍可切换灯光、时间与雨声。','Room content could not load; light, time, and rain still work.'],
-  contentError:['部分书目或笔记暂时无法加载，可从下方链接继续阅读。','Some books or notes could not load. Continue through the links below.'],
-  resetDone:['光回到傍晚，房间又安静下来。','Back to dusk. The room settles again.']
-};
-let lang = readPreference('caelum_lang', 'zh') === 'en' ? 'en' : 'zh';
-let time = 'dusk', lamp = true, selected = null, data = null, readingCache = null, readingRequest = null;
-let roomWorld = null, material = ['oak','walnut','plaster'].includes(readPreference('caelum_room_material')) ? readPreference('caelum_room_material') : 'oak';
-let feedbackTimer = null;
-let worldEpoch=0, leaving=false;
-const motionPreference=matchMedia('(prefers-reduced-motion: reduce)');
-let renderVersion = 0, teaStep = -1, teaTimers = [], audioContext = null, audioSource = null, audioGain = null;
-let audioStarting = false, audioEpoch = 0, plantDraft = readPreference('caelum_room_plant_note');
-const tr = key => (dict[key] || [key,key])[lang === 'en' ? 1 : 0];
-const localized = value => typeof value === 'string' ? value : value?.[lang] || value?.zh || '';
-const say = text => {clearTimeout(feedbackTimer);$('feedback').textContent=text;if(text)feedbackTimer=setTimeout(()=>{$('feedback').textContent='';},5000);};
-function el(tag, text, className) {
-  const node = document.createElement(tag); if (text != null) node.textContent = text; if (className) node.className = className; return node;
-}
-function button(text, handler, className = 'action-button') { const b = el('button', text, className); b.type='button';b.addEventListener('click',handler);return b; }
-function link(text, href, className = 'panel-link', external = false) {
-  const a=el('a',text,className);const url=safeURL(href,location.href);if(url)a.href=url;if(external){a.target='_blank';a.rel='noopener noreferrer';}return a;
-}
-const still=document.createElement('img');still.src=interior;still.alt='';still.decoding='async';
-still.addEventListener('error',()=>{$('scene-art').innerHTML=scene;document.body.classList.add('svg-fallback');positionStillHotspots();translate();},{once:true});
-$('scene-art').replaceChildren(still);
-$('hotspots').hidden = false;
-function positionStillHotspots(){
-  const svg=document.body.classList.contains('svg-fallback');
-  const positions=svg?{books:[.329,.39],window:[.685,.25],lamp:[.44,.31],music:[.737,.43],tea:[.525,.61],plant:[.783,.52]}:{books:[.17,.32],window:[.58,.28],lamp:[.34,.41],music:[.85,.46],tea:[.53,.73],plant:[.95,.53]};
-  const width=innerWidth,height=innerHeight,scale=Math.max(width/1672,height/941),drawWidth=1672*scale,drawHeight=941*scale;
-  document.querySelectorAll('.hotspot').forEach(b=>{const [x,y]=positions[b.dataset.object];if(svg){b.style.left=(x*100)+'%';b.style.top=(y*100)+'%';b.hidden=false;}else{const left=x*drawWidth+(width-drawWidth)/2,top=y*drawHeight+(height-drawHeight)/2;b.style.left=left+'px';b.style.top=top+'px';b.hidden=left<24||left>width-24||top<80||top>height-120;}});
-}
-window.addEventListener('resize',positionStillHotspots);positionStillHotspots();
-function translate() {
-  document.documentElement.lang=lang==='zh'?'zh-CN':'en';
-  document.title=lang==='zh'?'未来的房间 · Caelum':'The Room · Caelum';
-  document.querySelectorAll('[data-i18n]').forEach(n=>n.textContent=tr(n.dataset.i18n));
-  $('language').textContent=lang==='zh'?'EN':'中';
-  $('language').setAttribute('aria-label',lang==='zh'?'Switch to English':'切换到中文');
-  $('time-caption').textContent=tr(time+'Caption');
-  document.querySelectorAll('.hotspot').forEach(b=>b.setAttribute('aria-label',tr(b.dataset.object)));
-  const art=$('scene-art').querySelector('svg,img');if(art){const label=lang==='zh'?'自然木质的安静室内，书墙、阅读椅、茶桌、音乐、植物与落日窗景。':'A quiet natural-wood interior with a book wall, reading chair, tea table, music, plants, and sunset window.';art.setAttribute('role','img');art.setAttribute('aria-label',label);if(art.tagName==='IMG')art.alt=label;}
-  if(!$('load-error').hidden)$('load-error-text').textContent=tr('configError');
-  updateNavigationHint();
-}
-function updateNavigationHint(){$('room-help').querySelector('[data-i18n="navigationHint"]').textContent=tr(document.body.classList.contains('world-ready')?'navigationHint':'stillNavigation');}
-function setTime(value, announce=true) {
-  if(!['dawn','dusk','night'].includes(value))return;
-  time=value;document.body.dataset.time=time;
-  document.querySelectorAll('.time-options button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.time===time)));
-  $('time-caption').textContent=tr(time+'Caption');roomWorld?.setTime(time);if(announce)say(tr(time+'Caption'));
-}
-function clearTea() {teaTimers.forEach(clearTimeout);teaTimers=[];teaStep=-1;document.body.classList.remove('brewing','tea-ready');roomWorld?.setTeaState?.(-1);renderTeaState();}
-function renderTeaState() {
-  const b=$('brew');if(!b)return;
-  b.textContent=tr(teaStep===3?'again':teaStep>=0?'brewing':'brew');b.disabled=teaStep>=0&&teaStep<3;
-  document.querySelectorAll('.step-list span').forEach((n,i)=>n.classList.toggle('active',i===teaStep||teaStep===3));
-  const cancel=$('cancel-tea');if(cancel)cancel.hidden=teaStep<0||teaStep===3;
-}
-function startTea() {
-  clearTea();teaStep=0;document.body.classList.add('brewing');renderTeaState();roomWorld?.setTeaState?.(0);
-  say(localized(data?.tea?.steps?.[0])||tr('brewing'));
-  [1,2,3].forEach((step,i)=>teaTimers.push(setTimeout(()=>{
-    teaStep=step;roomWorld?.setTeaState?.(step);
-    if(step===3){document.body.classList.remove('brewing');document.body.classList.add('tea-ready');say(tr('ready'));}
-    else say(localized(data?.tea?.steps?.[step])||tr('brewing'));
-    renderTeaState();
-  },(i+1)*1800)));
-}
-async function toggleAudio() {
-  if(audioSource||audioStarting){stopAudio();return;}
-  const epoch=++audioEpoch;audioStarting=true;renderAudioState();
-  try {
-    const Context=window.AudioContext||window.webkitAudioContext;if(!Context)throw new Error('No audio');
-    if(!audioContext)audioContext=new Context();
-    await audioContext.resume();
-    if(epoch!==audioEpoch||document.hidden){if(!audioSource)audioContext.suspend().catch(()=>{});return;}
-    const buffer=audioContext.createBuffer(1,audioContext.sampleRate*3,audioContext.sampleRate),channel=buffer.getChannelData(0);
-    let last=0;for(let i=0;i<channel.length;i++){last=(last+Math.random()*.04-.02)/1.02;channel[i]=last*3.5;}
-    const source=audioContext.createBufferSource();source.buffer=buffer;source.loop=true;
-    const lowPass=audioContext.createBiquadFilter();lowPass.type='lowpass';lowPass.frequency.value=1100;
-    const gain=audioContext.createGain();gain.gain.setValueAtTime(0,audioContext.currentTime);gain.gain.linearRampToValueAtTime(.25,audioContext.currentTime+.7);
-    source.connect(lowPass);lowPass.connect(gain);gain.connect(audioContext.destination);audioSource=source;audioGain=gain;source.start();say(tr('ambientStart'));
-  } catch {say(tr('audioError'));}
-  finally {audioStarting=false;renderAudioState();}
-}
-function stopAudio() {
-  audioEpoch++;audioStarting=false;
-  if(audioSource){audioSource.stop();audioSource.disconnect();audioSource=null;audioGain?.disconnect();audioGain=null;}
-  if(audioContext?.state==='running')audioContext.suspend().catch(()=>{});
-  renderAudioState();
-}
-function renderAudioState(){const b=$('ambient');if(b){b.textContent=tr(audioSource?'ambientStop':'ambientStart');b.disabled=audioStarting;b.setAttribute('aria-pressed',String(!!audioSource));}}
-async function fetchJSON(path) {
-  const controller=new AbortController();
-  const timeout=setTimeout(()=>controller.abort(),10000);
-  try {
-    const response=await fetch(new URL(path,new URL(import.meta.env.BASE_URL,location.origin)),{signal:controller.signal});
-    if(!response.ok)throw new Error('HTTP '+response.status);
-    return await response.json();
-  } finally {clearTimeout(timeout);}
-}
-async function loadConfig() {
-  $('retry').disabled=true;
-  try {data=validateRoom(await fetchJSON('data/room.json'));$('load-error').hidden=true;renderPanel();}
-  catch {$('load-error').hidden=false;$('load-error-text').textContent=tr('configError');renderPanel();}
-  finally {$('retry').disabled=false;}
-}
-async function readBooks(){
-  if(readingCache)return readingCache;
-  if(!readingRequest)readingRequest=Promise.allSettled([fetchJSON('data/graph.json'),fetchJSON('data/articles.json')]).then(([g,a])=>{
-    const result={graph:g.status==='fulfilled'?g.value:null,articles:a.status==='fulfilled'&&Array.isArray(a.value)?a.value:[],partial:g.status==='rejected'||a.status==='rejected'};
-    if(!result.partial)readingCache=result;return result;
-  }).finally(()=>{readingRequest=null;});
-  return readingRequest;
-}
-function panelHeading(title,kicker) {const panel=$('panel');panel.replaceChildren();$('panel-kicker').textContent=kicker;const h=el('h2',title);h.id='content-title';panel.append(h);return panel;}
-async function renderPanel() {
-  const version=++renderVersion;
-  $('room-content').hidden=!selected;document.body.classList.toggle('has-selection',!!selected);
-  document.querySelectorAll('[data-object]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.object===selected)));
-  if(!selected){
-    const p=panelHeading(tr('homeTitle'),'THE ART OF SLOW LIVING');
-    p.append(el('p',localized(data?.intro)||tr('description')));
-    const quote=el('p',localized(data?.quote)||(lang==='zh'?'在很大的世界里，\n安放很小的自己。':'A small place of your own,\nin a very big world.'),'panel-quote');quote.style.whiteSpace='pre-line';p.append(quote,el('p',tr('homeFoot'),'panel-foot'));return;
-  }
-  if(selected==='books'){
-    const p=panelHeading(tr('bookTitle'),'01 / BOOKS & WORDS');p.append(el('p',tr('bookIntro')));
-    const loading=el('p',tr('loading'),'panel-loading');loading.setAttribute('role','status');p.append(loading);
-    const result=await readBooks();if(version!==renderVersion)return;loading.remove();
-    const books=selectBooks(result.graph,data?.reading);
-    if(!books.length)p.append(el('p',tr('noBooks')));
-    const list=el('ul',null,'panel-list');books.forEach((b,i)=>{const li=el('li');li.append(link(String(i+1).padStart(2,'0')+'　'+b.title,'./#sec-map',''),el('small',b.author||''));list.append(li);});p.append(list,link(tr('bookLink'),'./#sec-map'));
-    const articles=result.articles.filter(a=>/读书|阅读/.test(a.category||'')).slice(0,2);
-    if(articles.length){p.append(el('p',tr('readingNotes'),'panel-foot'));const notes=el('ul',null,'panel-list');articles.forEach(a=>{const url=safeURL(a.url);if(url){const li=el('li');li.append(link(a.title,url,'',true));notes.append(li);}});p.append(notes);}
-    p.append(link(tr('noteLink'),'./#sec-essays'));if(result.partial)p.append(el('p',tr('contentError'),'panel-foot'));
-  }else if(selected==='tea'){
-    const p=panelHeading(localized(data?.tea?.title)||tr('tea'),'02 / THE TEA RITUAL');p.append(el('p',localized(data?.tea?.note)||tr('description')));
-    const steps=el('div',null,'step-list');(data?.tea?.steps||[{zh:'温杯',en:'Warm'},{zh:'注水',en:'Steep'},{zh:'分茶',en:'Pour'}]).slice(0,3).forEach((step,i)=>{const s=el('span');s.append(el('b',String(i+1).padStart(2,'0')),document.createTextNode(localized(step)));steps.append(s);});p.append(steps);
-    const brew=button(tr('brew'),startTea);brew.id='brew';p.append(brew);const cancel=button(tr('cancelTea'),()=>{clearTea();say(tr('teaEnded'));},'secondary-button');cancel.id='cancel-tea';p.append(cancel);renderTeaState();
-  }else if(selected==='music'){
-    const p=panelHeading(lang==='zh'?'听见安静':'Listen to the quiet','03 / SOUND & SILENCE');p.append(el('p',localized(data?.music?.note)||tr('description')));
-    const b=button(tr('ambientStart'),toggleAudio);b.id='ambient';p.append(b,el('p',tr('ambientDetail'),'panel-foot'));renderAudioState();
-    const list=el('ul',null,'panel-list');(Array.isArray(data?.music?.playlist)?data.music.playlist:[]).forEach(item=>{const url=safeURL(item?.url);if(url){const li=el('li');li.append(link(localized(item.title),url,'',true));list.append(li);}});p.append(list);
-  }else if(selected==='plant'){
-    const p=panelHeading(localized(data?.plant?.name)||tr('plant'),'04 / GROWING, SLOWLY');p.append(el('p',localized(data?.plant?.note)||tr('description')));
-    const label=el('label',tr('plantLabel'),'note-label');label.htmlFor='plant-note';const input=el('textarea',null,'plant-note');input.id='plant-note';input.maxLength=2000;input.placeholder=tr('plantPlaceholder');input.value=plantDraft;input.addEventListener('input',()=>{plantDraft=input.value;});
-    p.append(label,input,button(tr('saveNote'),()=>say(tr(writePreference('caelum_room_plant_note',input.value)?'noteSaved':'noteFailed'))),el('p',tr('notePrivacy'),'panel-foot'));
-  }else if(selected==='window'){
-    const p=panelHeading(tr('windowTitle'),'05 / A CHANGE OF LIGHT');p.append(el('p',tr('windowNote')));
-    ['dawn','dusk','night'].forEach(t=>{const b=button(tr(t),()=>{setTime(t);renderPanel();});b.setAttribute('aria-pressed',String(t===time));p.append(b);});
-  }else if(selected==='lamp'){
-    const p=panelHeading(tr('lampTitle'),'06 / A POOL OF WARMTH');p.append(el('p',tr('lampNote')));const b=button(tr(lamp?'lampOn':'lampOff'),()=>{lamp=!lamp;document.body.dataset.lamp=lamp?'on':'off';roomWorld?.setLamp(lamp);renderPanel();say(tr(lamp?'lampOff':'lampOn'));});b.setAttribute('aria-pressed',String(lamp));p.append(b);
-  }
-}
-function chooseObject(object) {
-  if(!['books','tea','music','plant','window','lamp'].includes(object))return;
-  setQuiet(false);$('design-panel').hidden=true;$('design-toggle').setAttribute('aria-expanded','false');
-  selected=object;
-  if(object==='window')setTime(['dusk','night','dawn'][(['dusk','night','dawn'].indexOf(time)+1)%3]);
-  if(object==='lamp'){lamp=!lamp;document.body.dataset.lamp=lamp?'on':'off';roomWorld?.setLamp(lamp);}
-  roomWorld?.focus(object);renderPanel();$('room-content').focus({preventScroll:true});
-}
-function closeContent(restoreFocus=true) {const previous=selected;selected=null;renderPanel();if(restoreFocus&&previous)$('object-nav').querySelector(`[data-object="${previous}"]`)?.focus({preventScroll:true});}
-function setQuiet(value) {
-  document.body.classList.toggle('quiet-view',value);
-  document.querySelectorAll('.room-hud').forEach(n=>{n.inert=value;});
-  $('hotspots').inert=value;
-  $('room-content').inert=value;$('show-ui').hidden=!value;
-}
-function setMaterial(value, announce=true) {
-  if(!['oak','walnut','plaster'].includes(value))return;
-  material=value;document.body.dataset.style=value;writePreference('caelum_room_material',value);
-  document.querySelectorAll('[data-material]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.material===value)));
-  roomWorld?.setStyle?.(value);if(announce)say(tr(value));
-}
-function finishSceneLoading() {$('room-loading').hidden=true;$('scene-shell').setAttribute('aria-busy','false');}
-function showWorldFailure(){document.body.classList.remove('world-ready');$('scene-art').removeAttribute('aria-hidden');$('render-error').hidden=false;updateNavigationHint();finishSceneLoading();}
-async function initWorld(){
-  const epoch=++worldEpoch;roomWorld?.destroy();roomWorld=null;
-  $('render-error').hidden=true;$('room-loading').hidden=false;$('scene-shell').setAttribute('aria-busy','true');
-  try{
-    const {createRoom}=await import('./world.js');
-    if(epoch!==worldEpoch||leaving)return;
-    const world=await createRoom($('world-host'),{reducedMotion:motionPreference.matches,onObjectSelect:chooseObject,onError:()=>{if(epoch===worldEpoch&&!leaving){roomWorld?.destroy();roomWorld=null;showWorldFailure();}}});
-    if(epoch!==worldEpoch||leaving){world.destroy();return;}
-    roomWorld=world;world.setTime(time);world.setLamp(lamp);world.setStyle(material);world.setTeaState?.(teaStep);world.setPaused(document.hidden);
-    document.body.classList.add('world-ready');$('scene-art').setAttribute('aria-hidden','true');updateNavigationHint();finishSceneLoading();
-  }catch{if(epoch===worldEpoch&&!leaving)showWorldFailure();}
-}
-document.querySelectorAll('[data-object]').forEach(b=>b.addEventListener('click',()=>chooseObject(b.dataset.object)));
-document.querySelectorAll('.time-options button').forEach(b=>b.addEventListener('click',()=>{setTime(b.dataset.time);if(selected==='window')renderPanel();}));
-document.querySelectorAll('[data-material]').forEach(b=>b.addEventListener('click',()=>setMaterial(b.dataset.material)));
-$('language').addEventListener('click',()=>{lang=lang==='zh'?'en':'zh';writePreference('caelum_lang',lang);translate();renderPanel();say('');});
-$('retry').addEventListener('click',()=>{readingCache=null;loadConfig();});
-$('retry-world').addEventListener('click',initWorld);
-$('close-content').addEventListener('click',closeContent);
-$('reset').addEventListener('click',()=>{closeContent(false);$('design-panel').hidden=true;$('design-toggle').setAttribute('aria-expanded','false');roomWorld?.reset();say(tr('overviewNote'));});
-$('design-toggle').addEventListener('click',()=>{const open=$('design-panel').hidden;$('design-panel').hidden=!open;$('design-toggle').setAttribute('aria-expanded',String(open));if(open){closeContent(false);$('close-design').focus();}});
-$('close-design').addEventListener('click',()=>{$('design-panel').hidden=true;$('design-toggle').setAttribute('aria-expanded','false');$('design-toggle').focus();});
-$('hide-ui').addEventListener('click',()=>{setQuiet(true);$('show-ui').focus();});
-$('show-ui').addEventListener('click',()=>{setQuiet(false);$('hide-ui').focus();});
-$('fullscreen').addEventListener('click',async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else if(document.documentElement.requestFullscreen)await document.documentElement.requestFullscreen();else say(tr('fullscreenError'));}catch{say(tr('fullscreenError'));}});
-document.addEventListener('keydown',event=>{
-  if(event.key==='Escape') {if(!$('design-panel').hidden){$('design-panel').hidden=true;$('design-toggle').setAttribute('aria-expanded','false');$('design-toggle').focus();}else if(selected)closeContent();else {setQuiet(false);$('hide-ui').focus();}}
-  if(event.key.toLowerCase()==='h'&&!event.altKey&&!event.ctrlKey&&!event.metaKey&&!/INPUT|TEXTAREA|SELECT/.test(event.target?.tagName||'')&&!event.target?.isContentEditable){event.preventDefault();const quiet=!document.body.classList.contains('quiet-view');setQuiet(quiet);$(quiet?'show-ui':'hide-ui').focus();}
-});
-document.addEventListener('visibilitychange',()=>{document.body.classList.toggle('is-hidden',document.hidden);roomWorld?.setPaused(document.hidden);if(document.hidden)stopAudio();});
-window.addEventListener('pagehide',()=>{leaving=true;worldEpoch++;clearTea();stopAudio();audioContext?.close().catch(()=>{});audioContext=null;roomWorld?.destroy();roomWorld=null;});
-window.addEventListener('pageshow',event=>{if(event.persisted){leaving=false;initWorld();}});
-translate();renderPanel();setMaterial(material,false);loadConfig();initWorld();
+const $=id=>document.getElementById(id);
+const ids=['living','study','bedroom','kitchen','flex','reserve','bath','entry','garden'];
+const images={living:livingImage,study:studyImage,bedroom:bedroomImage,kitchen:kitchenImage,bath:bathImage,flex:flexImage};
+const english={living:'LIVING / TEA / LIBRARY',study:'A ROOM TO THINK',bedroom:'A PLACE TO REST',kitchen:'COOK / GATHER / SHARE',flex:'A LITTLE ROOM FOR OTHERS',reserve:'AN OPEN FUTURE',bath:'WATER / STONE / LIGHT',entry:'THE ART OF COMING HOME',garden:'RAIN / A TREE / THE SEASONS'};
+const shortNames={living:['起居茶室','Living'],study:['书房','Study'],bedroom:['主卧','Bedroom'],kitchen:['餐厨','Kitchen'],flex:['多用客房','Guest / flex'],reserve:['预留室','Reserve'],bath:['卫浴','Bath'],entry:['归家与家务','Entry / utility'],garden:['庭院','Courtyard']};
+const copy={identity:['未来的家','A home, imagined'],references:['设计脉络','Design lineage'],quiet:['静看','Just look'],restore:['显示界面 · H','Show controls · H'],houseIntro:['为现在的自己，\n也为尚未发生的生活。','For who you are now.\nFor a life still unfolding.'],grossArea:['㎡ 概念建面','m² gross concept'],closedRooms:['间独立空间','enclosed rooms'],courtArea:['㎡ 室外庭院','m² courtyard'],spaceTab:['空间','Space'],practicalTab:['落地','Living with it'],notesTab:['我的札记','My notes'],spatialIdea:['空间的想法','THE SPATIAL IDEA'],practicalLabel:['把画面带进真实生活','BRING THE IDEA INTO DAILY LIFE'],noteLabel:['想保留的，想改变的','What to keep. What to change.'],notePrivacy:['只保存在当前浏览器。导出后，可带给未来的建筑师。','Saved only in this browser. Export a copy for your future architect.'],saveNote:['保存这间的札记 ↗','Save this room’s notes ↗'],exportNotes:['导出整本设计札记 ↓','Export all design notes ↓'],daily:['在这里，过一会儿','Stay a little while'],conceptNote:['原创住宅研究 · 166㎡净功能 + 34㎡构造预留\n影像研究氛围，平面研究关系；二者不作精确对应。','Original house study · 166 m² net + 34 m² allowance\nImages explore atmosphere; the plan explores relationships.'],briefOpen:['阅读完整设计简报 ↗','Read the full design brief ↗'],imageCredit:['原创概念影像 · 非建成实景','ORIGINAL CONCEPT IMAGE · NOT A BUILT PROJECT'],imageView:['空间影像','Atmosphere'],planView:['全屋平面','House plan'],planHeading:['让日常，围着一棵树展开。','Let life gather around a tree.'],planCaption:['约200㎡建面工作模型 · 庭院另列 · 方位待基地确认','200 m² gross concept · Courtyard separate · Site orientation unconfirmed'],planFoot:['点选房间，查看生活设想与落地笔记。图中为概念净尺度，非施工图。','Choose a room to explore. These are conceptual control dimensions, not construction drawings.'],imageError:['这张影像暂未载入，仍可查看平面与设计笔记。','This image could not load. The plan and design notes remain available.'],dataError:['部分设计文字暂未载入，平面和空间影像仍可浏览。','Some design text could not load. Images and the plan remain available.'],referenceTitle:['借鉴一种思考方式。','Borrow a way of thinking.'],referenceIntro:['从建筑师的真实作品中，学习空间、材料和光。下面是原则的原创转译，并非原作者为此住宅设计，也不复制其图纸与摄影。','Learn about space, material and light from built architectural work. These are our interpretations, not a design by the cited architects. Their drawings and photographs are not reproduced.'],siteNote:['基地、朝向、气候、预算和居住人数尚待确定。这是一份可与建筑师继续深化的设计研究，面积与构造均需结合项目重新核实。','Site, climate, budget and occupancy remain open. This is a design study to develop with an architect; areas and construction need project-specific verification.'],exportBrief:['下载住宅设计简报 ↓','Download the house brief ↓'],dailyKicker:['A LITTLE EVERYDAY LIFE','A LITTLE EVERYDAY LIFE'],saved:['这间房的札记已保存。','Notes for this room are saved.'],saveFailed:['浏览器禁止了本地保存，请先导出札记。','Local saving is blocked. Please export your notes.'],notePlaceholder:['例如：书桌需要双屏；不喜欢开放式衣柜；窗外想种一棵树。','For example: two monitors; closed wardrobes; a tree outside the window.'],dimensionPrefix:['概念尺度：','Concept dimensions: '],outdoor:['室外 · 另列','OUTDOOR · SEPARATE'],planOnly:['这个空间先留在平面里，待真实的需要慢慢出现。','This space begins with a plan. Let its purpose emerge.'],referenceLink:['阅读官方项目 ↗','View the official project ↗']};
+const references=[
+ {name:'Aino & Alvar Aalto',project:'The Aalto House',url:'https://www.alvaraalto.fi/en/architecture/the-aalto-house/',idea:{zh:'居住与工作分区，用简单材料保留亲密的尺度。这里将书房独立出来，也让公共阅读区继续开放。',en:'Separate living and work while keeping an intimate scale. Our study can close its door; the shared reading room stays open.'}},
+ {name:'John Pawson',project:'Philippines House',url:'https://www.johnpawson.com/works/philippines-house',idea:{zh:'从庭院组织公共与私密、光与阴影。这里让归家稍作收敛，再朝起居与一棵树展开。',en:'Organize public and private, light and shade around a courtyard. Our entrance gathers inward before opening toward living and a tree.'}},
+ {name:'Norm Architects',project:'Forest Retreat',url:'https://normcph.com/project/forest-retreat/',idea:{zh:'从橡木、灰泥、织物与石材中获得触感层次。这里把木留给干区，让湿区与台面更易维护。',en:'Find tactile depth in oak, plaster, textiles and stone. Our timber belongs in dry areas; wet surfaces and worktops stay maintainable.'}},
+ {name:'Kengo Kuma',project:'Wood / Peel',url:'https://kkaa.co.jp/project/wood-peel/',idea:{zh:'用木和绿化柔化日照与视线。这里将局部格栅、植物与外遮阳作为庭院边界的研究方向。',en:'Use timber and planting to soften sun and sight lines. Our courtyard edge studies screens, planting and external shading.'}}
+];
+Object.assign(copy,{lineageOpen:['设计脉络与官方案例 ↗','Architectural references ↗'],expandPlan:['放大查看 ↗','Enlarge plan ↗'],largePlan:['全屋平面 · 近看','The house plan, up close'],fitPlan:['适应窗口','Fit view'],downloadPlan:['下载矢量图 ↓','Download SVG ↓'],panHint:['滚动查看细部；触屏可横向移动。点选空间后，关闭此图查看对应笔记。','Scroll to inspect details; pan horizontally on touchscreens. Choose a room, then close the drawing to read its notes.']});
+const initialAreas=[40,14,17.64,21.6,13.86,15.54,11.76,31.6,30];
+let house={version:1,assumptions:{grossFloorArea:200,netProgramArea:166,courtyardArea:30},rooms:ids.map((id,i)=>({id,label:{zh:shortNames[id][0],en:shortNames[id][1]},subtitle:{zh:'为未来的生活留一点余地。',en:'Room for a life still unfolding.'},area:initialAreas[i],zone:id==='garden'?'outdoor':'private',narrative:{zh:'空间影像与原创平面仍可浏览。完整设计说明请稍后重试。',en:'The atmosphere image and original plan remain available. Please retry the full design notes later.'},dimensions:{zh:'待结合项目深化',en:'To be developed for the project'},materials:{zh:[],en:[]},practical:{zh:[],en:[]}}))};
+let lang=readPreference('caelum_lang','zh')==='en'?'en':'zh';
+let selected=ids.includes(readPreference('caelum_house_room'))?readPreference('caelum_house_room'):'living',tab='space',view='image',imageEpoch=0,feedbackTimer=null,quiet=false;
+let notes={};
+try{const stored=JSON.parse(readPreference('caelum_house_notes_v1','{}'));if(stored&&typeof stored==='object'&&!Array.isArray(stored))for(const id of ids)if(typeof stored[id]==='string')notes[id]=stored[id].slice(0,4000);}catch{}
+const tr=key=>(copy[key]||[key,key])[lang==='en'?1:0];
+const local=value=>typeof value==='string'?value:value?.[lang]||value?.zh||'';
+const make=(tag,text,cls)=>{const n=document.createElement(tag);if(text!=null)n.textContent=text;if(cls)n.className=cls;return n;};
+const say=text=>{clearTimeout(feedbackTimer);$('feedback').textContent=text;if(text)feedbackTimer=setTimeout(()=>{$('feedback').textContent='';},5000);};
+function multiline(node,text){node.replaceChildren();String(text).split('\n').forEach((line,i)=>{if(i)node.append(document.createElement('br'));node.append(document.createTextNode(line));});}
+const plan=createHousePlan($('floorplan'),{onSelect:id=>selectRoom(id),language:lang,selected});
+const largePlan=createHousePlan($('large-floorplan'),{onSelect:id=>selectRoom(id),language:lang,selected});
+let planScale=1;
+const daily=mountDailyLife({getLanguage:()=>lang,announce:say,onLightChange:({time,lamp})=>{document.body.dataset.time=time;document.body.dataset.lamp=lamp?'on':'off';}});
+function activeRoom(){return house.rooms.find(room=>room.id===selected)||house.rooms[0];}
+function storeDraft(){const value=$('design-note').value.slice(0,4000);if(value.trim())notes[selected]=value;else delete notes[selected];}
+function setTab(next,focus=false){if(!['space','practical','notes'].includes(next))return;tab=next;document.querySelectorAll('[data-tab]').forEach(button=>{const on=button.dataset.tab===tab;button.setAttribute('aria-selected',String(on));button.tabIndex=on?0:-1;if(on&&focus)button.focus();});for(const id of ['space','practical','notes'])$('detail-'+id).hidden=id!==tab;}
+function setView(next){view=next==='image'&&images[selected]?'image':'plan';$('photo-stage').hidden=view!=='image';$('plan-stage').hidden=view!=='plan';$('view-image').disabled=!images[selected];$('view-image').setAttribute('aria-pressed',String(view==='image'));$('view-plan').setAttribute('aria-pressed',String(view==='plan'));}
+function updatePhoto(){const room=activeRoom(),source=images[selected],epoch=++imageEpoch;$('image-error').hidden=true;if(!source){setView('plan');return;}$('photo-stage').classList.add('is-changing');const image=new Image();image.onload=()=>{if(epoch!==imageEpoch)return;const visible=$('room-image');visible.src=source;visible.alt=local(room.label)+(lang==='en'?' — original atmospheric concept image':' · 原创氛围概念影像');$('photo-stage').classList.remove('is-changing');};image.onerror=()=>{if(epoch!==imageEpoch)return;$('photo-stage').classList.remove('is-changing');$('image-error').hidden=false;setView('plan');};image.src=source;}
+function ensureRoomVisible(){const nav=$('room-nav'),button=nav.querySelector('[aria-pressed="true"]');if(!button)return;const a=button.getBoundingClientRect(),b=nav.getBoundingClientRect();if(a.left<b.left)nav.scrollLeft+=a.left-b.left-12;else if(a.right>b.right)nav.scrollLeft+=a.right-b.right+12;}
+function renderRoom(){const room=activeRoom(),index=ids.indexOf(room.id);$('room-title').textContent=local(room.label);$('room-en').textContent=english[room.id];$('room-number').textContent=String(index+1).padStart(2,'0');const area=Number(room.area).toLocaleString(lang==='en'?'en-US':'zh-CN',{maximumFractionDigits:2});$('room-area').replaceChildren(document.createTextNode(area),make('small',room.zone==='outdoor'?tr('outdoor'):'㎡'));$('room-description').textContent=local(room.subtitle);$('room-idea').textContent=local(room.narrative);$('dimension-note').textContent=tr('dimensionPrefix')+local(room.dimensions);$('room-practical').replaceChildren();for(const line of room.practical?.[lang]||room.practical?.zh||[])$('room-practical').append(make('li',line));$('room-materials').replaceChildren();for(const name of room.materials?.[lang]||room.materials?.zh||[]){const material=make('span',null,'material');material.append(make('i'),document.createTextNode(name));$('room-materials').append(material);}$('design-note').value=notes[selected]||'';$('image-index').textContent=String(index+1).padStart(2,'0')+' / '+english[room.id].split(' / ')[0];$('image-title').textContent=local(room.label);$('image-subtitle').textContent=local(room.subtitle);$('room-image').alt=local(room.label)+(lang==='en'?' — original atmospheric concept image':' · 原创氛围概念影像');document.querySelectorAll('#room-nav [data-room]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.room===selected)));plan.select(selected);largePlan.select(selected);ensureRoomVisible();$('plan-selection').textContent=local(room.label)+' · '+area+'㎡ · '+local(room.dimensions);}
+function selectRoom(id){if(!ids.includes(id))return;storeDraft();selected=id;writePreference('caelum_house_room',id);renderRoom();updatePhoto();setView(view);}
+function renderNavigation(){const nav=$('room-nav');nav.replaceChildren();ids.forEach((id,i)=>{const button=make('button');button.type='button';button.dataset.room=id;button.setAttribute('aria-pressed',String(id===selected));button.append(make('small',String(i+1).padStart(2,'0')),make('span',shortNames[id][lang==='en'?1:0]));button.addEventListener('click',()=>selectRoom(id));nav.append(button);});}
+function renderReferences(){const list=$('reference-list');list.replaceChildren();references.forEach((reference,i)=>{const article=make('article',null,'reference-item');article.append(make('span',String(i+1).padStart(2,'0')),make('h3',reference.name),make('small',reference.project),make('p',local(reference.idea)));const link=make('a',tr('referenceLink'));link.href=safeURL(reference.url);link.target='_blank';link.rel='noopener noreferrer';article.append(link);list.append(article);});}
+function translate(){document.documentElement.lang=lang==='zh'?'zh-CN':'en';document.title=lang==='zh'?'未来的家 · Caelum':'A home, imagined · Caelum';document.querySelectorAll('[data-i18n]').forEach(n=>multiline(n,tr(n.dataset.i18n)));$('language').textContent=lang==='zh'?'EN':'中';$('language').setAttribute('aria-label',lang==='zh'?'Switch to English':'切换到中文');$('design-note').placeholder=tr('notePlaceholder');renderNavigation();renderReferences();renderRoom();plan.setLanguage(lang);largePlan.setLanguage(lang);daily.translate();}
+function setQuiet(value){quiet=value;document.body.classList.toggle('quiet-view',quiet);for(const n of document.querySelectorAll('.atlas-header,.room-nav,.design-sidebar,.view-switch'))n.inert=quiet;$('floorplan').inert=quiet;$('restore-ui').hidden=!quiet;if(quiet)$('restore-ui').focus({preventScroll:true});else $('quiet-toggle').focus({preventScroll:true});}
+function download(text,name,type='text/markdown;charset=utf-8'){const blob=new Blob([text],{type}),url=URL.createObjectURL(blob),a=make('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+function exportNotes(){storeDraft();const lines=['# Caelum · 未来住宅设计札记','', '工作模型：约200㎡概念建面 = 166㎡净功能 + 34㎡构造与设备预留；室外庭院30㎡另列。','', '以下为原创概念研究，影像与平面不作精确对应。实际建造须按基地与项目重新设计。',''];for(const room of house.rooms){lines.push('## '+local(room.label)+' · '+room.area+'㎡','',local(room.narrative),'','概念尺度：'+local(room.dimensions),'','落地笔记：',...(room.practical?.[lang]||room.practical?.zh||[]).map(line=>'- '+line),'','我的札记：',notes[room.id]||'（尚未记录）','');}lines.push('## 设计参考','',...references.map(r=>'- ['+r.name+' · '+r.project+']('+r.url+')'));download(lines.join('\n'),'Caelum-住宅设计札记.md');}
+async function loadHouse(){const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),10000);try{const response=await fetch(new URL('data/house.json',new URL(import.meta.env.BASE_URL,location.origin)),{signal:controller.signal});if(!response.ok)throw new Error('Unavailable');const value=validateHouse(await response.json());house=value;$('data-error').hidden=true;renderRoom();}catch{$('data-error').hidden=false;}finally{clearTimeout(timer);}}
+$('language').addEventListener('click',()=>{storeDraft();lang=lang==='zh'?'en':'zh';writePreference('caelum_lang',lang);translate();});
+function zoomPlan(value){planScale=Math.min(1.6,Math.max(.35,value));$('large-floorplan').style.width=(900*planScale)+'px';$('plan-scale').textContent=Math.round(planScale*100)+'%';}
+$('plan-expand').addEventListener('click',()=>{$('plan-dialog').showModal();zoomPlan(1);});
+$('plan-smaller').addEventListener('click',()=>zoomPlan(planScale-.15));$('plan-larger').addEventListener('click',()=>zoomPlan(planScale+.15));$('plan-fit').addEventListener('click',()=>zoomPlan(Math.min($('plan-pan').clientWidth/900,$('plan-pan').clientHeight/(900*1190/1120))));
+$('plan-download').addEventListener('click',()=>download('<?xml version="1.0" encoding="UTF-8"?>\n'+$('large-floorplan').querySelector('svg').outerHTML,'Caelum-住宅概念平面.svg','image/svg+xml;charset=utf-8'));
+$('view-image').addEventListener('click',()=>setView('image'));$('view-plan').addEventListener('click',()=>setView('plan'));
+$('quiet-toggle').addEventListener('click',()=>setQuiet(true));$('restore-ui').addEventListener('click',()=>setQuiet(false));
+$('reference-open').addEventListener('click',()=>$('reference-dialog').showModal());$('lineage-open').addEventListener('click',()=>$('reference-dialog').showModal());$('brief-open').addEventListener('click',()=>window.open(safeURL('./docs/未来住宅设计简报.md',location.href),'_blank','noopener,noreferrer'));
+$('daily-open').addEventListener('click',()=>daily.open(selected==='study'?'books':selected==='garden'?'plant':selected==='bedroom'?'music':'tea'));
+$('save-note').addEventListener('click',()=>{storeDraft();say(tr(writePreference('caelum_house_notes_v1',JSON.stringify(notes))?'saved':'saveFailed'));});
+$('design-note').addEventListener('input',storeDraft);$('export-notes').addEventListener('click',exportNotes);
+$('export-brief').addEventListener('click',async()=>{try{const response=await fetch(new URL('./docs/未来住宅设计简报.md',location.href));if(!response.ok)throw new Error('Unavailable');download(await response.text(),'Caelum-未来住宅设计简报.md');}catch{exportNotes();}});
+for(const button of document.querySelectorAll('[data-close]'))button.addEventListener('click',()=>$(button.dataset.close).close());
+for(const dialog of document.querySelectorAll('dialog'))dialog.addEventListener('click',event=>{if(event.target===dialog){const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)dialog.close();}});
+for(const button of document.querySelectorAll('[data-tab]')){button.addEventListener('click',()=>setTab(button.dataset.tab));button.addEventListener('keydown',event=>{const order=['space','practical','notes'],index=order.indexOf(tab);if(['ArrowRight','ArrowLeft','Home','End'].includes(event.key)){event.preventDefault();setTab(event.key==='Home'?'space':event.key==='End'?'notes':order[(index+(event.key==='ArrowRight'?1:2))%3],true);}});}
+document.addEventListener('keydown',event=>{if(document.querySelector('dialog[open]'))return;if(event.key==='Escape'&&quiet){setQuiet(false);return;}if(event.key.toLowerCase()==='h'&&!event.altKey&&!event.ctrlKey&&!event.metaKey&&!/INPUT|TEXTAREA|SELECT/.test(event.target?.tagName||'')&&!event.target?.isContentEditable){event.preventDefault();setQuiet(!quiet);}});
+window.addEventListener('pagehide',event=>{clearTimeout(feedbackTimer);daily.pause();if(!event.persisted){daily.destroy();plan.destroy();largePlan.destroy();}});
+translate();setTab('space');updatePhoto();setView(images[selected]?'image':'plan');loadHouse();
