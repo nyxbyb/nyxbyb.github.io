@@ -6,8 +6,8 @@ Caelum（凿星图）是个人科研、阅读、写作与生活网站。保留�
 
 - 页面使用原生 HTML/CSS/JavaScript，Vite 5 负责构建。虽保留 Svelte 5 及其插件依赖，现有页面没有 Svelte 组件，不要据此迁移技术栈。
 - `web/index.html` 是主页唯一维护入口，内含 Canvas 星图、沉浸式视图、星域、设置与内容编辑。`caelum.html` 是历史副本，禁止复制覆盖主页。
-- `web/room.html`、`web/room/{room.js,room.css,house-plan.js,daily-life.js}` 是二维住宅设计册、原创可交互 SVG 平面与日常内容。JPEG 位于 `web/room/assets/`；PNG 保留视觉原稿。`world.js` 和 `scene.svg` 为历史方案，不从当前页面加载。
-- `web/public/data/{graph,articles,text,inbox,room,house}.json`、`web/public/tree.json` 是公开内容。住宅中英文字段与面积表改 `house.json`，日常书茶内容改 `room.json`。平面几何改 `house-plan.js` 时同步面积数据与设计简报。
+- `web/room.html`、`web/room/{room.js,room.css,house-plan.js,spatial-model.js,spatial-drawings.js,design-dossier.js,daily-life.js}` 是二维住宅设计册、原创可交互 SVG 平面与日常内容。JPEG 位于 `web/room/assets/`；PNG 保留视觉原稿。`world.js` 和 `scene.svg` 为历史方案，不从当前页面加载。
+- `web/public/data/{graph,articles,text,inbox,room,house}.json`、`web/public/tree.json` 是公开内容。住宅中英文字段与面积表改 `house.json`，日常书茶内容改 `room.json`。空间几何只改 `spatial-model.js`，随后用 `scripts/render-house-studies.py` 重导出几何视图、公开SVG/JSON，再重建 `scripts/build-house-dossier.py` 的PDF；同步面积数据与设计简报。`spatial-drawings.js` 负责同模型图版，`house-plan.js` 负责可访问交互。
 - `scripts/` 是本地语料处理脚本；`corpus/`、`data/` 含私人原料。构建不需要重新抓取、嵌入或上传这些目录。
 - `web/scripts/package-pages.mjs` 将 Vite 产物包装为 `web/dist/web/`，在产物根保留跳转页及兼容手册。只发布 `web/dist/`。
 
@@ -33,7 +33,7 @@ git diff --check
 - 保留 `/web/`、`/web/index.html` 与原有手册链接。Vite `base` 为 `/web/`，页面内数据使用相对路径；不要引入根路径 `/assets/`、`/data/` 假设。
 - 不重写用户简介、论文、文章、书单或私有笔记。修改数据结构时兼容旧版本，保留已有条目。
 - 主页沿用衬线字体、低饱和主题与留白；住宅采用用户确认的日式现代自然木质，二维静帧与纸面建筑图册。2026-10-20 用户要求从三维改为二维，不要重新默认启用 Three.js。复用 CSS 变量与中英文字段。
-- 当前住宅工作模型为约200㎡概念建面（166㎡净功能＋34㎡构造设备预留）、30㎡庭院另列、四间独立空间。房间影像研究氛围，平面研究关系，不宣称精确对应或可直接施工。建筑师参考须链接官方来源，原创转译与原作区分。
+- 当前住宅工作模型为约200㎡概念建面（166㎡净功能＋34㎡构造设备预留）、30㎡庭院另列、四间独立空间。住宅名「迟庭」。门窗、家具、视点、动线、立面与剖面以同一模型协调；材质影像有对应固定视点和几何对照，不能宣称毫米级精确或可直接施工。历史REV.01独立氛围图不进入当前房间画面。建筑师参考须链接官方来源，原创转译与原作区分。
 - 房间保留原生控件、日常抽屉、可放大的键盘平面、矢量/札记导出。点击、触摸、键盘均可操作，保留焦点提示、状态反馈、减少动态效果偏好及数据/图像加载失败后的可用内容。
 - 页面隐藏时暂停持续动画与声音；音频只能由用户主动触发。不要为二维过渡新增 React、Three.js、GSAP 或模型依赖。历史 Three.js 依赖仅支持保留的源码与回归，不进入当前页面产物。
 - 不为格式统一重构整页。新增模块可以独立文件，现有功能修复尽量局部；更新这里与受影响的维护文档，不复制通用模板。
@@ -49,6 +49,6 @@ git diff --check
 
 ## 交付前验证
 
-运行 build、test、diff 检查；在浏览器检查主页初始化、星图搜索/筛选/推荐、星域下钻、语言/主题、编辑输入与错误反馈。住宅检查九区、平面点选与键盘、放大/缩放、图像、设计来源、札记保存/导出和全部日常功能。检查桌面和窄屏、控制台错误、资源 404、减少动态效果与存储不可用情形。真实 token 提交测试会公开写仓库，需避免把测试内容写入生产。
+运行 build、test、diff 检查；在浏览器检查主页初始化、星图搜索/筛选/推荐、星域下钻、语言/主题、编辑输入与错误反馈。住宅检查九区、平面点选与键盘、放大/缩放、影像/几何切换、八章设计册和联动、图纸/PDF/CSV下载、设计来源、札记保存/导出和全部日常功能。检查桌面和窄屏、控制台错误、资源 404、减少动态效果与存储不可用情形。真实 token 提交测试会公开写仓库，需避免把测试内容写入生产。
 
 CI 由 `.github/workflows/deploy.yml` 唯一负责，PR 构建检查，`main` 推送或手动触发时部署。Pages 设置的 Source 应为 GitHub Actions；仓库内删除旧 YAML 不会停止分支来源隐式发布。部署步骤使用现有 Pages 权限核验 Source 为 workflow，避免已验证产物再被原始源码覆盖。交付报告区分实际执行的检查、静态审查结论和未验证风险；记录访问路径与剩余限制。

@@ -1,8 +1,10 @@
 {
   "version": 1,
-  "title": { "zh": "未来之家", "en": "A home in the making" },
+  "title": { "zh": "迟庭", "en": "Chiting · A house with time" },
   "assumptions": {
-    "stage": "concept",
+    "stage": "concept-coordination",
+    "spatialModelVersion": 2,
+    "ceilingHeight": 2.7,
     "grossFloorArea": 200,
     "netProgramArea": 166,
     "wallAndServiceAllowance": 34,
@@ -21,7 +23,7 @@
       "dimensions": { "zh": "10 × 3.4m 主区，加 4 × 1.5m 转角", "en": "10 × 3.4 m main bay, plus a 4 × 1.5 m return" },
       "narrative": { "zh": "把一天里最好的光留给读书、喝茶和相处。低矮家具让视线越过窗台；藏书沿回廊一侧展开，庭院成为房间的远景。客厅不以电视墙为中心，而围绕书、茶桌和窗外的树组织。", "en": "Reserve the best light for reading, tea and time together. Low furniture keeps the view open; books line the gallery edge and the courtyard supplies the distant view. The room gathers around books, a tea table and a tree rather than a television wall." },
       "materials": { "zh": ["浅色橡木", "矿物质感白墙", "亚麻", "耐磨木地板"], "en": ["Pale oak", "Mineral-textured plaster", "Linen", "Durable timber flooring"] },
-      "practical": { "zh": ["茶区靠近餐厨，减少端水距离。", "长窗设置外遮阳与可开启扇，避免只追求整面玻璃。", "主通道目标至少 1.0–1.2m；书墙承重与防潮需单独核算。"], "en": ["Keep tea close to the kitchen and water.", "Combine large windows with external shading and operable sections.", "Aim for 1.0–1.2 m main routes; check book loads and moisture separately."] }
+      "practical": { "zh": ["茶席靠餐厨；杯具与在读书归入 F-L10，备水、冲泡、清洗与归柜一并考虑。", "长窗设置外遮阳与可开启扇，避免只追求整面玻璃。", "本版已核对 0.75–0.9m 的主要概念通行带；真实项目继续优化净宽，书墙承重与防潮另行核算。"], "en": ["Tea sits near the kitchen. F-L10 holds cups and current reading; plan filling, brewing, cleaning and return together.", "Combine large windows with external shading and operable sections.", "The main concept routes have checked 0.75–0.9 m bands; develop clear widths for the real project and verify book loads and moisture."] }
     },
     {
       "id": "study", "label": { "zh": "独立书房", "en": "Independent study" },
@@ -30,7 +32,7 @@
       "dimensions": { "zh": "约 4 × 3.5m", "en": "Approximately 4 × 3.5 m" },
       "narrative": { "zh": "计算机、写作与阅读拥有一间安静的房间。书桌侧向庭院取光，墙面保留给书架、草图与思考。白天有自然光，夜间可独立开灯，不必让工作扩散进卧室。", "en": "A quiet room for computing, writing and reading. The desk receives side light from the courtyard; walls hold books, sketches and unfinished thoughts. Work can continue under its own light without taking over the bedroom." },
       "materials": { "zh": ["橡木书桌", "可替换吸音软装", "哑光墙面", "可调工作灯"], "en": ["Oak desk", "Replaceable acoustic textiles", "Matt walls", "Adjustable task lighting"] },
-      "practical": { "zh": ["预留 1.8–2.2m 宽、0.75–0.85m 深的桌面与显示器距离。", "数据、插座、网线和散热路径在装修前确定。", "门缝、隔墙与通风消声共同决定隔音，不能只加吸音板。"], "en": ["Allow a 1.8–2.2 m desk width and 0.75–0.85 m depth.", "Plan data, power and equipment cooling before finishes.", "Acoustic privacy depends on the door, partitions and ventilation—not panels alone."] }
+      "practical": { "zh": ["预留 1.8–2.2m 宽、0.75–0.85m 深的桌面与显示器距离。", "双屏在 2.1 × 0.8m 桌面后沿；计算设备进入东侧通风柜，供电、网线和检修共同设计。", "门缝、隔墙与通风消声共同决定隔音，不能只加吸音板。"], "en": ["Allow a 1.8–2.2 m desk width and 0.75–0.85 m depth.", "Two displays sit at the back of a 2.1 × 0.8 m desk. Compute equipment has an east-side ventilated cabinet; coordinate power, data and servicing.", "Acoustic privacy depends on the door, partitions and ventilation—not panels alone."] }
     },
     {
       "id": "bedroom", "label": { "zh": "主卧", "en": "Primary bedroom" },
@@ -48,7 +50,7 @@
       "dimensions": { "zh": "约 4 × 5.4m", "en": "Approximately 4 × 5.4 m" },
       "narrative": { "zh": "餐桌成为工作、吃饭与谈话之间温和的过渡。厨房靠服务边布置，水、电与排烟集中；面向起居区保持交流，同时预留未来加玻璃移门的可能。", "en": "A dining table forms a gentle transition between work, meals and conversation. Water, power and extraction share a service edge. The kitchen stays connected to living, with the option of a future glazed sliding partition." },
       "materials": { "zh": ["易维护台面", "木色柜门", "耐污地面", "暖色工作照明"], "en": ["Maintainable counters", "Timber cabinet fronts", "Stain-resistant flooring", "Warm task lighting"] },
-      "practical": { "zh": ["洗、切、炒连续布置，操作区与餐椅活动范围分别核对。", "图中餐桌为 0.9 × 1.8m，通常 4–6 人使用。", "明火或重油烟需求可能影响开敞厨房与门窗方案。"], "en": ["Keep wash, prep and cooking in sequence; check counter and dining-chair clearances separately.", "The schematic 0.9 × 1.8 m table serves about four to six people.", "Fuel and cooking habits may change the open-kitchen and extraction strategy."] }
+      "practical": { "zh": ["洗、切、炒连续布置，操作区与餐椅活动范围分别核对。", "图中餐桌为 1.8 × 0.9m，配四把餐椅，西侧保留连续通道。", "明火或重油烟需求可能影响开敞厨房与门窗方案。"], "en": ["Keep wash, prep and cooking in sequence; check counter and dining-chair clearances separately.", "The 1.8 × 0.9 m table has four chairs, with a continuous route along its west side.", "Fuel and cooking habits may change the open-kitchen and extraction strategy."] }
     },
     {
       "id": "flex", "label": { "zh": "客房 · 多用室", "en": "Guest · multipurpose" },

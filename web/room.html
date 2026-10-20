@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#f1eee7">
-  <title>未来的家 · Caelum</title>
-  <meta name="description" content="一份关于未来生活的住宅设计册。约200平方米的庭院住宅，空间、材料、光线与尚未确定的生活。">
+  <title>迟庭 · Caelum</title>
+  <meta name="description" content="迟庭，一座给生活留出时间的庭院住宅。统一空间模型、室内影像、平面立面、材料与日常。">
   <link rel="canonical" href="https://nyxbyb.github.io/web/room.html">
   <link rel="stylesheet" href="./room/room.css">
   <script type="module" src="./room/room.js"></script>
@@ -15,39 +15,39 @@
   <div id="house-app" class="house-app">
     <header class="atlas-header">
       <a class="back-link" href="./"><span aria-hidden="true">↖</span> 凿星图 <i>Caelum</i></a>
-      <div class="atlas-identity"><span data-i18n="identity">未来的家</span><small>A HOUSE, IMAGINED</small></div>
+      <div class="atlas-identity"><span data-i18n="identity">迟庭</span><small>CHITING / A HOUSE WITH TIME</small></div>
       <div class="header-tools"><button id="reference-open" data-i18n="references">设计脉络</button><button id="quiet-toggle" data-i18n="quiet">静看</button><button id="language" aria-label="Switch to English">EN</button></div>
     </header>
     <main class="atlas-layout">
       <section class="visual-column" aria-label="空间图册 · Spatial atlas">
         <div class="visual-stage" id="visual-stage">
           <div class="photo-stage" id="photo-stage">
-            <img id="room-image" src="./room/assets/interior-dusk.jpg" alt="自然木质的起居茶室概念影像" fetchpriority="high">
-            <div class="photo-shade" aria-hidden="true"></div><div class="lamp-tone" aria-hidden="true"></div>
+            <img id="room-image" src="./room/assets/house-v2/living.jpg" alt="自然木质的起居茶室概念影像" fetchpriority="high">
+            <div class="view-correspondence"><button id="correspondence-open" aria-label="查看视点在平面的位置 · Locate viewpoint"><span id="viewpoint-code">C-living</span><span id="viewpoint-mini"></span><small data-i18n="locateView">在平面中定位 ↗</small></button></div><button id="geometry-toggle" class="geometry-toggle" aria-pressed="false" data-i18n="geometryView">同视点几何</button><div class="photo-shade" aria-hidden="true"></div><div class="lamp-tone" aria-hidden="true"></div>
             <div class="image-caption"><span id="image-index">01 / LIVING</span><h1 id="image-title">起居 · 茶 · 书</h1><p id="image-subtitle">把最好的光，留给醒着的日常。</p></div>
             <span class="image-credit" data-i18n="imageCredit">原创概念影像 · 非建成实景</span>
           </div>
           <div class="plan-stage" id="plan-stage" hidden>
-            <div class="plan-heading"><p>CAELUM / COURTYARD HOUSE</p><h2 data-i18n="planHeading">让日常，围着一棵树展开。</h2><span data-i18n="planCaption">约200㎡建面工作模型 · 庭院另列 · 方位待基地确认</span></div>
+            <div class="plan-heading"><p>CHITING / COURTYARD HOUSE</p><h2 data-i18n="planHeading">让日常，围着一棵树展开。</h2><span data-i18n="planCaption">约200㎡建面工作模型 · 庭院另列 · 方位待基地确认</span></div>
             <div class="floorplan" id="floorplan"></div>
             <div class="plan-foot-row"><p class="plan-foot" data-i18n="planFoot">点选房间，查看生活设想与落地笔记。图中为概念净尺度，非施工图。</p><button id="plan-expand" data-i18n="expandPlan">放大查看 ↗</button></div>
           </div>
-          <div class="view-switch" role="group" aria-label="图册视图 · Atlas view"><button id="view-image" aria-pressed="true" data-i18n="imageView">空间影像</button><button id="view-plan" aria-pressed="false" data-i18n="planView">全屋平面</button></div>
+          <section class="dossier-stage" id="dossier-stage" aria-label="迟庭设计册 · Chiting design dossier" hidden></section><div class="view-switch" role="group" aria-label="图册视图 · Atlas view"><button id="view-image" aria-pressed="true" data-i18n="imageView">空间影像</button><button id="view-plan" aria-pressed="false" data-i18n="planView">全屋平面</button><button id="view-dossier" aria-pressed="false" data-i18n="dossierView">设计册</button></div>
           <button class="restore-ui" id="restore-ui" hidden data-i18n="restore">显示界面 · H</button>
           <p class="image-error" id="image-error" hidden data-i18n="imageError">这张影像暂未载入，仍可查看平面与设计笔记。</p>
         </div>
         <nav class="room-nav" id="room-nav" aria-label="空间目录 · Room directory"></nav>
       </section>
       <aside class="design-sidebar" id="design-sidebar" aria-label="住宅设计笔记 · Design notes">
-        <div class="sidebar-top"><p class="eyebrow">A PLACE FOR THE YEARS AHEAD</p><p class="house-intro" data-i18n="houseIntro">为现在的自己，<br>也为尚未发生的生活。</p><div class="house-metrics"><span><b>200</b><small data-i18n="grossArea">㎡ 概念建面</small></span><span><b>4</b><small data-i18n="closedRooms">间独立空间</small></span><span><b>30</b><small data-i18n="courtArea">㎡ 室外庭院</small></span></div></div>
+        <div class="sidebar-top"><p class="eyebrow">A HOUSE WITH TIME</p><p class="house-intro" data-i18n="houseIntro">为现在的自己，<br>也为尚未发生的生活。</p><div class="house-metrics"><span><b>200</b><small data-i18n="grossArea">㎡ 概念建面</small></span><span><b>4</b><small data-i18n="closedRooms">间独立空间</small></span><span><b>30</b><small data-i18n="courtArea">㎡ 室外庭院</small></span></div></div>
         <div class="room-heading"><span class="room-number" id="room-number">01</span><div><h2 id="room-title">起居 · 茶 · 书</h2><p id="room-en">LIVING / TEA / LIBRARY</p></div><span class="room-area" id="room-area">40<small>㎡</small></span></div>
-        <div class="detail-tabs" role="tablist" aria-label="设计内容 · Design detail"><button role="tab" id="tab-space" aria-selected="true" aria-controls="detail-space" data-tab="space" data-i18n="spaceTab">空间</button><button role="tab" id="tab-practical" aria-selected="false" aria-controls="detail-practical" data-tab="practical" data-i18n="practicalTab">落地</button><button role="tab" id="tab-notes" aria-selected="false" aria-controls="detail-notes" data-tab="notes" data-i18n="notesTab">我的札记</button></div>
+        <div class="spatial-summary" id="spatial-summary"></div><div class="detail-tabs" role="tablist" aria-label="设计内容 · Design detail"><button role="tab" id="tab-space" aria-selected="true" aria-controls="detail-space" data-tab="space" data-i18n="spaceTab">空间</button><button role="tab" id="tab-practical" aria-selected="false" aria-controls="detail-practical" data-tab="practical" data-i18n="practicalTab">落地</button><button role="tab" id="tab-notes" aria-selected="false" aria-controls="detail-notes" data-tab="notes" data-i18n="notesTab">我的札记</button></div>
         <div class="detail-content">
           <section id="detail-space" role="tabpanel" aria-labelledby="tab-space"><p class="room-description" id="room-description"></p><div class="detail-rule"></div><p class="detail-label" data-i18n="spatialIdea">空间的想法</p><p id="room-idea" class="detail-copy"></p><div id="room-materials" class="materials"></div></section>
           <section id="detail-practical" role="tabpanel" aria-labelledby="tab-practical" hidden><p class="detail-label" data-i18n="practicalLabel">把画面带进真实生活</p><ul id="room-practical" class="practical-list"></ul><p class="dimension-note" id="dimension-note"></p></section>
           <section id="detail-notes" role="tabpanel" aria-labelledby="tab-notes" hidden><label for="design-note" class="detail-label" data-i18n="noteLabel">想保留的，想改变的</label><textarea id="design-note" maxlength="4000" placeholder="例如：书桌需要双屏；不喜欢开放式衣柜；窗外想种一棵树。"></textarea><p class="note-privacy" data-i18n="notePrivacy">只保存在当前浏览器。导出后，可带给未来的建筑师。</p><button class="line-button" id="save-note" data-i18n="saveNote">保存这间的札记 ↗</button><button class="text-button" id="export-notes" data-i18n="exportNotes">导出整本设计札记 ↓</button></section>
         </div>
-        <div class="sidebar-bottom"><button id="daily-open" class="daily-link"><span data-i18n="daily">在这里，过一会儿</span><span aria-hidden="true">↗</span></button><p data-i18n="conceptNote">原创住宅研究 · 166㎡净功能 + 34㎡构造预留<br>影像研究氛围，平面研究关系；二者不作精确对应。</p><button class="text-button brief-link" id="lineage-open" data-i18n="lineageOpen">设计脉络与官方案例 ↗</button><button class="text-button brief-link" id="brief-open" data-i18n="briefOpen">阅读完整设计简报 ↗</button></div>
+        <div class="sidebar-bottom"><button id="daily-open" class="daily-link"><span data-i18n="daily">在这里，过一会儿</span><span aria-hidden="true">↗</span></button><p data-i18n="conceptNote">原创住宅研究 · 166㎡净功能 + 34㎡构造预留<br>同一模型协调门窗、家具、动线与视点。</p><button class="text-button brief-link" id="dossier-open" data-i18n="dossierOpen">打开全屋设计册 ↗</button><button class="text-button brief-link" id="lineage-open" data-i18n="lineageOpen">设计脉络与官方案例 ↗</button><button class="text-button brief-link" id="brief-open" data-i18n="briefOpen">阅读完整设计简报 ↗</button></div>
       </aside>
     </main>
   </div>

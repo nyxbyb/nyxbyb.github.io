@@ -1,0 +1,2898 @@
+{
+  "version": 2,
+  "units": "m",
+  "coordinateSystem": {
+    "origin": "north-west control-line corner",
+    "x": "east",
+    "y": "south",
+    "z": "up",
+    "north": [
+      0,
+      -1
+    ]
+  },
+  "ceilingHeight": 2.7,
+  "envelope": {
+    "width": 14,
+    "depth": 14,
+    "netArea": 166,
+    "grossAllowance": 34,
+    "grossArea": 200,
+    "courtyardArea": 30
+  },
+  "zones": [
+    {
+      "id": "living",
+      "label": {
+        "zh": "起居 · 书与茶",
+        "en": "Living · books & tea"
+      },
+      "area": 40,
+      "polygons": [
+        [
+          [
+            0,
+            5.6
+          ],
+          [
+            10,
+            5.6
+          ],
+          [
+            10,
+            9
+          ],
+          [
+            0,
+            9
+          ]
+        ],
+        [
+          [
+            6,
+            9
+          ],
+          [
+            10,
+            9
+          ],
+          [
+            10,
+            10.5
+          ],
+          [
+            6,
+            10.5
+          ]
+        ]
+      ],
+      "labelAt": [
+        4.95,
+        8.25
+      ],
+      "outdoor": false
+    },
+    {
+      "id": "study",
+      "label": {
+        "zh": "独立书房",
+        "en": "Independent study"
+      },
+      "area": 14,
+      "polygons": [
+        [
+          [
+            6,
+            10.5
+          ],
+          [
+            10,
+            10.5
+          ],
+          [
+            10,
+            14
+          ],
+          [
+            6,
+            14
+          ]
+        ]
+      ],
+      "labelAt": [
+        8.05,
+        13.05
+      ],
+      "outdoor": false
+    },
+    {
+      "id": "bedroom",
+      "label": {
+        "zh": "主卧",
+        "en": "Primary bedroom"
+      },
+      "area": 17.64,
+      "polygons": [
+        [
+          [
+            0,
+            0
+          ],
+          [
+            4.2,
+            0
+          ],
+          [
+            4.2,
+            4.2
+          ],
+          [
+            0,
+            4.2
+          ]
+        ]
+      ],
+      "labelAt": [
+        2.1,
+        3.43
+      ],
+      "outdoor": false
+    },
+    {
+      "id": "kitchen",
+      "label": {
+        "zh": "餐厨",
+        "en": "Kitchen & dining"
+      },
+      "area": 21.6,
+      "polygons": [
+        [
+          [
+            10,
+            5.6
+          ],
+          [
+            14,
+            5.6
+          ],
+          [
+            14,
+            11
+          ],
+          [
+            10,
+            11
+          ]
+        ]
+      ],
+      "labelAt": [
+        11.75,
+        10.55
+      ],
+      "outdoor": false
+    },
+    {
+      "id": "flex",
+      "label": {
+        "zh": "客房 · 多用室",
+        "en": "Guest · multipurpose"
+      },
+      "area": 13.86,
+      "polygons": [
+        [
+          [
+            7,
+            0
+          ],
+          [
+            10.3,
+            0
+          ],
+          [
+            10.3,
+            4.2
+          ],
+          [
+            7,
+            4.2
+          ]
+        ]
+      ],
+      "labelAt": [
+        8.65,
+        2.23
+      ],
+      "outdoor": false
+    },
+    {
+      "id": "reserve",
+      "label": {
+        "zh": "未来预留室",
+        "en": "A room for later"
+      },
+      "area": 15.54,
+      "polygons": [
+        [
+          [
+            10.3,
+            0
+          ],
+          [
+            14,
+            0
+          ],
+          [
+            14,
+            4.2
+          ],
+          [
+            10.3,
+            4.2
+          ]
+        ]
+      ],
+      "labelAt": [
+        12.15,
+        3.35
+      ],
+      "outdoor": false
+    },
+    {
+      "id": "bath",
+      "label": {
+        "zh": "两处卫浴",
+        "en": "Two bathrooms"
+      },
+      "area": 11.76,
+      "polygons": [
+        [
+          [
+            4.2,
+            0
+          ],
+          [
+            7,
+            0
+          ],
+          [
+            7,
+            4.2
+          ],
+          [
+            4.2,
+            4.2
+          ]
+        ]
+      ],
+      "labelAt": [
+        5.6,
+        1.55
+      ],
+      "outdoor": false
+    },
+    {
+      "id": "entry",
+      "label": {
+        "zh": "玄关 · 家务 · 回廊",
+        "en": "Entry · utility · gallery"
+      },
+      "area": 31.6,
+      "polygons": [
+        [
+          [
+            0,
+            4.2
+          ],
+          [
+            14,
+            4.2
+          ],
+          [
+            14,
+            5.6
+          ],
+          [
+            0,
+            5.6
+          ]
+        ],
+        [
+          [
+            10,
+            11
+          ],
+          [
+            14,
+            11
+          ],
+          [
+            14,
+            14
+          ],
+          [
+            10,
+            14
+          ]
+        ]
+      ],
+      "labelAt": [
+        11.65,
+        12.85
+      ],
+      "outdoor": false
+    },
+    {
+      "id": "garden",
+      "label": {
+        "zh": "内庭 · 雨与树",
+        "en": "Courtyard · rain & trees"
+      },
+      "area": 30,
+      "polygons": [
+        [
+          [
+            0,
+            9
+          ],
+          [
+            6,
+            9
+          ],
+          [
+            6,
+            14
+          ],
+          [
+            0,
+            14
+          ]
+        ]
+      ],
+      "labelAt": [
+        2.7,
+        12.98
+      ],
+      "outdoor": true
+    }
+  ],
+  "spaces": [
+    {
+      "id": "living",
+      "zoneId": "living",
+      "polygons": [
+        [
+          [
+            0,
+            5.6
+          ],
+          [
+            10,
+            5.6
+          ],
+          [
+            10,
+            9
+          ],
+          [
+            0,
+            9
+          ]
+        ],
+        [
+          [
+            6,
+            9
+          ],
+          [
+            10,
+            9
+          ],
+          [
+            10,
+            10.5
+          ],
+          [
+            6,
+            10.5
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "study",
+      "zoneId": "study",
+      "polygons": [
+        [
+          [
+            6,
+            10.5
+          ],
+          [
+            10,
+            10.5
+          ],
+          [
+            10,
+            14
+          ],
+          [
+            6,
+            14
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "bedroom",
+      "zoneId": "bedroom",
+      "polygons": [
+        [
+          [
+            0,
+            0
+          ],
+          [
+            4.2,
+            0
+          ],
+          [
+            4.2,
+            4.2
+          ],
+          [
+            0,
+            4.2
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "kitchen",
+      "zoneId": "kitchen",
+      "polygons": [
+        [
+          [
+            10,
+            5.6
+          ],
+          [
+            14,
+            5.6
+          ],
+          [
+            14,
+            11
+          ],
+          [
+            10,
+            11
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "flex",
+      "zoneId": "flex",
+      "polygons": [
+        [
+          [
+            7,
+            0
+          ],
+          [
+            10.3,
+            0
+          ],
+          [
+            10.3,
+            4.2
+          ],
+          [
+            7,
+            4.2
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "reserve",
+      "zoneId": "reserve",
+      "polygons": [
+        [
+          [
+            10.3,
+            0
+          ],
+          [
+            14,
+            0
+          ],
+          [
+            14,
+            4.2
+          ],
+          [
+            10.3,
+            4.2
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "garden",
+      "zoneId": "garden",
+      "polygons": [
+        [
+          [
+            0,
+            9
+          ],
+          [
+            6,
+            9
+          ],
+          [
+            6,
+            14
+          ],
+          [
+            0,
+            14
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "gallery",
+      "zoneId": "entry",
+      "polygons": [
+        [
+          [
+            0,
+            4.2
+          ],
+          [
+            14,
+            4.2
+          ],
+          [
+            14,
+            5.6
+          ],
+          [
+            0,
+            5.6
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "vestibule",
+      "zoneId": "entry",
+      "polygons": [
+        [
+          [
+            10,
+            11
+          ],
+          [
+            14,
+            11
+          ],
+          [
+            14,
+            14
+          ],
+          [
+            10,
+            14
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "bath-main",
+      "zoneId": "bath",
+      "polygons": [
+        [
+          [
+            4.2,
+            0
+          ],
+          [
+            7,
+            0
+          ],
+          [
+            7,
+            2.5
+          ],
+          [
+            4.2,
+            2.5
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "bath-wc",
+      "zoneId": "bath",
+      "polygons": [
+        [
+          [
+            4.2,
+            2.5
+          ],
+          [
+            5.800000000000001,
+            2.5
+          ],
+          [
+            5.800000000000001,
+            4.2
+          ],
+          [
+            4.2,
+            4.2
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "bath-lobby",
+      "zoneId": "bath",
+      "polygons": [
+        [
+          [
+            5.8,
+            2.5
+          ],
+          [
+            7,
+            2.5
+          ],
+          [
+            7,
+            4.2
+          ],
+          [
+            5.8,
+            4.2
+          ]
+        ]
+      ]
+    }
+  ],
+  "walls": [
+    {
+      "id": "W01",
+      "label": {
+        "zh": "北侧外墙",
+        "en": "North external wall"
+      },
+      "a": [
+        0,
+        0
+      ],
+      "b": [
+        14,
+        0
+      ],
+      "kind": "exterior",
+      "height": 2.7,
+      "thickness": 0.24
+    },
+    {
+      "id": "W02",
+      "label": {
+        "zh": "西侧外墙",
+        "en": "West external wall"
+      },
+      "a": [
+        0,
+        0
+      ],
+      "b": [
+        0,
+        9
+      ],
+      "kind": "exterior",
+      "height": 2.7,
+      "thickness": 0.24
+    },
+    {
+      "id": "W03",
+      "label": {
+        "zh": "庭院北界",
+        "en": "North courtyard edge"
+      },
+      "a": [
+        0,
+        9
+      ],
+      "b": [
+        6,
+        9
+      ],
+      "kind": "exterior",
+      "height": 2.7,
+      "thickness": 0.24
+    },
+    {
+      "id": "W04",
+      "label": {
+        "zh": "庭院东界",
+        "en": "East courtyard edge"
+      },
+      "a": [
+        6,
+        9
+      ],
+      "b": [
+        6,
+        14
+      ],
+      "kind": "exterior",
+      "height": 2.7,
+      "thickness": 0.24
+    },
+    {
+      "id": "W05",
+      "label": {
+        "zh": "南侧外墙",
+        "en": "South external wall"
+      },
+      "a": [
+        6,
+        14
+      ],
+      "b": [
+        14,
+        14
+      ],
+      "kind": "exterior",
+      "height": 2.7,
+      "thickness": 0.24
+    },
+    {
+      "id": "W06",
+      "label": {
+        "zh": "东侧外墙",
+        "en": "East external wall"
+      },
+      "a": [
+        14,
+        0
+      ],
+      "b": [
+        14,
+        14
+      ],
+      "kind": "exterior",
+      "height": 2.7,
+      "thickness": 0.24
+    },
+    {
+      "id": "W07",
+      "label": {
+        "zh": "主卧与湿区隔墙",
+        "en": "Bedroom / wet-core partition"
+      },
+      "a": [
+        4.2,
+        0
+      ],
+      "b": [
+        4.2,
+        4.2
+      ],
+      "kind": "interior",
+      "height": 2.7,
+      "thickness": 0.12
+    },
+    {
+      "id": "W08",
+      "label": {
+        "zh": "湿区与客房隔墙",
+        "en": "Wet-core / guest partition"
+      },
+      "a": [
+        7,
+        0
+      ],
+      "b": [
+        7,
+        4.2
+      ],
+      "kind": "interior",
+      "height": 2.7,
+      "thickness": 0.12
+    },
+    {
+      "id": "W09",
+      "label": {
+        "zh": "客房与预留室隔墙",
+        "en": "Guest / reserve partition"
+      },
+      "a": [
+        10.3,
+        0
+      ],
+      "b": [
+        10.3,
+        4.2
+      ],
+      "kind": "interior",
+      "height": 2.7,
+      "thickness": 0.12
+    },
+    {
+      "id": "W10",
+      "label": {
+        "zh": "北房间与回廊隔墙",
+        "en": "Northern rooms / gallery partition"
+      },
+      "a": [
+        0,
+        4.2
+      ],
+      "b": [
+        14,
+        4.2
+      ],
+      "kind": "interior",
+      "height": 2.7,
+      "thickness": 0.12
+    },
+    {
+      "id": "W11",
+      "label": {
+        "zh": "回廊与公共区隔墙",
+        "en": "Gallery / shared-room partition"
+      },
+      "a": [
+        0,
+        5.6
+      ],
+      "b": [
+        14,
+        5.6
+      ],
+      "kind": "interior",
+      "height": 2.7,
+      "thickness": 0.12
+    },
+    {
+      "id": "W12",
+      "label": {
+        "zh": "浴室与前室隔墙",
+        "en": "Bathroom / lobby partition"
+      },
+      "a": [
+        4.2,
+        2.5
+      ],
+      "b": [
+        7,
+        2.5
+      ],
+      "kind": "interior",
+      "height": 2.7,
+      "thickness": 0.12
+    },
+    {
+      "id": "W13",
+      "label": {
+        "zh": "客用洗手间隔墙",
+        "en": "Guest WC partition"
+      },
+      "a": [
+        5.8,
+        2.5
+      ],
+      "b": [
+        5.8,
+        4.2
+      ],
+      "kind": "interior",
+      "height": 2.7,
+      "thickness": 0.12
+    },
+    {
+      "id": "W14",
+      "label": {
+        "zh": "书房北墙",
+        "en": "Study north partition"
+      },
+      "a": [
+        6,
+        10.5
+      ],
+      "b": [
+        10,
+        10.5
+      ],
+      "kind": "interior",
+      "height": 2.7,
+      "thickness": 0.12
+    },
+    {
+      "id": "W15",
+      "label": {
+        "zh": "起居与餐厨界面",
+        "en": "Living / kitchen edge"
+      },
+      "a": [
+        10,
+        5.6
+      ],
+      "b": [
+        10,
+        10.5
+      ],
+      "kind": "interior",
+      "height": 2.7,
+      "thickness": 0.12
+    },
+    {
+      "id": "W16",
+      "label": {
+        "zh": "书房东墙",
+        "en": "Study east partition"
+      },
+      "a": [
+        10,
+        10.5
+      ],
+      "b": [
+        10,
+        14
+      ],
+      "kind": "interior",
+      "height": 2.7,
+      "thickness": 0.12
+    },
+    {
+      "id": "W17",
+      "label": {
+        "zh": "餐厨与玄关隔墙",
+        "en": "Kitchen / vestibule partition"
+      },
+      "a": [
+        10,
+        11
+      ],
+      "b": [
+        14,
+        11
+      ],
+      "kind": "interior",
+      "height": 2.7,
+      "thickness": 0.12
+    }
+  ],
+  "openings": [
+    {
+      "id": "D01",
+      "label": {
+        "zh": "入户门",
+        "en": "Entrance door"
+      },
+      "wallId": "W05",
+      "type": "door",
+      "a": [
+        12.2,
+        14
+      ],
+      "b": [
+        13.2,
+        14
+      ],
+      "spaceIds": [
+        "outside",
+        "vestibule"
+      ],
+      "connects": [
+        "outside",
+        "entry"
+      ],
+      "sill": 0,
+      "head": 2.2,
+      "operation": "hinged",
+      "hinge": "b",
+      "swing": "north"
+    },
+    {
+      "id": "D02",
+      "label": {
+        "zh": "书房门",
+        "en": "Study door"
+      },
+      "wallId": "W16",
+      "type": "door",
+      "a": [
+        10,
+        12.1
+      ],
+      "b": [
+        10,
+        13.1
+      ],
+      "spaceIds": [
+        "vestibule",
+        "study"
+      ],
+      "connects": [
+        "entry",
+        "study"
+      ],
+      "sill": 0,
+      "head": 2.2,
+      "operation": "hinged",
+      "hinge": "b",
+      "swing": "west"
+    },
+    {
+      "id": "D03",
+      "label": {
+        "zh": "主卧门",
+        "en": "Bedroom door"
+      },
+      "wallId": "W10",
+      "type": "door",
+      "a": [
+        3.1,
+        4.2
+      ],
+      "b": [
+        4,
+        4.2
+      ],
+      "spaceIds": [
+        "gallery",
+        "bedroom"
+      ],
+      "connects": [
+        "entry",
+        "bedroom"
+      ],
+      "sill": 0,
+      "head": 2.2,
+      "operation": "hinged",
+      "hinge": "b",
+      "swing": "north"
+    },
+    {
+      "id": "D04",
+      "label": {
+        "zh": "湿区前室门",
+        "en": "Wet-core lobby door"
+      },
+      "wallId": "W10",
+      "type": "door",
+      "a": [
+        5.95,
+        4.2
+      ],
+      "b": [
+        6.85,
+        4.2
+      ],
+      "spaceIds": [
+        "gallery",
+        "bath-lobby"
+      ],
+      "connects": [
+        "entry",
+        "bath"
+      ],
+      "sill": 0,
+      "head": 2.2,
+      "operation": "hinged",
+      "hinge": "b",
+      "swing": "north"
+    },
+    {
+      "id": "D05",
+      "label": {
+        "zh": "客房门",
+        "en": "Guest-room door"
+      },
+      "wallId": "W10",
+      "type": "door",
+      "a": [
+        8.85,
+        4.2
+      ],
+      "b": [
+        9.75,
+        4.2
+      ],
+      "spaceIds": [
+        "gallery",
+        "flex"
+      ],
+      "connects": [
+        "entry",
+        "flex"
+      ],
+      "sill": 0,
+      "head": 2.2,
+      "operation": "hinged",
+      "hinge": "b",
+      "swing": "north"
+    },
+    {
+      "id": "D06",
+      "label": {
+        "zh": "预留室门",
+        "en": "Reserve-room door"
+      },
+      "wallId": "W10",
+      "type": "door",
+      "a": [
+        12.7,
+        4.2
+      ],
+      "b": [
+        13.6,
+        4.2
+      ],
+      "spaceIds": [
+        "gallery",
+        "reserve"
+      ],
+      "connects": [
+        "entry",
+        "reserve"
+      ],
+      "sill": 0,
+      "head": 2.2,
+      "operation": "hinged",
+      "hinge": "b",
+      "swing": "north"
+    },
+    {
+      "id": "D07",
+      "label": {
+        "zh": "完整浴室门",
+        "en": "Full-bathroom door"
+      },
+      "wallId": "W12",
+      "type": "door",
+      "a": [
+        5.95,
+        2.5
+      ],
+      "b": [
+        6.85,
+        2.5
+      ],
+      "spaceIds": [
+        "bath-lobby",
+        "bath-main"
+      ],
+      "connects": [
+        "bath"
+      ],
+      "sill": 0,
+      "head": 2.2,
+      "operation": "hinged",
+      "hinge": "b",
+      "swing": "north"
+    },
+    {
+      "id": "D08",
+      "label": {
+        "zh": "客用洗手间移门",
+        "en": "Guest WC pocket door"
+      },
+      "wallId": "W13",
+      "type": "door",
+      "a": [
+        5.8,
+        3
+      ],
+      "b": [
+        5.8,
+        3.8
+      ],
+      "spaceIds": [
+        "bath-lobby",
+        "bath-wc"
+      ],
+      "connects": [
+        "bath"
+      ],
+      "sill": 0,
+      "head": 2.2,
+      "operation": "pocket",
+      "slideTo": "north"
+    },
+    {
+      "id": "D09",
+      "label": {
+        "zh": "庭院推拉门",
+        "en": "Courtyard sliding door"
+      },
+      "wallId": "W03",
+      "type": "door",
+      "a": [
+        4.2,
+        9
+      ],
+      "b": [
+        5.4,
+        9
+      ],
+      "spaceIds": [
+        "living",
+        "garden"
+      ],
+      "connects": [
+        "living",
+        "garden"
+      ],
+      "sill": 0,
+      "head": 2.5,
+      "operation": "sliding",
+      "slideTo": "west"
+    },
+    {
+      "id": "P01",
+      "label": {
+        "zh": "回廊至起居",
+        "en": "Gallery to living"
+      },
+      "wallId": "W11",
+      "type": "passage",
+      "a": [
+        5.8,
+        5.6
+      ],
+      "b": [
+        7,
+        5.6
+      ],
+      "spaceIds": [
+        "gallery",
+        "living"
+      ],
+      "connects": [
+        "entry",
+        "living"
+      ],
+      "sill": 0,
+      "head": 2.2,
+      "operation": "open"
+    },
+    {
+      "id": "P02",
+      "label": {
+        "zh": "回廊至餐厨",
+        "en": "Gallery to kitchen"
+      },
+      "wallId": "W11",
+      "type": "passage",
+      "a": [
+        10.1,
+        5.6
+      ],
+      "b": [
+        11.3,
+        5.6
+      ],
+      "spaceIds": [
+        "gallery",
+        "kitchen"
+      ],
+      "connects": [
+        "entry",
+        "kitchen"
+      ],
+      "sill": 0,
+      "head": 2.2,
+      "operation": "open"
+    },
+    {
+      "id": "P03",
+      "label": {
+        "zh": "餐厨至起居",
+        "en": "Kitchen to living"
+      },
+      "wallId": "W15",
+      "type": "passage",
+      "a": [
+        10,
+        6.1
+      ],
+      "b": [
+        10,
+        7.6
+      ],
+      "spaceIds": [
+        "kitchen",
+        "living"
+      ],
+      "connects": [
+        "kitchen",
+        "living"
+      ],
+      "sill": 0,
+      "head": 2.2,
+      "operation": "open"
+    },
+    {
+      "id": "P04",
+      "label": {
+        "zh": "玄关至餐厨",
+        "en": "Vestibule to kitchen"
+      },
+      "wallId": "W17",
+      "type": "passage",
+      "a": [
+        10.1,
+        11
+      ],
+      "b": [
+        11.3,
+        11
+      ],
+      "spaceIds": [
+        "vestibule",
+        "kitchen"
+      ],
+      "connects": [
+        "entry",
+        "kitchen"
+      ],
+      "sill": 0,
+      "head": 2.2,
+      "operation": "open"
+    },
+    {
+      "id": "V01",
+      "label": {
+        "zh": "主卧北窗",
+        "en": "Bedroom north window"
+      },
+      "wallId": "W01",
+      "type": "window",
+      "a": [
+        0.75,
+        0
+      ],
+      "b": [
+        3.45,
+        0
+      ],
+      "spaceIds": [
+        "bedroom",
+        "outside"
+      ],
+      "connects": [
+        "bedroom",
+        "outside"
+      ],
+      "sill": 1.05,
+      "head": 2.5,
+      "operation": "operable"
+    },
+    {
+      "id": "V02",
+      "label": {
+        "zh": "浴室高窗",
+        "en": "Bathroom high window"
+      },
+      "wallId": "W01",
+      "type": "window",
+      "a": [
+        4.65,
+        0
+      ],
+      "b": [
+        6.55,
+        0
+      ],
+      "spaceIds": [
+        "bath-main",
+        "outside"
+      ],
+      "connects": [
+        "bath",
+        "outside"
+      ],
+      "sill": 1.6,
+      "head": 2.5,
+      "operation": "operable-obscure"
+    },
+    {
+      "id": "V03",
+      "label": {
+        "zh": "客房北窗",
+        "en": "Guest north window"
+      },
+      "wallId": "W01",
+      "type": "window",
+      "a": [
+        7.5,
+        0
+      ],
+      "b": [
+        9.8,
+        0
+      ],
+      "spaceIds": [
+        "flex",
+        "outside"
+      ],
+      "connects": [
+        "flex",
+        "outside"
+      ],
+      "sill": 1.05,
+      "head": 2.5,
+      "operation": "operable"
+    },
+    {
+      "id": "V04",
+      "label": {
+        "zh": "预留室北窗",
+        "en": "Reserve north window"
+      },
+      "wallId": "W01",
+      "type": "window",
+      "a": [
+        10.85,
+        0
+      ],
+      "b": [
+        13.55,
+        0
+      ],
+      "spaceIds": [
+        "reserve",
+        "outside"
+      ],
+      "connects": [
+        "reserve",
+        "outside"
+      ],
+      "sill": 0.95,
+      "head": 2.5,
+      "operation": "operable"
+    },
+    {
+      "id": "V05",
+      "label": {
+        "zh": "起居西窗",
+        "en": "Living west window"
+      },
+      "wallId": "W02",
+      "type": "window",
+      "a": [
+        0,
+        5.9
+      ],
+      "b": [
+        0,
+        8.55
+      ],
+      "spaceIds": [
+        "living",
+        "outside"
+      ],
+      "connects": [
+        "living",
+        "outside"
+      ],
+      "sill": 0.45,
+      "head": 2.5,
+      "operation": "fixed-plus-operable"
+    },
+    {
+      "id": "V06",
+      "label": {
+        "zh": "起居庭院长窗",
+        "en": "Living courtyard glazing"
+      },
+      "wallId": "W03",
+      "type": "window",
+      "a": [
+        0.45,
+        9
+      ],
+      "b": [
+        4.05,
+        9
+      ],
+      "spaceIds": [
+        "living",
+        "garden"
+      ],
+      "connects": [
+        "living",
+        "garden"
+      ],
+      "sill": 0.15,
+      "head": 2.5,
+      "operation": "fixed"
+    },
+    {
+      "id": "V07",
+      "label": {
+        "zh": "书房庭院窗",
+        "en": "Study courtyard window"
+      },
+      "wallId": "W04",
+      "type": "window",
+      "a": [
+        6,
+        10.8
+      ],
+      "b": [
+        6,
+        13.5
+      ],
+      "spaceIds": [
+        "study",
+        "garden"
+      ],
+      "connects": [
+        "study",
+        "garden"
+      ],
+      "sill": 0.55,
+      "head": 2.5,
+      "operation": "fixed-plus-operable"
+    },
+    {
+      "id": "V08",
+      "label": {
+        "zh": "书房南窗",
+        "en": "Study south window"
+      },
+      "wallId": "W05",
+      "type": "window",
+      "a": [
+        6.7,
+        14
+      ],
+      "b": [
+        9.3,
+        14
+      ],
+      "spaceIds": [
+        "study",
+        "outside"
+      ],
+      "connects": [
+        "study",
+        "outside"
+      ],
+      "sill": 0.95,
+      "head": 2.5,
+      "operation": "operable"
+    },
+    {
+      "id": "V09",
+      "label": {
+        "zh": "厨房东窗",
+        "en": "Kitchen east window"
+      },
+      "wallId": "W06",
+      "type": "window",
+      "a": [
+        14,
+        6.2
+      ],
+      "b": [
+        14,
+        9.2
+      ],
+      "spaceIds": [
+        "kitchen",
+        "outside"
+      ],
+      "connects": [
+        "kitchen",
+        "outside"
+      ],
+      "sill": 1.1,
+      "head": 2.5,
+      "operation": "fixed-plus-operable"
+    }
+  ],
+  "furniture": [
+    {
+      "id": "F-L01",
+      "roomId": "living",
+      "label": {
+        "zh": "三人亚麻沙发",
+        "en": "Three-seat linen sofa"
+      },
+      "type": "sofa",
+      "rect": {
+        "x": 1.25,
+        "y": 6.32,
+        "w": 3.1,
+        "d": 0.9
+      },
+      "height": 0.78,
+      "baseHeight": 0,
+      "blocking": true
+    },
+    {
+      "id": "F-L02",
+      "roomId": "living",
+      "label": {
+        "zh": "低茶几",
+        "en": "Low coffee table"
+      },
+      "type": "table",
+      "rect": {
+        "x": 2.3,
+        "y": 7.3,
+        "w": 1.4,
+        "d": 0.8
+      },
+      "height": 0.36,
+      "baseHeight": 0,
+      "blocking": true,
+      "shape": "ellipse"
+    },
+    {
+      "id": "F-L03",
+      "roomId": "living",
+      "label": {
+        "zh": "阅读椅",
+        "en": "Reading chair"
+      },
+      "type": "chair",
+      "rect": {
+        "x": 4.9,
+        "y": 6.93,
+        "w": 0.5,
+        "d": 0.48
+      },
+      "height": 0.8,
+      "baseHeight": 0,
+      "blocking": true,
+      "rotation": 45
+    },
+    {
+      "id": "F-L04",
+      "roomId": "living",
+      "label": {
+        "zh": "茶桌",
+        "en": "Tea table"
+      },
+      "type": "tea-table",
+      "rect": {
+        "x": 7.8,
+        "y": 7.7,
+        "w": 1.2,
+        "d": 1.2
+      },
+      "height": 0.68,
+      "baseHeight": 0,
+      "blocking": true,
+      "shape": "ellipse"
+    },
+    {
+      "id": "F-L05",
+      "roomId": "living",
+      "label": {
+        "zh": "茶椅一",
+        "en": "Tea chair one"
+      },
+      "type": "chair",
+      "rect": {
+        "x": 8.15,
+        "y": 7.11,
+        "w": 0.5,
+        "d": 0.48
+      },
+      "height": 0.78,
+      "baseHeight": 0,
+      "blocking": true
+    },
+    {
+      "id": "F-L06",
+      "roomId": "living",
+      "label": {
+        "zh": "茶椅二",
+        "en": "Tea chair two"
+      },
+      "type": "chair",
+      "rect": {
+        "x": 7.15,
+        "y": 8.06,
+        "w": 0.5,
+        "d": 0.48
+      },
+      "height": 0.78,
+      "baseHeight": 0,
+      "blocking": true,
+      "rotation": 270
+    },
+    {
+      "id": "F-L07",
+      "roomId": "living",
+      "label": {
+        "zh": "茶椅三",
+        "en": "Tea chair three"
+      },
+      "type": "chair",
+      "rect": {
+        "x": 9.1,
+        "y": 8.06,
+        "w": 0.5,
+        "d": 0.48
+      },
+      "height": 0.78,
+      "baseHeight": 0,
+      "blocking": true,
+      "rotation": 90
+    },
+    {
+      "id": "F-L08",
+      "roomId": "living",
+      "label": {
+        "zh": "西段低书柜",
+        "en": "West low bookcase"
+      },
+      "type": "shelf",
+      "rect": {
+        "x": 0.12,
+        "y": 5.7,
+        "w": 2.06,
+        "d": 0.36
+      },
+      "height": 0.85,
+      "baseHeight": 0,
+      "blocking": true
+    },
+    {
+      "id": "F-L09",
+      "roomId": "living",
+      "label": {
+        "zh": "音响与唱片柜",
+        "en": "Audio and record cabinet"
+      },
+      "type": "shelf",
+      "rect": {
+        "x": 4.45,
+        "y": 5.7,
+        "w": 1.1,
+        "d": 0.36
+      },
+      "height": 0.75,
+      "baseHeight": 0,
+      "blocking": true
+    },
+    {
+      "id": "F-L10",
+      "roomId": "living",
+      "label": {
+        "zh": "茶具与在读收纳",
+        "en": "Tea ware and current-reading storage"
+      },
+      "type": "shelf",
+      "rect": {
+        "x": 7.3,
+        "y": 5.7,
+        "w": 2.05,
+        "d": 0.36
+      },
+      "height": 0.85,
+      "baseHeight": 0,
+      "blocking": true
+    },
+    {
+      "id": "F-L11",
+      "roomId": "living",
+      "label": {
+        "zh": "左落地音箱",
+        "en": "Left floor speaker"
+      },
+      "type": "speaker",
+      "rect": {
+        "x": 1.3,
+        "y": 8.4,
+        "w": 0.26,
+        "d": 0.3
+      },
+      "height": 0.88,
+      "baseHeight": 0,
+      "blocking": true,
+      "rotation": 180,
+      "frontDirection": "north"
+    },
+    {
+      "id": "F-L12",
+      "roomId": "living",
+      "label": {
+        "zh": "右落地音箱",
+        "en": "Right floor speaker"
+      },
+      "type": "speaker",
+      "rect": {
+        "x": 4.05,
+        "y": 8.4,
+        "w": 0.26,
+        "d": 0.3
+      },
+      "height": 0.88,
+      "baseHeight": 0,
+      "blocking": true,
+      "rotation": 180,
+      "frontDirection": "north"
+    },
+    {
+      "id": "F-L13",
+      "roomId": "living",
+      "label": {
+        "zh": "转角阅读长凳",
+        "en": "Reading bench in the return"
+      },
+      "type": "bench",
+      "rect": {
+        "x": 6.55,
+        "y": 9.55,
+        "w": 2.65,
+        "d": 0.44
+      },
+      "height": 0.43,
+      "baseHeight": 0,
+      "blocking": true
+    },
+    {
+      "id": "F-L14",
+      "roomId": "living",
+      "label": {
+        "zh": "亚麻地毯",
+        "en": "Linen rug"
+      },
+      "type": "rug",
+      "rect": {
+        "x": 1.05,
+        "y": 6.3,
+        "w": 4.45,
+        "d": 2.15
+      },
+      "height": 0.015,
+      "baseHeight": 0,
+      "blocking": false
+    },
+    {
+      "id": "F-S01",
+      "roomId": "study",
+      "label": {
+        "zh": "双显示器工作桌",
+        "en": "Dual-display work desk"
+      },
+      "type": "desk",
+      "rect": {
+        "x": 6.4,
+        "y": 11.05,
+        "w": 2.1,
+        "d": 0.8
+      },
+      "height": 0.74,
+      "baseHeight": 0,
+      "blocking": true
+    },
+    {
+      "id": "F-S02",
+      "roomId": "study",
+      "label": {
+        "zh": "人体工学工作椅",
+        "en": "Ergonomic work chair"
+      },
+      "type": "chair",
+      "rect": {
+        "x": 7.25,
+        "y": 11.96,
+        "w": 0.5,
+        "d": 0.48
+      },
+      "height": 1.1,
+      "baseHeight": 0,
+      "blocking": true,
+      "rotation": 180
+    },
+    {
+      "id": "F-S03",
+      "roomId": "study",
+      "label": {
+        "zh": "北侧书架",
+        "en": "North bookcase"
+      },
+      "type": "shelf",
+      "rect": {
+        "x": 7.1,
+        "y": 10.65,
+        "w": 1.8,
+        "d": 0.33
+      },
+      "height": 2.2,
+      "baseHeight": 0,
+      "blocking": true
+    },
+    {
+      "id": "F-S04",
+      "roomId": "study",
+      "label": {
+        "zh": "通风计算设备柜",
+        "en": "Ventilated compute cabinet"
+      },
+      "type": "equipment",
+      "rect": {
+        "x": 9.35,
+        "y": 10.72,
+        "w": 0.5,
+        "d": 1.1
+      },
+      "height": 0.8,
+      "baseHeight": 0,
+      "blocking": true,
+      "detail": {
+        "zh": "独立通风、电源与有线网络；柜门向西检修，型号待定。",
+        "en": "Independent ventilation, power and wired network; service access faces west. Equipment remains undecided."
+      }
+    },
+    {
+      "id": "F-S05",
+      "roomId": "study",
+      "label": {
+        "zh": "南侧矮收纳",
+        "en": "South low storage"
+      },
+      "type": "shelf",
+      "rect": {
+        "x": 9.48,
+        "y": 13.3,
+        "w": 0.37,
+        "d": 0.5
+      },
+      "height": 0.8,
+      "baseHeight": 0,
+      "blocking": true
+    },
+    {
+      "id": "F-S06",
+      "roomId": "study",
+      "label": {
+        "zh": "左显示器",
+        "en": "Left monitor"
+      },
+      "type": "monitor",
+      "rect": {
+        "x": 6.6,
+        "y": 11.14,
+        "w": 0.72,
+        "d": 0.07
+      },
+      "height": 0.42,
+      "baseHeight": 0.74,
+      "blocking": false,
+      "parentId": "F-S01"
+    },
+    {
+      "id": "F-S07",
+      "roomId": "study",
+      "label": {
+        "zh": "右显示器",
+        "en": "Right monitor"
+      },
+      "type": "monitor",
+      "rect": {
+        "x": 7.42,
+        "y": 11.14,
+        "w": 0.72,
+        "d": 0.07
+      },
+      "height": 0.42,
+      "baseHeight": 0.74,
+      "blocking": false,
+      "parentId": "F-S01"
+    },
+    {
+      "id": "F-B01",
+      "roomId": "bedroom",
+      "label": {
+        "zh": "双人床",
+        "en": "Double bed"
+      },
+      "type": "bed",
+      "rect": {
+        "x": 1.5,
+        "y": 0.85,
+        "w": 1.8,
+        "d": 2
+      },
+      "height": 0.5,
+      "baseHeight": 0,
+      "blocking": true,
+      "headDirection": "north"
+    },
+    {
+      "id": "F-B02",
+      "roomId": "bedroom",
+      "label": {
+        "zh": "床头板",
+        "en": "Headboard"
+      },
+      "type": "headboard",
+      "rect": {
+        "x": 1.5,
+        "y": 0.72,
+        "w": 1.8,
+        "d": 0.16
+      },
+      "height": 0.9,
+      "baseHeight": 0,
+      "blocking": true
+    },
+    {
+      "id": "F-B03",
+      "roomId": "bedroom",
+      "label": {
+        "zh": "西侧衣柜",
+        "en": "West wardrobe"
+      },
+      "type": "wardrobe",
+      "rect": {
+        "x": 0.15,
+        "y": 0.18,
+        "w": 0.6,
+        "d": 3.55
+      },
+      "height": 2.5,
+      "baseHeight": 0,
+      "blocking": true
+    },
+    {
+      "id": "F-B04",
+      "roomId": "bedroom",
+      "label": {
+        "zh": "左床头柜",
+        "en": "Left bedside table"
+      },
+      "type": "table",
+      "rect": {
+        "x": 1,
+        "y": 0.86,
+        "w": 0.36,
+        "d": 0.42
+      },
+      "height": 0.46,
+      "baseHeight": 0,
+      "blocking": true
+    },
+    {
+      "id": "F-B05",
+      "roomId": "bedroom",
+      "label": {
+        "zh": "右床头柜",
+        "en": "Right bedside table"
+      },
+      "type": "table",
+      "rect": {
+        "x": 3.43,
+        "y": 0.86,
+        "w": 0.36,
+        "d": 0.42
+      },
+      "height": 0.46,
+      "baseHeight": 0,
+      "blocking": true
+    },
+    {
+      "id": "F-K01",
+      "roomId": "kitchen",
+      "label": {
+        "zh": "北侧操作台",
+        "en": "North kitchen counter"
+      },
+      "type": "counter",
+      "rect": {
+        "x": 11.45,
+        "y": 5.76,
+        "w": 2.37,
+        "d": 0.62
+      },
+      "height": 0.9,
+      "baseHeight": 0,
+      "blocking": true
+    },
+    {
+      "id": "F-K02",
+      "roomId": "kitchen",
+      "label": {
+        "zh": "东侧水槽台",
+        "en": "East sink counter"
+      },
+      "type": "counter",
+      "rect": {
+        "x": 13.18,
+        "y": 6.38,
+        "w": 0.64,
+        "d": 3.1
+      },
+      "height": 0.9,
+      "baseHeight": 0,
+      "blocking": true
+    },
+    {
+      "id": "F-K03",
+      "roomId": "kitchen",
+      "label": {
+        "zh": "冰箱",
+        "en": "Refrigerator"
+      },
+      "type": "equipment",
+      "rect": {
+        "x": 13.18,
+        "y": 10.1,
+        "w": 0.64,
+        "d": 0.7
+      },
+      "height": 1.9,
+      "baseHeight": 0,
+      "blocking": true
+    },
+    {
+      "id": "F-K04",
+      "roomId": "kitchen",
+      "label": {
+        "zh": "四人餐桌",
+        "en": "Four-seat dining table"
+      },
+      "type": "dining-table",
+      "rect": {
+        "x": 11.16,
+        "y": 8.2,
+        "w": 1.8,
+        "d": 0.9
+      },
+      "height": 0.74,
+      "baseHeight": 0,
+      "blocking": true
+    },
+    {
+      "id": "F-K05",
+      "roomId": "kitchen",
+      "label": {
+        "zh": "餐椅1",
+        "en": "Dining chair 1"
+      },
+      "type": "chair",
+      "rect": {
+        "x": 11.4,
+        "y": 7.61,
+        "w": 0.48,
+        "d": 0.48
+      },
+      "height": 0.8,
+      "baseHeight": 0,
+      "blocking": true,
+      "rotation": 0
+    },
+    {
+      "id": "F-K06",
+      "roomId": "kitchen",
+      "label": {
+        "zh": "餐椅2",
+        "en": "Dining chair 2"
+      },
+      "type": "chair",
+      "rect": {
+        "x": 12.2,
+        "y": 7.61,
+        "w": 0.48,
+        "d": 0.48
+      },
+      "height": 0.8,
+      "baseHeight": 0,
+      "blocking": true,
+      "rotation": 0
+    },
+    {
+      "id": "F-K07",
+      "roomId": "kitchen",
+      "label": {
+        "zh": "餐椅3",
+        "en": "Dining chair 3"
+      },
+      "type": "chair",
+      "rect": {
+        "x": 11.4,
+        "y": 9.21,
+        "w": 0.48,
+        "d": 0.48
+      },
+      "height": 0.8,
+      "baseHeight": 0,
+      "blocking": true,
+      "rotation": 180
+    },
+    {
+      "id": "F-K08",
+      "roomId": "kitchen",
+      "label": {
+        "zh": "餐椅4",
+        "en": "Dining chair 4"
+      },
+      "type": "chair",
+      "rect": {
+        "x": 12.2,
+        "y": 9.21,
+        "w": 0.48,
+        "d": 0.48
+      },
+      "height": 0.8,
+      "baseHeight": 0,
+      "blocking": true,
+      "rotation": 180
+    },
+    {
+      "id": "F-K09",
+      "roomId": "kitchen",
+      "label": {
+        "zh": "北台嵌入灶具",
+        "en": "North counter hob"
+      },
+      "type": "hob",
+      "rect": {
+        "x": 12.05,
+        "y": 5.84,
+        "w": 0.75,
+        "d": 0.44
+      },
+      "height": 0.03,
+      "baseHeight": 0.9,
+      "blocking": false,
+      "parentId": "F-K01"
+    },
+    {
+      "id": "F-K10",
+      "roomId": "kitchen",
+      "label": {
+        "zh": "东台嵌入水槽",
+        "en": "East counter sink"
+      },
+      "type": "sink",
+      "rect": {
+        "x": 13.25,
+        "y": 7.43,
+        "w": 0.5,
+        "d": 0.65
+      },
+      "height": 0.03,
+      "baseHeight": 0.9,
+      "blocking": false,
+      "parentId": "F-K02"
+    },
+    {
+      "id": "F-F01",
+      "roomId": "flex",
+      "label": {
+        "zh": "客用展开床",
+        "en": "Guest bed unfolded"
+      },
+      "type": "sofa-bed",
+      "rect": {
+        "x": 7.35,
+        "y": 0.5,
+        "w": 1.4,
+        "d": 2
+      },
+      "height": 0.48,
+      "baseHeight": 0,
+      "blocking": true,
+      "headDirection": "north"
+    },
+    {
+      "id": "F-F02",
+      "roomId": "flex",
+      "label": {
+        "zh": "客房收纳",
+        "en": "Guest storage"
+      },
+      "type": "wardrobe",
+      "rect": {
+        "x": 9.64,
+        "y": 0.4,
+        "w": 0.48,
+        "d": 2.4
+      },
+      "height": 2.4,
+      "baseHeight": 0,
+      "blocking": true
+    },
+    {
+      "id": "F-F03",
+      "roomId": "flex",
+      "label": {
+        "zh": "小书桌",
+        "en": "Small writing desk"
+      },
+      "type": "desk",
+      "rect": {
+        "x": 7.18,
+        "y": 3.38,
+        "w": 1.3,
+        "d": 0.58
+      },
+      "height": 0.74,
+      "baseHeight": 0,
+      "blocking": true
+    },
+    {
+      "id": "F-F04",
+      "roomId": "flex",
+      "label": {
+        "zh": "客房椅",
+        "en": "Guest-room chair"
+      },
+      "type": "chair",
+      "rect": {
+        "x": 7.58,
+        "y": 2.78,
+        "w": 0.5,
+        "d": 0.48
+      },
+      "height": 0.8,
+      "baseHeight": 0,
+      "blocking": true,
+      "rotation": 180
+    },
+    {
+      "id": "F-R01",
+      "roomId": "reserve",
+      "label": {
+        "zh": "可移动桌",
+        "en": "Movable table"
+      },
+      "type": "desk",
+      "rect": {
+        "x": 11.1,
+        "y": 1.2,
+        "w": 1.8,
+        "d": 0.8
+      },
+      "height": 0.74,
+      "baseHeight": 0,
+      "blocking": true,
+      "provisional": true
+    },
+    {
+      "id": "F-R02",
+      "roomId": "reserve",
+      "label": {
+        "zh": "可移动收纳",
+        "en": "Movable storage"
+      },
+      "type": "shelf",
+      "rect": {
+        "x": 10.5,
+        "y": 0.2,
+        "w": 0.56,
+        "d": 2.5
+      },
+      "height": 1.1,
+      "baseHeight": 0,
+      "blocking": true,
+      "provisional": true
+    },
+    {
+      "id": "F-R03",
+      "roomId": "reserve",
+      "label": {
+        "zh": "活动椅",
+        "en": "Loose chair"
+      },
+      "type": "chair",
+      "rect": {
+        "x": 11.75,
+        "y": 2.11,
+        "w": 0.5,
+        "d": 0.48
+      },
+      "height": 0.8,
+      "baseHeight": 0,
+      "blocking": true,
+      "rotation": 180,
+      "provisional": true
+    },
+    {
+      "id": "F-W01",
+      "roomId": "bath",
+      "label": {
+        "zh": "淋浴区",
+        "en": "Shower"
+      },
+      "type": "shower",
+      "rect": {
+        "x": 4.35,
+        "y": 0.15,
+        "w": 1.3,
+        "d": 1.25
+      },
+      "height": 0.03,
+      "baseHeight": 0,
+      "blocking": false,
+      "spaceId": "bath-main"
+    },
+    {
+      "id": "F-W02",
+      "roomId": "bath",
+      "label": {
+        "zh": "浴室台盆",
+        "en": "Bathroom vanity"
+      },
+      "type": "basin",
+      "rect": {
+        "x": 4.35,
+        "y": 1.78,
+        "w": 1.1,
+        "d": 0.52
+      },
+      "height": 0.85,
+      "baseHeight": 0,
+      "blocking": true,
+      "spaceId": "bath-main"
+    },
+    {
+      "id": "F-W03",
+      "roomId": "bath",
+      "label": {
+        "zh": "浴室坐便器",
+        "en": "Bathroom WC"
+      },
+      "type": "wc",
+      "rect": {
+        "x": 6.12,
+        "y": 0.22,
+        "w": 0.52,
+        "d": 0.8
+      },
+      "height": 0.7,
+      "baseHeight": 0,
+      "blocking": true,
+      "spaceId": "bath-main"
+    },
+    {
+      "id": "F-W04",
+      "roomId": "bath",
+      "label": {
+        "zh": "客用坐便器",
+        "en": "Guest WC"
+      },
+      "type": "wc",
+      "rect": {
+        "x": 4.45,
+        "y": 2.68,
+        "w": 0.5,
+        "d": 0.76
+      },
+      "height": 0.7,
+      "baseHeight": 0,
+      "blocking": true,
+      "spaceId": "bath-wc"
+    },
+    {
+      "id": "F-W05",
+      "roomId": "bath",
+      "label": {
+        "zh": "客用洗手盆",
+        "en": "Guest basin"
+      },
+      "type": "basin",
+      "rect": {
+        "x": 5.18,
+        "y": 2.68,
+        "w": 0.43,
+        "d": 0.36
+      },
+      "height": 0.85,
+      "baseHeight": 0,
+      "blocking": true,
+      "spaceId": "bath-wc"
+    },
+    {
+      "id": "F-E01",
+      "roomId": "entry",
+      "label": {
+        "zh": "洗烘与家务台",
+        "en": "Laundry / utility counter"
+      },
+      "type": "utility",
+      "rect": {
+        "x": 12.4,
+        "y": 11.15,
+        "w": 1.4,
+        "d": 0.72
+      },
+      "height": 0.9,
+      "baseHeight": 0,
+      "blocking": true,
+      "spaceId": "vestibule"
+    },
+    {
+      "id": "F-E02",
+      "roomId": "entry",
+      "label": {
+        "zh": "外衣与清洁柜",
+        "en": "Coat / cleaning cupboard"
+      },
+      "type": "wardrobe",
+      "rect": {
+        "x": 13.3,
+        "y": 12.25,
+        "w": 0.52,
+        "d": 1.5
+      },
+      "height": 2.5,
+      "baseHeight": 0,
+      "blocking": true,
+      "spaceId": "vestibule"
+    },
+    {
+      "id": "F-E03",
+      "roomId": "entry",
+      "label": {
+        "zh": "换鞋凳",
+        "en": "Entry bench"
+      },
+      "type": "bench",
+      "rect": {
+        "x": 10.18,
+        "y": 13.2,
+        "w": 1.5,
+        "d": 0.45
+      },
+      "height": 0.43,
+      "baseHeight": 0,
+      "blocking": true,
+      "spaceId": "vestibule"
+    },
+    {
+      "id": "F-E04",
+      "roomId": "entry",
+      "label": {
+        "zh": "入口地垫",
+        "en": "Entry mat"
+      },
+      "type": "rug",
+      "rect": {
+        "x": 11.5,
+        "y": 13.33,
+        "w": 1.85,
+        "d": 0.43
+      },
+      "height": 0.015,
+      "baseHeight": 0,
+      "blocking": false,
+      "spaceId": "vestibule"
+    },
+    {
+      "id": "F-G01",
+      "roomId": "garden",
+      "label": {
+        "zh": "檐下长凳",
+        "en": "Courtyard bench"
+      },
+      "type": "bench",
+      "rect": {
+        "x": 1.05,
+        "y": 9.55,
+        "w": 2.25,
+        "d": 0.42
+      },
+      "height": 0.43,
+      "baseHeight": 0,
+      "blocking": true
+    },
+    {
+      "id": "F-G02",
+      "roomId": "garden",
+      "label": {
+        "zh": "一棵树",
+        "en": "A courtyard tree"
+      },
+      "type": "tree",
+      "rect": {
+        "x": 2.9,
+        "y": 11.4,
+        "w": 0.2,
+        "d": 0.2
+      },
+      "height": 4,
+      "baseHeight": 0,
+      "blocking": true,
+      "canopyRadius": 1.4
+    },
+    {
+      "id": "F-G03",
+      "roomId": "garden",
+      "label": {
+        "zh": "木平台",
+        "en": "Timber deck"
+      },
+      "type": "deck",
+      "rect": {
+        "x": 0.45,
+        "y": 9.17,
+        "w": 4.95,
+        "d": 1.1
+      },
+      "height": 0.02,
+      "baseHeight": 0,
+      "blocking": false
+    }
+  ],
+  "routes": [
+    {
+      "id": "R01",
+      "label": {
+        "zh": "归家 · 放下包 · 工作",
+        "en": "Arrive · put down a bag · work"
+      },
+      "width": 0.9,
+      "rooms": [
+        "entry",
+        "study"
+      ],
+      "points": [
+        [
+          12.7,
+          14.8
+        ],
+        [
+          12.7,
+          14
+        ],
+        [
+          12.7,
+          12.6
+        ],
+        [
+          8.7,
+          12.6
+        ]
+      ]
+    },
+    {
+      "id": "R02",
+      "label": {
+        "zh": "洗手备茶 · 起居 · 入庭",
+        "en": "Prepare tea · living · courtyard"
+      },
+      "width": 0.9,
+      "rooms": [
+        "entry",
+        "kitchen",
+        "living",
+        "garden"
+      ],
+      "points": [
+        [
+          12.7,
+          12.6
+        ],
+        [
+          10.65,
+          12.6
+        ],
+        [
+          10.65,
+          6.65
+        ],
+        [
+          6.4,
+          6.65
+        ],
+        [
+          6.4,
+          8.5
+        ],
+        [
+          4.8,
+          8.5
+        ],
+        [
+          4.8,
+          10.4
+        ]
+      ]
+    },
+    {
+      "id": "R03",
+      "label": {
+        "zh": "夜间 · 回廊 · 安睡",
+        "en": "Evening · gallery · sleep"
+      },
+      "width": 0.75,
+      "rooms": [
+        "kitchen",
+        "living",
+        "entry",
+        "bedroom"
+      ],
+      "points": [
+        [
+          10.65,
+          10.6
+        ],
+        [
+          10.65,
+          6.65
+        ],
+        [
+          6.4,
+          6.65
+        ],
+        [
+          6.4,
+          4.9
+        ],
+        [
+          3.55,
+          4.9
+        ],
+        [
+          3.55,
+          3.35
+        ],
+        [
+          2.5,
+          3.35
+        ]
+      ]
+    }
+  ],
+  "cameras": [
+    {
+      "id": "C-living",
+      "roomId": "living",
+      "position": [
+        9.4,
+        6.5
+      ],
+      "target": [
+        3.2,
+        7.9
+      ],
+      "eyeHeight": 1.5,
+      "targetHeight": 1.5,
+      "fov": 70
+    },
+    {
+      "id": "C-study",
+      "roomId": "study",
+      "position": [
+        9.1,
+        13.45
+      ],
+      "target": [
+        7.4,
+        11.5
+      ],
+      "eyeHeight": 1.5,
+      "targetHeight": 1.5,
+      "fov": 65
+    },
+    {
+      "id": "C-bedroom",
+      "roomId": "bedroom",
+      "position": [
+        3.05,
+        3.8
+      ],
+      "target": [
+        2.1,
+        1.5
+      ],
+      "eyeHeight": 1.5,
+      "targetHeight": 1.5,
+      "fov": 65
+    },
+    {
+      "id": "C-kitchen",
+      "roomId": "kitchen",
+      "position": [
+        10.55,
+        10.65
+      ],
+      "target": [
+        12.6,
+        7.3
+      ],
+      "eyeHeight": 1.5,
+      "targetHeight": 1.5,
+      "fov": 70
+    },
+    {
+      "id": "C-flex",
+      "roomId": "flex",
+      "position": [
+        8.8,
+        3.8
+      ],
+      "target": [
+        8.2,
+        1.2
+      ],
+      "eyeHeight": 1.5,
+      "targetHeight": 1.5,
+      "fov": 65
+    },
+    {
+      "id": "C-reserve",
+      "roomId": "reserve",
+      "position": [
+        12.6,
+        3.75
+      ],
+      "target": [
+        11.65,
+        1.6
+      ],
+      "eyeHeight": 1.5,
+      "targetHeight": 1.5,
+      "fov": 65
+    },
+    {
+      "id": "C-bath",
+      "roomId": "bath",
+      "position": [
+        6.45,
+        1.45
+      ],
+      "target": [
+        4.85,
+        0.65
+      ],
+      "eyeHeight": 1.5,
+      "targetHeight": 1.5,
+      "fov": 75
+    },
+    {
+      "id": "C-entry",
+      "roomId": "entry",
+      "position": [
+        11.3,
+        12.9
+      ],
+      "target": [
+        13.1,
+        11.65
+      ],
+      "eyeHeight": 1.5,
+      "targetHeight": 1.5,
+      "fov": 70
+    },
+    {
+      "id": "C-garden",
+      "roomId": "garden",
+      "position": [
+        5.3,
+        13.2
+      ],
+      "target": [
+        2.3,
+        10.8
+      ],
+      "eyeHeight": 1.5,
+      "targetHeight": 1.5,
+      "fov": 75
+    }
+  ],
+  "note": {
+    "zh": "同一模型约束门窗、家具、动线、立面与几何视图；影像仍是材质氛围研究。0.75–0.9m 路线为当前概念净通行带，非无障碍或施工验收结论。",
+    "en": "One model governs openings, furniture, routes, elevations and geometric views. Atmospheric images remain material studies. The 0.75–0.9 m paths are concept clearances, not accessibility or construction certification."
+  }
+}
