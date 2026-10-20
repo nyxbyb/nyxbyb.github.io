@@ -405,6 +405,7 @@
       font-family: var(--ui); letter-spacing: 0.08em;
     }
     .breadcrumb .crumb {
+      background: transparent; border: 0; color: inherit; font: inherit;
       cursor: pointer; padding: 4px 4px; border-radius: 4px; transition: color 0.2s;
     }
     .breadcrumb .crumb:hover { color: var(--accent); }
@@ -412,6 +413,7 @@
     .breadcrumb .crumb-now { color: var(--accent); cursor: default; }
     .domain-view { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; width: 100%; }
     .dv-item {
+      width: 100%; text-align: left; font-family: inherit; color: inherit;
       position: relative; border: 1px solid rgba(238,240,245,0.12);
       border-radius: 12px; padding: 20px 22px; cursor: pointer;
       background: rgba(10,14,22,0.6); backdrop-filter: blur(4px);
@@ -544,8 +546,14 @@
     }
     .lp-links a:hover { color: var(--accent); border-bottom-color: var(--accent); }
 
-    /* ========== 第4屏：拓星 ========== */
-    #sec-frontier { background: var(--bg-deep); }
+    /* 计算机分支中的科研与代表作 */
+    #sec-frontier.domain-legacy-anchor { display: block; height: 0; padding: 0; margin: 0; overflow: visible; scroll-margin-top: 100px; }
+    .domain-view[hidden], .domain-research[hidden] { display: none; }
+    .domain-research { padding: 24px 0 70px; }
+    .domain-research .section-title { font-size: clamp(24px, 3vw, 32px); text-align: left; }
+    .domain-research .frontier-list { max-width: none; }
+    .domain-research .frontier-more { display: inline-block; margin-top: 28px; color: var(--accent-dim); font-size: 13px; }
+    .domain-research .frontier-tags { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 24px; font-family: var(--ui); color: var(--ink-dim); font-size: 11px; }
     .frontier-list {
       max-width: 640px; width: 100%;
       display: flex; flex-direction: column; gap: 16px;
@@ -644,6 +652,7 @@
     .set-btn:hover { color: var(--accent); border-color: var(--accent); }
     .set-btn.wide { width: 100%; text-align: left; padding: 12px 18px; font-size: 14px; }
     .set-btn.on { color: var(--accent); border-color: var(--accent); background: rgba(238,240,245,0.08); }
+    .profile-link { text-decoration: none; display: block; font-size: 12px; line-height: 1.7; }
     .set-foot { margin-top: 10px; font-size: 11px; color: rgba(238,240,245,0.3); letter-spacing: 0.15em; text-align: center; }
 
     .frontier-tags {
@@ -700,6 +709,7 @@
       font-family: var(--serif-en); font-style: italic; letter-spacing: 0.1em;
     }
     .essay-more {
+      background: transparent; width: 100%; font-family: var(--ui);
       margin: 8px 0 4px; font-size: 12px; color: var(--accent-dim);
       cursor: pointer; letter-spacing: 0.12em; transition: color 0.2s;
       text-align: center; padding: 6px; border: 1px dashed rgba(238,240,245,0.2); border-radius: 8px;
@@ -866,7 +876,7 @@
   <a class="caelum-brand" href="./" aria-label="Caelum 首页"><span>✳</span> 凿星图 <i>Caelum</i></a>
   <nav aria-label="主要内容 · Main navigation">
     <a href="#sec-map" data-i18n="siteMap">阅读星图</a>
-    <a href="#sec-frontier" data-i18n="siteResearch">科研</a>
+    <a href="#sec-domain" onclick="showDomainRoot()" data-i18n="siteDomains">星域</a>
     <a href="#sec-essays" data-i18n="siteWriting">文字</a>
     <a class="caelum-room-link" href="./room.html" data-i18n="siteRoom">未来的房间 ↗</a>
   </nav>
@@ -882,10 +892,9 @@
   <button type="button" class="nav-dot active" data-label="序" data-label-en="Prelude" aria-label="序 · Prelude" onclick="goTo(0)"></button>
   <button type="button" class="nav-dot" data-label="星图" data-label-en="Starchart" aria-label="星图 · Starchart" onclick="goTo(1)"></button>
   <button type="button" class="nav-dot" data-label="星域" data-label-en="Domains" aria-label="星域 · Domains" onclick="goTo(2)"></button>
-  <button type="button" class="nav-dot" data-label="拓星" data-label-en="Research" aria-label="拓星 · Research" onclick="goTo(3)"></button>
-  <button type="button" class="nav-dot" data-label="星屑" data-label-en="Stardust" aria-label="星屑 · Stardust" onclick="goTo(4)"></button>
-  <button type="button" class="nav-dot" data-label="星愿" data-label-en="Stellar Vows" aria-label="星愿 · Stellar Vows" onclick="goTo(5)"></button>
-  <button type="button" class="nav-dot" data-label="跋" data-label-en="Coda" aria-label="跋 · Coda" onclick="goTo(6)"></button>
+  <button type="button" class="nav-dot" data-label="星屑" data-label-en="Stardust" aria-label="星屑 · Stardust" onclick="goTo(3)"></button>
+  <button type="button" class="nav-dot" data-label="星愿" data-label-en="Stellar Vows" aria-label="星愿 · Stellar Vows" onclick="goTo(4)"></button>
+  <button type="button" class="nav-dot" data-label="跋" data-label-en="Coda" aria-label="跋 · Coda" onclick="goTo(5)"></button>
 </nav>
 
 <!-- ═══════════ 第 1 屏：序 · 个人名片
@@ -899,10 +908,6 @@
       <span class="zi-source" id="introZiSource"></span>
     </div>
     <div class="intro-tagline" id="introTagline">认识你自己 · γνῶθι σεαυτόν</div>
-  </div>
-  <div class="intro-paths">
-    <a href="#sec-map" data-i18n="introExplore">沿星图，认识我的阅读与研究 ↓</a>
-    <a href="./room.html" data-i18n="introRoom">在房间，停留一会儿 ↗</a>
   </div>
   <div class="intro-hint" id="introHint">向下滚动</div>
 </section>
@@ -929,22 +934,17 @@
   </div>
 </section>
 
-<!-- ═══════════ 第 3 屏：星域 · 四域下钻 ═══════════ -->
+<!-- ═══════════ 第 3 屏：星域 · 三个方向 ═══════════ -->
 <section id="sec-domain">
   <h2 class="section-title"><span>星 域</span><span class="title-en">The Domains of Knowledge</span></h2>
   <p class="section-sub" id="taglineDomain"></p>
   <div class="domain-nav">
     <div class="breadcrumb" id="domainCrumb"></div>
+    <span id="sec-frontier" class="domain-legacy-anchor" aria-hidden="true"></span>
     <div class="domain-view" id="domainView"></div>
-  </div>
-</section>
-
-<!-- ═══════════ 第 4 屏：拓星 ═══════════
-     ✏️ 编辑入口：研究方向与代表作改这里。
-     想增删代表作 → 复制/删掉一个 <a class="frontier-item"> 块。
-     完整学术履历链接地址在下方 frontier-more 里。 -->
-<section id="sec-frontier">
-  <h2 class="section-title"><span>拓 星</span><span class="title-en">Research</span></h2>
+    <!-- 计算机 → 科研：沿用既有四篇代表作，旧 #sec-frontier 链接仍可进入。 -->
+    <div class="domain-research" id="domainResearch" hidden>
+  <h3 class="section-title"><span>科研与代表作</span><span class="title-en">Research & Publications</span></h3>
   <p class="section-sub" id="taglineFrontier"></p>
 
   <!-- 研究方向（✏️ 可改标签文本） -->
@@ -983,6 +983,8 @@
     <span data-i18n="frontierMore">完整学术履历</span>
     &nbsp;→ GOOGLE SCHOLAR
   </a>
+    </div>
+  </div>
 </section>
 
 <!-- ═══════════ 第 5 屏：随笔 ═══════════
@@ -1023,6 +1025,7 @@
   const sections = document.querySelectorAll('section');
 
   function goTo(i) {
+    if (sections[i]?.id === 'sec-domain') showDomainRoot();
     if (sections[i]) sections[i].scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
   }
 
@@ -1040,11 +1043,10 @@
   // ─── 中英双语 ───
   const I18N = {
     siteMap: { zh: "阅读星图", en: "Starchart" },
-    siteResearch: { zh: "科研", en: "Research" },
+    siteDomains: { zh: "星域", en: "Domains" },
+    personalProfile: { zh: "给大模型阅读的个人说明 ↗", en: "Personal context for language models ↗" },
     siteWriting: { zh: "文字", en: "Writing" },
     siteRoom: { zh: "未来的房间 ↗", en: "The Room ↗" },
-    introExplore: { zh: "沿星图，认识我的阅读与研究 ↓", en: "Explore my reading and research ↓" },
-    introRoom: { zh: "在房间，停留一会儿 ↗", en: "Stay a while in the room ↗" },
     introSymbol: { zh: "凿 星 图 · C A E L U M", en: "C A E L U M · THE CHISEL" },
     introZi: { zh: "—— 取自《周易》「贞」，取义：正固 · 卜问 · 坚定", en: "— from Zhouyi's zhen: steadfast · inquiring · resolute" },
     introPoem: { zh: "名中含「昱」——日光；「冰」——冰雪。光与寒并存，在黑夜中自行发光。我名夜神 Nyx。", en: "Yu — sunlight; Bing — ice. Light and cold together, shining of its own accord in the dark. My name is Nyx." },
@@ -1109,6 +1111,8 @@
   try { localStorage.removeItem('caelum_admin_key'); localStorage.removeItem('caelum_admin_token'); } catch {}
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   let lang = storageGet('caelum_lang') === 'en' ? 'en' : 'zh';
+  let starmapInteraction = null;
+  let starmapMatches = (node, query) => (`${node.title || ''} ${node.author || ''}`).toLocaleLowerCase().includes(query.toLocaleLowerCase());
   const toggle = document.getElementById('langToggle');
   let textLoadedSnapshot = '';
   let textData = null; // 从 text.json 读：序/星愿/跋
@@ -1165,6 +1169,12 @@
     document.querySelectorAll('#setPanel .set-langs .set-btn').forEach(b =>
       b.classList.toggle('on', b.getAttribute('data-lang') === lang));
     renderText(); // 渲染 text.json 控制的序/星愿/跋
+    if (document.getElementById('domainCrumb')?.childElementCount) renderDomains();
+    document.querySelectorAll('.essay-more').forEach(btn => {
+      const open = btn.getAttribute('aria-expanded') === 'true';
+      btn.textContent = open ? (lang === 'en' ? 'Show less ▴' : '收起 ▴') : (lang === 'en' ? `Show ${btn.getAttribute('data-count')} more ▾` : `展开其余 ${btn.getAttribute('data-count')} 篇 ▾`);
+    });
+    starmapInteraction?.refresh();
   }
   function toggleLang() {
     lang = lang === 'zh' ? 'en' : 'zh';
@@ -1280,6 +1290,7 @@
     });
     document.getElementById('mapStatus').textContent = nodes.length ? `${nodes.length} 本书 · 拖拽旋转 · 点击进入` : '暂无书目';
     drawStars();
+    starmapInteraction?.refresh();
   }
 
   // 三态标记存取
@@ -1303,7 +1314,7 @@
   let mapIdleStart = performance.now();
   function mapIdleLoop() {
     const sec = document.getElementById('sec-map');
-    if (!document.hidden && !reducedMotion.matches && sec && nodes.length && !isRotating && hoverIdx < 0) {
+    if (!document.hidden && !reducedMotion.matches && sec && nodes.length && !isRotating && hoverIdx < 0 && !starmapInteraction?.isPaused()) {
       const inView = sec.getBoundingClientRect().bottom > 0 && sec.getBoundingClientRect().top < innerHeight;
       if (inView && performance.now() - mapIdleStart > 4000) {
         rotY += 0.0008;
@@ -1499,16 +1510,16 @@
       return ia - ib;
     });
     wrap.innerHTML = '';
-    keys.forEach(cat => {
+    keys.forEach((cat, categoryIndex) => {
       const [zh, en] = ESSAY_LABEL[cat] || [cat, 'More'];
       const list = cats[cat];
       const col = document.createElement('div');
       col.className = 'essay-col';
       col.innerHTML = `<div class="essay-cat-head">${escapeHTML(zh)}<span class="ec-en">${escapeHTML(en)}</span><span class="ec-n">${list.length}</span></div>`;
       const itemsBox = document.createElement('div');
-      // 每列最多显示 5 篇，超出折叠
-      const shown = list.slice(0, 5);
-      const rest = list.slice(5);
+      // 每栏先读两篇，其余文章保留在可展开列表中。
+      const shown = list.slice(0, 2);
+      const rest = list.slice(2);
       const mk = a => {
         const item = document.createElement('a');
         item.className = 'essay-item';
@@ -1523,20 +1534,23 @@
       col.appendChild(itemsBox);
       if (rest.length) {
         const collapse = document.createElement('div');
-        collapse.className = 'essay-rest'; collapse.style.display = 'none';
+        collapse.className = 'essay-rest'; collapse.id = `essay-rest-${categoryIndex}`; collapse.hidden = true;
         rest.forEach(a => collapse.appendChild(mk(a)));
         col.appendChild(collapse);
-        const btn = document.createElement('div');
-        btn.className = 'essay-more';
-        btn.innerHTML = `展开其余 ${rest.length} 篇 ▾`;
-        btn.onclick = () => { collapse.style.display = ''; btn.style.display = 'none'; };
+        const btn = document.createElement('button');
+        btn.type = 'button'; btn.className = 'essay-more';
+        btn.textContent = lang === 'en' ? `Show ${rest.length} more ▾` : `展开其余 ${rest.length} 篇 ▾`;
+        btn.setAttribute('aria-expanded', 'false');
+        btn.setAttribute('data-count', rest.length);
+        btn.setAttribute('aria-controls', collapse.id);
+        btn.onclick = () => { const open = collapse.hidden; collapse.hidden = !open; btn.setAttribute('aria-expanded', String(open)); btn.textContent = open ? (lang === 'en' ? 'Show less ▴' : '收起 ▴') : (lang === 'en' ? `Show ${rest.length} more ▾` : `展开其余 ${rest.length} 篇 ▾`); };
         col.appendChild(btn);
       }
       wrap.appendChild(col);
     });
   }
 
-  // ─── 星域：四域下钻导航（数据来自 tree.json）───
+  // ─── 星域：三个方向的下钻导航（数据来自 tree.json）───
   let domainMarks = {};
   try { domainMarks = JSON.parse(storageGet('caelum_domains') || '{}'); } catch {}
   let domainNotes = {};
@@ -1546,7 +1560,7 @@
   let currentNodes = [];
 
   async function loadTree() {
-    // 加载四域目录树（tree.json）
+    // 加载三个方向；旧目录独立归档，既有笔记键由 storagePath 保留。
     const paths = ['tree.json', 'data/tree.json', '/tree.json', '/data/tree.json'];
     for (const p of paths) {
       try {
@@ -1555,68 +1569,68 @@
       } catch {}
     }
     renderDomains();
+    routeDomainHash();
   }
 
   function saveDomainMark() { try { storageSet('caelum_domains', JSON.stringify(domainMarks)); } catch {} }
   function saveDomainNotes() { try { storageSet('caelum_domain_notes', JSON.stringify(domainNotes)); } catch {} }
 
   function domainKey(node) {
-    // 叶子标注键: 完整路径
-    return domainPath.map(p => p.id).concat(node.id).join('>');
+    // Promoted topics keep their original note/mark keys, without moving browser data.
+    return node.storagePath || domainPath.map(p => p.id).concat(node.id).join('>');
   }
+  function pathEntry(node) { return { id: node.id, zh: node.zh, en: node.en }; }
+  function showDomainRoot() { domainPath = []; renderDomains(); }
+  function routeDomainHash() {
+    const hash = window.location?.hash || '';
+    if (!['#sec-frontier', '#sec-domain/computing/research'].includes(hash)) return;
+    const computing = treeData.domains.find(n => n.id === 'computing');
+    const research = computing?.children?.find(n => n.view === 'research');
+    if (!research) return; // loadTree retries the route after its asynchronous fetch.
+    domainPath = [pathEntry(computing), pathEntry(research)];
+    renderDomains();
+    document.getElementById('sec-domain')?.scrollIntoView?.({ behavior: 'auto' });
+  }
+  window.addEventListener('hashchange', routeDomainHash);
 
   function renderDomains() {
     const view = document.getElementById('domainView');
     const crumb = document.getElementById('domainCrumb');
+    const research = document.getElementById('domainResearch');
     if (!view) return;
-    // 面包屑
-    crumb.innerHTML = '';
-    crumb.appendChild(crumbEl('星域', () => { domainPath = []; renderDomains(); }));
+    crumb.replaceChildren();
+    crumb.appendChild(crumbEl(lang === 'en' ? 'Domains' : '星域', showDomainRoot));
     domainPath.forEach((p, i) => {
       crumb.appendChild(sepEl());
-      crumb.appendChild(crumbEl(p.zh, () => { domainPath = domainPath.slice(0, i + 1); renderDomains(); }));
+      crumb.appendChild(crumbEl(lang === 'en' ? (p.en || p.zh) : p.zh, () => { domainPath = domainPath.slice(0, i + 1); renderDomains(); }));
     });
-    // 当前层节点
-    let parent = null;
-    const findNode = (nodes, idx) => {
-      let cur = nodes;
-      for (let i = 1; i <= idx; i++) {
-        cur = cur.find(n => n.id === domainPath[i].id);
-        if (cur && cur.children) cur = cur.children;
-        else return [];
-      }
-      return cur || [];
-    };
-    if (domainPath.length === 0) {
-      currentNodes = treeData.domains || [];
-    } else {
-      let cur = treeData.domains.find(n => n.id === domainPath[0].id);
-      for (let i = 1; i < domainPath.length; i++) {
-        cur = cur?.children?.find(c => c.id === domainPath[i].id);
-      }
-      currentNodes = cur?.children || [];
+    let current = null;
+    let branch = treeData.domains || [];
+    for (const entry of domainPath) {
+      current = branch.find(n => n.id === entry.id);
+      branch = current?.children || [];
     }
-    view.innerHTML = '';
+    const isResearch = current?.view === 'research';
+    view.hidden = isResearch;
+    if (research) research.hidden = !isResearch;
+    if (isResearch) return;
+    currentNodes = domainPath.length ? branch : treeData.domains || [];
+    view.replaceChildren();
     if (!currentNodes.length) {
-      view.textContent = '此目录暂无条目，或数据暂时无法加载。请刷新重试。';
+      view.textContent = lang === 'en' ? 'No entries are available. Please reload.' : '此目录暂无条目，或数据暂时无法加载。请刷新重试。';
       return;
     }
     currentNodes.forEach(node => {
       const hasKids = node.children && node.children.length;
-      const el = document.createElement('div');
-      el.className = 'dv-item';
-      const markVal = node.children ? null : domainMarks[domainKey(node)];
+      const el = document.createElement('button');
+      el.type = 'button'; el.className = 'dv-item';
       el.innerHTML = `<div class="dv-cn">${escapeHTML(node.zh)}</div><div class="dv-en">${escapeHTML(node.en || '')}</div>` +
         (node.posture ? `<div class="dv-badge">${escapeHTML(node.posture)}</div>` : '') +
-        (hasKids ? `<div class="dv-arrow">›</div>` : `<div class="dv-badge">条目页</div>`);
+        (hasKids || node.view === 'research' ? `<div class="dv-arrow">›</div>` : `<div class="dv-badge">${lang === 'en' ? 'Notes' : '条目页'}</div>`);
       el.onclick = () => {
-        if (hasKids) {
-          domainPath.push({ id: node.id, zh: node.zh, en: node.en });
-          renderDomains();
-        } else {
-          // 叶子：进入独立条目页
-          openLeafPage(node);
-        }
+        if (hasKids || node.view === 'research') {
+          domainPath.push(pathEntry(node)); renderDomains();
+        } else openLeafPage(node);
       };
       view.appendChild(el);
     });
@@ -1629,7 +1643,7 @@
     leafCurrent = node;
     const crumb = document.getElementById('lpCrumb');
     crumb.textContent = domainPath.map(p => p.zh).concat([node.zh]).join(' › ');
-    const key = domainPath.map(p => p.id).concat([node.id]).join('>');
+    const key = domainKey(node);
     const st = domainMarks[key] || 'na';
     const distill = domainNotes[key + '.distill'] || '';
     const dialog = domainNotes[key + '.dialog'] || '';
@@ -1738,7 +1752,7 @@ ${dialog.slice(0, 8000)}
   }
 
   function crumbEl(txt, fn) {
-    const s = document.createElement('span');
+    const s = document.createElement('button'); s.type = 'button';
     s.className = 'crumb'; s.textContent = txt; s.onclick = fn;
     return s;
   }
@@ -1769,12 +1783,14 @@ ${dialog.slice(0, 8000)}
   }
 
   canvas.addEventListener('pointerdown', (e) => {
+    if (starmapInteraction?.ownsPointerEvents) return;
     if (!e.isPrimary || e.button > 0) return;
     canvas.setPointerCapture(e.pointerId); mapMoved = 0;
     isRotating = true; rotLastX = e.clientX; rotLastY = e.clientY;
     mapIdleStart = performance.now();
   });
   window.addEventListener('pointermove', (e) => {
+    if (starmapInteraction?.ownsPointerEvents) return;
     mapIdleStart = performance.now();
     if (isRotating) {
       mapMoved += Math.abs(e.clientX - rotLastX) + Math.abs(e.clientY - rotLastY);
@@ -1791,6 +1807,7 @@ ${dialog.slice(0, 8000)}
   });
   canvas.addEventListener('pointercancel', () => { isRotating = false; });
   window.addEventListener('pointerup', (e) => {
+    if (starmapInteraction?.ownsPointerEvents) return;
     if (!isRotating) return;
     isRotating = false;
     // 点击（无拖拽）→ 进入沉浸式星图（详情在沉浸式里点星查看）
@@ -1835,12 +1852,12 @@ ${dialog.slice(0, 8000)}
   let immFilter = 'all';      // all | my | author
   let immAuthor = '';
   let immSelNode = null;      // 点击选中的节点
-  let immFocus = { x: 0, y: 0 };  // 相机聚焦的世界坐标（-1..1）
+  let immFocus = { x: 0, y: 0, z: 0 };  // 相机聚焦的世界坐标（-1..1）
   // 闲置自转：交互后 4 秒无操作，星空缓慢自转；任何交互重置
   let immIdleStart = 0;
   let immUserActed = false;
   function immIdleLoop() {
-    if (!document.hidden && !reducedMotion.matches && document.getElementById('immerse')?.classList.contains('open')) {
+    if (!document.hidden && !reducedMotion.matches && !starmapInteraction?.isPaused() && document.getElementById('immerse')?.classList.contains('open')) {
       const idle = performance.now() - immIdleStart;
       if (idle > 4000 && !immDrag) {
         rotY += 0.0012;
@@ -1856,7 +1873,7 @@ ${dialog.slice(0, 8000)}
     const cx = immAxisMode ? val(n, immAxisX) : (n.x - 0.5) * 2;
     const cy = immAxisMode ? val(n, immAxisY) : (n.y - 0.5) * 2;
     const cz = (n.z - 0.5) * 2;
-    let x1 = cx - immFocus.x, y1 = cy - immFocus.y, z1 = cz;
+    let x1 = cx - immFocus.x, y1 = cy - immFocus.y, z1 = cz - (immFocus.z || 0);
     // rotY + rotX 旋转
     let rx = x1 * Math.cos(rotY) + z1 * Math.sin(rotY);
     let rz = -x1 * Math.sin(rotY) + z1 * Math.cos(rotY);
@@ -1878,7 +1895,7 @@ ${dialog.slice(0, 8000)}
     renderSuggest();
     // 星空绽放：从深处 zoom 0.02 缓动展开到 1，如星云在眼前绽开（每次进入都绽放）
     immZoom = reducedMotion.matches ? 1 : 0.02;
-    immFocus = { x: 0, y: 0 };
+    immFocus = { x: 0, y: 0, z: 0 };
     immUserActed = false;
     rotY = 0.6; rotX = -0.35;
     const t0 = performance.now();
@@ -1899,6 +1916,7 @@ ${dialog.slice(0, 8000)}
   // 沉浸式画布事件绑定（openImmersive 时执行，确保 canvas 已存在）
   let immEventBound = false;
   function immBound() {
+    if (starmapInteraction?.ownsPointerEvents) return;
     if (immEventBound) return;
     immEventBound = true;
     imm.addEventListener('pointerdown', (e) => { if (!e.isPrimary || e.button > 0) return; imm.setPointerCapture(e.pointerId); immDrag = true; immMoved = 0; immLastX = e.clientX; immLastY = e.clientY; immTouch(); });
@@ -1995,7 +2013,7 @@ ${dialog.slice(0, 8000)}
 
   function immNodeVisible(n) {
     if (immFilter === 'my') return n.status === 'read' || n.status === 'fav';
-    if (immFilter === 'author') return (n.author || '').includes(immAuthor);
+    if (immFilter === 'author') return starmapMatches(n, immAuthor);
     return true;
   }
 
@@ -2117,7 +2135,7 @@ ${dialog.slice(0, 8000)}
       let infl = 0;
       if (immSortMode === 'duration' && n.wechat && n.wechat.duration_min) infl = n.wechat.duration_min / immMaxD;
       else if (immSortMode === 'rating' && (n.douban_rating || n.rating)) infl = (n.douban_rating || n.rating) / immMaxR;
-      const highlighted = immFilter === 'author' && (n.author || '').includes(immAuthor);
+      const highlighted = immFilter === 'author' && starmapMatches(n, immAuthor);
       const depthF = 1 / (1 + Math.abs(p.depth) * 0.35);
       // 半径随放缩增大：放大后星变大、能看清具体书
       const zoomK = 0.85 + Math.log(1 + immZoom * 0.9);  // zoom=1 → 1.5x; zoom=4 → ~2.3x
@@ -2154,6 +2172,7 @@ ${dialog.slice(0, 8000)}
         immCtx.fillText(txt, o.p.sx, o.p.sy + 32);
       }
     }
+    starmapInteraction?.refreshView();
   }
 
   function immApply() {
@@ -2175,13 +2194,14 @@ ${dialog.slice(0, 8000)}
       });
       const top = Object.entries(authors).sort((x, y) => y[1] - x[1]).slice(0, 30).map(([a]) => a);
       renderSuggest(top);
-      info.textContent = `作者「${immAuthor}」相关 ${all.length} 本 · 其中你读过 ${mine.length} 本`;
+      info.textContent = lang === 'en' ? `${all.length} matching books · ${mine.length} read or loved` : `「${immAuthor}」相关 ${all.length} 本 · 其中你读过 ${mine.length} 本`;
     } else if (immFilter === 'my') {
       info.textContent = `你的光斑：已读/喜爱 ${mine.length} 本`;
     } else {
-      info.textContent = `${all.length} 本 · 拖拽旋转 · 输入作者名点亮`;
+      info.textContent = lang === 'en' ? `${all.length} books · Search a title or author` : `${all.length} 本 · 按书名或作者探索`;
     }
     immRender();
+    starmapInteraction?.refresh();
   }
   function immHighlight(mode) {
     immFilter = mode;
@@ -2272,7 +2292,13 @@ ${dialog.slice(0, 8000)}
   // 点击选星：显示信息 + 最近邻居（按 3D 距离）
   function immSelect(idx) {
     const box = document.getElementById('immStar');
-    if (idx < 0 || !nodes[idx]) { box.style.display = 'none'; immSelNode = null; return; }
+    if (idx < 0 || !nodes[idx]) {
+      box.style.display = 'none'; immSelNode = null; immHover = -1;
+      if (immCtx) immRender();
+      starmapInteraction?.refreshView();
+      return;
+    }
+    immTouch(); immHover = idx;
     immSelNode = nodes[idx];
     const n = immSelNode;
     // 邻居：3D 欧氏距离
@@ -2296,6 +2322,8 @@ ${dialog.slice(0, 8000)}
       </div><div class="imm-star-x" onclick="document.getElementById('immStar').style.display='none'">关闭</div>`;
     box.innerHTML = html;
     box.style.display = 'block';
+    if (immCtx) immRender();
+    starmapInteraction?.refreshView();
   }
 
   function immMark(status) {
@@ -2401,7 +2429,11 @@ ${dialog.slice(0, 8000)}
     setTimeout(() => { openImmersive(); immSelect(idx); }, 100);
   }
 
-  window.addEventListener('resize', () => { resize(); drawStars(); });
+  window.addEventListener('resize', () => {
+    resize(); drawStars();
+    if (immCtx && document.getElementById('immerse')?.classList.contains('open')) { immResize(); immRender(); }
+    starmapInteraction?.refreshView();
+  });
   document.addEventListener('keydown', e => {
     if (e.key !== 'Escape') return;
     closeImmersive(); closeSettings(); closeRecPanel(); closeAddPanel(); closeTextEdit();
@@ -2414,6 +2446,41 @@ ${dialog.slice(0, 8000)}
   loadTree();
   loadEssays();
   loadText();
+
+  window.caelumStarmapAdapter = {
+    getNodes: () => nodes,
+    getLanguage: () => lang,
+    isOpen: () => document.getElementById('immerse').classList.contains('open'),
+    open: openImmersive,
+    close: closeImmersive,
+    select: immSelect,
+    clearSelection: () => immSelect(-1),
+    getSelectedIndex: () => nodes.indexOf(immSelNode),
+    isNodeVisible: index => !!nodes[index] && immNodeVisible(nodes[index]),
+    stopMotion() { immTouch(); mapIdleStart = performance.now(); },
+    getVisibleIndices: (surface) => nodes.flatMap((node, index) => surface === 'main' || immNodeVisible(node) ? [index] : []),
+    getView: () => ({ rotX, rotY, zoom: immZoom, focusX: immFocus.x, focusY: immFocus.y, focusZ: immFocus.z || 0 }),
+    setView(view) {
+      rotX = view.rotX; rotY = view.rotY;
+      immZoom = Math.min(30, Math.max(0.1, view.zoom));
+      immFocus = { x: view.focusX, y: view.focusY, z: view.focusZ || 0 };
+      immTouch(); mapIdleStart = performance.now(); drawStars();
+      if (immCtx && this.isOpen()) immRender();
+    },
+    project(index, surface) {
+      return surface === 'main'
+        ? project3d(nodes[index], { x: W / 2, y: H / 2 }, Math.min(W, H) / 2 - 70)
+        : immProject(nodes[index]);
+    },
+    hover(index, surface) {
+      if (surface === 'main') mapIdleStart = performance.now();
+      else immTouch();
+      if (surface === 'main') { if (hoverIdx !== index) { hoverIdx = index; drawStars(); } }
+      else if (immHover !== index) { immHover = index; if (immCtx) immRender(); }
+    },
+    applyQuery: () => immApply(),
+    attach(controller, matches) { starmapInteraction = controller; starmapMatches = matches; controller?.refresh(); },
+  };
 
   // GitHub authorizes writes. Never persist the token or publish a passphrase/hash.
   const EDIT_PATHS = ['web/public/data/inbox.json', 'web/public/data/text.json'];
@@ -2519,7 +2586,7 @@ ${dialog.slice(0, 8000)}
   const TEXT_FIELDS = [
     ['taglines.map', '星图页一句话'],
     ['taglines.domain', '星域页一句话'],
-    ['taglines.frontier', '拓星页一句话'],
+    ['taglines.frontier', '计算机 · 科研一句话'],
     ['taglines.essays', '星屑页一句话'],
     ['intro.tagline', '封面 tagline'],
     ['vision', '星愿（每行一句，中英用 -- 分隔）'],
@@ -2742,11 +2809,17 @@ ${dialog.slice(0, 8000)}
       <div class="set-group-h">常 用</div>
       <div class="set-row">
         <button class="set-btn wide" onclick="openManual(this)">📖 更新指南</button>
+        <a class="set-btn wide profile-link" href="./docs/profile.md" target="_blank" rel="noopener noreferrer" data-i18n="personalProfile">给大模型阅读的个人说明 ↗</a>
       </div>
     </div>
     <div class="set-foot">凿星图 · Caelum · 认识你自己</div>
   </div>
 </div>
 
+<script type="module">
+  import { mountStarmapInteractions, matchesBookQuery } from './starmap/interaction.js';
+  const adapter = window.caelumStarmapAdapter;
+  adapter.attach(mountStarmapInteractions(adapter), matchesBookQuery);
+</script>
 </body>
 </html>

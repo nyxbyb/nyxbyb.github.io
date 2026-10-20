@@ -2,57 +2,59 @@
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#171e1b">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#222820">
   <title>未来的房间 · Caelum</title>
-  <meta name="description" content="一间有书、有茶、有音乐和植物的房间。凿星图 Caelum 的一个安静角落。">
+  <meta name="description" content="走进一间关于未来生活的房间。木、茶、书、音乐与傍晚的光。">
   <link rel="canonical" href="https://nyxbyb.github.io/web/room.html">
   <link rel="stylesheet" href="./room/room.css">
   <script type="module" src="./room/room.js"></script>
 </head>
-<body data-time="dusk" data-lamp="on">
-  <a class="skip-link" href="#room-content">跳到房间内容 · Skip to content</a>
-  <header class="site-header">
-    <a class="brand" href="./" aria-label="Caelum 首页"><span class="brand-mark">✳</span><span>凿星图 <i>Caelum</i></span></a>
-    <nav aria-label="主导航">
-      <a href="./#sec-map" data-i18n="starchart">星图</a>
-      <a href="./#sec-frontier" data-i18n="research">科研</a>
-      <a href="./#sec-essays" data-i18n="writing">文字</a>
-      <a href="./room.html" aria-current="page" data-i18n="room">房间</a>
-    </nav>
-    <button class="language-button" id="language" aria-label="Switch to English">EN</button>
-  </header>
-  <main>
-    <div class="room-heading">
-      <div><p class="eyebrow">A QUIET CORNER OF CAELUM <span>／ 01</span></p><h1 data-i18n="title">给自己，留一间房。</h1><p class="heading-description" data-i18n="description">读几页书，等一壶茶。把时间还给自己。</p></div>
-      <div class="time-control"><span class="control-label" data-i18n="light">窗外的光</span><div class="time-options" role="group" aria-label="时间 · Time of day"><button data-time="dawn" aria-pressed="false" data-i18n="dawn">清晨</button><button data-time="dusk" aria-pressed="true" data-i18n="dusk">傍晚</button><button data-time="night" aria-pressed="false" data-i18n="night">夜晚</button></div></div>
-    </div>
-    <div class="room-layout">
-      <div class="scene-column">
-        <div class="scene-shell" id="scene-shell" role="group" aria-label="交互式房间 · Interactive room">
-          <div class="scene-art" id="scene-art"><img src="./room/scene.svg" alt="温暖的等距房间，书架、阅读椅、茶桌、唱片机、植物与一扇窗。"></div>
-          <div class="scene-status"><span class="status-dot"></span><span id="time-caption">傍晚 · 日光渐慢</span></div>
-          <div class="hotspots" id="hotspots" hidden>
-            <button class="hotspot" data-object="books" style="--x:32.9%;--y:39%"><span class="hotspot-dot">＋</span><span class="hotspot-label" data-i18n="books">书架</span></button>
-            <button class="hotspot" data-object="window" style="--x:68.5%;--y:25%"><span class="hotspot-dot">＋</span><span class="hotspot-label" data-i18n="window">窗外</span></button>
-            <button class="hotspot" data-object="lamp" style="--x:44%;--y:31%"><span class="hotspot-dot">＋</span><span class="hotspot-label" data-i18n="lamp">落地灯</span></button>
-            <button class="hotspot" data-object="music" style="--x:73.7%;--y:43%"><span class="hotspot-dot">＋</span><span class="hotspot-label" data-i18n="music">音乐</span></button>
-            <button class="hotspot" data-object="tea" style="--x:52.5%;--y:61%"><span class="hotspot-dot">＋</span><span class="hotspot-label" data-i18n="tea">茶桌</span></button>
-            <button class="hotspot" data-object="plant" style="--x:78.3%;--y:52%"><span class="hotspot-dot">＋</span><span class="hotspot-label" data-i18n="plant">植物</span></button>
-          </div>
-          <noscript><p class="noscript-note">房间可以静静观看。开启 JavaScript 后可泡茶、调光与探索书架。<a href="./#sec-map">前往星图 →</a></p></noscript>
-        </div>
-        <div class="scene-caption"><p><span class="small-cross">✧</span><span data-i18n="explore">点亮一件小物，走进一段日常。</span></p><button id="reset" data-i18n="reset">回到初见 ↺</button></div>
-        <div class="object-nav" role="group" aria-label="房间物件 · Room objects"><button data-object="books" data-i18n="books">书架</button><button data-object="tea" data-i18n="tea">茶桌</button><button data-object="music" data-i18n="music">音乐</button><button data-object="plant" data-i18n="plant">植物</button><button data-object="window" data-i18n="window">窗外</button><button data-object="lamp" data-i18n="lamp">落地灯</button></div>
+<body data-time="dusk" data-lamp="on" data-style="oak">
+  <a class="skip-link" href="#object-nav">跳到房间物件 · Skip to objects</a>
+  <main class="room-experience" id="room-experience">
+    <div class="scene-shell" id="scene-shell" role="group" aria-label="可探索的室内空间 · Explore the room">
+      <div class="scene-art" id="scene-art"><img src="./room/assets/interior-dusk.jpg" alt="自然木质的安静室内，书墙、茶席与落日窗景。"></div>
+      <div class="world-host" id="world-host"></div>
+      <div class="scene-shade" aria-hidden="true"></div>
+      <div class="hotspots" id="hotspots" hidden>
+        <button class="hotspot" data-object="books" style="--x:32.9%;--y:39%"><span class="hotspot-dot">＋</span><span class="hotspot-label" data-i18n="books">书架</span></button>
+        <button class="hotspot" data-object="window" style="--x:68.5%;--y:25%"><span class="hotspot-dot">＋</span><span class="hotspot-label" data-i18n="window">窗外</span></button>
+        <button class="hotspot" data-object="lamp" style="--x:44%;--y:31%"><span class="hotspot-dot">＋</span><span class="hotspot-label" data-i18n="lamp">落地灯</span></button>
+        <button class="hotspot" data-object="music" style="--x:73.7%;--y:43%"><span class="hotspot-dot">＋</span><span class="hotspot-label" data-i18n="music">音乐</span></button>
+        <button class="hotspot" data-object="tea" style="--x:52.5%;--y:61%"><span class="hotspot-dot">＋</span><span class="hotspot-label" data-i18n="tea">茶桌</span></button>
+        <button class="hotspot" data-object="plant" style="--x:78.3%;--y:52%"><span class="hotspot-dot">＋</span><span class="hotspot-label" data-i18n="plant">植物</span></button>
       </div>
-      <aside class="room-content" id="room-content" tabindex="-1" aria-labelledby="content-title">
-        <p class="panel-kicker" id="panel-kicker">THE ART OF SLOW LIVING</p>
-        <div id="panel"><h2 id="content-title">未来的房间</h2><p>书、茶、音乐，和一小片绿色。<br>这里是星图之外，留给生活的地方。</p><p class="panel-loading" role="status">正在整理房间里的小物…</p></div>
-      </aside>
+      <noscript><p class="noscript-note">房间可以静静观看。开启 JavaScript 后可探索物件与灯光。<a href="./">返回凿星图 →</a></p></noscript>
     </div>
+    <header class="room-header room-hud">
+      <a class="room-back" href="./"><span aria-hidden="true">↖</span><span>凿星图 <i>Caelum</i></span></a>
+      <div class="room-header-controls">
+        <div class="time-options" role="group" aria-label="时间 · Time of day"><button data-time="dawn" aria-pressed="false" data-i18n="dawn">清晨</button><button data-time="dusk" aria-pressed="true" data-i18n="dusk">傍晚</button><button data-time="night" aria-pressed="false" data-i18n="night">夜晚</button></div>
+        <button class="quiet-button" id="design-toggle" aria-expanded="false" aria-controls="design-panel" data-i18n="design">空间设定</button>
+        <button class="quiet-button" id="fullscreen" aria-label="切换全屏 · Toggle fullscreen" title="全屏">⤢</button>
+        <button class="quiet-button" id="language" aria-label="Switch to English">EN</button>
+      </div>
+    </header>
+    <div class="room-intro room-hud" id="room-intro"><p class="eyebrow">CAELUM / A ROOM TO LIVE IN</p><h1 data-i18n="title">未来的房间</h1><p class="room-intro-description" data-i18n="description">有一扇好窗，有书，有茶。日子慢慢来。</p><p class="time-caption"><span class="status-dot"></span><span id="time-caption">傍晚 · 日光渐慢</span></p></div>
+    <div class="room-loading" id="room-loading" role="status"><span class="loading-line"></span><p data-i18n="preparing">正在把傍晚的光带进来…</p></div>
+    <div class="room-help room-hud" id="room-help"><span data-i18n="navigationHint">拖动环顾 · 滚轮靠近 · 点一件小物</span><button id="hide-ui" data-i18n="quietView">静看 · H</button></div>
+    <div class="room-dock room-hud"><button class="dock-reset" id="reset" data-i18n="overview">全景</button><div class="object-nav" id="object-nav" role="group" aria-label="房间物件 · Room objects"><button data-object="books" data-i18n="books">书架</button><button data-object="tea" data-i18n="tea">茶桌</button><button data-object="music" data-i18n="music">音乐</button><button data-object="plant" data-i18n="plant">植物</button><button data-object="window" data-i18n="window">窗外</button><button data-object="lamp" data-i18n="lamp">落地灯</button></div></div>
+    <button class="restore-ui" id="show-ui" hidden data-i18n="showControls">显示控制 · H</button>
+    <aside class="room-content" id="room-content" tabindex="-1" aria-labelledby="content-title" hidden>
+      <div class="content-head"><p class="panel-kicker" id="panel-kicker">A QUIET MOMENT</p><button class="panel-close" id="close-content" aria-label="收起内容 · Close content">×</button></div>
+      <div id="panel"><h2 id="content-title">未来的房间</h2><p>书、茶、音乐，和一小片绿色。</p></div>
+    </aside>
+    <aside class="design-panel room-hud" id="design-panel" aria-labelledby="design-title" hidden>
+      <div class="content-head"><h2 id="design-title" data-i18n="design">空间设定</h2><button class="panel-close" id="close-design" aria-label="关闭空间设定 · Close design settings">×</button></div>
+      <p class="design-copy" data-i18n="designCopy">一间房，先把生活安顿好。</p>
+      <p class="design-label" data-i18n="material">材质与色调</p>
+      <div class="material-options" role="group" aria-label="材质 · Materials"><button data-material="oak" aria-pressed="true"><span class="material-swatch oak"></span><span data-i18n="oak">自然橡木</span></button><button data-material="walnut" aria-pressed="false"><span class="material-swatch walnut"></span><span data-i18n="walnut">温润胡桃</span></button><button data-material="plaster" aria-pressed="false"><span class="material-swatch plaster"></span><span data-i18n="plaster">浅木灰泥</span></button></div>
+      <p class="design-foot" data-i18n="designFoot">窗边阅读、中央茶席、音乐与绿意。房间之外，留给以后。</p>
+    </aside>
     <p class="feedback" id="feedback" role="status" aria-live="polite"></p>
-    <div class="load-error" id="load-error" hidden><span id="load-error-text"></span><button id="retry" data-i18n="retry">重新加载</button></div>
+    <div class="load-error room-hud" id="load-error" hidden><span id="load-error-text"></span><button id="retry" data-i18n="retry">重新加载</button></div>
+    <div class="render-error room-hud" id="render-error" hidden><span data-i18n="renderFallback">当前设备使用静态房间，物件内容仍可探索。</span><button id="retry-world" data-i18n="retryScene">重试空间渲染</button></div>
   </main>
-  <footer><span>凿星图 <i>Caelum</i> <span class="footer-divider">／</span><span data-i18n="footer">向外探索，向内生活。</span></span><a href="./" data-i18n="back">返回星图 ↗</a></footer>
 </body>
 </html>

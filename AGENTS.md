@@ -6,7 +6,7 @@ Caelum（凿星图）是个人科研、阅读、写作与生活网站。保留�
 
 - 页面使用原生 HTML/CSS/JavaScript，Vite 5 负责构建。虽保留 Svelte 5 及其插件依赖，现有页面没有 Svelte 组件，不要据此迁移技术栈。
 - `web/index.html` 是主页唯一维护入口，内含 Canvas 星图、沉浸式视图、星域、设置与内容编辑。`caelum.html` 是历史副本，禁止复制覆盖主页。
-- `web/room.html`、`web/room/{room.js,room.css,scene.svg}` 是房间页面、行为、样式和原创 SVG 场景。
+- `web/room.html`、`web/room/{room.js,room.css,world.js}` 是房间页面、内容行为、样式与按需 Three.js 室内渲染；`scene.svg` 和 `assets/interior-dusk.jpg` 保留静态降级，PNG 为原始视觉素材。
 - `web/public/data/{graph,articles,text,inbox,room}.json`、`web/public/tree.json` 是公开内容。房间内容改 `room.json`，无需修改场景。
 - `scripts/` 是本地语料处理脚本；`corpus/`、`data/` 含私人原料。构建不需要重新抓取、嵌入或上传这些目录。
 - `web/scripts/package-pages.mjs` 将 Vite 产物包装为 `web/dist/web/`，在产物根保留跳转页及兼容手册。只发布 `web/dist/`。
@@ -32,9 +32,9 @@ git diff --check
 
 - 保留 `/web/`、`/web/index.html` 与原有手册链接。Vite `base` 为 `/web/`，页面内数据使用相对路径；不要引入根路径 `/assets/`、`/data/` 假设。
 - 不重写用户简介、论文、文章、书单或私有笔记。修改数据结构时兼容旧版本，保留已有条目。
-- 主页沿用衬线字体、低饱和主题与留白；房间采用木色、暖光、安静的等距构图。复用 CSS 变量与现有中英文字段。
-- 房间保持 SVG 静态场景、原生按钮和独立内容面板。点击、触摸、键盘均可操作，保留焦点提示、状态反馈、减少动态效果偏好及加载失败后的可用内容。
-- 页面隐藏时暂停持续动画与声音；音频只能由用户主动触发。为简单过渡不要新增 React、Three.js、GSAP 或模型下载。
+- 主页沿用衬线字体、低饱和主题与留白；房间采用用户确认的日式现代自然木质、暖光、室内平视构图。复用 CSS 变量与现有中英文字段。
+- 房间使用按需加载的原生 Three.js 室内场景（2026-10-20 用户明确授权完整场景引入），保留静态图像/SVG 降级、原生按钮和独立内容面板。点击、触摸、键盘均可操作，保留焦点提示、状态反馈、减少动态效果偏好及加载失败后的可用内容。
+- 页面隐藏时暂停持续动画与声音；音频只能由用户主动触发。Three.js 仅用于完整室内渲染；为简单过渡不要再新增 React、GSAP 或额外模型依赖。
 - 不为格式统一重构整页。新增模块可以独立文件，现有功能修复尽量局部；更新这里与受影响的维护文档，不复制通用模板。
 
 ## 安全与数据

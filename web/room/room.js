@@ -1,10 +1,13 @@
 import scene from './scene.svg?raw';
+import interior from './assets/interior-dusk.jpg';
 import { safeURL, readPreference, writePreference, selectBooks, validateRoom } from './helpers.js';
 
 const $ = id => document.getElementById(id);
 const dict = {
   starchart:['星图','Starchart'],research:['科研','Research'],writing:['文字','Writing'],room:['房间','The Room'],
-  title:['给自己，留一间房。','A room of one’s own.'],description:['读几页书，等一壶茶。把时间还给自己。','A few pages. A pot of tea. A little time to yourself.'],
+  title:['未来的房间','A room of one’s own.'],description:['有一扇好窗，有书，有茶。日子慢慢来。','A good window, a few books, and tea. Let life take its time.'],
+  design:['空间设定','The interior'],designCopy:['一间房，先把生活安顿好。','One room. A little space for living well.'],designFoot:['窗边阅读、中央茶席、音乐与绿意。房间之外，留给以后。','Reading by the window, tea, music, and a little green. The rest can wait.'],material:['材质与色调','Material & colour'],oak:['自然橡木','Natural oak'],walnut:['温润胡桃','Warm walnut'],plaster:['浅木灰泥','Pale oak & plaster'],preparing:['正在把傍晚的光带进来…','Letting the evening light in…'],navigationHint:['拖动环顾 · 滚轮靠近 · 点一件小物','Drag to look around · Scroll to approach · Choose an object'],quietView:['静看 · H','Just look · H'],showControls:['显示控制 · H','Show controls · H'],overview:['全景','Room'],overviewNote:['回到房间，慢慢看。','Back to the room. Take your time.'],renderFallback:['当前设备使用静态房间，物件内容仍可探索。','A still room is available on this device. The objects remain yours to explore.'],retryScene:['重试空间渲染','Try the room again'],fullscreenError:['当前浏览器没有开启全屏，房间仍铺满窗口。','The room fills this window; browser fullscreen is unavailable.'],
+  stillNavigation:['点选一件小物，慢慢探索','Choose an object. Take your time.'],
   light:['窗外的光','The light outside'],dawn:['清晨','Dawn'],dusk:['傍晚','Dusk'],night:['夜晚','Night'],
   books:['书架','Books'],tea:['茶桌','Tea'],music:['音乐','Music'],plant:['植物','Plant'],window:['窗外','Window'],lamp:['落地灯','Lamp'],
   explore:['点亮一件小物，走进一段日常。','Choose an object. Stay for a little while.'],reset:['回到初见 ↺','Start anew ↺'],footer:['向外探索，向内生活。','Explore the world. Make room for life.'],back:['返回星图 ↗','Back to Caelum ↗'],retry:['重新加载','Try again'],
@@ -13,6 +16,7 @@ const dict = {
   bookLink:['走进阅读星图 ↗','Explore the reading constellation ↗'],noteLink:['更多读书笔记与文字 ↗','More notes and writing ↗'],readingNotes:['书页之外 · 读书笔记','Beyond the pages · Reading notes'],loading:['正在从星图取书…','Bringing a few books from the constellation…'],
   noBooks:['书目暂时没能取回，阅读星图仍在原处。','The books could not be loaded. The constellation is still there.'],
   brew:['为自己泡一壶茶','Make a pot of tea'],brewing:['正在泡茶…','Making tea…'],ready:['茶好了。慢慢喝。','Tea is ready. Take your time.'],again:['再泡一壶','Make another pot'],cancelTea:['结束这次泡茶','End this ritual'],
+  teaEnded:['泡茶已结束。','The tea ritual has ended.'],
   ambientStart:['播放轻柔雨声','Play gentle rain'],ambientStop:['暂停雨声','Pause the rain'],ambientDetail:['浏览器实时合成 · 无人声 · 不自动播放','Synthesized in your browser · No voices · Starts only on request'],
   audioError:['这个浏览器暂时无法播放环境声。','Ambient audio is unavailable in this browser.'],
   plantLabel:['今天观察到了什么？','What did you notice today?'],plantPlaceholder:['一片新叶，一点光，或只是今天的心情…','A new leaf, a patch of light, or a passing thought…'],saveNote:['保存这条札记','Save this observation'],notePrivacy:['只保存在当前浏览器，不上传。','Saved in this browser only. Never uploaded.'],noteSaved:['札记已保存在当前浏览器。','Observation saved in this browser.'],noteFailed:['浏览器禁止了本地保存，请先复制札记。','Local saving is blocked. Please copy your observation.'],
@@ -25,11 +29,15 @@ const dict = {
 };
 let lang = readPreference('caelum_lang', 'zh') === 'en' ? 'en' : 'zh';
 let time = 'dusk', lamp = true, selected = null, data = null, readingCache = null, readingRequest = null;
+let roomWorld = null, material = ['oak','walnut','plaster'].includes(readPreference('caelum_room_material')) ? readPreference('caelum_room_material') : 'oak';
+let feedbackTimer = null;
+let worldEpoch=0, leaving=false;
+const motionPreference=matchMedia('(prefers-reduced-motion: reduce)');
 let renderVersion = 0, teaStep = -1, teaTimers = [], audioContext = null, audioSource = null, audioGain = null;
 let audioStarting = false, audioEpoch = 0, plantDraft = readPreference('caelum_room_plant_note');
 const tr = key => (dict[key] || [key,key])[lang === 'en' ? 1 : 0];
 const localized = value => typeof value === 'string' ? value : value?.[lang] || value?.zh || '';
-const say = text => { $('feedback').textContent = text; };
+const say = text => {clearTimeout(feedbackTimer);$('feedback').textContent=text;if(text)feedbackTimer=setTimeout(()=>{$('feedback').textContent='';},5000);};
 function el(tag, text, className) {
   const node = document.createElement(tag); if (text != null) node.textContent = text; if (className) node.className = className; return node;
 }
@@ -37,8 +45,17 @@ function button(text, handler, className = 'action-button') { const b = el('butt
 function link(text, href, className = 'panel-link', external = false) {
   const a=el('a',text,className);const url=safeURL(href,location.href);if(url)a.href=url;if(external){a.target='_blank';a.rel='noopener noreferrer';}return a;
 }
-$('scene-art').innerHTML = scene; // trusted, locally authored SVG; configuration is always rendered as text
+const still=document.createElement('img');still.src=interior;still.alt='';still.decoding='async';
+still.addEventListener('error',()=>{$('scene-art').innerHTML=scene;document.body.classList.add('svg-fallback');positionStillHotspots();translate();},{once:true});
+$('scene-art').replaceChildren(still);
 $('hotspots').hidden = false;
+function positionStillHotspots(){
+  const svg=document.body.classList.contains('svg-fallback');
+  const positions=svg?{books:[.329,.39],window:[.685,.25],lamp:[.44,.31],music:[.737,.43],tea:[.525,.61],plant:[.783,.52]}:{books:[.17,.32],window:[.58,.28],lamp:[.34,.41],music:[.85,.46],tea:[.53,.73],plant:[.95,.53]};
+  const width=innerWidth,height=innerHeight,scale=Math.max(width/1672,height/941),drawWidth=1672*scale,drawHeight=941*scale;
+  document.querySelectorAll('.hotspot').forEach(b=>{const [x,y]=positions[b.dataset.object];if(svg){b.style.left=(x*100)+'%';b.style.top=(y*100)+'%';b.hidden=false;}else{const left=x*drawWidth+(width-drawWidth)/2,top=y*drawHeight+(height-drawHeight)/2;b.style.left=left+'px';b.style.top=top+'px';b.hidden=left<24||left>width-24||top<80||top>height-120;}});
+}
+window.addEventListener('resize',positionStillHotspots);positionStillHotspots();
 function translate() {
   document.documentElement.lang=lang==='zh'?'zh-CN':'en';
   document.title=lang==='zh'?'未来的房间 · Caelum':'The Room · Caelum';
@@ -47,16 +64,18 @@ function translate() {
   $('language').setAttribute('aria-label',lang==='zh'?'Switch to English':'切换到中文');
   $('time-caption').textContent=tr(time+'Caption');
   document.querySelectorAll('.hotspot').forEach(b=>b.setAttribute('aria-label',tr(b.dataset.object)));
-  const art=$('scene-art').querySelector('svg');art.setAttribute('role','img');art.setAttribute('aria-label',lang==='zh'?'温暖的等距房间，书架、阅读椅、茶桌、唱片机、植物与窗户。':'A warm isometric room with books, an armchair, tea, a record player, a plant, and a window.');
+  const art=$('scene-art').querySelector('svg,img');if(art){const label=lang==='zh'?'自然木质的安静室内，书墙、阅读椅、茶桌、音乐、植物与落日窗景。':'A quiet natural-wood interior with a book wall, reading chair, tea table, music, plants, and sunset window.';art.setAttribute('role','img');art.setAttribute('aria-label',label);if(art.tagName==='IMG')art.alt=label;}
   if(!$('load-error').hidden)$('load-error-text').textContent=tr('configError');
+  updateNavigationHint();
 }
+function updateNavigationHint(){$('room-help').querySelector('[data-i18n="navigationHint"]').textContent=tr(document.body.classList.contains('world-ready')?'navigationHint':'stillNavigation');}
 function setTime(value, announce=true) {
   if(!['dawn','dusk','night'].includes(value))return;
   time=value;document.body.dataset.time=time;
   document.querySelectorAll('.time-options button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.time===time)));
-  $('time-caption').textContent=tr(time+'Caption');if(announce)say(tr(time+'Caption'));
+  $('time-caption').textContent=tr(time+'Caption');roomWorld?.setTime(time);if(announce)say(tr(time+'Caption'));
 }
-function clearTea() {teaTimers.forEach(clearTimeout);teaTimers=[];teaStep=-1;document.body.classList.remove('brewing','tea-ready');}
+function clearTea() {teaTimers.forEach(clearTimeout);teaTimers=[];teaStep=-1;document.body.classList.remove('brewing','tea-ready');roomWorld?.setTeaState?.(-1);renderTeaState();}
 function renderTeaState() {
   const b=$('brew');if(!b)return;
   b.textContent=tr(teaStep===3?'again':teaStep>=0?'brewing':'brew');b.disabled=teaStep>=0&&teaStep<3;
@@ -64,10 +83,10 @@ function renderTeaState() {
   const cancel=$('cancel-tea');if(cancel)cancel.hidden=teaStep<0||teaStep===3;
 }
 function startTea() {
-  clearTea();teaStep=0;document.body.classList.add('brewing');renderTeaState();
+  clearTea();teaStep=0;document.body.classList.add('brewing');renderTeaState();roomWorld?.setTeaState?.(0);
   say(localized(data?.tea?.steps?.[0])||tr('brewing'));
   [1,2,3].forEach((step,i)=>teaTimers.push(setTimeout(()=>{
-    teaStep=step;
+    teaStep=step;roomWorld?.setTeaState?.(step);
     if(step===3){document.body.classList.remove('brewing');document.body.classList.add('tea-ready');say(tr('ready'));}
     else say(localized(data?.tea?.steps?.[step])||tr('brewing'));
     renderTeaState();
@@ -123,6 +142,7 @@ async function readBooks(){
 function panelHeading(title,kicker) {const panel=$('panel');panel.replaceChildren();$('panel-kicker').textContent=kicker;const h=el('h2',title);h.id='content-title';panel.append(h);return panel;}
 async function renderPanel() {
   const version=++renderVersion;
+  $('room-content').hidden=!selected;document.body.classList.toggle('has-selection',!!selected);
   document.querySelectorAll('[data-object]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.object===selected)));
   if(!selected){
     const p=panelHeading(tr('homeTitle'),'THE ART OF SLOW LIVING');
@@ -142,7 +162,7 @@ async function renderPanel() {
   }else if(selected==='tea'){
     const p=panelHeading(localized(data?.tea?.title)||tr('tea'),'02 / THE TEA RITUAL');p.append(el('p',localized(data?.tea?.note)||tr('description')));
     const steps=el('div',null,'step-list');(data?.tea?.steps||[{zh:'温杯',en:'Warm'},{zh:'注水',en:'Steep'},{zh:'分茶',en:'Pour'}]).slice(0,3).forEach((step,i)=>{const s=el('span');s.append(el('b',String(i+1).padStart(2,'0')),document.createTextNode(localized(step)));steps.append(s);});p.append(steps);
-    const brew=button(tr('brew'),startTea);brew.id='brew';p.append(brew);const cancel=button(tr('cancelTea'),()=>{clearTea();renderTeaState();say(tr('resetDone'));},'secondary-button');cancel.id='cancel-tea';p.append(cancel);renderTeaState();
+    const brew=button(tr('brew'),startTea);brew.id='brew';p.append(brew);const cancel=button(tr('cancelTea'),()=>{clearTea();say(tr('teaEnded'));},'secondary-button');cancel.id='cancel-tea';p.append(cancel);renderTeaState();
   }else if(selected==='music'){
     const p=panelHeading(lang==='zh'?'听见安静':'Listen to the quiet','03 / SOUND & SILENCE');p.append(el('p',localized(data?.music?.note)||tr('description')));
     const b=button(tr('ambientStart'),toggleAudio);b.id='ambient';p.append(b,el('p',tr('ambientDetail'),'panel-foot'));renderAudioState();
@@ -155,15 +175,62 @@ async function renderPanel() {
     const p=panelHeading(tr('windowTitle'),'05 / A CHANGE OF LIGHT');p.append(el('p',tr('windowNote')));
     ['dawn','dusk','night'].forEach(t=>{const b=button(tr(t),()=>{setTime(t);renderPanel();});b.setAttribute('aria-pressed',String(t===time));p.append(b);});
   }else if(selected==='lamp'){
-    const p=panelHeading(tr('lampTitle'),'06 / A POOL OF WARMTH');p.append(el('p',tr('lampNote')));const b=button(tr(lamp?'lampOn':'lampOff'),()=>{lamp=!lamp;document.body.dataset.lamp=lamp?'on':'off';renderPanel();say(tr(lamp?'lampOff':'lampOn'));});b.setAttribute('aria-pressed',String(lamp));p.append(b);
+    const p=panelHeading(tr('lampTitle'),'06 / A POOL OF WARMTH');p.append(el('p',tr('lampNote')));const b=button(tr(lamp?'lampOn':'lampOff'),()=>{lamp=!lamp;document.body.dataset.lamp=lamp?'on':'off';roomWorld?.setLamp(lamp);renderPanel();say(tr(lamp?'lampOff':'lampOn'));});b.setAttribute('aria-pressed',String(lamp));p.append(b);
   }
 }
-function chooseObject(object){selected=object;if(object==='window')setTime(['dusk','night','dawn'][(['dusk','night','dawn'].indexOf(time)+1)%3]);if(object==='lamp'){lamp=!lamp;document.body.dataset.lamp=lamp?'on':'off';}renderPanel();}
+function chooseObject(object) {
+  if(!['books','tea','music','plant','window','lamp'].includes(object))return;
+  setQuiet(false);$('design-panel').hidden=true;$('design-toggle').setAttribute('aria-expanded','false');
+  selected=object;
+  if(object==='window')setTime(['dusk','night','dawn'][(['dusk','night','dawn'].indexOf(time)+1)%3]);
+  if(object==='lamp'){lamp=!lamp;document.body.dataset.lamp=lamp?'on':'off';roomWorld?.setLamp(lamp);}
+  roomWorld?.focus(object);renderPanel();$('room-content').focus({preventScroll:true});
+}
+function closeContent(restoreFocus=true) {const previous=selected;selected=null;renderPanel();if(restoreFocus&&previous)$('object-nav').querySelector(`[data-object="${previous}"]`)?.focus({preventScroll:true});}
+function setQuiet(value) {
+  document.body.classList.toggle('quiet-view',value);
+  document.querySelectorAll('.room-hud').forEach(n=>{n.inert=value;});
+  $('hotspots').inert=value;
+  $('room-content').inert=value;$('show-ui').hidden=!value;
+}
+function setMaterial(value, announce=true) {
+  if(!['oak','walnut','plaster'].includes(value))return;
+  material=value;document.body.dataset.style=value;writePreference('caelum_room_material',value);
+  document.querySelectorAll('[data-material]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.material===value)));
+  roomWorld?.setStyle?.(value);if(announce)say(tr(value));
+}
+function finishSceneLoading() {$('room-loading').hidden=true;$('scene-shell').setAttribute('aria-busy','false');}
+function showWorldFailure(){document.body.classList.remove('world-ready');$('scene-art').removeAttribute('aria-hidden');$('render-error').hidden=false;updateNavigationHint();finishSceneLoading();}
+async function initWorld(){
+  const epoch=++worldEpoch;roomWorld?.destroy();roomWorld=null;
+  $('render-error').hidden=true;$('room-loading').hidden=false;$('scene-shell').setAttribute('aria-busy','true');
+  try{
+    const {createRoom}=await import('./world.js');
+    if(epoch!==worldEpoch||leaving)return;
+    const world=await createRoom($('world-host'),{reducedMotion:motionPreference.matches,onObjectSelect:chooseObject,onError:()=>{if(epoch===worldEpoch&&!leaving){roomWorld?.destroy();roomWorld=null;showWorldFailure();}}});
+    if(epoch!==worldEpoch||leaving){world.destroy();return;}
+    roomWorld=world;world.setTime(time);world.setLamp(lamp);world.setStyle(material);world.setTeaState?.(teaStep);world.setPaused(document.hidden);
+    document.body.classList.add('world-ready');$('scene-art').setAttribute('aria-hidden','true');updateNavigationHint();finishSceneLoading();
+  }catch{if(epoch===worldEpoch&&!leaving)showWorldFailure();}
+}
 document.querySelectorAll('[data-object]').forEach(b=>b.addEventListener('click',()=>chooseObject(b.dataset.object)));
 document.querySelectorAll('.time-options button').forEach(b=>b.addEventListener('click',()=>{setTime(b.dataset.time);if(selected==='window')renderPanel();}));
+document.querySelectorAll('[data-material]').forEach(b=>b.addEventListener('click',()=>setMaterial(b.dataset.material)));
 $('language').addEventListener('click',()=>{lang=lang==='zh'?'en':'zh';writePreference('caelum_lang',lang);translate();renderPanel();say('');});
 $('retry').addEventListener('click',()=>{readingCache=null;loadConfig();});
-$('reset').addEventListener('click',()=>{clearTea();stopAudio();lamp=true;document.body.dataset.lamp='on';setTime('dusk',false);selected=null;renderPanel();say(tr('resetDone'));});
-document.addEventListener('visibilitychange',()=>{document.body.classList.toggle('is-hidden',document.hidden);if(document.hidden)stopAudio();});
-window.addEventListener('pagehide',()=>{clearTea();stopAudio();audioContext?.close().catch(()=>{});audioContext=null;});
-translate();renderPanel();loadConfig();
+$('retry-world').addEventListener('click',initWorld);
+$('close-content').addEventListener('click',closeContent);
+$('reset').addEventListener('click',()=>{closeContent(false);$('design-panel').hidden=true;$('design-toggle').setAttribute('aria-expanded','false');roomWorld?.reset();say(tr('overviewNote'));});
+$('design-toggle').addEventListener('click',()=>{const open=$('design-panel').hidden;$('design-panel').hidden=!open;$('design-toggle').setAttribute('aria-expanded',String(open));if(open){closeContent(false);$('close-design').focus();}});
+$('close-design').addEventListener('click',()=>{$('design-panel').hidden=true;$('design-toggle').setAttribute('aria-expanded','false');$('design-toggle').focus();});
+$('hide-ui').addEventListener('click',()=>{setQuiet(true);$('show-ui').focus();});
+$('show-ui').addEventListener('click',()=>{setQuiet(false);$('hide-ui').focus();});
+$('fullscreen').addEventListener('click',async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else if(document.documentElement.requestFullscreen)await document.documentElement.requestFullscreen();else say(tr('fullscreenError'));}catch{say(tr('fullscreenError'));}});
+document.addEventListener('keydown',event=>{
+  if(event.key==='Escape') {if(!$('design-panel').hidden){$('design-panel').hidden=true;$('design-toggle').setAttribute('aria-expanded','false');$('design-toggle').focus();}else if(selected)closeContent();else {setQuiet(false);$('hide-ui').focus();}}
+  if(event.key.toLowerCase()==='h'&&!event.altKey&&!event.ctrlKey&&!event.metaKey&&!/INPUT|TEXTAREA|SELECT/.test(event.target?.tagName||'')&&!event.target?.isContentEditable){event.preventDefault();const quiet=!document.body.classList.contains('quiet-view');setQuiet(quiet);$(quiet?'show-ui':'hide-ui').focus();}
+});
+document.addEventListener('visibilitychange',()=>{document.body.classList.toggle('is-hidden',document.hidden);roomWorld?.setPaused(document.hidden);if(document.hidden)stopAudio();});
+window.addEventListener('pagehide',()=>{leaving=true;worldEpoch++;clearTea();stopAudio();audioContext?.close().catch(()=>{});audioContext=null;roomWorld?.destroy();roomWorld=null;});
+window.addEventListener('pageshow',event=>{if(event.persisted){leaving=false;initWorld();}});
+translate();renderPanel();setMaterial(material,false);loadConfig();initWorld();
