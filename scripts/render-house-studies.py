@@ -12,13 +12,13 @@ import pymupdf
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / 'web/public/docs/drawings'
-REF = ROOT / 'tmp/house-v3'
+REF = ROOT / 'tmp/house-v4'
 OUT.mkdir(parents=True, exist_ok=True)
 REF.mkdir(parents=True, exist_ok=True)
 source = """
 import {SPATIAL_MODEL as model} from './web/room/spatial-model.js';
-import {perspectiveSVG,planSVG,elevationSVG,sectionSVG,teaDetailSVG,teaCabinetSVG,courtyardBoundarySVG,estateSVG} from './web/room/spatial-drawings.js';
-console.log(JSON.stringify({model,views:model.cameras.map(c=>({id:c.id==='C-tea'?'tea':c.roomId,scene:perspectiveSVG(c.id,'zh',true),plan:planSVG({selected:c.roomId,layer:'cameras'})})),plan:planSVG(),routes:planSVG({layer:'routes'}),openings:planSVG({layer:'openings'}),lighting:planSVG({layer:'lighting'}),services:planSVG({layer:'services'}),section:sectionSVG(),studies:{'tea-ritual':teaDetailSVG('zh','ritual'),'tea-services':teaDetailSVG('zh','services'),'tea-audio':teaDetailSVG('zh','audio'),'tea-cabinet':teaCabinetSVG('zh'),'courtyard-boundary':courtyardBoundarySVG('zh'),'estate':estateSVG('zh')},elevations:model.zones.filter(z=>!z.outdoor).flatMap(z=>['north','east','south','west'].map(d=>({id:z.id+'-'+d,svg:elevationSVG(z.id,d)})))}));
+import {perspectiveSVG,planSVG,elevationSVG,sectionSVG,teaDetailSVG,teaCabinetSVG,courtyardBoundarySVG,estateSVG,estateDetailSVG} from './web/room/spatial-drawings.js';
+console.log(JSON.stringify({model,views:model.cameras.map(c=>({id:c.id==='C-tea'?'tea':c.roomId,scene:perspectiveSVG(c.id,'zh',true),plan:['reserve','gym','media','pool','outer'].includes(c.roomId)?estateDetailSVG(c.roomId):planSVG({selected:c.roomId,layer:'cameras'})})),plan:planSVG(),routes:planSVG({layer:'routes'}),openings:planSVG({layer:'openings'}),lighting:planSVG({layer:'lighting'}),services:planSVG({layer:'services'}),section:sectionSVG(),studies:{'tea-ritual':teaDetailSVG('zh','ritual'),'tea-services':teaDetailSVG('zh','services'),'tea-audio':teaDetailSVG('zh','audio'),'tea-cabinet':teaCabinetSVG('zh'),'courtyard-boundary':courtyardBoundarySVG('zh'),'estate':estateSVG('zh')},elevations:model.zones.filter(z=>!z.outdoor).flatMap(z=>['north','east','south','west'].map(d=>({id:z.id+'-'+d,svg:elevationSVG(z.id,d)})))}));
 """
 data = json.loads(subprocess.check_output(['node', '--input-type=module', '-e', source], cwd=ROOT))
 
@@ -60,6 +60,8 @@ for view in data['views']:
     img.save(OUT / (view['id']+'-geometry.png'), optimize=True)
     svg = view['plan']
     (REF / (view['id']+'-plan.svg')).write_text(svg)
+    if view['id'] in ['reserve','gym','media','pool','outer']:
+        (OUT / (view['id']+'-plan.svg')).write_text(svg)
     doc = pymupdf.open(stream=svg.encode(), filetype='svg')
     doc[0].get_pixmap(matrix=pymupdf.Matrix(1.5,1.5), alpha=False).save(REF / (view['id']+'-plan.png'))
 for name in ['plan','routes','openings','lighting','services','section']:
@@ -75,7 +77,7 @@ for name, svg in data['studies'].items():
 with (OUT / 'furniture.csv').open('w', encoding='utf-8-sig', newline='') as stream:
     writer = csv.writer(stream, lineterminator='\n')
     writer.writerow(['code','room','name_zh','name_en','width_m','depth_m','height_m','phase'])
-    for item in data['model']['furniture'] + data['model']['estate']['wing']['furniture']:
+    for item in data['model']['furniture'] + data['model']['estate']['wing']['furniture'] + data['model']['estate']['outdoorFurniture']:
         r = item['rect']
-        writer.writerow([item['id'],item['roomId'],item['label']['zh'],item['label']['en'],r['w'],r['d'],item['height'],'phase-2' if item['id'].startswith('EF') else 'phase-1'])
+        writer.writerow([item['id'],item['roomId'],item['label']['zh'],item['label']['en'],r['w'],r['d'],item['height'],item.get('phase', 'phase-2' if item['id'].startswith('EF') else 'phase-1')])
 print(f"Saved {len(data['views'])} fixed-camera studies and model-derived SVG sheets.")

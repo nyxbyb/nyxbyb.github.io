@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { SPATIAL_MODEL as model } from '../room/spatial-model.js';
-import { boundarySegments, doorPlanGeometry, elevationPanels, elevationSVG, lightingPoints, perspectiveSVG, planSVG, sectionGeometry, sectionSVG, teaDetailSVG, teaCabinetSVG, courtyardBoundarySVG, estateSVG } from '../room/spatial-drawings.js';
+import { boundarySegments, doorPlanGeometry, elevationPanels, elevationSVG, lightingPoints, perspectiveSVG, planSVG, sectionGeometry, sectionSVG, teaDetailSVG, teaCabinetSVG, courtyardBoundarySVG, estateSVG, estateDetailSVG } from '../room/spatial-drawings.js';
 
 const near = (a, b) => assert.ok(Math.abs(a - b) < 1e-7, `${a} ≠ ${b}`);
 const room = id => model.zones.find(z => z.id === id);
@@ -145,7 +145,7 @@ test('tea camera resolves by its stable id and W03 has real reveals, roof depth 
     const height = Math.max(...f.points.map(p => p[1])) - Math.min(...f.points.map(p => p[1]));
     const planSpan = Math.max(...f.points.flatMap(a => f.points.map(b => Math.hypot(a[0] - b[0], a[2] - b[2]))));
     return height < 1.4 || planSpan < .2;
-  }), 'the easel must not become a solid full-height cabinet');
+  }), 'the scroll stand must not become a solid full-height cabinet');
 });
 
 test('new tea, shared-boundary and estate sheets expose actual model codes in bilingual printable SVG', () => {
@@ -181,4 +181,25 @@ test('interior ceilings occlude outdoor tree crowns above the wall head without 
  assert.ok(faces.length);
  for(const f of faces)for(const point of f.points)near(point[1]+scene.eyeHeight,model.ceilingHeight);
  assert.ok(!scene.faces.some(f=>f.sourceId==='ceiling:garden'));
+});
+
+
+test('extended cameras render the actual wing, pool boundary and exterior furniture',()=>{
+  for(const id of ['media','gym','pool','outer']){
+    const scene=perspectiveSVG(id,'zh',true);
+    assert.equal(scene.cameraId,'C-'+id);
+    assert.ok(scene.faces.some(f=>f.sourceId.startsWith('EW')||f.sourceId.startsWith('ED')));
+    if(id==='media')for(const code of ['EF07','EF08','EF09','EF10'])assert.ok(scene.faces.some(f=>f.sourceId===code),code);
+    if(id==='gym')for(const code of ['EF01','EF02','EF03'])assert.ok(scene.faces.some(f=>f.sourceId===code),code);
+    if(id==='pool'||id==='outer')for(const code of ['pool-water','pool-coping','PS01','PG01'])assert.ok(scene.faces.some(f=>f.sourceId===code),code);
+    assert.ok(!perspectiveSVG(id,'en').includes('NaN'));
+  }
+  for(const lang of ['zh','en'])for(const id of ['reserve','media','gym','pool','outer']){
+    const svg=estateDetailSVG(id,lang);
+    assert.ok(svg.includes('data-study-camera="C-'+id+'"'));
+    assert.ok(!svg.includes('NaN'));
+    if(id==='pool')assert.ok(svg.indexOf('#ded0b5')<svg.indexOf('#b5cfca'),'pool water must be painted above the surrounding deck');
+    if(id==='outer')for(const opening of ['V06','D09','ED01','EV01','ED03','EV02'])assert.ok(svg.includes('data-study-opening="'+opening+'"'));
+  }
+  for(const c of model.cameras.filter(c=>c.scope==='estate'))assert.ok(estateSVG().includes('data-estate-camera="'+c.id+'"'));
 });

@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "units": "m",
   "coordinateSystem": {
     "origin": "north-west control-line corner",
@@ -207,8 +207,8 @@
     {
       "id": "reserve",
       "label": {
-        "zh": "画室 · 可变工作间",
-        "en": "Art studio · adaptable room"
+        "zh": "画室 · 中国书画",
+        "en": "Studio · Chinese painting"
       },
       "area": 15.54,
       "polygons": [
@@ -2540,27 +2540,44 @@
       "id": "F-R01",
       "roomId": "reserve",
       "label": {
-        "zh": "可洗画材工作台",
-        "en": "Washable art workbench"
+        "zh": "北光书画长案",
+        "en": "North-light calligraphy / painting desk"
       },
       "type": "art-counter",
       "rect": {
         "x": 10.5,
-        "y": 0.2,
+        "y": 0.15,
         "w": 2.9,
-        "d": 0.65
+        "d": 0.9
       },
-      "height": 0.9,
+      "height": 0.8,
       "baseHeight": 0,
       "blocking": true,
-      "provisional": true
+      "provisional": true,
+      "kneeSpace": {
+        "x": 11.5,
+        "y": 0.15,
+        "w": 1.2,
+        "d": 0.9,
+        "clearHeight": 0.73
+      },
+      "sinkPedestal": {
+        "x": 12.75,
+        "y": 0.15,
+        "w": 0.65,
+        "d": 0.9
+      },
+      "detail": {
+        "zh": "2.9×0.9m长案以毡垫展开纸本，东端独立洗笔槽；自然木质与米白纸墙，不叠加古典装饰。",
+        "en": "A 2.9 × 0.9 m felt-topped paper-work desk with a separate eastern brush basin, natural timber and paper-toned walls."
+      }
     },
     {
       "id": "F-R02",
       "roomId": "reserve",
       "label": {
-        "zh": "平面画材抽屉柜",
-        "en": "Flat art-supply drawers"
+        "zh": "宣纸与画卷平抽屉",
+        "en": "Flat xuan-paper / scroll drawers"
       },
       "type": "shelf",
       "rect": {
@@ -2584,13 +2601,13 @@
       "id": "F-R03",
       "roomId": "reserve",
       "label": {
-        "zh": "画室活动椅",
-        "en": "Art-studio chair"
+        "zh": "书画木椅",
+        "en": "Timber painting chair"
       },
       "type": "chair",
       "rect": {
         "x": 11.85,
-        "y": 1.05,
+        "y": 1.18,
         "w": 0.5,
         "d": 0.48
       },
@@ -2604,17 +2621,17 @@
       "id": "F-R04",
       "roomId": "reserve",
       "label": {
-        "zh": "独立画架",
-        "en": "Freestanding easel"
+        "zh": "可移动挂轴晾画架",
+        "en": "Movable hanging-scroll drying stand"
       },
-      "type": "easel",
+      "type": "scroll-stand",
       "rect": {
         "x": 11.85,
         "y": 2.2,
         "w": 0.65,
         "d": 0.7
       },
-      "height": 1.75,
+      "height": 1.65,
       "baseHeight": 0,
       "blocking": true,
       "provisional": true
@@ -2623,8 +2640,8 @@
       "id": "F-R05",
       "roomId": "reserve",
       "label": {
-        "zh": "作品晾干架",
-        "en": "Artwork drying rack"
+        "zh": "书画晾纸与画夹架",
+        "en": "Paper drying / painting-folder rack"
       },
       "type": "drying-rack",
       "rect": {
@@ -2653,7 +2670,7 @@
         "d": 0.42
       },
       "height": 0.03,
-      "baseHeight": 0.9,
+      "baseHeight": 0.8,
       "blocking": false,
       "parentId": "F-R01"
     },
@@ -2997,8 +3014,8 @@
     {
       "id": "R04",
       "label": {
-        "zh": "画室入口 · 画架 · 洗笔台",
-        "en": "Studio entrance · easel · brush sink"
+        "zh": "画室入口 · 挂轴 · 洗笔长案",
+        "en": "Studio entrance · scrolls · brush-washing desk"
       },
       "width": 0.75,
       "rooms": [
@@ -3020,7 +3037,7 @@
         ],
         [
           13,
-          1.3
+          1.45
         ]
       ]
     }
@@ -3179,6 +3196,86 @@
         "zh": "茶柜与茶席近看",
         "en": "Tea counter and table study"
       }
+    },
+    {
+      "id": "C-media",
+      "roomId": "media",
+      "position": [
+        23.25,
+        23.25
+      ],
+      "target": [
+        20.7,
+        20.2
+      ],
+      "eyeHeight": 1.5,
+      "targetHeight": 1.5,
+      "fov": 75,
+      "label": {
+        "zh": "影音室 · 朝北屏幕",
+        "en": "Media room · toward the north screen"
+      },
+      "scope": "estate"
+    },
+    {
+      "id": "C-gym",
+      "roomId": "gym",
+      "position": [
+        18.6,
+        17.35
+      ],
+      "target": [
+        21.1,
+        15.1
+      ],
+      "eyeHeight": 1.5,
+      "targetHeight": 1.5,
+      "fov": 76,
+      "label": {
+        "zh": "健身房 · 朝东北窗",
+        "en": "Gym · toward the northeast window"
+      },
+      "scope": "estate"
+    },
+    {
+      "id": "C-pool",
+      "roomId": "pool",
+      "position": [
+        0.95,
+        23.85
+      ],
+      "target": [
+        11,
+        20.5
+      ],
+      "eyeHeight": 1.5,
+      "targetHeight": 1.5,
+      "fov": 75,
+      "label": {
+        "zh": "泳池 · 从西南池畔看",
+        "en": "Pool · from the southwest deck"
+      },
+      "scope": "estate"
+    },
+    {
+      "id": "C-outer",
+      "roomId": "outer",
+      "position": [
+        -2.8,
+        27
+      ],
+      "target": [
+        10.2,
+        15.5
+      ],
+      "eyeHeight": 1.5,
+      "targetHeight": 1.5,
+      "fov": 75,
+      "label": {
+        "zh": "外庭 · 朝主宅与生活翼",
+        "en": "Outer garden · toward the core and wing"
+      },
+      "scope": "estate"
     }
   ],
   "tea": {
@@ -4974,7 +5071,9 @@
           "b": [
             18,
             24
-          ]
+          ],
+          "height": 2.7,
+          "thickness": 0.24
         },
         {
           "id": "EW02",
@@ -4985,7 +5084,9 @@
           "b": [
             24,
             24
-          ]
+          ],
+          "height": 2.7,
+          "thickness": 0.24
         },
         {
           "id": "EW03",
@@ -4996,7 +5097,9 @@
           "b": [
             24,
             14
-          ]
+          ],
+          "height": 2.7,
+          "thickness": 0.24
         },
         {
           "id": "EW04",
@@ -5007,7 +5110,9 @@
           "b": [
             24,
             24
-          ]
+          ],
+          "height": 2.7,
+          "thickness": 0.24
         },
         {
           "id": "EW05",
@@ -5018,7 +5123,9 @@
           "b": [
             24,
             18
-          ]
+          ],
+          "height": 2.7,
+          "thickness": 0.12
         },
         {
           "id": "EW06",
@@ -5029,7 +5136,9 @@
           "b": [
             24,
             20
-          ]
+          ],
+          "height": 2.7,
+          "thickness": 0.12
         },
         {
           "id": "EW07",
@@ -5040,7 +5149,9 @@
           "b": [
             21,
             20
-          ]
+          ],
+          "height": 2.7,
+          "thickness": 0.12
         }
       ],
       "openings": [
@@ -5059,7 +5170,11 @@
             "outside",
             "gym"
           ],
-          "type": "door"
+          "type": "door",
+          "sill": 0,
+          "head": 2.2,
+          "operation": "sliding",
+          "clearWidth": 1.299999999999999
         },
         {
           "id": "ED02",
@@ -5076,7 +5191,11 @@
             "outside",
             "changing"
           ],
-          "type": "door"
+          "type": "door",
+          "sill": 0,
+          "head": 2.2,
+          "operation": "sliding",
+          "clearWidth": 1
         },
         {
           "id": "ED03",
@@ -5093,7 +5212,11 @@
             "outside",
             "media"
           ],
-          "type": "door"
+          "type": "door",
+          "sill": 0,
+          "head": 2.2,
+          "operation": "sliding",
+          "clearWidth": 1.2000000000000028
         },
         {
           "id": "ED04",
@@ -5110,7 +5233,11 @@
             "gym",
             "changing"
           ],
-          "type": "door"
+          "type": "door",
+          "sill": 0,
+          "head": 2.2,
+          "operation": "sliding",
+          "clearWidth": 1
         },
         {
           "id": "ED05",
@@ -5127,7 +5254,11 @@
             "outside",
             "plant"
           ],
-          "type": "door"
+          "type": "door",
+          "sill": 0,
+          "head": 2.2,
+          "operation": "sliding",
+          "clearWidth": 1.2999999999999972
         },
         {
           "id": "EV01",
@@ -5144,7 +5275,10 @@
             "outside",
             "gym"
           ],
-          "type": "window"
+          "type": "window",
+          "sill": 0.45,
+          "head": 2.5,
+          "operation": "fixed-plus-operable"
         },
         {
           "id": "EV02",
@@ -5161,7 +5295,11 @@
             "outside",
             "media"
           ],
-          "type": "blackout-window"
+          "type": "blackout-window",
+          "sill": 1.1,
+          "head": 2.5,
+          "operation": "operable-blackout",
+          "blackoutClosed": true
         }
       ],
       "furniture": [
@@ -5169,31 +5307,37 @@
           "id": "EF01",
           "roomId": "gym",
           "label": {
-            "zh": "力量器材预留",
-            "en": "Strength equipment"
+            "zh": "木钢复合力量架",
+            "en": "Timber / steel strength rack"
           },
+          "type": "strength-rack",
           "rect": {
             "x": 19,
             "y": 14.4,
             "w": 1.6,
             "d": 1.2
           },
-          "height": 2.2
+          "height": 2.2,
+          "baseHeight": 0,
+          "blocking": true
         },
         {
           "id": "EF02",
           "roomId": "gym",
           "label": {
-            "zh": "跑步机预留",
-            "en": "Treadmill"
+            "zh": "朝窗跑步机",
+            "en": "Window-facing treadmill"
           },
+          "type": "treadmill",
           "rect": {
             "x": 22.2,
             "y": 14.8,
             "w": 1,
             "d": 2
           },
-          "height": 1.5
+          "height": 1.5,
+          "baseHeight": 0,
+          "blocking": true
         },
         {
           "id": "EF03",
@@ -5202,6 +5346,7 @@
             "zh": "伸展垫",
             "en": "Stretching mat"
           },
+          "type": "rug",
           "rect": {
             "x": 20.6,
             "y": 16.6,
@@ -5209,6 +5354,7 @@
             "d": 1
           },
           "height": 0.02,
+          "baseHeight": 0,
           "blocking": false
         },
         {
@@ -5218,13 +5364,16 @@
             "zh": "更衣凳",
             "en": "Changing bench"
           },
+          "type": "bench",
           "rect": {
             "x": 18.15,
             "y": 19.55,
             "w": 1.2,
             "d": 0.3
           },
-          "height": 0.45
+          "height": 0.45,
+          "baseHeight": 0,
+          "blocking": true
         },
         {
           "id": "EF05",
@@ -5233,6 +5382,7 @@
             "zh": "淋浴预留",
             "en": "Shower reservation"
           },
+          "type": "shower",
           "rect": {
             "x": 19.7,
             "y": 18.1,
@@ -5240,6 +5390,7 @@
             "d": 1.2
           },
           "height": 2.2,
+          "baseHeight": 0,
           "blocking": false
         },
         {
@@ -5249,43 +5400,178 @@
             "zh": "独立设备检修区",
             "en": "Independent plant bay"
           },
+          "type": "equipment",
           "rect": {
             "x": 21.2,
             "y": 18.15,
             "w": 2.2,
             "d": 0.6
           },
-          "height": 1.8
+          "height": 1.8,
+          "baseHeight": 0,
+          "blocking": true
         },
         {
           "id": "EF07",
           "roomId": "media",
           "label": {
-            "zh": "投影幕",
-            "en": "Projection screen"
+            "zh": "北侧投影幕",
+            "en": "North projection screen"
           },
+          "type": "projection-screen",
           "rect": {
-            "x": 19,
-            "y": 20.1,
-            "w": 4,
-            "d": 0.12
+            "x": 19.2,
+            "y": 20.12,
+            "w": 3.6,
+            "d": 0.045
           },
-          "height": 1.8
+          "height": 1.7,
+          "baseHeight": 0.55,
+          "blocking": true
         },
         {
           "id": "EF08",
           "roomId": "media",
           "label": {
-            "zh": "三人观影位",
-            "en": "Three-person media seat"
+            "zh": "三人亚麻观影沙发",
+            "en": "Three-seat linen media sofa"
           },
+          "type": "sofa",
           "rect": {
-            "x": 19.1,
-            "y": 22.1,
+            "x": 19.45,
+            "y": 22.2,
             "w": 3.1,
             "d": 0.9
           },
-          "height": 0.9
+          "height": 0.9,
+          "baseHeight": 0,
+          "blocking": true
+        },
+        {
+          "id": "EF09",
+          "roomId": "media",
+          "label": {
+            "zh": "左前音箱",
+            "en": "Front left speaker"
+          },
+          "type": "speaker",
+          "rect": {
+            "x": 18.65,
+            "y": 20.35,
+            "w": 0.3,
+            "d": 0.35
+          },
+          "height": 1.05,
+          "baseHeight": 0,
+          "blocking": true
+        },
+        {
+          "id": "EF10",
+          "roomId": "media",
+          "label": {
+            "zh": "右前音箱",
+            "en": "Front right speaker"
+          },
+          "type": "speaker",
+          "rect": {
+            "x": 23.05,
+            "y": 20.35,
+            "w": 0.3,
+            "d": 0.35
+          },
+          "height": 1.05,
+          "baseHeight": 0,
+          "blocking": true
+        },
+        {
+          "id": "EF11",
+          "roomId": "media",
+          "label": {
+            "zh": "吊装投影位",
+            "en": "Ceiling projector position"
+          },
+          "type": "projector",
+          "rect": {
+            "x": 20.8,
+            "y": 22.7,
+            "w": 0.4,
+            "d": 0.3
+          },
+          "height": 0.18,
+          "baseHeight": 2.1,
+          "blocking": false
+        },
+        {
+          "id": "EF12",
+          "roomId": "media",
+          "label": {
+            "zh": "低位器材柜",
+            "en": "Low media cabinet"
+          },
+          "type": "shelf",
+          "rect": {
+            "x": 19.3,
+            "y": 20.32,
+            "w": 3.4,
+            "d": 0.4
+          },
+          "height": 0.35,
+          "baseHeight": 0,
+          "blocking": true
+        },
+        {
+          "id": "EF13",
+          "roomId": "media",
+          "label": {
+            "zh": "低木茶几",
+            "en": "Low timber media table"
+          },
+          "type": "table",
+          "rect": {
+            "x": 20.35,
+            "y": 21.25,
+            "w": 1.25,
+            "d": 0.5
+          },
+          "height": 0.35,
+          "baseHeight": 0,
+          "blocking": true
+        },
+        {
+          "id": "EF14",
+          "roomId": "gym",
+          "label": {
+            "zh": "哑铃与弹力带柜",
+            "en": "Dumbbell / resistance-band cabinet"
+          },
+          "type": "equipment",
+          "rect": {
+            "x": 21.2,
+            "y": 14.15,
+            "w": 0.75,
+            "d": 0.45
+          },
+          "height": 0.72,
+          "baseHeight": 0,
+          "blocking": true
+        },
+        {
+          "id": "EF15",
+          "roomId": "gym",
+          "label": {
+            "zh": "毛巾与饮水低柜",
+            "en": "Towel / water low cabinet"
+          },
+          "type": "shelf",
+          "rect": {
+            "x": 23.25,
+            "y": 17.3,
+            "w": 0.5,
+            "d": 0.45
+          },
+          "height": 0.9,
+          "baseHeight": 0,
+          "blocking": true
         }
       ],
       "mediaAccess": {
@@ -5308,7 +5594,150 @@
             23.5
           ]
         ]
+      },
+      "roof": {
+        "soffit": 2.7,
+        "top": 2.9,
+        "projection": 0.35
       }
+    },
+    "outdoorFurniture": [
+      {
+        "id": "OF01",
+        "roomId": "pool",
+        "label": {
+          "zh": "北池畔木躺椅一",
+          "en": "North pool timber lounger 1"
+        },
+        "type": "lounger",
+        "rect": {
+          "x": 10.2,
+          "y": 18.82,
+          "w": 1.8,
+          "d": 0.55
+        },
+        "height": 0.62,
+        "baseHeight": 0,
+        "blocking": true,
+        "phase": "phase-3"
+      },
+      {
+        "id": "OF02",
+        "roomId": "pool",
+        "label": {
+          "zh": "北池畔木躺椅二",
+          "en": "North pool timber lounger 2"
+        },
+        "type": "lounger",
+        "rect": {
+          "x": 12.25,
+          "y": 18.82,
+          "w": 1.8,
+          "d": 0.55
+        },
+        "height": 0.62,
+        "baseHeight": 0,
+        "blocking": true,
+        "phase": "phase-3"
+      },
+      {
+        "id": "OF03",
+        "roomId": "outer",
+        "label": {
+          "zh": "桂树旁独处长凳",
+          "en": "Solitude bench by the osmanthus candidate"
+        },
+        "type": "bench",
+        "rect": {
+          "x": -3.7,
+          "y": 20.65,
+          "w": 1.8,
+          "d": 0.45
+        },
+        "height": 0.43,
+        "baseHeight": 0,
+        "blocking": true,
+        "phase": "phase-2"
+      },
+      {
+        "id": "OF04",
+        "roomId": "outer",
+        "label": {
+          "zh": "手持园具窄柜",
+          "en": "Slim garden-tool cabinet"
+        },
+        "type": "shelf",
+        "rect": {
+          "x": -4.65,
+          "y": 14.8,
+          "w": 0.45,
+          "d": 1.2
+        },
+        "height": 1.3,
+        "baseHeight": 0,
+        "blocking": true,
+        "phase": "phase-2"
+      }
+    ],
+    "lights": [
+      {
+        "id": "EL01",
+        "label": {
+          "zh": "池门低位灯",
+          "en": "Low pool-gate light"
+        },
+        "description": {
+          "zh": "仅照亮门锁与脚下，不在池面制造眩光。",
+          "en": "Light the latch and path, avoiding glare over the water."
+        },
+        "position": [
+          8.9,
+          18.3,
+          0.55
+        ],
+        "phase": "phase-3"
+      },
+      {
+        "id": "EL02",
+        "label": {
+          "zh": "生活翼入口壁灯",
+          "en": "Wing entry wall light"
+        },
+        "description": {
+          "zh": "在健身入口旁定位，不替代室内灯光设计。",
+          "en": "A fixed light beside the gym entry, not a full indoor lighting design."
+        },
+        "position": [
+          17.86,
+          17.1,
+          1.7
+        ],
+        "phase": "phase-2"
+      },
+      {
+        "id": "EL03",
+        "label": {
+          "zh": "桂树旁低位灯",
+          "en": "Low osmanthus-candidate light"
+        },
+        "description": {
+          "zh": "引导停留与回庭，避免上照树冠和窗。",
+          "en": "Mark the resting route without uplighting crowns or windows."
+        },
+        "position": [
+          -2.6,
+          21.4,
+          0.55
+        ],
+        "phase": "phase-2"
+      }
+    ],
+    "pool": {
+      "waterLevel": -0.15,
+      "conceptDepth": 1.2,
+      "copingWidth": 0.18,
+      "fenceMaterial": "clear-glass-with-timber-posts",
+      "gateState": "closed"
     },
     "arrivalStorage": {
       "id": "EA01",
@@ -5359,6 +5788,642 @@
         "en": "A shared flat-roof edge: soffit 2.70 m, top 2.90 m, 0.45 m projection into the court. Structure, waterproofing and drainage remain to be developed."
       }
     }
+  },
+  "walk": {
+    "stations": [
+      {
+        "id": "entry",
+        "position": [
+          12.7,
+          12.6
+        ]
+      },
+      {
+        "id": "kitchen",
+        "position": [
+          10.65,
+          10
+        ]
+      },
+      {
+        "id": "living",
+        "position": [
+          6.4,
+          8.5
+        ]
+      },
+      {
+        "id": "garden",
+        "position": [
+          4.8,
+          13.1
+        ]
+      },
+      {
+        "id": "outer",
+        "position": [
+          8,
+          16.5
+        ]
+      },
+      {
+        "id": "pool",
+        "position": [
+          8,
+          19.2
+        ]
+      },
+      {
+        "id": "gym",
+        "position": [
+          19,
+          17
+        ]
+      },
+      {
+        "id": "media",
+        "position": [
+          18.5,
+          23.5
+        ]
+      },
+      {
+        "id": "reserve",
+        "position": [
+          13,
+          1.45
+        ]
+      },
+      {
+        "id": "study",
+        "position": [
+          8.7,
+          12.6
+        ]
+      },
+      {
+        "id": "bedroom",
+        "position": [
+          2.5,
+          3.35
+        ]
+      },
+      {
+        "id": "bath",
+        "position": [
+          6.4,
+          1.8
+        ]
+      },
+      {
+        "id": "flex",
+        "position": [
+          9.25,
+          3.3
+        ]
+      },
+      {
+        "id": "gallery",
+        "position": [
+          6.4,
+          4.9
+        ]
+      },
+      {
+        "id": "changing",
+        "position": [
+          19,
+          19
+        ]
+      }
+    ],
+    "connections": [
+      {
+        "id": "WC01",
+        "from": "entry",
+        "to": "kitchen",
+        "label": {
+          "zh": "玄关经餐厨通口",
+          "en": "Entry through the kitchen passage"
+        },
+        "width": 0.8,
+        "gateIds": [
+          "P04"
+        ],
+        "points": [
+          [
+            12.7,
+            12.6
+          ],
+          [
+            10.65,
+            12.6
+          ],
+          [
+            10.65,
+            10
+          ]
+        ]
+      },
+      {
+        "id": "WC02",
+        "from": "entry",
+        "to": "study",
+        "label": {
+          "zh": "玄关进独立书房",
+          "en": "Entry to the independent study"
+        },
+        "width": 0.8,
+        "gateIds": [
+          "D02"
+        ],
+        "points": [
+          [
+            12.7,
+            12.6
+          ],
+          [
+            8.7,
+            12.6
+          ]
+        ]
+      },
+      {
+        "id": "WC03",
+        "from": "kitchen",
+        "to": "gallery",
+        "label": {
+          "zh": "餐厨沿东侧进入回廊",
+          "en": "Kitchen to the gallery"
+        },
+        "width": 0.8,
+        "gateIds": [
+          "P02"
+        ],
+        "points": [
+          [
+            10.65,
+            10
+          ],
+          [
+            10.65,
+            4.9
+          ],
+          [
+            6.4,
+            4.9
+          ]
+        ]
+      },
+      {
+        "id": "WC04",
+        "from": "gallery",
+        "to": "living",
+        "label": {
+          "zh": "回廊进入茶与起居",
+          "en": "Gallery to tea and living"
+        },
+        "width": 0.8,
+        "gateIds": [
+          "P01"
+        ],
+        "points": [
+          [
+            6.4,
+            4.9
+          ],
+          [
+            6.4,
+            8.5
+          ]
+        ]
+      },
+      {
+        "id": "WC05",
+        "from": "living",
+        "to": "garden",
+        "label": {
+          "zh": "经单扇推拉门入内庭",
+          "en": "Through the sliding door to the court"
+        },
+        "width": 0.8,
+        "gateIds": [
+          "D09"
+        ],
+        "points": [
+          [
+            6.4,
+            8.5
+          ],
+          [
+            4.8,
+            8.5
+          ],
+          [
+            4.8,
+            13.1
+          ]
+        ]
+      },
+      {
+        "id": "WC06",
+        "from": "garden",
+        "to": "outer",
+        "label": {
+          "zh": "从内庭南门进入外园",
+          "en": "Court south gate to outer garden"
+        },
+        "width": 0.8,
+        "gateIds": [
+          "EG01"
+        ],
+        "points": [
+          [
+            4.8,
+            13.1
+          ],
+          [
+            4.8,
+            16.5
+          ],
+          [
+            8,
+            16.5
+          ]
+        ]
+      },
+      {
+        "id": "WC07",
+        "from": "outer",
+        "to": "pool",
+        "label": {
+          "zh": "经独立池门进入池畔",
+          "en": "Through the independent pool gate"
+        },
+        "width": 0.8,
+        "gateIds": [
+          "PG01"
+        ],
+        "points": [
+          [
+            8,
+            16.5
+          ],
+          [
+            8,
+            19.2
+          ]
+        ]
+      },
+      {
+        "id": "WC08",
+        "from": "pool",
+        "to": "changing",
+        "label": {
+          "zh": "池门外步道到更衣",
+          "en": "Pool gate and external path to changing"
+        },
+        "width": 0.8,
+        "gateIds": [
+          "PG01",
+          "ED02"
+        ],
+        "points": [
+          [
+            8,
+            19.2
+          ],
+          [
+            8,
+            17
+          ],
+          [
+            16.5,
+            17
+          ],
+          [
+            16.5,
+            19
+          ],
+          [
+            19,
+            19
+          ]
+        ]
+      },
+      {
+        "id": "WC09",
+        "from": "changing",
+        "to": "gym",
+        "label": {
+          "zh": "更衣区内部进入健身房",
+          "en": "Changing through the internal gym door"
+        },
+        "width": 0.8,
+        "gateIds": [
+          "ED04"
+        ],
+        "points": [
+          [
+            19,
+            19
+          ],
+          [
+            19,
+            17
+          ]
+        ]
+      },
+      {
+        "id": "WC10",
+        "from": "changing",
+        "to": "media",
+        "label": {
+          "zh": "由外部步道绕入影音室",
+          "en": "External path to the media room"
+        },
+        "width": 0.8,
+        "gateIds": [
+          "ED02",
+          "ED03"
+        ],
+        "points": [
+          [
+            19,
+            19
+          ],
+          [
+            16.5,
+            19
+          ],
+          [
+            16.5,
+            22
+          ],
+          [
+            18.5,
+            22
+          ],
+          [
+            18.5,
+            23.5
+          ]
+        ]
+      },
+      {
+        "id": "WC11",
+        "from": "outer",
+        "to": "entry",
+        "label": {
+          "zh": "外园步道返回主宅",
+          "en": "Outer garden path back to the core"
+        },
+        "width": 0.8,
+        "gateIds": [
+          "D01"
+        ],
+        "points": [
+          [
+            8,
+            16.5
+          ],
+          [
+            8,
+            16
+          ],
+          [
+            12.7,
+            16
+          ],
+          [
+            12.7,
+            12.6
+          ]
+        ]
+      },
+      {
+        "id": "WC12",
+        "from": "gallery",
+        "to": "reserve",
+        "label": {
+          "zh": "沿回廊进入中国书画室",
+          "en": "Gallery to Chinese painting studio"
+        },
+        "width": 0.75,
+        "gateIds": [
+          "D06"
+        ],
+        "points": [
+          [
+            6.4,
+            4.9
+          ],
+          [
+            13.15,
+            4.9
+          ],
+          [
+            13.15,
+            3.1
+          ],
+          [
+            13,
+            3.1
+          ],
+          [
+            13,
+            1.45
+          ]
+        ]
+      },
+      {
+        "id": "WC13",
+        "from": "gallery",
+        "to": "bedroom",
+        "label": {
+          "zh": "回廊向西到主卧",
+          "en": "Gallery west to the bedroom"
+        },
+        "width": 0.75,
+        "gateIds": [
+          "D03"
+        ],
+        "points": [
+          [
+            6.4,
+            4.9
+          ],
+          [
+            3.55,
+            4.9
+          ],
+          [
+            3.55,
+            3.35
+          ],
+          [
+            2.5,
+            3.35
+          ]
+        ]
+      },
+      {
+        "id": "WC14",
+        "from": "gallery",
+        "to": "bath",
+        "label": {
+          "zh": "湿区前室进入浴室",
+          "en": "Wet-core lobby to the bathroom"
+        },
+        "width": 0.75,
+        "gateIds": [
+          "D04",
+          "D07"
+        ],
+        "points": [
+          [
+            6.4,
+            4.9
+          ],
+          [
+            6.4,
+            1.8
+          ]
+        ]
+      },
+      {
+        "id": "WC16",
+        "from": "changing",
+        "to": "outer",
+        "label": {
+          "zh": "更衣外门沿步道回外园",
+          "en": "Changing exterior path to the outer garden"
+        },
+        "width": 0.8,
+        "gateIds": [
+          "ED02"
+        ],
+        "points": [
+          [
+            19,
+            19
+          ],
+          [
+            16.5,
+            19
+          ],
+          [
+            16.5,
+            17
+          ],
+          [
+            8,
+            17
+          ],
+          [
+            8,
+            16.5
+          ]
+        ]
+      },
+      {
+        "id": "WC17",
+        "from": "gym",
+        "to": "outer",
+        "label": {
+          "zh": "健身西门沿步道回外园",
+          "en": "Gym west door to the outer garden path"
+        },
+        "width": 0.8,
+        "gateIds": [
+          "ED01"
+        ],
+        "points": [
+          [
+            19,
+            17
+          ],
+          [
+            19,
+            16
+          ],
+          [
+            8,
+            16
+          ],
+          [
+            8,
+            16.5
+          ]
+        ]
+      },
+      {
+        "id": "WC18",
+        "from": "media",
+        "to": "outer",
+        "label": {
+          "zh": "影音西门沿园路直接回外庭",
+          "en": "Media west door directly along the garden path"
+        },
+        "width": 0.8,
+        "gateIds": [
+          "ED03"
+        ],
+        "points": [
+          [
+            18.5,
+            23.5
+          ],
+          [
+            18.5,
+            22
+          ],
+          [
+            16.5,
+            22
+          ],
+          [
+            16.5,
+            17
+          ],
+          [
+            8,
+            17
+          ],
+          [
+            8,
+            16.5
+          ]
+        ]
+      },
+      {
+        "id": "WC15",
+        "from": "gallery",
+        "to": "flex",
+        "label": {
+          "zh": "回廊进入客房",
+          "en": "Gallery to the guest room"
+        },
+        "width": 0.75,
+        "gateIds": [
+          "D05"
+        ],
+        "points": [
+          [
+            6.4,
+            4.9
+          ],
+          [
+            9.25,
+            4.9
+          ],
+          [
+            9.25,
+            3.3
+          ]
+        ]
+      }
+    ]
   },
   "note": {
     "zh": "同一模型约束门窗、家具、动线、立面与几何视图；影像仍是材质氛围研究。0.75–0.9m 路线为当前概念净通行带，非无障碍或施工验收结论。",

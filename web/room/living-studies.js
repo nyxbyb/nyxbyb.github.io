@@ -3,7 +3,7 @@ import {teaDetailSVG,teaCabinetSVG,courtyardBoundarySVG,estateSVG} from './spati
 
 // Geometry and equipment positions stay in the spatial model. This module only
 // presents the tea-room and garden studies, with native controls and SVG exports.
-const media=import.meta.glob('./assets/house-v3/*.jpg',{eager:true,query:'?url',import:'default'});
+const media={...import.meta.glob(['./assets/house-v3/*.jpg','!./assets/house-v3/reserve.jpg'],{eager:true,query:'?url',import:'default'}),...import.meta.glob('./assets/house-v4/*.jpg',{eager:true,query:'?url',import:'default'})};
 const photographs=Object.fromEntries(Object.entries(media).map(([p,url])=>[p.split('/').pop().replace('.jpg',''),url]));
 const el=(tag,text,cls)=>{const n=document.createElement(tag);if(text!=null)n.textContent=text;if(cls)n.className=cls;return n;};
 
@@ -24,7 +24,7 @@ export function createLivingStudies({getLanguage,rerender}){
  function tea(body){
   const t=M.tea;
   const strip=el('div',null,'study-intro-strip');
-  strip.append(el('span',say('40㎡ · 起居与茶','40 m² · Living & tea')),el('span',say('水、声、光、香分开控制','Water, sound, light and scent separately controlled')),el('span','REV.03'));
+  strip.append(el('span',say('40㎡ · 起居与茶','40 m² · Living & tea')),el('span',say('水、声、光、香分开控制','Water, sound, light and scent separately controlled')),el('span','REV.'+String(M.version).padStart(2,'0')));
   body.append(strip);
   const tools=el('div',null,'dossier-tools');
   const layers=[['ritual','茶水与收纳','Tea & storage'],['services','灯光与插座','Light & outlets'],['audio','听音与独处','Listening'],['cabinet','茶柜立面','Tea cabinet'],['boundary','室内外同一面墙','One shared wall'],['material','茶席影像','Tea image']];
@@ -64,6 +64,14 @@ export function createLivingStudies({getLanguage,rerender}){
   const tools=el('div',null,'dossier-tools');tools.append(tool(say('完整园居','Whole garden'),phase==='all',()=>phase='all'));
   for(const p of e.phases||[])tools.append(tool(name(p),phase===String(p.id),()=>phase=String(p.id)));
   body.append(tools,sheet(estateSVG(getLanguage(),phase)),link(say('放大园居总图 SVG ↗','Enlarge the garden masterplan SVG ↗'),'./docs/drawings/estate.svg'));
+  section(body,say('沿着园路，走进下一处。','Follow the garden path into the next room.'));
+  body.append(el('p',say('从总图进入固定视点，再沿门、回廊与园路继续走。每处可切换同模型几何与平面定位。','Enter a fixed viewpoint from the plan, then continue through doors, the gallery and garden paths. Each stop has a model view and a plan location.'),'dossier-lede'));
+  const views=el('div',null,'study-image-pair');
+  for(const [id,zh,en] of [['media','影音室','Media room'],['gym','健身房','Gym'],['pool','泳池与池畔','Pool & terrace'],['outer','外庭','Outer garden']]){
+   const item=el('article',null,'dossier-card');item.append(el('h3',say(zh,en)),photo(id,`C-${id} · ${say(zh,en)}`));
+   const controls=el('div',null,'dossier-tools'),open=el('button',say('走进'+zh+' ↗','Enter '+en+' ↗'));open.type='button';open.addEventListener('click',()=>document.dispatchEvent(new CustomEvent('caelum:walk',{detail:{id}})));controls.append(open);item.append(controls);views.append(item);
+  }
+  body.append(views);
   const phases=el('div',null,'dossier-grid');for(const p of e.phases||[])phases.append(card(p));body.append(phases);
   section(body,say('房子之外，添加什么，也承担什么。','What to add, and what it asks of you.'));
   const program=el('div',null,'dossier-grid');for(const p of e.program||[])program.append(card(p));body.append(program);

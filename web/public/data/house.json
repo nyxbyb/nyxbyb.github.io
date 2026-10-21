@@ -3,7 +3,7 @@
   "title": { "zh": "迟庭", "en": "Chiting · A house with time" },
   "assumptions": {
     "stage": "concept-coordination",
-    "spatialModelVersion": 3,
+    "spatialModelVersion": 4,
     "ceilingHeight": 2.7,
     "grossFloorArea": 200,
     "netProgramArea": 166,
@@ -62,16 +62,13 @@
       "practical": { "zh": ["展开床后仍应保留到门与窗的通道。", "不要用高低差或固定榻榻米阻断未来家具变化。", "若将来变为长期卧室，须重新核验采光、通风与收纳。"], "en": ["Keep a route to the door and window with the bed unfolded.", "Avoid fixed raised platforms that prevent future furniture changes.", "Recheck daylight, ventilation and storage if it becomes a permanent bedroom."] }
     },
     {
-      "id": "reserve",
-      "label": {"zh": "画室 · 可变工作间", "en": "Art studio · adaptable room"},
-      "subtitle": {"zh": "给手、纸与颜料一间明亮的房间", "en": "A bright room for hands, paper and paint"},
-      "area": 15.54,
-      "zone": "private",
-      "size": {"w": 3.7, "d": 4.2},
+      "id": "reserve", "label": {"zh": "画室 · 中国书画", "en": "Studio · Chinese painting"},
+      "subtitle": {"zh": "一张长案，容得下笔墨与停顿", "en": "A long table for ink, paper and pauses"},
+      "area": 15.54, "zone": "private", "size": {"w": 3.7, "d": 4.2},
       "dimensions": {"zh": "约 3.7 × 4.2m", "en": "Approximately 3.7 × 4.2 m"},
-      "narrative": {"zh": "北窗留给画架和工作台，画材平放、湿作品晾干、洗笔各有位置。门可以关上，创作不必每晚收回餐桌；保留可移动家具，使它日后仍能随生活变化。", "en": "A north window serves the easel and worktable, with flat art storage, drying space and a separate brush sink. Close the door and leave work in progress. Movable furniture keeps the room adaptable."},
-      "materials": {"zh": ["可洗工作台", "平面画材抽屉", "中性墙面", "可更换保护地垫"], "en": ["Washable work surface", "Flat art drawers", "Neutral walls", "Replaceable floor protection"]},
-      "practical": {"zh": ["保留15.54㎡原房间：画架、画材柜、独立洗笔盆和晾画位按同模型放置。", "洗笔与茶具清洗分开，颜料废物按所选材料要求收集处理；不是把画材倒进食物水槽。", "抽屉展开和门窗通行一起核对；自然光方向与产品选择待真实基地确认。"], "en": ["Use the existing 15.54 m² room, with coordinated easel, flat storage, separate brush sink and drying rack.", "Keep brush washing separate from tea utensils and collect material waste according to the selected medium.", "Check open drawers and circulation together; confirm daylight and products for the real site."]}
+      "narrative": {"zh": "以中国书画的使用方式组织这间房：北窗下的木长案铺毡展纸，笔墨砚有手边位置，西侧平纸与卷轴收纳，作品在独立挂晾架上慢慢干。浅木、米白与少量墨色延续全屋，不依靠繁复装饰。独立洗笔槽与茶水分开，门可以关上，未完成的纸面不必每晚收回餐桌。", "en": "The room is arranged for Chinese ink painting and calligraphy: a timber table beneath the north window, a felt writing surface, brush and ink tools within reach, flat paper and scroll storage to the west, and an independent hanging frame for drying work. Pale wood, warm white and touches of ink continue the house palette. A separate brush sink keeps art materials away from tea utensils; unfinished work can stay when the door closes."},
+      "materials": {"zh": ["浅木书画长案", "米白画毡与纸面", "平纸及卷轴收纳", "哑光石质洗笔面"], "en": ["Pale timber painting table", "Warm felt and paper", "Flat paper & scroll storage", "Matte stone brush-washing surface"]},
+      "practical": {"zh": ["保留15.54㎡原房间与既定门窗：长案、平纸抽屉、挂晾架、独立洗笔槽按同模型布置。", "常用笔墨在长案手边，未用宣纸与卷轴闭合收纳；湿作挂晾不遮门窗和主通路。", "洗笔与茶具清洗分开，材料废物按所选媒介收集；抽屉展开、走道和入口一起核对。"], "en": ["Keep the existing 15.54 m² room and openings, with model-located painting table, flat drawers, drying frame and separate brush sink.", "Keep working brushes and ink at the table, unused paper and scrolls in closed storage; drying work must leave openings and circulation clear.", "Keep brush washing separate from tea utensils and collect medium-specific waste; check open drawers, aisles and entry together."]}
     },
     {
       "id": "bath", "label": { "zh": "两处卫浴", "en": "Two bathrooms" },

@@ -6,7 +6,7 @@ Caelum（凿星图）是个人科研、阅读、写作与生活网站。保留�
 
 - 页面使用原生 HTML/CSS/JavaScript，Vite 5 负责构建。虽保留 Svelte 5 及其插件依赖，现有页面没有 Svelte 组件，不要据此迁移技术栈。
 - `web/index.html` 是主页唯一维护入口，内含 Canvas 星图、沉浸式视图、星域、设置与内容编辑。`caelum.html` 是历史副本，禁止复制覆盖主页。
-- `web/room.html`、`web/room/{room.js,room.css,house-plan.js,spatial-model.js,spatial-drawings.js,design-dossier.js,living-studies.js,daily-life.js}` 是二维住宅设计册、原创可交互 SVG 平面与日常内容。JPEG 位于 `web/room/assets/`；PNG 保留视觉原稿。`world.js` 和 `scene.svg` 为历史方案，不从当前页面加载。
+- `web/room.html`、`web/room/{room.js,room.css,house-plan.js,spatial-model.js,spatial-drawings.js,design-dossier.js,living-studies.js,estate-walk.js,daily-life.js}` 是二维住宅设计册、原创可交互 SVG 平面、13站全屋漫游与日常内容。JPEG 位于 `web/room/assets/`；PNG 保留视觉原稿。`world.js` 和 `scene.svg` 为历史方案，不从当前页面加载。
 - `web/public/data/{graph,articles,text,inbox,room,house}.json`、`web/public/tree.json` 是公开内容。住宅中英文字段与面积表改 `house.json`，日常书茶内容改 `room.json`。空间几何只改 `spatial-model.js`，随后用 `scripts/render-house-studies.py` 重导出几何视图、公开SVG/JSON，再重建 `scripts/build-house-dossier.py` 的PDF；同步面积数据与设计简报。`spatial-drawings.js` 负责同模型图版，`house-plan.js` 负责可访问交互。
 - `scripts/` 是本地语料处理脚本；`corpus/`、`data/` 含私人原料。构建不需要重新抓取、嵌入或上传这些目录。
 - `web/scripts/package-pages.mjs` 将 Vite 产物包装为 `web/dist/web/`，在产物根保留跳转页及兼容手册。只发布 `web/dist/`。
@@ -34,7 +34,7 @@ git diff --check
 - 不重写用户简介、论文、文章、书单或私有笔记。修改数据结构时兼容旧版本，保留已有条目。
 - 主页沿用衬线字体、低饱和主题与留白；住宅采用用户确认的日式现代自然木质，二维静帧与纸面建筑图册。2026-10-20 用户要求从三维改为二维，不要重新默认启用 Three.js。复用 CSS 变量与中英文字段。
 - 当前住宅工作模型为约200㎡概念建面（166㎡净功能＋34㎡构造设备预留）、30㎡庭院另列、四间独立空间（含15.54㎡画室）。园居扩展以1190㎡假想地块研究，生活翼另增72㎡概念建面，泳池36㎡及池畔54㎡为室外另列，不混入主宅200㎡；树种按实际气候核定。茶室点位在模型`tea`，窗墙檐口在`courtyardBoundary`，外园在`estate`。住宅名「迟庭」。门窗、家具、视点、动线、立面与剖面以同一模型协调；材质影像有对应固定视点和几何对照，不能宣称毫米级精确或可直接施工。历史REV.01独立氛围图不进入当前房间画面。建筑师参考须链接官方来源，原创转译与原作区分。
-- 房间保留原生控件、日常抽屉、可放大的键盘平面、矢量/札记导出。点击、触摸、键盘均可操作，保留焦点提示、状态反馈、减少动态效果偏好及数据/图像加载失败后的可用内容。
+- 房间保留原生控件、日常抽屉、可放大的键盘平面、矢量/札记导出。漫游采用原生对话框，`#walk-<id>`直达，主宅九区札记ID不变；画室为自然木质的中国书画空间，v4材质图不回退到旧西式画室。扩展4处与主宅共13站，路径按实际门廊和园路连接。点击、触摸、键盘均可操作，保留焦点提示、状态反馈、减少动态效果偏好及数据/图像加载失败后的可用内容。
 - 页面隐藏时暂停持续动画与声音；音频只能由用户主动触发。不要为二维过渡新增 React、Three.js、GSAP 或模型依赖。历史 Three.js 依赖仅支持保留的源码与回归，不进入当前页面产物。
 - 不为格式统一重构整页。新增模块可以独立文件，现有功能修复尽量局部；更新这里与受影响的维护文档，不复制通用模板。
 

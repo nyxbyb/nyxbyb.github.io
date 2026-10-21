@@ -14,7 +14,7 @@ const zones = [
   zone('bedroom', '主卧', 'Primary bedroom', 17.64, [[0, 0, 4.2, 4.2]], [2.1, 3.43]),
   zone('kitchen', '餐厨', 'Kitchen & dining', 21.6, [[10, 5.6, 4, 5.4]], [11.75, 10.55]),
   zone('flex', '客房 · 多用室', 'Guest · multipurpose', 13.86, [[7, 0, 3.3, 4.2]], [8.65, 2.23]),
-  zone('reserve', '画室 · 可变工作间', 'Art studio · adaptable room', 15.54, [[10.3, 0, 3.7, 4.2]], [12.15, 3.35]),
+  zone('reserve', '画室 · 中国书画', 'Studio · Chinese painting', 15.54, [[10.3, 0, 3.7, 4.2]], [12.15, 3.35]),
   zone('bath', '两处卫浴', 'Two bathrooms', 11.76, [[4.2, 0, 2.8, 4.2]], [5.6, 1.55]),
   zone('entry', '玄关 · 家务 · 回廊', 'Entry · utility · gallery', 31.6, [[0, 4.2, 14, 1.4], [10, 11, 4, 3]], [11.65, 12.85]),
   zone('garden', '内庭 · 雨与树', 'Courtyard · rain & trees', 30, [[0, 9, 6, 5]], [2.7, 12.98], true)
@@ -132,12 +132,12 @@ const furniture = [
   item('F-F02', 'flex', '客房收纳', 'Guest storage', 'wardrobe', [9.64, .4, .48, 2.4], 2.4),
   item('F-F03', 'flex', '小书桌', 'Small writing desk', 'desk', [7.18, 3.38, 1.3, .58], .74),
   item('F-F04', 'flex', '客房椅', 'Guest-room chair', 'chair', [7.58, 2.78, .5, .48], .8, { rotation: 180 }),
-  item('F-R01', 'reserve', '可洗画材工作台', 'Washable art workbench', 'art-counter', [10.5, .2, 2.9, .65], .9, { provisional: true }),
-  item('F-R02', 'reserve', '平面画材抽屉柜', 'Flat art-supply drawers', 'shelf', [10.5, 1.65, .65, 1.95], .8, { provisional: true, openedRect: { x: 11.15, y: 1.65, w: .55, d: 1.95 } }),
-  item('F-R03', 'reserve', '画室活动椅', 'Art-studio chair', 'chair', [11.85, 1.05, .5, .48], .8, { rotation: 180, provisional: true }),
-  item('F-R04', 'reserve', '独立画架', 'Freestanding easel', 'easel', [11.85, 2.2, .65, .7], 1.75, { provisional: true }),
-  item('F-R05', 'reserve', '作品晾干架', 'Artwork drying rack', 'drying-rack', [13.45, 1.25, .35, 1.6], 1.7, { provisional: true }),
-  item('F-R06', 'reserve', '独立洗笔盆', 'Dedicated brush-washing sink', 'sink', [12.85, .3, .4, .42], .03, { baseHeight: .9, parentId: 'F-R01', blocking: false }),
+  item('F-R01', 'reserve', '北光书画长案', 'North-light calligraphy / painting desk', 'art-counter', [10.5, .15, 2.9, .9], .8, { provisional: true, kneeSpace: { x: 11.5, y: .15, w: 1.2, d: .9, clearHeight: .73 }, sinkPedestal: { x: 12.75, y: .15, w: .65, d: .9 }, detail: label('2.9×0.9m长案以毡垫展开纸本，东端独立洗笔槽；自然木质与米白纸墙，不叠加古典装饰。', 'A 2.9 × 0.9 m felt-topped paper-work desk with a separate eastern brush basin, natural timber and paper-toned walls.') }),
+  item('F-R02', 'reserve', '宣纸与画卷平抽屉', 'Flat xuan-paper / scroll drawers', 'shelf', [10.5, 1.65, .65, 1.95], .8, { provisional: true, openedRect: { x: 11.15, y: 1.65, w: .55, d: 1.95 } }),
+  item('F-R03', 'reserve', '书画木椅', 'Timber painting chair', 'chair', [11.85, 1.18, .5, .48], .8, { rotation: 180, provisional: true }),
+  item('F-R04', 'reserve', '可移动挂轴晾画架', 'Movable hanging-scroll drying stand', 'scroll-stand', [11.85, 2.2, .65, .7], 1.65, { provisional: true }),
+  item('F-R05', 'reserve', '书画晾纸与画夹架', 'Paper drying / painting-folder rack', 'drying-rack', [13.45, 1.25, .35, 1.6], 1.7, { provisional: true }),
+  item('F-R06', 'reserve', '独立洗笔盆', 'Dedicated brush-washing sink', 'sink', [12.85, .3, .4, .42], .03, { baseHeight: .8, parentId: 'F-R01', blocking: false }),
   item('F-W01', 'bath', '淋浴区', 'Shower', 'shower', [4.35, .15, 1.3, 1.25], .03, { spaceId: 'bath-main', blocking: false }),
   item('F-W02', 'bath', '浴室台盆', 'Bathroom vanity', 'basin', [4.35, 1.78, 1.1, .52], .85, { spaceId: 'bath-main' }),
   item('F-W03', 'bath', '浴室坐便器', 'Bathroom WC', 'wc', [6.12, .22, .52, .8], .7, { spaceId: 'bath-main' }),
@@ -156,7 +156,7 @@ const routes = [
   { id: 'R01', label: label('归家 · 放下包 · 工作', 'Arrive · put down a bag · work'), width: .9, rooms: ['entry', 'study'], points: [[12.7, 14.8], [12.7, 14], [12.7, 12.6], [8.7, 12.6]] },
   { id: 'R02', label: label('归家 · 回廊 · 起居 · 入庭', 'Arrive · gallery · living · courtyard'), width: .9, rooms: ['entry', 'kitchen', 'living', 'garden'], points: [[12.7, 12.6], [10.65, 12.6], [10.65, 4.9], [6.4, 4.9], [6.4, 8.5], [4.8, 8.5], [4.8, 10.4]] },
   { id: 'R03', label: label('夜间 · 回廊 · 安睡', 'Evening · gallery · sleep'), width: .75, rooms: ['kitchen', 'entry', 'bedroom'], points: [[10.65, 10.6], [10.65, 4.9], [3.55, 4.9], [3.55, 3.35], [2.5, 3.35]] },
-  { id: 'R04', label: label('画室入口 · 画架 · 洗笔台', 'Studio entrance · easel · brush sink'), width: .75, rooms: ['entry', 'reserve'], points: [[13.15, 4.9], [13.15, 3.1], [13, 3.1], [13, 1.3]] }
+  { id: 'R04', label: label('画室入口 · 挂轴 · 洗笔长案', 'Studio entrance · scrolls · brush-washing desk'), width: .75, rooms: ['entry', 'reserve'], points: [[13.15, 4.9], [13.15, 3.1], [13, 3.1], [13, 1.45]] }
 ];
 
 // Horizontal lenses are deliberate: geometric reference views stay undistorted.
@@ -299,22 +299,86 @@ estate.wing = {
     { id: 'ED03', wallId: 'EW01', a: [18, 21.4], b: [18, 22.6], connects: ['outside', 'media'], type: 'door' },
     { id: 'ED04', wallId: 'EW05', a: [18.5, 18], b: [19.5, 18], connects: ['gym', 'changing'], type: 'door' },
     { id: 'ED05', wallId: 'EW02', a: [24, 18.35], b: [24, 19.65], connects: ['outside', 'plant'], type: 'door' },
-    { id: 'EV01', wallId: 'EW02', a: [24, 14.8], b: [24, 17.2], connects: ['outside', 'gym'], type: 'window' },
-    { id: 'EV02', wallId: 'EW04', a: [20.5, 24], b: [22.5, 24], connects: ['outside', 'media'], type: 'blackout-window' }
+    { id: 'EV01', wallId: 'EW02', a: [24, 14.8], b: [24, 17.2], connects: ['outside', 'gym'], type: 'window', sill: .45, head: 2.5, operation: 'fixed-plus-operable' },
+    { id: 'EV02', wallId: 'EW04', a: [20.5, 24], b: [22.5, 24], connects: ['outside', 'media'], type: 'blackout-window', sill: 1.1, head: 2.5, operation: 'operable-blackout', blackoutClosed: true }
   ],
   furniture: [
-    { id: 'EF01', roomId: 'gym', label: label('力量器材预留', 'Strength equipment'), rect: box(19, 14.4, 1.6, 1.2), height: 2.2 },
-    { id: 'EF02', roomId: 'gym', label: label('跑步机预留', 'Treadmill'), rect: box(22.2, 14.8, 1, 2), height: 1.5 },
-    { id: 'EF03', roomId: 'gym', label: label('伸展垫', 'Stretching mat'), rect: box(20.6, 16.6, 2, 1), height: .02, blocking: false },
-    { id: 'EF04', roomId: 'changing', label: label('更衣凳', 'Changing bench'), rect: box(18.15, 19.55, 1.2, .3), height: .45 },
-    { id: 'EF05', roomId: 'changing', label: label('淋浴预留', 'Shower reservation'), rect: box(19.7, 18.1, 1.2, 1.2), height: 2.2, blocking: false },
-    { id: 'EF06', roomId: 'plant', label: label('独立设备检修区', 'Independent plant bay'), rect: box(21.2, 18.15, 2.2, .6), height: 1.8 },
-    { id: 'EF07', roomId: 'media', label: label('投影幕', 'Projection screen'), rect: box(19, 20.1, 4, .12), height: 1.8 },
-    { id: 'EF08', roomId: 'media', label: label('三人观影位', 'Three-person media seat'), rect: box(19.1, 22.1, 3.1, .9), height: .9 }
+    item('EF01', 'gym', '木钢复合力量架', 'Timber / steel strength rack', 'strength-rack', [19, 14.4, 1.6, 1.2], 2.2),
+    item('EF02', 'gym', '朝窗跑步机', 'Window-facing treadmill', 'treadmill', [22.2, 14.8, 1, 2], 1.5),
+    item('EF03', 'gym', '伸展垫', 'Stretching mat', 'rug', [20.6, 16.6, 2, 1], .02, { blocking: false }),
+    item('EF04', 'changing', '更衣凳', 'Changing bench', 'bench', [18.15, 19.55, 1.2, .3], .45),
+    item('EF05', 'changing', '淋浴预留', 'Shower reservation', 'shower', [19.7, 18.1, 1.2, 1.2], 2.2, { blocking: false }),
+    item('EF06', 'plant', '独立设备检修区', 'Independent plant bay', 'equipment', [21.2, 18.15, 2.2, .6], 1.8),
+    item('EF07', 'media', '北侧投影幕', 'North projection screen', 'projection-screen', [19.2, 20.12, 3.6, .045], 1.7, { baseHeight: .55 }),
+    item('EF08', 'media', '三人亚麻观影沙发', 'Three-seat linen media sofa', 'sofa', [19.45, 22.2, 3.1, .9], .9),
+    item('EF09', 'media', '左前音箱', 'Front left speaker', 'speaker', [18.65, 20.35, .3, .35], 1.05),
+    item('EF10', 'media', '右前音箱', 'Front right speaker', 'speaker', [23.05, 20.35, .3, .35], 1.05),
+    item('EF11', 'media', '吊装投影位', 'Ceiling projector position', 'projector', [20.8, 22.7, .4, .3], .18, { baseHeight: 2.1, blocking: false }),
+    item('EF12', 'media', '低位器材柜', 'Low media cabinet', 'shelf', [19.3, 20.32, 3.4, .4], .35),
+    item('EF13', 'media', '低木茶几', 'Low timber media table', 'table', [20.35, 21.25, 1.25, .5], .35),
+    item('EF14', 'gym', '哑铃与弹力带柜', 'Dumbbell / resistance-band cabinet', 'equipment', [21.2, 14.15, .75, .45], .72),
+    item('EF15', 'gym', '毛巾与饮水低柜', 'Towel / water low cabinet', 'shelf', [23.25, 17.3, .5, .45], .9)
   ],
   mediaAccess: { width: .8, points: [[18, 22], [18.5, 22], [18.5, 23.5], [20.5, 23.5]] }
 };
+// Full-height exterior and interior opening specifications are shared by all views.
+for (const wall of estate.wing.walls) Object.assign(wall, { height: 2.7, thickness: ['EW01','EW02','EW03','EW04'].includes(wall.id) ? .24 : .12 });
+for (const opening of estate.wing.openings.filter(o => o.type === 'door')) Object.assign(opening, { sill: 0, head: 2.2, operation: 'sliding', clearWidth: span(opening.a, opening.b) });
+estate.wing.roof = { soffit: 2.7, top: 2.9, projection: .35 };
+estate.outdoorFurniture = [
+  item('OF01', 'pool', '北池畔木躺椅一', 'North pool timber lounger 1', 'lounger', [10.2, 18.82, 1.8, .55], .62, { phase: 'phase-3' }),
+  item('OF02', 'pool', '北池畔木躺椅二', 'North pool timber lounger 2', 'lounger', [12.25, 18.82, 1.8, .55], .62, { phase: 'phase-3' }),
+  item('OF03', 'outer', '桂树旁独处长凳', 'Solitude bench by the osmanthus candidate', 'bench', [-3.7, 20.65, 1.8, .45], .43, { phase: 'phase-2' }),
+  item('OF04', 'outer', '手持园具窄柜', 'Slim garden-tool cabinet', 'shelf', [-4.65, 14.8, .45, 1.2], 1.3, { phase: 'phase-2' })
+];
+estate.lights = [
+  record('EL01', '池门低位灯', 'Low pool-gate light', '仅照亮门锁与脚下，不在池面制造眩光。', 'Light the latch and path, avoiding glare over the water.', { position: [8.9, 18.3, .55], phase: 'phase-3' }),
+  record('EL02', '生活翼入口壁灯', 'Wing entry wall light', '在健身入口旁定位，不替代室内灯光设计。', 'A fixed light beside the gym entry, not a full indoor lighting design.', { position: [17.86, 17.1, 1.7], phase: 'phase-2' }),
+  record('EL03', '桂树旁低位灯', 'Low osmanthus-candidate light', '引导停留与回庭，避免上照树冠和窗。', 'Mark the resting route without uplighting crowns or windows.', { position: [-2.6, 21.4, .55], phase: 'phase-2' })
+];
+estate.pool = { waterLevel: -.15, conceptDepth: 1.2, copingWidth: .18, fenceMaterial: 'clear-glass-with-timber-posts', gateState: 'closed' };
+cameras.push(
+  { ...camera('media', [23.25, 23.25], [20.7, 20.2], 75), label: label('影音室 · 朝北屏幕', 'Media room · toward the north screen'), scope: 'estate' },
+  { ...camera('gym', [18.6, 17.35], [21.1, 15.1], 76), label: label('健身房 · 朝东北窗', 'Gym · toward the northeast window'), scope: 'estate' },
+  { ...camera('pool', [.95, 23.85], [11, 20.5], 75), label: label('泳池 · 从西南池畔看', 'Pool · from the southwest deck'), scope: 'estate' },
+  { ...camera('outer', [-2.8, 27], [10.2, 15.5], 75), label: label('外庭 · 朝主宅与生活翼', 'Outer garden · toward the core and wing'), scope: 'estate' }
+);
 estate.arrivalStorage = record('EA01', '单车与快递格', 'Cycle / parcel storage', '露天停车旁的轻量收纳，不增加封闭车库。', 'Light storage next to open parking, without adding an enclosed garage.', { rect: box(24.2, 1, 1.2, .6), height: 1.2 });
+
+// Walk endpoints are places to stand, distinct from photographic camera positions.
+// Connections carry actual doorway/gate paths; the UI may traverse either direction.
+const walk = {
+  stations: [
+    { id: 'entry', position: [12.7, 12.6] }, { id: 'kitchen', position: [10.65, 10] },
+    { id: 'living', position: [6.4, 8.5] }, { id: 'garden', position: [4.8, 13.1] },
+    { id: 'outer', position: [8, 16.5] }, { id: 'pool', position: [8, 19.2] },
+    { id: 'gym', position: [19, 17] }, { id: 'media', position: [18.5, 23.5] },
+    { id: 'reserve', position: [13, 1.45] }, { id: 'study', position: [8.7, 12.6] },
+    { id: 'bedroom', position: [2.5, 3.35] }, { id: 'bath', position: [6.4, 1.8] },
+    { id: 'flex', position: [9.25, 3.3] }, { id: 'gallery', position: [6.4, 4.9] },
+    { id: 'changing', position: [19, 19] }
+  ],
+  connections: [
+    { id: 'WC01', from: 'entry', to: 'kitchen', label: label('玄关经餐厨通口', 'Entry through the kitchen passage'), width: .8, gateIds: ['P04'], points: [[12.7,12.6],[10.65,12.6],[10.65,10]] },
+    { id: 'WC02', from: 'entry', to: 'study', label: label('玄关进独立书房', 'Entry to the independent study'), width: .8, gateIds: ['D02'], points: [[12.7,12.6],[8.7,12.6]] },
+    { id: 'WC03', from: 'kitchen', to: 'gallery', label: label('餐厨沿东侧进入回廊', 'Kitchen to the gallery'), width: .8, gateIds: ['P02'], points: [[10.65,10],[10.65,4.9],[6.4,4.9]] },
+    { id: 'WC04', from: 'gallery', to: 'living', label: label('回廊进入茶与起居', 'Gallery to tea and living'), width: .8, gateIds: ['P01'], points: [[6.4,4.9],[6.4,8.5]] },
+    { id: 'WC05', from: 'living', to: 'garden', label: label('经单扇推拉门入内庭', 'Through the sliding door to the court'), width: .8, gateIds: ['D09'], points: [[6.4,8.5],[4.8,8.5],[4.8,13.1]] },
+    { id: 'WC06', from: 'garden', to: 'outer', label: label('从内庭南门进入外园', 'Court south gate to outer garden'), width: .8, gateIds: ['EG01'], points: [[4.8,13.1],[4.8,16.5],[8,16.5]] },
+    { id: 'WC07', from: 'outer', to: 'pool', label: label('经独立池门进入池畔', 'Through the independent pool gate'), width: .8, gateIds: ['PG01'], points: [[8,16.5],[8,19.2]] },
+    { id: 'WC08', from: 'pool', to: 'changing', label: label('池门外步道到更衣', 'Pool gate and external path to changing'), width: .8, gateIds: ['PG01','ED02'], points: [[8,19.2],[8,17],[16.5,17],[16.5,19],[19,19]] },
+    { id: 'WC09', from: 'changing', to: 'gym', label: label('更衣区内部进入健身房', 'Changing through the internal gym door'), width: .8, gateIds: ['ED04'], points: [[19,19],[19,17]] },
+    { id: 'WC10', from: 'changing', to: 'media', label: label('由外部步道绕入影音室', 'External path to the media room'), width: .8, gateIds: ['ED02','ED03'], points: [[19,19],[16.5,19],[16.5,22],[18.5,22],[18.5,23.5]] },
+    { id: 'WC11', from: 'outer', to: 'entry', label: label('外园步道返回主宅', 'Outer garden path back to the core'), width: .8, gateIds: ['D01'], points: [[8,16.5],[8,16],[12.7,16],[12.7,12.6]] },
+    { id: 'WC12', from: 'gallery', to: 'reserve', label: label('沿回廊进入中国书画室', 'Gallery to Chinese painting studio'), width: .75, gateIds: ['D06'], points: [[6.4,4.9],[13.15,4.9],[13.15,3.1],[13,3.1],[13,1.45]] },
+    { id: 'WC13', from: 'gallery', to: 'bedroom', label: label('回廊向西到主卧', 'Gallery west to the bedroom'), width: .75, gateIds: ['D03'], points: [[6.4,4.9],[3.55,4.9],[3.55,3.35],[2.5,3.35]] },
+    { id: 'WC14', from: 'gallery', to: 'bath', label: label('湿区前室进入浴室', 'Wet-core lobby to the bathroom'), width: .75, gateIds: ['D04','D07'], points: [[6.4,4.9],[6.4,1.8]] },
+    { id: 'WC16', from: 'changing', to: 'outer', label: label('更衣外门沿步道回外园', 'Changing exterior path to the outer garden'), width: .8, gateIds: ['ED02'], points: [[19,19],[16.5,19],[16.5,17],[8,17],[8,16.5]] },
+    { id: 'WC17', from: 'gym', to: 'outer', label: label('健身西门沿步道回外园', 'Gym west door to the outer garden path'), width: .8, gateIds: ['ED01'], points: [[19,17],[19,16],[8,16],[8,16.5]] },
+    { id: 'WC18', from: 'media', to: 'outer', label: label('影音西门沿园路直接回外庭', 'Media west door directly along the garden path'), width: .8, gateIds: ['ED03'], points: [[18.5,23.5],[18.5,22],[16.5,22],[16.5,17],[8,17],[8,16.5]] },
+    { id: 'WC15', from: 'gallery', to: 'flex', label: label('回廊进入客房', 'Gallery to the guest room'), width: .75, gateIds: ['D05'], points: [[6.4,4.9],[9.25,4.9],[9.25,3.3]] }
+  ]
+};
 
 const courtyardBoundary = {
   id: 'B-W03', wallId: 'W03', openingIds: ['V06', 'D09'], insideCameraId: 'C-living', outsideCameraId: 'C-garden',
@@ -324,12 +388,12 @@ const courtyardBoundary = {
 };
 
 export const SPATIAL_MODEL = {
-  version: 3,
+  version: 4,
   units: 'm',
   coordinateSystem: { origin: 'north-west control-line corner', x: 'east', y: 'south', z: 'up', north: [0, -1] },
   ceilingHeight: 2.7,
   envelope: { width: 14, depth: 14, netArea: 166, grossAllowance: 34, grossArea: 200, courtyardArea: 30 },
-  zones, spaces, walls, openings, furniture, routes, cameras, tea, estate, courtyardBoundary,
+  zones, spaces, walls, openings, furniture, routes, cameras, tea, estate, courtyardBoundary, walk,
   note: label('同一模型约束门窗、家具、动线、立面与几何视图；影像仍是材质氛围研究。0.75–0.9m 路线为当前概念净通行带，非无障碍或施工验收结论。', 'One model governs openings, furniture, routes, elevations and geometric views. Atmospheric images remain material studies. The 0.75–0.9 m paths are concept clearances, not accessibility or construction certification.')
 };
 

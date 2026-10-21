@@ -42,7 +42,7 @@ GREEN = colors.HexColor("#657965")
 PALE_GREEN = colors.HexColor("#E0E6DA")
 WATER = colors.HexColor("#6D8790")
 DATE = "2026-10-21"
-REVISION = "03"
+REVISION = "04"
 
 
 def register_fonts():
@@ -858,6 +858,31 @@ page.get_pixmap(matrix=fitz.Matrix(scale,scale),alpha=True).save(sys.argv[2])
         self.column("一棵桂花，先作为候选", ["桂花典型高约3–6m、冠幅3–4.3m，喜排水良好与日照或半阴。先保留外园树位、根域与维护路线；内庭树种不因画面喜好仓促锁定。", "温带可研究鸡爪槭的枝影与季相；热带可研究九里香的局部香花。选址后按品种、土壤、风与维护投入决定。"], MARGIN, 209, 350)
         self.column("少而必要的后台", ["生活翼给换衣、毛巾、湿衣和淋浴留位置；泳池设备、清洁品和园艺工具有可检修的地方。", "首期完成茶与基本庭院，使用后再定运动/影音设备，最后落定泳池。空处仍可以保留为空处。"], 449, 209, 350)
 
+    def garden_views(self):
+        """Pair each material study with its actual camera and model plan."""
+        stops = [
+            ("reserve", "画室 · 笔墨与留白", "北窗长案、平纸与卷轴柜、独立洗笔槽和通透挂晾架；主宅原房间，不增加面积。"),
+            ("media", "影音室 · 关上门，慢慢看", "北侧幕面、成对前置音箱、三人沙发与低位器材柜；由西侧ED03独立到达。"),
+            ("gym", "健身房 · 面向园景伸展", "力量、跑步与伸展分开；ED01入室，ED04连接更衣，EV01保留原窗位。"),
+            ("pool", "池畔 · 水与自己的边界", "12×3m水面与54㎡池畔另列；PG01为独立池门，普通园路在围界之外。"),
+            ("outer", "外庭 · 从树荫走向家", "外园树位、路径和翼房共同定位；桂树是待基地确认的候选，不假设场外山景。"),
+        ]
+        for index, (ident, title, note) in enumerate(stops, 1):
+            cam = next(c for c in self.cameras if c["id"] == "C-" + ident)
+            self.start(f"V-{index:02d}", title, f"{cam['id']} / 材质影像、同视点几何与局部平面")
+            material = ROOT / "web/room/assets/house-v4" / f"{ident}.jpg"
+            geometry = ROOT / "web/public/docs/drawings" / f"{ident}-geometry.png"
+            plan = self.svg_image(f"{ident}-plan.svg")
+            self.image(material, MARGIN, 160, 464, 289)
+            self.para(note, MARGIN, 144, 464, 10, 17)
+            eye = cam.get("eyeHeight", 1.5)
+            self.para(f"视点 {cam['id']} / 眼高 {eye:g}m / 平面位置 {cam['position']}\n朝向 {cam['target']} / 视场 {cam.get('fov', 75):g}°", MARGIN, 97, 464, 8.5, 13, MUTED)
+            self.text(534, 455, "同模型局部平面 / 门窗、家具与观看方向", 8, "Sans", MUTED)
+            self.image(plan, 526, 276, 274, 171)
+            self.text(534, 263, "同一固定视点 / 几何对照", 8, "Sans", MUTED)
+            self.image(geometry, 526, 84, 274, 171)
+            self.para("生成影像用于材质与氛围研究；几何、编号与通行关系以同源图纸为准。非实景或施工文件。", MARGIN, 59, W - 2 * MARGIN, 7.5, 11, MUTED)
+
     def garden_sources(self):
         entries = [
             ("Norm Architects / Pavillion House", "附属工作室与音乐、电视、工作功能；与主屋连续的材料和开窗节奏。", "https://normcph.com/project/pavillion-house/"),
@@ -923,7 +948,7 @@ page.get_pixmap(matrix=fitz.Matrix(scale,scale),alpha=True).save(sys.argv[2])
         self.room_detail("kitchen", "A-03", "餐厨与茶的完整回路", ["洗、切、炒顺序与餐椅后退空间分别核对。茶席到水源、清洗、废水和收纳的距离计入使用。", "操作照明、插座、排烟与可检修位置在装修前共同决定。材料耐清洗、能补修，再考虑表面效果。"])
         self.room_detail("bath", "A-04", "卫浴与安静的家务秩序", ["完整浴室与独立客用洗手间集中布置，分别开门。朋友来访时不用进入卧室。", "防水、排风、排水与检修先于装饰。现布局仍需完整净距、无障碍及设备开启检查。"])
         self.materials(); self.lighting(); self.services(); self.life(); self.areas()
-        self.tea_and_garden()
+        self.tea_and_garden(); self.garden_views()
         self.next_stage(); self.sources(); self.garden_sources()
         self.finish()
 

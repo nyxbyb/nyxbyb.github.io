@@ -13,12 +13,14 @@ test('published drawings and camera references retain the current shared model, 
   const png=await file('../public/docs/drawings/'+viewId+'-geometry.png');
   assert.equal(png.subarray(1,4).toString(),'PNG');
   assert.equal(png.readUInt32BE(16),1200);assert.equal(png.readUInt32BE(20),750);
-  const jpg=await file('../room/assets/'+(['living','garden','reserve','tea'].includes(viewId)?'house-v3/':'house-v2/')+viewId+'.jpg');assert.equal(jpg.readUInt16BE(0),0xffd8);assert.ok(jpg.length>50000);
+  const folder=['reserve','media','gym','pool','outer'].includes(viewId)?'house-v4/':['living','garden','tea'].includes(viewId)?'house-v3/':'house-v2/';
+  const jpg=await file('../room/assets/'+folder+viewId+'.jpg');assert.equal(jpg.readUInt16BE(0),0xffd8);assert.ok(jpg.length>50000);
  }
  for(const name of ['plan','routes','openings','lighting','services','section','tea-ritual','tea-services','tea-audio','tea-cabinet','courtyard-boundary','estate'])assert.match((await file('../public/docs/drawings/'+name+'.svg')).toString(),/<svg[\s>]/);
  for(const z of model.zones.filter(z=>!z.outdoor))for(const d of ['north','east','south','west'])assert.match((await file('../public/docs/drawings/'+z.id+'-'+d+'.svg')).toString(),/<svg[\s>]/);
+ for(const id of ['reserve','media','gym','pool','outer'])assert.match((await file('../public/docs/drawings/'+id+'-plan.svg')).toString(),/<svg[\s>]/);
  const schedule=(await file('../public/docs/drawings/furniture.csv')).toString().trim().split(/\r?\n/);
- const catalog=[...model.furniture,...model.estate.wing.furniture];
+ const catalog=[...model.furniture,...model.estate.wing.furniture,...model.estate.outdoorFurniture];
  assert.equal(schedule.length,catalog.length+1,'The downloadable schedule must include the garden wing as well as the core.');
  for(const f of catalog)assert.ok(schedule.some(line=>line.startsWith(f.id+',')),`Missing furniture: ${f.id}`);
 });

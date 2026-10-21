@@ -117,7 +117,7 @@ test('furniture footprints and camera positions remain in their own spaces', () 
   }
   assert.ok(model.cameras.length >= model.zones.length);
   for (const zone of model.zones) assert.equal(model.cameras.filter(c => c.id === 'C-' + zone.id).length, 1);
-  for (const camera of model.cameras) {
+  for (const camera of model.cameras.filter(c => c.scope !== 'estate')) {
     if (camera.id === 'C-' + camera.roomId) assert.equal(cameraByRoomId(camera.roomId), camera);
     assert.ok(inside(camera.position, roomById(camera.roomId).polygons), `${camera.id}: camera outside its room`);
     assert.ok(inside(camera.target, roomById(camera.roomId).polygons), `${camera.id}: target outside its room`);
@@ -205,7 +205,7 @@ test('tea refill and cleanup stay clear of furniture and do not cross main circu
 
 test('art studio has a separate brush sink, drying and drawers that open without blocking the entrance', () => {
   const studio = model.furniture.filter(f => f.roomId === 'reserve');
-  for (const type of ['art-counter', 'easel', 'drying-rack', 'sink']) assert.ok(studio.some(f => f.type === type));
+  for (const type of ['art-counter', 'scroll-stand', 'drying-rack', 'sink']) assert.ok(studio.some(f => f.type === type));
   const sink = studio.find(f => f.type === 'sink');
   assert.equal(sink.parentId, 'F-R01');
   const drawer = studio.find(f => f.openedRect);
@@ -260,3 +260,72 @@ test('estate gates connect arrival, inner court, wing and a separately enclosed 
 });
 
 function nearBoolean(a, b) { return Math.abs(a - b) < EPS; }
+
+
+test('Chinese painting desk keeps a usable knee bay and a separate eastern brush-sink pedestal', () => {
+  const desk=model.furniture.find(f=>f.id==='F-R01'), chair=model.furniture.find(f=>f.id==='F-R03'), bay=desk.kneeSpace, sink=desk.sinkPedestal;
+  assert.ok(bay.w>=1.1 && bay.clearHeight>=.72);
+  assert.ok(chair.rect.x>=bay.x && chair.rect.x+chair.rect.w<=bay.x+bay.w);
+  assert.ok(sink.x>=bay.x+bay.w);
+  assert.equal(desk.height,.8);
+  assert.equal(model.furniture.some(f=>f.roomId==='reserve'&&f.type==='easel'),false);
+});
+
+test('estate fixed cameras stay in the intended rooms or safe dry outdoor surfaces', () => {
+  const e=model.estate;
+  assert.equal(model.version,4);
+  assert.equal(model.cameras.length,14);
+  assert.equal(e.wing.furniture.length,15);
+  assert.equal(e.outdoorFurniture.length,4);
+  for(const id of ['media','gym','pool','outer']){
+    const c=model.cameras.find(c=>c.id==='C-'+id);
+    assert.equal(c.scope,'estate');
+    assert.equal(c.eyeHeight,c.targetHeight);
+    assert.ok(c.fov>=45&&c.fov<=80);
+    if(['media','gym'].includes(id)){
+      const r=e.program.find(p=>p.id===id).rect;
+      assert.ok(inside(c.position,[[[r.x,r.y],[r.x+r.w,r.y],[r.x+r.w,r.y+r.d],[r.x,r.y+r.d]]]));
+    }else{
+      const r=e.bounds;
+      assert.ok(c.position[0]>r.x&&c.position[0]<r.x+r.w&&c.position[1]>r.y&&c.position[1]<r.y+r.d);
+      const pool=e.program.find(p=>p.id==='pool').rect;
+      assert.ok(distanceToRect(c.position,pool)>.1,'a photographic point cannot stand in pool water');
+    }
+    for(const f of [...model.furniture,...e.wing.furniture,...e.outdoorFurniture].filter(f=>f.blocking!==false))assert.ok(distanceToRect(c.position,f.rect)>.05,c.id+' intersects '+f.id);
+  }
+  for(const o of e.wing.openings){
+    const w=e.wing.walls.find(w=>w.id===o.wallId);
+    assert.ok(onSegment(o.a,w.a,w.b)&&onSegment(o.b,w.a,w.b));
+    assert.ok(o.head>o.sill&&o.head<=w.height);
+  }
+});
+
+test('the continuous house walk uses real gates and keeps full-width walking bands clear', () => {
+  const e=model.estate,p=e.poolSafety,r=p.rect;
+  const fences=[...model.walls.map(w=>({...w,holes:model.openings.filter(o=>o.wallId===w.id&&!o.type.includes('window'))})),...e.wing.walls.map(w=>({...w,holes:e.wing.openings.filter(o=>o.wallId===w.id&&!o.type.includes('window'))})),...e.boundaries.map(b=>({...b,holes:b.openings||(b.opening?[b.opening]:[])})),...[[[r.x,r.y],[r.x+r.w,r.y]],[[r.x+r.w,r.y],[r.x+r.w,r.y+r.d]],[[r.x,r.y+r.d],[r.x+r.w,r.y+r.d]],[[r.x,r.y],[r.x,r.y+r.d]]].map(([a,b],i)=>({id:'PF'+i,a,b,holes:i===0?[p.gate]:[]}))];
+  const segments=fences.flatMap(w=>{
+    const axis=near(w.a[0],w.b[0])?1:0,start=Math.min(w.a[axis],w.b[axis]),end=Math.max(w.a[axis],w.b[axis]),holes=w.holes.map(o=>[Math.min(o.a[axis],o.b[axis]),Math.max(o.a[axis],o.b[axis])]).sort((a,b)=>a[0]-b[0]),parts=[];let cursor=start;
+    for(const[a,b]of[...holes,[end,end]]){if(a>cursor+EPS){const p=[...w.a],q=[...w.a];p[axis]=cursor;q[axis]=a;parts.push({id:w.id,a:p,b:q});}cursor=Math.max(cursor,b);}return parts;
+  });
+  const objects=[...model.furniture,...e.wing.furniture,...e.outdoorFurniture].filter(f=>f.blocking!==false);
+  const graph=model.walk,byId=id=>graph.stations.find(s=>s.id===id);
+  for(const route of graph.connections){
+    assert.deepEqual(route.points[0],byId(route.from).position,route.id+' start');
+    assert.deepEqual(route.points.at(-1),byId(route.to).position,route.id+' end');
+    assert.ok(route.width>=.75);
+    for(let i=1;i<route.points.length;i++){
+      const a=route.points[i-1],b=route.points[i];assert.ok(near(a[0],b[0])||near(a[1],b[1]));
+      for(const p of sampleLine(a,b)){
+        for(const wall of segments)assert.ok(distanceToSegment(p,wall.a,wall.b)>=route.width/2-EPS,route.id+' hits '+wall.id+' at '+p);
+        for(const f of objects)assert.ok(distanceToRect(p,f.rect)>=route.width/2-EPS,route.id+' hits '+f.id+' at '+p);
+      }
+    }
+  }
+  const reached=new Set(['entry']);for(let step=0;step<graph.stations.length;step++)for(const c of graph.connections)if(reached.has(c.from)||reached.has(c.to)){reached.add(c.from);reached.add(c.to);}
+  assert.equal(reached.size,graph.stations.length);
+  assert.ok(graph.connections.some(c=>c.from==='changing'&&c.to==='outer'&&!c.gateIds.includes('PG01')),'the wing must return home without entering the pool enclosure');
+  const mediaReturn=graph.connections.find(c=>c.from==='media'&&c.to==='outer');
+  assert.ok(mediaReturn,'the media room needs its own exterior return, without detouring through changing');
+  assert.deepEqual(mediaReturn.gateIds,['ED03']);
+  assert.ok(mediaReturn.points.every(([x])=>x<19),'the return stays on the west garden path');
+});
