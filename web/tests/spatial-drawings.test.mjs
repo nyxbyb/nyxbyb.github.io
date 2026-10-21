@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { SPATIAL_MODEL as model } from '../room/spatial-model.js';
-import { boundarySegments, doorPlanGeometry, elevationPanels, elevationSVG, lightingPoints, perspectiveSVG, planSVG, sectionGeometry, sectionSVG } from '../room/spatial-drawings.js';
+import { boundarySegments, doorPlanGeometry, elevationPanels, elevationSVG, lightingPoints, perspectiveSVG, planSVG, sectionGeometry, sectionSVG, teaDetailSVG, teaCabinetSVG, courtyardBoundarySVG, estateSVG } from '../room/spatial-drawings.js';
 
 const near = (a, b) => assert.ok(Math.abs(a - b) < 1e-7, `${a} ≠ ${b}`);
 const room = id => model.zones.find(z => z.id === id);
@@ -114,6 +114,63 @@ test('opposite dining chair rows face the table in the perspective geometry', ()
     const worldY = top.map(p => camera.position[1] + right[1] * p[0] + forward[1] * p[2]);
     if (chair.rotation === 180) assert.ok(Math.min(...worldY) >= chair.rect.y + chair.rect.d - .1);
     else assert.ok(Math.max(...worldY) <= chair.rect.y + .1);
+  }
+});
+
+test('tea camera resolves by its stable id and W03 has real reveals, roof depth and planted edges', () => {
+  const tea = perspectiveSVG('C-tea', 'zh', true);
+  assert.equal(tea.cameraId, 'C-tea');
+  assert.equal(tea.eyeHeight, 1.25);
+  assert.equal(tea.targetHeight, 1.25);
+  assert.ok(tea.faces.some(f => f.sourceId === 'F-L10'));
+  assert.ok(tea.faces.some(f => f.sourceId === 'F-L21'));
+  assert.ok(tea.faces.some(f => f.sourceId === 'TL01'));
+  const scene = perspectiveSVG('C-garden', 'zh', true), camera = model.cameras.find(c => c.id === 'C-garden');
+  const dx = camera.target[0] - camera.position[0], dy = camera.target[1] - camera.position[1], len = Math.hypot(dx, dy), forward = [dx / len, dy / len], right = [-forward[1], forward[0]];
+  const world = p => [camera.position[0] + right[0] * p[0] + forward[0] * p[2], camera.position[1] + right[1] * p[0] + forward[1] * p[2], camera.eyeHeight + p[1]];
+  const reveal = scene.faces.filter(f => f.sourceId === 'V06:reveal').flatMap(f => f.points.map(world));
+  assert.ok(reveal.length);
+  near(Math.min(...reveal.map(p => p[1])), 8.88);
+  near(Math.max(...reveal.map(p => p[1])), 9.12);
+  const eaves = scene.faces.filter(f => f.sourceId === 'B-W03:eaves').flatMap(f => f.points.map(world));
+  near(Math.max(...eaves.map(p => p[1])) - 9.12, model.courtyardBoundary.roofEdge.projection);
+  near(Math.min(...eaves.map(p => p[2])), model.courtyardBoundary.roofEdge.soffit);
+  near(Math.max(...eaves.map(p => p[2])), model.courtyardBoundary.roofEdge.top);
+  assert.ok(scene.faces.some(f => f.sourceId === 'EB03'));
+  assert.ok(scene.faces.some(f => f.sourceId === 'EB01'));
+  const studio = perspectiveSVG('reserve', 'zh', true);
+  const easelFaces = studio.faces.filter(f => f.sourceId === 'F-R04');
+  assert.ok(easelFaces.length);
+  assert.ok(easelFaces.every(f => {
+    const height = Math.max(...f.points.map(p => p[1])) - Math.min(...f.points.map(p => p[1]));
+    const planSpan = Math.max(...f.points.flatMap(a => f.points.map(b => Math.hypot(a[0] - b[0], a[2] - b[2]))));
+    return height < 1.4 || planSpan < .2;
+  }), 'the easel must not become a solid full-height cabinet');
+});
+
+test('new tea, shared-boundary and estate sheets expose actual model codes in bilingual printable SVG', () => {
+  for (const lang of ['zh', 'en']) {
+    const svg = teaDetailSVG(lang, 'ritual');
+    assert.ok(svg.includes('data-tea-route="TR01"'));
+    assert.ok(svg.includes('data-tea-furniture="F-L21"'));
+    const wallLines = [...svg.matchAll(/<line\b[^>]*data-tea-wall="[^"]+"[^>]*>/g)];
+    assert.ok(wallLines.length);
+    for (const [tag] of wallLines) {
+      const attr = Object.fromEntries([...tag.matchAll(/(x1|x2|y1|y2)="([^"]+)"/g)].map(match => [match[1], Number(match[2])]));
+      for (const key of ['x1', 'x2']) assert.ok(attr[key] >= 70 - 1e-7 && attr[key] <= 620 + 1e-7, 'numerical crop must protect the legend');
+      for (const key of ['y1', 'y2']) assert.ok(attr[key] >= 170 - 1e-7 && attr[key] <= 439.5 + 1e-7, 'numerical crop must protect the header, even without clipPath support');
+    }
+    for (const layer of ['ritual', 'services', 'audio']) assert.ok(!teaDetailSVG(lang, layer).includes('NaN'));
+    assert.ok(teaDetailSVG(lang, 'services').includes('data-tea-point="TW02"'));
+    assert.ok(teaCabinetSVG(lang).includes('ST04'));
+    for (const id of ['W03', 'V06', 'D09']) assert.ok(courtyardBoundarySVG(lang).includes(id));
+    for (const phase of ['all', 'phase-1', 'phase-2', 'phase-3']) {
+      const site = estateSVG(lang, phase);
+      for (const id of ['gym', 'media', 'pool', 'arrival']) assert.ok(site.includes(`data-estate-program="${id}"`));
+      assert.ok(site.includes('PG01') && site.includes('EG01') && site.includes('ED05'));
+      assert.ok(!site.includes('NaN'));
+    }
+    assert.ok(estateSVG(lang, 'phase-1').includes('opacity="0.26"'));
   }
 });
 

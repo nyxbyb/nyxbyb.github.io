@@ -115,9 +115,10 @@ test('furniture footprints and camera positions remain in their own spaces', () 
       assert.ok(r.x >= s.x && r.y >= s.y && r.x + r.w <= s.x + s.w && r.y + r.d <= s.y + s.d, `${item.id}: overhangs its support`);
     }
   }
-  assert.equal(model.cameras.length, model.zones.length);
+  assert.ok(model.cameras.length >= model.zones.length);
+  for (const zone of model.zones) assert.equal(model.cameras.filter(c => c.id === 'C-' + zone.id).length, 1);
   for (const camera of model.cameras) {
-    assert.equal(cameraByRoomId(camera.roomId), camera);
+    if (camera.id === 'C-' + camera.roomId) assert.equal(cameraByRoomId(camera.roomId), camera);
     assert.ok(inside(camera.position, roomById(camera.roomId).polygons), `${camera.id}: camera outside its room`);
     assert.ok(inside(camera.target, roomById(camera.roomId).polygons), `${camera.id}: target outside its room`);
     assert.ok(camera.eyeHeight > 1 && camera.eyeHeight < model.ceilingHeight);
@@ -126,7 +127,7 @@ test('furniture footprints and camera positions remain in their own spaces', () 
   }
   assert.deepEqual(cameraByRoomId('living').position, [9.4, 6.5]);
   assert.equal(model.furniture.filter(item => item.type === 'monitor' && item.roomId === 'study').length, 2);
-  assert.deepEqual(model.furniture.filter(item => ['hob', 'sink'].includes(item.type)).map(item => item.parentId).sort(), ['F-K01', 'F-K02']);
+  assert.deepEqual(model.furniture.filter(item => ['hob', 'sink'].includes(item.type)).map(item => item.parentId).sort(), ['F-K01', 'F-K02', 'F-L10', 'F-R01']);
 });
 
 test('the full walking widths pass through real openings and avoid walls and occupied furniture', () => {
@@ -162,3 +163,100 @@ test('hinged doors keep the full opening sweep free of occupied furniture', () =
     }
   }
 });
+
+test('tea has useful counter depth, supported fixtures, a clear working aisle and independent scent storage', () => {
+  const counter = model.furniture.find(f => f.id === model.tea.counterId), table = model.furniture.find(f => f.id === model.tea.tableId);
+  assert.ok(counter.rect.w >= 2.5 && counter.rect.d >= .6);
+  assert.ok(table.rect.y - counter.rect.y - counter.rect.d >= 1.19, 'cabinet-to-table working aisle');
+  assert.equal(model.furniture.filter(f => f.parentId === counter.id).length, 4);
+  assert.ok(model.tea.storage.find(s => s.id === 'ST03').label.zh.includes('托盘'));
+  assert.equal(model.tea.storage.find(s => s.id === 'ST04').thermalBreak, true);
+  near(model.tea.storage.reduce((sum, s) => sum + s.rect.w, 0), counter.rect.w);
+  for (const point of model.tea.points) {
+    assert.ok(inside(point.position, roomById('living').polygons), `${point.id}: outside living`);
+    assert.ok(point.position[2] > 0 && point.position[2] <= model.ceilingHeight);
+    for (const lang of ['zh', 'en']) assert.ok(point.label[lang] && point.description[lang] && point.spec[lang]);
+  }
+  assert.equal(model.tea.scent.flameFree, true);
+  assert.ok(model.tea.scent.disabledSceneIds.includes('tea'));
+  assert.ok(!model.tea.scenes.find(s => s.id === 'tea').pointIds.includes('TA01'));
+  assert.ok(model.tea.scenes.find(s => s.id === 'solitude').pointIds.includes('TA01'));
+  const scent = model.furniture.find(f => f.id === model.tea.scent.furnitureId);
+  assert.equal(scent.parentId, 'F-L08');
+  assert.ok(counter.rect.x - scent.rect.x > 6, 'separate aroma and dry tea');
+  for (const f of model.furniture.filter(f => f.parentId === table.id)) {
+    const r = f.rect, t = table.rect;
+    for (const [x, y] of [[r.x, r.y], [r.x + r.w, r.y], [r.x, r.y + r.d], [r.x + r.w, r.y + r.d]]) assert.ok(((x - t.x - t.w / 2) / (t.w / 2)) ** 2 + ((y - t.y - t.d / 2) / (t.d / 2)) ** 2 <= 1, `${f.id} overhangs the round table`);
+  }
+  assert.equal(model.furniture.filter(f => f.parentId === table.id).length, 3);
+  assert.equal(model.openings.find(o => o.id === 'D09').leafCount, 1);
+  near(model.openings.find(o => o.id === 'D09').clearWidth, 1.2);
+});
+
+test('tea refill and cleanup stay clear of furniture and do not cross main circulation', () => {
+  const mainPoints = model.routes.flatMap(route => route.points.slice(1).flatMap((b, i) => sampleLine(route.points[i], b).map(p => ({ p, radius: route.width / 2 }))));
+  for (const route of model.tea.routes) for (let i = 1; i < route.points.length; i++) for (const p of sampleLine(route.points[i - 1], route.points[i])) {
+    for (const f of model.furniture.filter(f => f.blocking)) assert.ok(distanceToRect(p, f.rect) >= route.width / 2 - EPS, `${route.id} hits ${f.id}`);
+    for (const main of mainPoints) assert.ok(Math.hypot(p[0] - main.p[0], p[1] - main.p[1]) >= route.width / 2 + main.radius - EPS, `${route.id} crosses a primary walking band`);
+  }
+  assert.ok(model.tea.listening.angleDegrees > 59 && model.tea.listening.angleDegrees < 61);
+  near(model.tea.listening.sideDistances.left, model.tea.listening.sideDistances.right);
+});
+
+test('art studio has a separate brush sink, drying and drawers that open without blocking the entrance', () => {
+  const studio = model.furniture.filter(f => f.roomId === 'reserve');
+  for (const type of ['art-counter', 'easel', 'drying-rack', 'sink']) assert.ok(studio.some(f => f.type === type));
+  const sink = studio.find(f => f.type === 'sink');
+  assert.equal(sink.parentId, 'F-R01');
+  const drawer = studio.find(f => f.openedRect);
+  for (const f of studio.filter(f => f.blocking && f.id !== drawer.id)) {
+    const r = f.rect, d = drawer.openedRect;
+    assert.ok(r.x + r.w <= d.x || d.x + d.w <= r.x || r.y + r.d <= d.y || d.y + d.d <= r.y, `open drawer hits ${f.id}`);
+  }
+  const route = model.routes.find(r => r.id === 'R04');
+  for (let i = 1; i < route.points.length; i++) for (const p of sampleLine(route.points[i - 1], route.points[i])) assert.ok(distanceToRect(p, drawer.openedRect) >= route.width / 2 - EPS);
+});
+
+test('estate separates hypothetical land, original core, later wing and outdoor water/deck areas', () => {
+  const e = model.estate;
+  near(e.bounds.w * e.bounds.d, 1190);
+  near(e.program.filter(p => p.phase === 'phase-2').reduce((s, p) => s + p.netArea, 0), 60);
+  near(e.program.filter(p => p.phase === 'phase-2').reduce((s, p) => s + p.grossArea, 0), 72);
+  near(e.areaSummary.totalGrossArea, 272);
+  near(e.areaSummary.totalNetArea, 226);
+  const pool = e.program.find(p => p.id === 'pool'), deck = e.program.find(p => p.id === 'pool-deck');
+  near(pool.rect.w * pool.rect.d, pool.area);
+  near(deck.rect.w * deck.rect.d - pool.area, deck.area);
+  for (const p of e.program.filter(p => !p.includedInCore)) {
+    assert.ok(p.rect.x >= e.bounds.x && p.rect.y >= e.bounds.y && p.rect.x + p.rect.w <= e.bounds.x + e.bounds.w && p.rect.y + p.rect.d <= e.bounds.y + e.bounds.d);
+    for (const q of e.program.filter(q => q.id !== p.id && !q.includedInCore)) {
+      if (new Set([p.id, q.id]).has('pool-deck') && new Set([p.id, q.id]).has('pool')) continue;
+      assert.ok(p.rect.x + p.rect.w <= q.rect.x || q.rect.x + q.rect.w <= p.rect.x || p.rect.y + p.rect.d <= q.rect.y || q.rect.y + q.rect.d <= p.rect.y, `${p.id} overlaps ${q.id}`);
+    }
+  }
+});
+
+test('estate gates connect arrival, inner court, wing and a separately enclosed pool', () => {
+  const e = model.estate, south = e.boundaries.find(b => b.id === 'EB04'), pool = e.poolSafety;
+  assert.equal(south.opening.id, 'EG01');
+  assert.equal(pool.gate.selfClosing, true); assert.equal(pool.gate.selfLatching, true);
+  assert.ok(onSegment(pool.gate.a, [pool.rect.x, pool.rect.y], [pool.rect.x + pool.rect.w, pool.rect.y]));
+  assert.ok(onSegment(pool.gate.b, [pool.rect.x, pool.rect.y], [pool.rect.x + pool.rect.w, pool.rect.y]));
+  const fences = [...e.boundaries.map(b => ({ ...b, holes: b.openings || (b.opening ? [b.opening] : []) })), ...e.wing.walls.map(w => ({ ...w, holes: e.wing.openings.filter(o => o.wallId === w.id) }))];
+  fences.push(...[[[pool.rect.x, pool.rect.y], [pool.rect.x + pool.rect.w, pool.rect.y]], [[pool.rect.x + pool.rect.w, pool.rect.y], [pool.rect.x + pool.rect.w, pool.rect.y + pool.rect.d]], [[pool.rect.x, pool.rect.y + pool.rect.d], [pool.rect.x + pool.rect.w, pool.rect.y + pool.rect.d]], [[pool.rect.x, pool.rect.y], [pool.rect.x, pool.rect.y + pool.rect.d]]].map(([a, b], i) => ({ id: `PF${i + 1}`, a, b, holes: i === 0 ? [pool.gate] : [] })));
+  for (const route of [...e.paths, e.wing.mediaAccess]) for (let i = 1; i < route.points.length; i++) {
+    const a = route.points[i - 1], b = route.points[i];
+    for (const fence of fences) {
+      const vertical = nearBoolean(fence.a[0], fence.b[0]);
+      if (vertical === nearBoolean(a[0], b[0])) continue;
+      const p = vertical ? [fence.a[0], a[1]] : [a[0], fence.a[1]];
+      if (onSegment(p, a, b) && onSegment(p, fence.a, fence.b)) assert.ok(fence.holes.some(o => o.type !== 'window' && o.type !== 'blackout-window' && onSegment(p, o.a, o.b)), `${route.id || 'media'} crosses closed ${fence.id}`);
+    }
+    for (const p of sampleLine(a, b)) for (const f of e.wing.furniture.filter(f => f.blocking !== false)) assert.ok(distanceToRect(p, f.rect) >= route.width / 2 - EPS, `${route.id || 'media'} hits ${f.id}`);
+  }
+  const reached = new Set(['outside']);
+  for (let i = 0; i < 4; i++) for (const door of e.wing.openings.filter(o => o.type === 'door')) if (door.connects.some(id => reached.has(id))) door.connects.forEach(id => reached.add(id));
+  for (const id of ['gym', 'changing', 'plant', 'media']) assert.ok(reached.has(id));
+});
+
+function nearBoolean(a, b) { return Math.abs(a - b) < EPS; }

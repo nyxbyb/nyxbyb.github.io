@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "units": "m",
   "coordinateSystem": {
     "origin": "north-west control-line corner",
@@ -207,8 +207,8 @@
     {
       "id": "reserve",
       "label": {
-        "zh": "未来预留室",
-        "en": "A room for later"
+        "zh": "画室 · 可变工作间",
+        "en": "Art studio · adaptable room"
       },
       "area": 15.54,
       "polygons": [
@@ -1125,8 +1125,8 @@
     {
       "id": "D06",
       "label": {
-        "zh": "预留室门",
-        "en": "Reserve-room door"
+        "zh": "画室门",
+        "en": "Art-studio door"
       },
       "wallId": "W10",
       "type": "door",
@@ -1212,8 +1212,8 @@
     {
       "id": "D09",
       "label": {
-        "zh": "庭院推拉门",
-        "en": "Courtyard sliding door"
+        "zh": "庭院单扇旁侧推拉门",
+        "en": "Courtyard single-leaf side-sliding door"
       },
       "wallId": "W03",
       "type": "door",
@@ -1236,7 +1236,14 @@
       "sill": 0,
       "head": 2.5,
       "operation": "sliding",
-      "slideTo": "west"
+      "slideTo": "west",
+      "leafCount": 1,
+      "clearWidth": 1.2,
+      "parkingSide": "west",
+      "description": {
+        "zh": "净开目标1.20m，单扇向西旁侧轨道停放；不是在本1.2m洞内双扇互推。窗前停车、150mm实垛、轨道、密封与实际净开须一并选型核验。",
+        "en": "Target clear opening 1.20 m: one leaf parks to the west on a side track, rather than two leaves overlapping within this 1.2 m aperture. Verify parking in front of glazing, the 150 mm pier, track, seals and actual clear width together."
+      }
     },
     {
       "id": "P01",
@@ -1437,8 +1444,8 @@
     {
       "id": "V04",
       "label": {
-        "zh": "预留室北窗",
-        "en": "Reserve north window"
+        "zh": "画室北窗",
+        "en": "Art-studio north window"
       },
       "wallId": "W01",
       "type": "window",
@@ -1670,7 +1677,7 @@
       "type": "tea-table",
       "rect": {
         "x": 7.8,
-        "y": 7.7,
+        "y": 7.5,
         "w": 1.2,
         "d": 1.2
       },
@@ -1683,31 +1690,32 @@
       "id": "F-L05",
       "roomId": "living",
       "label": {
-        "zh": "茶椅一",
-        "en": "Tea chair one"
+        "zh": "南侧茶椅",
+        "en": "South tea chair"
       },
       "type": "chair",
       "rect": {
         "x": 8.15,
-        "y": 7.11,
+        "y": 9,
         "w": 0.5,
         "d": 0.48
       },
       "height": 0.78,
       "baseHeight": 0,
-      "blocking": true
+      "blocking": true,
+      "rotation": 180
     },
     {
       "id": "F-L06",
       "roomId": "living",
       "label": {
-        "zh": "茶椅二",
-        "en": "Tea chair two"
+        "zh": "西侧茶椅",
+        "en": "West tea chair"
       },
       "type": "chair",
       "rect": {
         "x": 7.15,
-        "y": 8.06,
+        "y": 7.86,
         "w": 0.5,
         "d": 0.48
       },
@@ -1720,13 +1728,13 @@
       "id": "F-L07",
       "roomId": "living",
       "label": {
-        "zh": "茶椅三",
-        "en": "Tea chair three"
+        "zh": "东侧茶椅",
+        "en": "East tea chair"
       },
       "type": "chair",
       "rect": {
         "x": 9.1,
-        "y": 8.06,
+        "y": 7.86,
         "w": 0.5,
         "d": 0.48
       },
@@ -1775,17 +1783,17 @@
       "id": "F-L10",
       "roomId": "living",
       "label": {
-        "zh": "茶具与在读收纳",
-        "en": "Tea ware and current-reading storage"
+        "zh": "洗沏收纳茶水柜",
+        "en": "Wash / brew / storage tea counter"
       },
-      "type": "shelf",
+      "type": "tea-counter",
       "rect": {
-        "x": 7.3,
+        "x": 7.15,
         "y": 5.7,
-        "w": 2.05,
-        "d": 0.36
+        "w": 2.55,
+        "d": 0.6
       },
-      "height": 0.85,
+      "height": 0.9,
       "baseHeight": 0,
       "blocking": true
     },
@@ -1798,7 +1806,7 @@
       },
       "type": "speaker",
       "rect": {
-        "x": 1.3,
+        "x": 1.66,
         "y": 8.4,
         "w": 0.26,
         "d": 0.3
@@ -1807,7 +1815,11 @@
       "baseHeight": 0,
       "blocking": true,
       "rotation": 180,
-      "frontDirection": "north"
+      "frontDirection": "north",
+      "toeInTrial": [
+        0,
+        20
+      ]
     },
     {
       "id": "F-L12",
@@ -1818,7 +1830,7 @@
       },
       "type": "speaker",
       "rect": {
-        "x": 4.05,
+        "x": 3.68,
         "y": 8.4,
         "w": 0.26,
         "d": 0.3
@@ -1827,21 +1839,25 @@
       "baseHeight": 0,
       "blocking": true,
       "rotation": 180,
-      "frontDirection": "north"
+      "frontDirection": "north",
+      "toeInTrial": [
+        0,
+        20
+      ]
     },
     {
       "id": "F-L13",
       "roomId": "living",
       "label": {
-        "zh": "转角阅读长凳",
+        "zh": "转角阅读矮凳",
         "en": "Reading bench in the return"
       },
       "type": "bench",
       "rect": {
-        "x": 6.55,
-        "y": 9.55,
-        "w": 2.65,
-        "d": 0.44
+        "x": 6.14,
+        "y": 9.2,
+        "w": 0.44,
+        "d": 1.1
       },
       "height": 0.43,
       "baseHeight": 0,
@@ -1864,6 +1880,177 @@
       "height": 0.015,
       "baseHeight": 0,
       "blocking": false
+    },
+    {
+      "id": "F-L15",
+      "roomId": "living",
+      "label": {
+        "zh": "独立茶洗水槽",
+        "en": "Dedicated tea sink"
+      },
+      "type": "sink",
+      "rect": {
+        "x": 7.3,
+        "y": 5.8,
+        "w": 0.42,
+        "d": 0.4
+      },
+      "height": 0.03,
+      "baseHeight": 0.9,
+      "blocking": false,
+      "parentId": "F-L10"
+    },
+    {
+      "id": "F-L16",
+      "roomId": "living",
+      "label": {
+        "zh": "沥水托盘",
+        "en": "Draining tray"
+      },
+      "type": "tray",
+      "rect": {
+        "x": 7.87,
+        "y": 5.82,
+        "w": 0.55,
+        "d": 0.38
+      },
+      "height": 0.025,
+      "baseHeight": 0.9,
+      "blocking": false,
+      "parentId": "F-L10"
+    },
+    {
+      "id": "F-L17",
+      "roomId": "living",
+      "label": {
+        "zh": "柜上定点烧水壶",
+        "en": "Stationary counter kettle"
+      },
+      "type": "kettle",
+      "rect": {
+        "x": 8.65,
+        "y": 5.91,
+        "w": 0.26,
+        "d": 0.26
+      },
+      "height": 0.28,
+      "baseHeight": 0.9,
+      "blocking": false,
+      "parentId": "F-L10"
+    },
+    {
+      "id": "F-L18",
+      "roomId": "living",
+      "label": {
+        "zh": "洁净续水托盘",
+        "en": "Clean serving tray"
+      },
+      "type": "tray",
+      "rect": {
+        "x": 9.12,
+        "y": 5.82,
+        "w": 0.45,
+        "d": 0.4
+      },
+      "height": 0.025,
+      "baseHeight": 0.9,
+      "blocking": false,
+      "parentId": "F-L10"
+    },
+    {
+      "id": "F-L19",
+      "roomId": "living",
+      "label": {
+        "zh": "阅读落地灯",
+        "en": "Reading floor lamp"
+      },
+      "type": "floor-lamp",
+      "rect": {
+        "x": 4.55,
+        "y": 6.13,
+        "w": 0.22,
+        "d": 0.22
+      },
+      "height": 1.5,
+      "baseHeight": 0,
+      "blocking": true
+    },
+    {
+      "id": "F-L20",
+      "roomId": "living",
+      "label": {
+        "zh": "可取出无明火扩香盘",
+        "en": "Removable flame-free scent tray"
+      },
+      "type": "scent-tray",
+      "rect": {
+        "x": 0.28,
+        "y": 5.78,
+        "w": 0.42,
+        "d": 0.2
+      },
+      "height": 0.025,
+      "baseHeight": 0.85,
+      "blocking": false,
+      "parentId": "F-L08"
+    },
+    {
+      "id": "F-L21",
+      "roomId": "living",
+      "label": {
+        "zh": "坐姿干泡茶盘",
+        "en": "Seated-brewing tray"
+      },
+      "type": "tea-tray",
+      "rect": {
+        "x": 8.12,
+        "y": 7.9,
+        "w": 0.48,
+        "d": 0.32
+      },
+      "height": 0.025,
+      "baseHeight": 0.68,
+      "blocking": false,
+      "parentId": "F-L04"
+    },
+    {
+      "id": "F-L22",
+      "roomId": "living",
+      "label": {
+        "zh": "小型保温续水壶",
+        "en": "Small insulated server"
+      },
+      "type": "insulated-server",
+      "rect": {
+        "x": 8.64,
+        "y": 7.76,
+        "w": 0.16,
+        "d": 0.16
+      },
+      "height": 0.24,
+      "baseHeight": 0.68,
+      "blocking": false,
+      "parentId": "F-L04"
+    },
+    {
+      "id": "F-L23",
+      "roomId": "living",
+      "label": {
+        "zh": "小废水盂",
+        "en": "Small tea-waste bowl"
+      },
+      "type": "waste-bowl",
+      "rect": {
+        "x": 8,
+        "y": 8.23,
+        "w": 0.18,
+        "d": 0.18
+      },
+      "height": 0.1,
+      "baseHeight": 0.68,
+      "blocking": false,
+      "parentId": "F-L04",
+      "shape": "ellipse"
     },
     {
       "id": "F-S01",
@@ -2353,17 +2540,17 @@
       "id": "F-R01",
       "roomId": "reserve",
       "label": {
-        "zh": "可移动桌",
-        "en": "Movable table"
+        "zh": "可洗画材工作台",
+        "en": "Washable art workbench"
       },
-      "type": "desk",
+      "type": "art-counter",
       "rect": {
-        "x": 11.1,
-        "y": 1.2,
-        "w": 1.8,
-        "d": 0.8
+        "x": 10.5,
+        "y": 0.2,
+        "w": 2.9,
+        "d": 0.65
       },
-      "height": 0.74,
+      "height": 0.9,
       "baseHeight": 0,
       "blocking": true,
       "provisional": true
@@ -2372,32 +2559,38 @@
       "id": "F-R02",
       "roomId": "reserve",
       "label": {
-        "zh": "可移动收纳",
-        "en": "Movable storage"
+        "zh": "平面画材抽屉柜",
+        "en": "Flat art-supply drawers"
       },
       "type": "shelf",
       "rect": {
         "x": 10.5,
-        "y": 0.2,
-        "w": 0.56,
-        "d": 2.5
+        "y": 1.65,
+        "w": 0.65,
+        "d": 1.95
       },
-      "height": 1.1,
+      "height": 0.8,
       "baseHeight": 0,
       "blocking": true,
-      "provisional": true
+      "provisional": true,
+      "openedRect": {
+        "x": 11.15,
+        "y": 1.65,
+        "w": 0.55,
+        "d": 1.95
+      }
     },
     {
       "id": "F-R03",
       "roomId": "reserve",
       "label": {
-        "zh": "活动椅",
-        "en": "Loose chair"
+        "zh": "画室活动椅",
+        "en": "Art-studio chair"
       },
       "type": "chair",
       "rect": {
-        "x": 11.75,
-        "y": 2.11,
+        "x": 11.85,
+        "y": 1.05,
         "w": 0.5,
         "d": 0.48
       },
@@ -2406,6 +2599,63 @@
       "blocking": true,
       "rotation": 180,
       "provisional": true
+    },
+    {
+      "id": "F-R04",
+      "roomId": "reserve",
+      "label": {
+        "zh": "独立画架",
+        "en": "Freestanding easel"
+      },
+      "type": "easel",
+      "rect": {
+        "x": 11.85,
+        "y": 2.2,
+        "w": 0.65,
+        "d": 0.7
+      },
+      "height": 1.75,
+      "baseHeight": 0,
+      "blocking": true,
+      "provisional": true
+    },
+    {
+      "id": "F-R05",
+      "roomId": "reserve",
+      "label": {
+        "zh": "作品晾干架",
+        "en": "Artwork drying rack"
+      },
+      "type": "drying-rack",
+      "rect": {
+        "x": 13.45,
+        "y": 1.25,
+        "w": 0.35,
+        "d": 1.6
+      },
+      "height": 1.7,
+      "baseHeight": 0,
+      "blocking": true,
+      "provisional": true
+    },
+    {
+      "id": "F-R06",
+      "roomId": "reserve",
+      "label": {
+        "zh": "独立洗笔盆",
+        "en": "Dedicated brush-washing sink"
+      },
+      "type": "sink",
+      "rect": {
+        "x": 12.85,
+        "y": 0.3,
+        "w": 0.4,
+        "d": 0.42
+      },
+      "height": 0.03,
+      "baseHeight": 0.9,
+      "blocking": false,
+      "parentId": "F-R01"
     },
     {
       "id": "F-W01",
@@ -2668,8 +2918,8 @@
     {
       "id": "R02",
       "label": {
-        "zh": "洗手备茶 · 起居 · 入庭",
-        "en": "Prepare tea · living · courtyard"
+        "zh": "归家 · 回廊 · 起居 · 入庭",
+        "en": "Arrive · gallery · living · courtyard"
       },
       "width": 0.9,
       "rooms": [
@@ -2689,11 +2939,11 @@
         ],
         [
           10.65,
-          6.65
+          4.9
         ],
         [
           6.4,
-          6.65
+          4.9
         ],
         [
           6.4,
@@ -2718,7 +2968,6 @@
       "width": 0.75,
       "rooms": [
         "kitchen",
-        "living",
         "entry",
         "bedroom"
       ],
@@ -2729,14 +2978,6 @@
         ],
         [
           10.65,
-          6.65
-        ],
-        [
-          6.4,
-          6.65
-        ],
-        [
-          6.4,
           4.9
         ],
         [
@@ -2750,6 +2991,36 @@
         [
           2.5,
           3.35
+        ]
+      ]
+    },
+    {
+      "id": "R04",
+      "label": {
+        "zh": "画室入口 · 画架 · 洗笔台",
+        "en": "Studio entrance · easel · brush sink"
+      },
+      "width": 0.75,
+      "rooms": [
+        "entry",
+        "reserve"
+      ],
+      "points": [
+        [
+          13.15,
+          4.9
+        ],
+        [
+          13.15,
+          3.1
+        ],
+        [
+          13,
+          3.1
+        ],
+        [
+          13,
+          1.3
         ]
       ]
     }
@@ -2834,16 +3105,16 @@
       "id": "C-reserve",
       "roomId": "reserve",
       "position": [
-        12.6,
-        3.75
+        13.45,
+        3.2
       ],
       "target": [
-        11.65,
-        1.6
+        12.5,
+        0.6
       ],
       "eyeHeight": 1.5,
       "targetHeight": 1.5,
-      "fov": 65
+      "fov": 75
     },
     {
       "id": "C-bath",
@@ -2879,18 +3150,2216 @@
       "id": "C-garden",
       "roomId": "garden",
       "position": [
-        5.3,
-        13.2
+        4.4,
+        13.7
       ],
       "target": [
-        2.3,
-        10.8
+        3,
+        9
       ],
       "eyeHeight": 1.5,
       "targetHeight": 1.5,
-      "fov": 75
+      "fov": 78
+    },
+    {
+      "id": "C-tea",
+      "roomId": "living",
+      "position": [
+        9.55,
+        10.2
+      ],
+      "target": [
+        8.35,
+        6.8
+      ],
+      "eyeHeight": 1.25,
+      "targetHeight": 1.25,
+      "fov": 75,
+      "label": {
+        "zh": "茶柜与茶席近看",
+        "en": "Tea counter and table study"
+      }
     }
   ],
+  "tea": {
+    "id": "tea-study",
+    "roomId": "living",
+    "cameraId": "C-tea",
+    "counterId": "F-L10",
+    "tableId": "F-L04",
+    "label": {
+      "zh": "茶与听音 · 日常深化",
+      "en": "Tea and listening · daily-life study"
+    },
+    "description": {
+      "zh": "柜上烧水、坐下冲泡、收杯、清洗和归柜在同一茶湾内闭环。主通行改经回廊；热电壶留在柜上，小保温壶送到茶桌，坐姿干泡不横越归家或夜间路线。",
+      "en": "Heat water at the counter, brew while seated, then wash and store within one tea bay. Main circulation uses the gallery; the electric kettle stays put while a small insulated server supplies the seated ritual."
+    },
+    "stations": [
+      {
+        "id": "TS01",
+        "label": {
+          "zh": "洗涤与弃水",
+          "en": "Wash and empty"
+        },
+        "description": {
+          "zh": "独立茶洗槽接收茶水与杯具；洗笔另在画室，不借用食品或茶水槽。",
+          "en": "A dedicated tea sink handles cups and tea waste. Brush washing has its own studio basin."
+        },
+        "furnitureId": "F-L15",
+        "kind": "wash",
+        "position": [
+          7.51,
+          6,
+          0.93
+        ],
+        "rect": {
+          "x": 7.3,
+          "y": 5.8,
+          "w": 0.42,
+          "d": 0.4
+        }
+      },
+      {
+        "id": "TS02",
+        "label": {
+          "zh": "沥水与擦干",
+          "en": "Drain and dry"
+        },
+        "description": {
+          "zh": "洗后在水槽旁沥干，再擦干归柜；不把湿杯直接放入干茶抽屉。",
+          "en": "Drain next to the sink, dry, then store. Keep wet cups out of the dry-tea drawers."
+        },
+        "furnitureId": "F-L16",
+        "kind": "dry",
+        "position": [
+          8.145,
+          6.010000000000001,
+          0.925
+        ],
+        "rect": {
+          "x": 7.87,
+          "y": 5.82,
+          "w": 0.55,
+          "d": 0.38
+        }
+      },
+      {
+        "id": "TS03",
+        "label": {
+          "zh": "定点烧水",
+          "en": "Stationary water heating"
+        },
+        "description": {
+          "zh": "电壶固定在耐热柜面，不端着通电或沸腾的电壶跨主路；具体温度按所泡茶类决定。",
+          "en": "Keep the electric kettle on its heat-resistant counter, away from main circulation. Select water temperature for the tea."
+        },
+        "furnitureId": "F-L17",
+        "kind": "heat",
+        "position": [
+          8.780000000000001,
+          6.04,
+          1.1800000000000002
+        ],
+        "rect": {
+          "x": 8.65,
+          "y": 5.91,
+          "w": 0.26,
+          "d": 0.26
+        }
+      },
+      {
+        "id": "TS04",
+        "label": {
+          "zh": "洁净续水与托盘",
+          "en": "Clean refill and tray"
+        },
+        "description": {
+          "zh": "柜上烧水后装入小保温壶，加盖托盘送至茶桌；0.55m只是人员局部服务站位间隔，不是器具全程。",
+          "en": "Fill a small insulated server at the counter and carry it covered on the tray. The 0.55 m measure describes local standing positions, not the complete vessel journey."
+        },
+        "furnitureId": "F-L18",
+        "kind": "serve",
+        "position": [
+          9.344999999999999,
+          6.0200000000000005,
+          0.925
+        ],
+        "rect": {
+          "x": 9.12,
+          "y": 5.82,
+          "w": 0.45,
+          "d": 0.4
+        }
+      },
+      {
+        "id": "TS05",
+        "label": {
+          "zh": "坐姿干泡茶席",
+          "en": "Seated tea ritual"
+        },
+        "description": {
+          "zh": "直径1.2m、桌高0.68m三人茶席，配茶盘、壶承/公道杯位置、小保温壶和废水盂；坐下冲泡与品饮，茶水柜负责烧水和洗涤。",
+          "en": "A 1.2 m-diameter, 0.68 m-high table for three, with a tray, brewing / serving space, insulated server and waste bowl. Brew and drink seated; heat and wash at the counter."
+        },
+        "furnitureId": "F-L04",
+        "kind": "table",
+        "position": [
+          8.4,
+          8.1,
+          0.68
+        ],
+        "rect": {
+          "x": 7.8,
+          "y": 7.5,
+          "w": 1.2,
+          "d": 1.2
+        }
+      }
+    ],
+    "points": [
+      {
+        "id": "TL01",
+        "label": {
+          "zh": "茶席吊灯",
+          "en": "Tea-table pendant"
+        },
+        "description": {
+          "zh": "灯位对准茶桌，不作为穿行区低垂障碍。",
+          "en": "The pendant sits above the table, outside walking routes."
+        },
+        "kind": "lighting",
+        "position": [
+          8.4,
+          8.1,
+          1.85
+        ],
+        "spec": {
+          "zh": "暖色可调光；下沿研究高度1.70m，显色、眩光与实物样板待核。",
+          "en": "Warm dimmable light; concept lower edge 1.70 m. Verify rendering, glare and a physical sample."
+        },
+        "sceneIds": [
+          "tea",
+          "solitude"
+        ],
+        "fixture": {
+          "shape": "pendant",
+          "diameter": 0.42,
+          "height": 0.3
+        }
+      },
+      {
+        "id": "TL02",
+        "label": {
+          "zh": "茶柜工作灯",
+          "en": "Tea-counter task light"
+        },
+        "description": {
+          "zh": "连续照亮水槽、沥水、烧水和托盘区。",
+          "en": "Light the sink, drying, heating and clean-tray zones together."
+        },
+        "kind": "lighting",
+        "position": [
+          8.425,
+          5.76,
+          2.3
+        ],
+        "spec": {
+          "zh": "2.30m线性工作灯；清洗场景优先操作照度，回路与灯型未定。",
+          "en": "2.30 m linear task light; prioritize useful light for cleaning. Circuit and product remain open."
+        },
+        "sceneIds": [
+          "tea",
+          "clean"
+        ],
+        "fixture": {
+          "shape": "linear",
+          "length": 2.3,
+          "depth": 0.035,
+          "height": 0.035
+        }
+      },
+      {
+        "id": "TL03",
+        "label": {
+          "zh": "阅读落地灯",
+          "en": "Reading floor lamp"
+        },
+        "description": {
+          "zh": "灯光停留在读书椅与唱片柜附近，不照向显示器或卧室。",
+          "en": "Keep reading light by the chair and audio cabinet."
+        },
+        "kind": "lighting",
+        "position": [
+          4.66,
+          6.24,
+          1.5
+        ],
+        "spec": {
+          "zh": "独立开关、局部照明；底座F-L19。",
+          "en": "Independent local light; base footprint F-L19."
+        },
+        "sceneIds": [
+          "music",
+          "solitude"
+        ],
+        "furnitureId": "F-L19"
+      },
+      {
+        "id": "TC01",
+        "label": {
+          "zh": "入口场景控制",
+          "en": "Entry scene control"
+        },
+        "description": {
+          "zh": "从回廊入起居时可切换茶、听音、清洗和独处。",
+          "en": "Choose tea, music, cleaning or solitude on entering from the gallery."
+        },
+        "kind": "switch",
+        "position": [
+          7.05,
+          5.61,
+          1.1
+        ],
+        "spec": {
+          "zh": "靠P01东门垛；可用物理按键，不依赖手机。",
+          "en": "Beside the east jamb of P01; physical controls remain usable without a phone."
+        },
+        "sceneIds": [
+          "tea",
+          "music",
+          "clean",
+          "solitude"
+        ],
+        "wallId": "W11"
+      },
+      {
+        "id": "TP01",
+        "label": {
+          "zh": "烧水专用插座位",
+          "en": "Kettle outlet position"
+        },
+        "description": {
+          "zh": "插座在烧水区后方，与西侧茶洗槽分开。",
+          "en": "An outlet behind the heating zone, separated from the western sink."
+        },
+        "kind": "power",
+        "position": [
+          8.78,
+          5.61,
+          1.15
+        ],
+        "spec": {
+          "zh": "独立可断电；负荷、保护与防溅规格由电气专业核定。",
+          "en": "Individually switchable; an electrician must determine load, protection and splash requirements."
+        },
+        "sceneIds": [
+          "tea",
+          "clean"
+        ],
+        "wallId": "W11",
+        "furnitureId": "F-L17"
+      },
+      {
+        "id": "TP02",
+        "label": {
+          "zh": "音响低位电源",
+          "en": "Low audio power"
+        },
+        "description": {
+          "zh": "电源与信号在唱片柜后检修；不沿D09门槛铺活动线。",
+          "en": "Service power behind the record cabinet; no loose cable crosses D09."
+        },
+        "kind": "power",
+        "position": [
+          5,
+          5.61,
+          0.3
+        ],
+        "spec": {
+          "zh": "柜后可检修；扬声器线沿北侧与西侧柜边暗藏，实际走线待声学/电气协调。",
+          "en": "Keep service access. Conceal speaker runs along cabinetry and the west edge after acoustic/electrical coordination."
+        },
+        "sceneIds": [
+          "music",
+          "solitude"
+        ],
+        "wallId": "W11"
+      },
+      {
+        "id": "TP03",
+        "label": {
+          "zh": "茶柜备用电源",
+          "en": "Spare tea-counter power"
+        },
+        "description": {
+          "zh": "在洁净托盘一端预留，不放在水槽正上方。",
+          "en": "Reserve power at the clean-tray end, away from directly above the sink."
+        },
+        "kind": "power",
+        "position": [
+          9.45,
+          5.61,
+          1.15
+        ],
+        "spec": {
+          "zh": "用途与数量待设备清单确定；不用插线板堆叠。",
+          "en": "Finalize use and count from the equipment inventory; avoid piled extension strips."
+        },
+        "sceneIds": [
+          "tea",
+          "clean"
+        ],
+        "wallId": "W11"
+      },
+      {
+        "id": "TN01",
+        "label": {
+          "zh": "有线音频与网络",
+          "en": "Wired audio / network"
+        },
+        "description": {
+          "zh": "唱片、流媒体和未来设备可共用可检修信号位。",
+          "en": "Provide serviceable connections for records, streaming and future equipment."
+        },
+        "kind": "data",
+        "position": [
+          5.12,
+          5.61,
+          0.3
+        ],
+        "spec": {
+          "zh": "强弱电分路策略待专业深化，不把线缆跨通道外露。",
+          "en": "Coordinate signal/power separation professionally; keep cables off walking routes."
+        },
+        "sceneIds": [
+          "music"
+        ],
+        "wallId": "W11"
+      },
+      {
+        "id": "TW01",
+        "label": {
+          "zh": "茶洗给水位",
+          "en": "Tea-sink water supply"
+        },
+        "description": {
+          "zh": "给水在水槽柜内可检修。",
+          "en": "Keep the supply accessible inside the sink cabinet."
+        },
+        "kind": "supply",
+        "position": [
+          7.51,
+          5.82,
+          0.55
+        ],
+        "spec": {
+          "zh": "过滤、检修阀与防漏措施待设备选择。",
+          "en": "Specify filtration, isolation and leak measures after equipment selection."
+        },
+        "sceneIds": [
+          "tea",
+          "clean"
+        ],
+        "furnitureId": "F-L15"
+      },
+      {
+        "id": "TW02",
+        "label": {
+          "zh": "茶洗排水位",
+          "en": "Tea-sink drainage"
+        },
+        "description": {
+          "zh": "湿区沿北服务带向餐厨协调，不以图中折线代替真实排水坡度。",
+          "en": "Coordinate drainage along the northern service strip toward the kitchen; a diagram is not a drainage-gradient design."
+        },
+        "kind": "drain",
+        "position": [
+          7.51,
+          5.82,
+          0.35
+        ],
+        "spec": {
+          "zh": "先弃茶渣后冲洗；存水弯、坡度、穿梁和清扫口由机电核验。",
+          "en": "Remove leaves before rinsing. Verify traps, falls, structure crossings and cleaning access professionally."
+        },
+        "sceneIds": [
+          "clean"
+        ],
+        "furnitureId": "F-L15"
+      },
+      {
+        "id": "TA01",
+        "label": {
+          "zh": "独处香气位",
+          "en": "Optional solitude scent"
+        },
+        "description": {
+          "zh": "西端独立香品格与可取出无明火扩香盘，远离干茶、烧水和音响；泡茶时关闭并收起。",
+          "en": "A closed western scent drawer and removable flame-free tray, away from tea, heating and audio. Close and put away for tea."
+        },
+        "kind": "scent",
+        "position": [
+          0.49,
+          5.88,
+          0.875
+        ],
+        "spec": {
+          "zh": "不用明火、雾化水汽或常开扩香；气味不代替通风，可完全撤掉。",
+          "en": "No flame, mist or continuous diffusion. Scent does not replace ventilation and can be removed entirely."
+        },
+        "sceneIds": [
+          "solitude"
+        ],
+        "furnitureId": "F-L20"
+      }
+    ],
+    "storage": [
+      {
+        "id": "ST01",
+        "label": {
+          "zh": "水槽与检修",
+          "en": "Sink / service bay"
+        },
+        "description": {
+          "zh": "留给存水弯、阀门与可取出的废水/茶渣处理，不装干茶。",
+          "en": "Reserve room for trap, valves and removable tea-waste handling; no dry tea here."
+        },
+        "rect": {
+          "x": 7.15,
+          "y": 5.7,
+          "w": 0.6,
+          "d": 0.6
+        },
+        "baseHeight": 0.08,
+        "height": 0.78,
+        "opening": "service-door"
+      },
+      {
+        "id": "ST02",
+        "label": {
+          "zh": "杯具抽屉",
+          "en": "Cup drawers"
+        },
+        "description": {
+          "zh": "常用杯在上、备用杯在下；洗后擦干再归位。",
+          "en": "Daily cups above, spares below; dry them before storing."
+        },
+        "rect": {
+          "x": 7.75,
+          "y": 5.7,
+          "w": 0.6,
+          "d": 0.6
+        },
+        "baseHeight": 0.08,
+        "height": 0.78,
+        "opening": "drawer",
+        "drawerHeights": [
+          0.18,
+          0.24,
+          0.36
+        ]
+      },
+      {
+        "id": "ST03",
+        "label": {
+          "zh": "托盘与耐热耗材",
+          "en": "Trays / heat-zone supplies"
+        },
+        "description": {
+          "zh": "烧水壶下不放干茶，保留耐热耗材、托盘与检修；茶布分干湿归位。",
+          "en": "No dry tea beneath the kettle; keep heat-tolerant supplies, trays and access here."
+        },
+        "rect": {
+          "x": 8.35,
+          "y": 5.7,
+          "w": 0.65,
+          "d": 0.6
+        },
+        "baseHeight": 0.08,
+        "height": 0.78,
+        "opening": "drawer",
+        "drawerHeights": [
+          0.18,
+          0.24,
+          0.36
+        ]
+      },
+      {
+        "id": "ST04",
+        "label": {
+          "zh": "洁净端干茶内盒",
+          "en": "Dry-tea tins at the clean end"
+        },
+        "description": {
+          "zh": "干茶在最东洁净端密封内盒，与烧水格设隔热分隔；温湿度和存量仍需试用核验。",
+          "en": "Store sealed dry tea at the eastern clean end, thermally separated from the heating module. Check temperature, humidity and real inventory."
+        },
+        "rect": {
+          "x": 9,
+          "y": 5.7,
+          "w": 0.7,
+          "d": 0.6
+        },
+        "baseHeight": 0.08,
+        "height": 0.78,
+        "opening": "door",
+        "shelves": [
+          0.4
+        ],
+        "thermalBreak": true
+      }
+    ],
+    "routes": [
+      {
+        "id": "TR01",
+        "label": {
+          "zh": "局部续水",
+          "en": "Local refill"
+        },
+        "description": {
+          "zh": "热电壶留柜上，小保温壶加盖置托盘送茶席；图示0.55m是东北侧人员局部站位间隔，不是器具全程；不跨主路。",
+          "en": "Keep the electric kettle on the counter and carry a covered insulated server on the tray. The 0.55 m line is a local standing interval, not the complete vessel journey; main routes stay separate."
+        },
+        "kind": "hot-service",
+        "width": 0.5,
+        "points": [
+          [
+            9.1,
+            6.65
+          ],
+          [
+            9.1,
+            7.2
+          ]
+        ]
+      },
+      {
+        "id": "TR02",
+        "label": {
+          "zh": "收杯 · 清洗 · 归柜",
+          "en": "Collect · wash · store"
+        },
+        "description": {
+          "zh": "从东北服务位收杯，沿茶柜前回到西侧洗槽，再沥干归柜；干湿操作分端。",
+          "en": "Collect at the northeast service point, return along the counter to the west sink, then dry and store."
+        },
+        "kind": "cleanup",
+        "width": 0.5,
+        "points": [
+          [
+            9.1,
+            7.2
+          ],
+          [
+            9.1,
+            6.65
+          ],
+          [
+            7.5,
+            6.65
+          ]
+        ]
+      }
+    ],
+    "steps": [
+      {
+        "id": "T01",
+        "label": {
+          "zh": "取器与布席",
+          "en": "Set the tray"
+        },
+        "description": {
+          "zh": "从ST02取干杯、ST03取茶布托盘、ST04取密封干茶，先在柜上布置；主路保持畅通。",
+          "en": "Take cups from ST02, cloth / trays from ST03 and sealed dry tea from ST04; prepare on the counter and keep circulation clear."
+        }
+      },
+      {
+        "id": "T02",
+        "label": {
+          "zh": "柜上烧水",
+          "en": "Heat at the counter"
+        },
+        "description": {
+          "zh": "在TS03烧水，装入小保温壶后加盖、置洁净托盘送茶席；电水壶保持原位，温度按茶类决定。",
+          "en": "Heat at TS03, then cover the small insulated server and carry it on the clean tray. Keep the electric kettle in place; select temperature for the tea."
+        }
+      },
+      {
+        "id": "T03",
+        "label": {
+          "zh": "坐下冲泡与慢饮",
+          "en": "Brew seated / drink slowly"
+        },
+        "description": {
+          "zh": "在TS05茶盘上坐姿干泡，用壶承、公道杯和小废水盂完成仪式；TR01标局部服务站位，不把沸壶穿过归家路径。",
+          "en": "Brew seated at the TS05 tray with brewing / serving space and a small waste bowl. TR01 marks local service positions rather than carrying a boiling kettle through arrival routes."
+        }
+      },
+      {
+        "id": "T04",
+        "label": {
+          "zh": "弃渣与清洗",
+          "en": "Empty / wash"
+        },
+        "description": {
+          "zh": "茶渣先入可取出的容器，杯具到TS01；不用茶水槽处理画材。",
+          "en": "Collect leaves before washing cups at TS01; keep art materials out of this sink."
+        }
+      },
+      {
+        "id": "T05",
+        "label": {
+          "zh": "沥干与归位",
+          "en": "Dry / reset"
+        },
+        "description": {
+          "zh": "TS02沥干、擦干、回到对应柜格；夜间只留局部灯光。",
+          "en": "Drain at TS02, dry, return to the correct module and leave only local evening light."
+        }
+      }
+    ],
+    "scenes": [
+      {
+        "id": "tea",
+        "label": {
+          "zh": "泡茶",
+          "en": "Tea"
+        },
+        "description": {
+          "zh": "柜上烧水、坐下干泡，茶柜工作灯与茶席灯分层开启；主路绕过操作区，香品关闭收起。",
+          "en": "Heat at the counter and brew seated under layered light; keep main routes clear and put scent products away."
+        },
+        "layer": "ritual",
+        "pointIds": [
+          "TL01",
+          "TL02",
+          "TC01",
+          "TP01"
+        ],
+        "stationIds": [
+          "TS01",
+          "TS02",
+          "TS03",
+          "TS04",
+          "TS05"
+        ]
+      },
+      {
+        "id": "music",
+        "label": {
+          "zh": "听音",
+          "en": "Music"
+        },
+        "description": {
+          "zh": "茶柜灯关闭或调暗，听位回到沙发中央；三角形只是约60°试摆起点。",
+          "en": "Dim the counter, sit at the sofa centre and treat the approximately 60° triangle as a listening trial."
+        },
+        "layer": "audio",
+        "pointIds": [
+          "TL03",
+          "TP02",
+          "TN01"
+        ]
+      },
+      {
+        "id": "clean",
+        "label": {
+          "zh": "清洗",
+          "en": "Clean"
+        },
+        "description": {
+          "zh": "提高柜面工作照明，先弃渣再洗杯，沥干归柜后结束。",
+          "en": "Use task light; remove leaves, wash, dry and reset."
+        },
+        "layer": "services",
+        "pointIds": [
+          "TL02",
+          "TP01",
+          "TP03",
+          "TW01",
+          "TW02"
+        ]
+      },
+      {
+        "id": "solitude",
+        "label": {
+          "zh": "独处",
+          "en": "Solitude"
+        },
+        "description": {
+          "zh": "只留阅读灯或低亮茶灯；香气可选、可撤，机器与工作仍在可关门的书房。",
+          "en": "Keep local light and optional removable scent while work and machines remain behind the study door."
+        },
+        "layer": "audio",
+        "pointIds": [
+          "TL01",
+          "TL03",
+          "TP02",
+          "TA01"
+        ]
+      }
+    ],
+    "listening": {
+      "seatPosition": [
+        2.8,
+        6.8
+      ],
+      "speakerIds": [
+        "F-L11",
+        "F-L12"
+      ],
+      "speakerCenters": [
+        [
+          1.79,
+          8.55
+        ],
+        [
+          3.81,
+          8.55
+        ]
+      ],
+      "sideDistances": {
+        "left": 2.020544481074347,
+        "right": 2.0205444810743476,
+        "between": 2.02
+      },
+      "angleDegrees": 59.982172646682606,
+      "triangle": [
+        [
+          1.79,
+          8.55
+        ],
+        [
+          2.8,
+          6.8
+        ],
+        [
+          3.81,
+          8.55
+        ]
+      ],
+      "description": {
+        "zh": "主听位(2.80,6.80)，两箱中心距2.02m、左右听距约2.02m，夹角约60.0°。这是一组可试听的约60°试摆；窗面反射、帘布、音量和0–20°内倾仍需现场调，不承诺茶席每个座位都是主听位。",
+        "en": "The main seat (2.80, 6.80) has a 2.02 m speaker span, approximately 2.02 m listening distances and a 60.0° angle. This is an adjustable approximately 60° trial. Tune glass reflections, curtains, level and 0–20° toe-in on site; tea seats are not all sweet spots."
+      }
+    },
+    "scent": {
+      "id": "SC01",
+      "label": {
+        "zh": "香气可选，也可以没有",
+        "en": "Optional scent, including none"
+      },
+      "description": {
+        "zh": "西段F-L08独立闭合香品格与F-L20可取出扩香盘；与干茶和音响分开。只在独处场景按需短时使用，泡茶时关闭收起，不设置明火和雾化水汽。",
+        "en": "A closed scent compartment in F-L08 and removable F-L20 tray stay separate from tea and audio. Optional short use during solitude; close and put away for tea. No flame or mist."
+      },
+      "furnitureId": "F-L20",
+      "storageParentId": "F-L08",
+      "storageRect": {
+        "x": 0.12,
+        "y": 5.7,
+        "w": 0.65,
+        "d": 0.36
+      },
+      "enabledSceneIds": [
+        "solitude"
+      ],
+      "disabledSceneIds": [
+        "tea",
+        "clean"
+      ],
+      "flameFree": true,
+      "removable": true
+    }
+  },
+  "estate": {
+    "id": "estate-study",
+    "label": {
+      "zh": "园居 · 分期远景",
+      "en": "Garden home · phased horizon"
+    },
+    "description": {
+      "zh": "1190㎡假想地块，用于园居关系研究，不是真实土地、测绘或可获批的用地结论。主宅200㎡保持独立核算，新增翼房与泳池按分期另列。",
+      "en": "A hypothetical 1,190 m² parcel for spatial study, not actual land, a survey or an approval. The 200 m² core remains separate from a phased wing and outdoor pool."
+    },
+    "bounds": {
+      "x": -5,
+      "y": -5,
+      "w": 34,
+      "d": 35,
+      "area": 1190
+    },
+    "phases": [
+      {
+        "id": "phase-1",
+        "label": {
+          "zh": "一期 · 主宅与内庭",
+          "en": "Phase 1 · core and courtyard"
+        },
+        "description": {
+          "zh": "200㎡概念建面含166㎡净功能；原15.54㎡预留室成为可逆画室，30㎡内庭另列。",
+          "en": "200 m² gross concept includes 166 m² net; the existing 15.54 m² room becomes a reversible art studio. The 30 m² court is separate."
+        },
+        "order": 1
+      },
+      {
+        "id": "phase-2",
+        "label": {
+          "zh": "二期 · 影音与健身翼",
+          "en": "Phase 2 · media / fitness wing"
+        },
+        "description": {
+          "zh": "独立东南翼60㎡净功能，加12㎡构造设备预留，合72㎡新增概念建面。",
+          "en": "A detached southeast wing adds 60 m² net plus 12 m² allowance, or 72 m² additional gross concept."
+        },
+        "order": 2
+      },
+      {
+        "id": "phase-3",
+        "label": {
+          "zh": "三期 · 泳池与池畔",
+          "en": "Phase 3 · pool / deck"
+        },
+        "description": {
+          "zh": "36㎡水面与54㎡池畔为室外面积；先确认维护、用水、机房和四边安全围界。",
+          "en": "36 m² water and 54 m² deck are outdoors. Resolve maintenance, water, plant and a four-sided safety enclosure first."
+        },
+        "order": 3
+      }
+    ],
+    "program": [
+      {
+        "id": "core",
+        "label": {
+          "zh": "主宅",
+          "en": "Core house"
+        },
+        "description": {
+          "zh": "图示沿用166㎡净功能控制线；200㎡概念建面含34㎡构造设备预留，不能把14×14包围盒当实测外廓。",
+          "en": "The drawing retains the 166 m² net control geometry. The 200 m² gross concept includes a 34 m² allowance; its 14 × 14 bounding box is not a surveyed envelope."
+        },
+        "phase": "phase-1",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "w": 14,
+          "d": 14
+        },
+        "polygons": [
+          [
+            [
+              0,
+              5.6
+            ],
+            [
+              10,
+              5.6
+            ],
+            [
+              10,
+              9
+            ],
+            [
+              0,
+              9
+            ]
+          ],
+          [
+            [
+              6,
+              9
+            ],
+            [
+              10,
+              9
+            ],
+            [
+              10,
+              10.5
+            ],
+            [
+              6,
+              10.5
+            ]
+          ],
+          [
+            [
+              6,
+              10.5
+            ],
+            [
+              10,
+              10.5
+            ],
+            [
+              10,
+              14
+            ],
+            [
+              6,
+              14
+            ]
+          ],
+          [
+            [
+              0,
+              0
+            ],
+            [
+              4.2,
+              0
+            ],
+            [
+              4.2,
+              4.2
+            ],
+            [
+              0,
+              4.2
+            ]
+          ],
+          [
+            [
+              10,
+              5.6
+            ],
+            [
+              14,
+              5.6
+            ],
+            [
+              14,
+              11
+            ],
+            [
+              10,
+              11
+            ]
+          ],
+          [
+            [
+              7,
+              0
+            ],
+            [
+              10.3,
+              0
+            ],
+            [
+              10.3,
+              4.2
+            ],
+            [
+              7,
+              4.2
+            ]
+          ],
+          [
+            [
+              10.3,
+              0
+            ],
+            [
+              14,
+              0
+            ],
+            [
+              14,
+              4.2
+            ],
+            [
+              10.3,
+              4.2
+            ]
+          ],
+          [
+            [
+              4.2,
+              0
+            ],
+            [
+              7,
+              0
+            ],
+            [
+              7,
+              4.2
+            ],
+            [
+              4.2,
+              4.2
+            ]
+          ],
+          [
+            [
+              0,
+              4.2
+            ],
+            [
+              14,
+              4.2
+            ],
+            [
+              14,
+              5.6
+            ],
+            [
+              0,
+              5.6
+            ]
+          ],
+          [
+            [
+              10,
+              11
+            ],
+            [
+              14,
+              11
+            ],
+            [
+              14,
+              14
+            ],
+            [
+              10,
+              14
+            ]
+          ]
+        ],
+        "area": 200,
+        "netArea": 166,
+        "grossArea": 200,
+        "areaBasis": "gross"
+      },
+      {
+        "id": "studio",
+        "label": {
+          "zh": "主宅内画室",
+          "en": "Art studio in the core"
+        },
+        "description": {
+          "zh": "15.54㎡已在主宅166㎡净功能内；不再重复增加建筑面积。",
+          "en": "15.54 m² is already inside the core net area; it is not additional floor area."
+        },
+        "phase": "phase-1",
+        "roomId": "reserve",
+        "rect": {
+          "x": 10.3,
+          "y": 0,
+          "w": 3.7,
+          "d": 4.2
+        },
+        "area": 15.54,
+        "netArea": 15.54,
+        "grossArea": 0,
+        "includedInCore": true,
+        "areaBasis": "core-net"
+      },
+      {
+        "id": "arrival",
+        "label": {
+          "zh": "露天停车与抵达",
+          "en": "Open parking / arrival"
+        },
+        "description": {
+          "zh": "3×6m露天停车位与邻近单车/快递格属于室外预留，不默认为车库建筑面积。",
+          "en": "A 3 × 6 m open parking bay with nearby cycle / parcel storage is an outdoor reservation, not assumed garage floor area."
+        },
+        "phase": "phase-1",
+        "rect": {
+          "x": 21,
+          "y": -1,
+          "w": 3,
+          "d": 6
+        },
+        "area": 18,
+        "netArea": 0,
+        "grossArea": 0,
+        "areaBasis": "outdoor-arrival"
+      },
+      {
+        "id": "gym",
+        "label": {
+          "zh": "庭园健身房",
+          "en": "Garden gym"
+        },
+        "description": {
+          "zh": "6×4m净空间，留可移动器材与伸展；荷载、振动和通风待设备清单核验。",
+          "en": "A 6 × 4 m net room for movable equipment and stretching; verify load, vibration and ventilation from the equipment list."
+        },
+        "phase": "phase-2",
+        "rect": {
+          "x": 18,
+          "y": 14,
+          "w": 6,
+          "d": 4
+        },
+        "area": 24,
+        "netArea": 24,
+        "grossArea": 28.8,
+        "areaBasis": "net"
+      },
+      {
+        "id": "wing-service",
+        "label": {
+          "zh": "淋浴 · 更衣 · 设备",
+          "en": "Shower / change / plant"
+        },
+        "description": {
+          "zh": "与健身、影音分隔，服务泳池与翼房；湿区和设备房仍需专业划分。",
+          "en": "Separate support for the pool and wing; professionally divide wet services and plant space."
+        },
+        "phase": "phase-2",
+        "rect": {
+          "x": 18,
+          "y": 18,
+          "w": 6,
+          "d": 2
+        },
+        "area": 12,
+        "netArea": 12,
+        "grossArea": 14.4,
+        "areaBasis": "net"
+      },
+      {
+        "id": "media",
+        "label": {
+          "zh": "独立影音室",
+          "en": "Detached media room"
+        },
+        "description": {
+          "zh": "6×4m净空间，避开卧室共墙；隔声、低频与静音通风优先，不把软包当隔音。",
+          "en": "A 6 × 4 m net room without a shared bedroom wall. Prioritize isolation, bass control and quiet ventilation."
+        },
+        "phase": "phase-2",
+        "rect": {
+          "x": 18,
+          "y": 20,
+          "w": 6,
+          "d": 4
+        },
+        "area": 24,
+        "netArea": 24,
+        "grossArea": 28.8,
+        "areaBasis": "net"
+      },
+      {
+        "id": "pool",
+        "label": {
+          "zh": "泳池水面",
+          "en": "Pool water"
+        },
+        "description": {
+          "zh": "12×3m的36㎡水面属于后期室外愿景；水深、结构、处理系统和审批未定。",
+          "en": "A 12 × 3 m, 36 m² water area is a later outdoor study; depth, structure, treatment and approvals remain open."
+        },
+        "phase": "phase-3",
+        "rect": {
+          "x": 2,
+          "y": 20,
+          "w": 12,
+          "d": 3
+        },
+        "area": 36,
+        "netArea": 0,
+        "grossArea": 0,
+        "areaBasis": "outdoor-water"
+      },
+      {
+        "id": "pool-deck",
+        "label": {
+          "zh": "池畔活动面",
+          "en": "Pool deck"
+        },
+        "description": {
+          "zh": "15×6m围合范围扣除36㎡水面，池畔净54㎡；不计室内建面。",
+          "en": "A 15 × 6 m enclosure minus 36 m² water leaves 54 m² deck, separate from indoor floor area."
+        },
+        "phase": "phase-3",
+        "rect": {
+          "x": 0.5,
+          "y": 18.5,
+          "w": 15,
+          "d": 6
+        },
+        "voidRect": {
+          "x": 2,
+          "y": 20,
+          "w": 12,
+          "d": 3
+        },
+        "area": 54,
+        "netArea": 0,
+        "grossArea": 0,
+        "areaBasis": "outdoor-deck"
+      }
+    ],
+    "paths": [
+      {
+        "id": "EP01",
+        "label": {
+          "zh": "主宅至生活翼",
+          "en": "Core to garden wing"
+        },
+        "description": {
+          "zh": "1.2m研究步道连接归家入口和独立翼，不要求穿过泳池围界。",
+          "en": "A 1.2 m study path links the entrance and detached wing without entering the pool enclosure."
+        },
+        "phase": "phase-2",
+        "width": 1.2,
+        "points": [
+          [
+            12.7,
+            14.8
+          ],
+          [
+            12.7,
+            16
+          ],
+          [
+            16.5,
+            16
+          ],
+          [
+            18,
+            16
+          ]
+        ]
+      },
+      {
+        "id": "EP02",
+        "label": {
+          "zh": "翼房服务步道",
+          "en": "Wing service path"
+        },
+        "description": {
+          "zh": "健身、设备和影音各从西侧步道到达，夜间噪声与湿脚不穿卧室。",
+          "en": "A west-side path serves the gym, services and media room without crossing bedrooms."
+        },
+        "phase": "phase-2",
+        "width": 1.2,
+        "points": [
+          [
+            16.5,
+            16
+          ],
+          [
+            16.5,
+            22
+          ],
+          [
+            18,
+            22
+          ]
+        ]
+      },
+      {
+        "id": "EP03",
+        "label": {
+          "zh": "内庭至外园",
+          "en": "Inner court to outer garden"
+        },
+        "description": {
+          "zh": "从EG01南侧门到外园，再经独立泳池安全门PG01入池畔；入口不借主宅门替代。",
+          "en": "Leave through EG01, then enter the pool deck through its own PG01 safety gate."
+        },
+        "phase": "phase-3",
+        "width": 1.2,
+        "gateIds": [
+          "EG01",
+          "PG01"
+        ],
+        "points": [
+          [
+            4.8,
+            13.1
+          ],
+          [
+            4.8,
+            16.5
+          ],
+          [
+            8,
+            16.5
+          ],
+          [
+            8,
+            19.2
+          ]
+        ]
+      },
+      {
+        "id": "EP04",
+        "label": {
+          "zh": "健身后更衣",
+          "en": "Gym to changing"
+        },
+        "description": {
+          "zh": "通过翼内门ED04到更衣淋浴，不穿影音室。",
+          "en": "Use internal ED04 for changing / showering, without crossing the media room."
+        },
+        "phase": "phase-2",
+        "width": 0.8,
+        "gateIds": [
+          "ED04"
+        ],
+        "points": [
+          [
+            19,
+            17
+          ],
+          [
+            19,
+            19
+          ]
+        ]
+      },
+      {
+        "id": "EP05",
+        "label": {
+          "zh": "更衣至池门",
+          "en": "Changing to pool gate"
+        },
+        "description": {
+          "zh": "经ED02回外部步道，再从PG01入池畔，干湿路径不借影音座位穿行。",
+          "en": "Leave through ED02, follow the external path and enter PG01; wet traffic never crosses media seating."
+        },
+        "phase": "phase-3",
+        "width": 0.8,
+        "gateIds": [
+          "ED02",
+          "PG01"
+        ],
+        "points": [
+          [
+            19,
+            19
+          ],
+          [
+            16.5,
+            19
+          ],
+          [
+            16.5,
+            17
+          ],
+          [
+            8,
+            17
+          ],
+          [
+            8,
+            19.2
+          ]
+        ]
+      },
+      {
+        "id": "EP06",
+        "label": {
+          "zh": "步行门至归家",
+          "en": "Pedestrian gate to home"
+        },
+        "description": {
+          "zh": "从假想东侧接路面经EG02步行门，绕翼房北侧到D01；不穿健身房。",
+          "en": "Walk through EG02 and around the north of the wing to D01, without crossing the gym."
+        },
+        "phase": "phase-1",
+        "width": 1.2,
+        "gateIds": [
+          "EG02",
+          "D01"
+        ],
+        "points": [
+          [
+            29.5,
+            9.8
+          ],
+          [
+            26,
+            9.8
+          ],
+          [
+            26,
+            12
+          ],
+          [
+            16.5,
+            12
+          ],
+          [
+            16.5,
+            16
+          ],
+          [
+            12.7,
+            16
+          ],
+          [
+            12.7,
+            14.8
+          ]
+        ]
+      },
+      {
+        "id": "EP07",
+        "label": {
+          "zh": "露天停车进场",
+          "en": "Open-parking arrival"
+        },
+        "description": {
+          "zh": "东侧EG03车行口通露天车位；与步行门分开，实际转弯与接路待基地测绘。",
+          "en": "EG03 serves open parking separately from the pedestrian gate; turning and actual road access await a real survey."
+        },
+        "phase": "phase-1",
+        "width": 3,
+        "kind": "vehicle",
+        "gateIds": [
+          "EG03"
+        ],
+        "points": [
+          [
+            29.5,
+            2.75
+          ],
+          [
+            24,
+            2.75
+          ]
+        ]
+      },
+      {
+        "id": "EP08",
+        "label": {
+          "zh": "东侧设备检修",
+          "en": "Eastern plant access"
+        },
+        "description": {
+          "zh": "设备维护从东侧外部通路到ED05，不穿卧室、茶室或泳池围界。",
+          "en": "Reach ED05 from the eastern service path without crossing bedrooms, tea or the pool enclosure."
+        },
+        "phase": "phase-2",
+        "width": 1.2,
+        "gateIds": [
+          "ED05"
+        ],
+        "points": [
+          [
+            26,
+            12
+          ],
+          [
+            26,
+            19
+          ],
+          [
+            24,
+            19
+          ]
+        ]
+      }
+    ],
+    "boundaries": [
+      {
+        "id": "EB01",
+        "label": {
+          "zh": "西侧隐私界",
+          "en": "West privacy edge"
+        },
+        "description": {
+          "zh": "以实体围墙和内侧种植形成背景，不假定场地外有远山。",
+          "en": "A wall and planting form the backdrop; no unselected mountain view is assumed."
+        },
+        "a": [
+          -5,
+          -5
+        ],
+        "b": [
+          -5,
+          30
+        ],
+        "height": 1.8,
+        "kind": "privacy-wall",
+        "phase": "phase-1"
+      },
+      {
+        "id": "EB02",
+        "label": {
+          "zh": "南侧隐私界",
+          "en": "South privacy edge"
+        },
+        "description": {
+          "zh": "南侧同样以墙和种植收边，具体材料和基地退界待定。",
+          "en": "A southern wall and planting close the view; materials and real setbacks remain open."
+        },
+        "a": [
+          -5,
+          30
+        ],
+        "b": [
+          29,
+          30
+        ],
+        "height": 1.8,
+        "kind": "privacy-wall",
+        "phase": "phase-1"
+      },
+      {
+        "id": "EB03",
+        "label": {
+          "zh": "内庭西侧绿屏",
+          "en": "Inner-court west screen"
+        },
+        "description": {
+          "zh": "1.5m通透种植屏界；不把茶窗外临时补成封死的高墙。",
+          "en": "A 1.5 m planted screen, rather than an invented high wall immediately outside the tea window."
+        },
+        "a": [
+          0,
+          9
+        ],
+        "b": [
+          0,
+          14
+        ],
+        "height": 1.5,
+        "kind": "planted-screen",
+        "phase": "phase-1"
+      },
+      {
+        "id": "EB04",
+        "label": {
+          "zh": "内庭南侧绿屏",
+          "en": "Inner-court south screen"
+        },
+        "description": {
+          "zh": "同高绿屏留一处1.2m步行门，内外庭院可以真正相通。",
+          "en": "The screen includes a 1.2 m walking gate linking inner and outer gardens."
+        },
+        "a": [
+          0,
+          14
+        ],
+        "b": [
+          6,
+          14
+        ],
+        "height": 1.5,
+        "kind": "planted-screen",
+        "phase": "phase-1",
+        "opening": {
+          "id": "EG01",
+          "a": [
+            4.2,
+            14
+          ],
+          "b": [
+            5.4,
+            14
+          ],
+          "operation": "gate"
+        }
+      },
+      {
+        "id": "EB05",
+        "label": {
+          "zh": "东侧抵达界",
+          "en": "East arrival edge"
+        },
+        "description": {
+          "zh": "低绿篱标边，EG02步行门与EG03车行口分别接假想道路；不是实有道路或获批开口。",
+          "en": "A low hedge with separate EG02 pedestrian and EG03 vehicle openings meets a hypothetical road, not a verified access approval."
+        },
+        "a": [
+          29,
+          -5
+        ],
+        "b": [
+          29,
+          30
+        ],
+        "height": 1.2,
+        "kind": "hedge",
+        "phase": "phase-1",
+        "openings": [
+          {
+            "id": "EG02",
+            "a": [
+              29,
+              9.2
+            ],
+            "b": [
+              29,
+              10.4
+            ],
+            "kind": "pedestrian"
+          },
+          {
+            "id": "EG03",
+            "a": [
+              29,
+              1
+            ],
+            "b": [
+              29,
+              4.5
+            ],
+            "kind": "vehicle"
+          }
+        ]
+      },
+      {
+        "id": "EB06",
+        "label": {
+          "zh": "北侧前园界",
+          "en": "North foregarden edge"
+        },
+        "description": {
+          "zh": "以1.2m低绿篱收边，边界外不预设风景或可使用土地。",
+          "en": "A 1.2 m hedge defines the foregarden; land and views beyond are not assumed."
+        },
+        "a": [
+          -5,
+          -5
+        ],
+        "b": [
+          29,
+          -5
+        ],
+        "height": 1.2,
+        "kind": "hedge",
+        "phase": "phase-1"
+      }
+    ],
+    "planting": [
+      {
+        "id": "PL01",
+        "label": {
+          "zh": "内庭通透小乔木",
+          "en": "Light-canopied inner-court tree"
+        },
+        "description": {
+          "zh": "保留原树位(3,11.5)与通透冠层；树种随城市气候、根域、落叶和维护确定，不将它冒认为已定桂树。",
+          "en": "Retain the existing tree position and open crown. Select species for climate, roots and maintenance rather than silently calling it osmanthus."
+        },
+        "position": [
+          3,
+          11.5
+        ],
+        "species": {
+          "zh": "树种待气候确认",
+          "en": "Species pending climate"
+        },
+        "canopyRadius": 1.4,
+        "rootZoneRadius": 1.5,
+        "phase": "phase-1",
+        "spec": {
+          "zh": "模型树高4m仅空间占位。",
+          "en": "The modelled 4 m height is only a spatial placeholder."
+        }
+      },
+      {
+        "id": "PL02",
+        "label": {
+          "zh": "外园桂树候选",
+          "en": "Outer-garden osmanthus candidate"
+        },
+        "description": {
+          "zh": "放在外园而非挤进内庭；留冠幅、根域与落花维护空间，是否适种待城市和气候确认。",
+          "en": "Place the candidate in the outer garden with crown, roots and flower cleanup space. Suitability awaits a real climate."
+        },
+        "position": [
+          -2,
+          18
+        ],
+        "species": {
+          "zh": "桂花 Osmanthus fragrans · 条件候选",
+          "en": "Osmanthus fragrans · conditional candidate"
+        },
+        "canopyRadius": 2.15,
+        "rootZoneRadius": 2.3,
+        "phase": "phase-2",
+        "spec": {
+          "zh": "研究冠幅3–4.3m、高3–6m；并非定苗或栽植许可。",
+          "en": "Research range: crown 3–4.3 m, height 3–6 m; not a selected specimen or planting approval."
+        }
+      },
+      {
+        "id": "PL03",
+        "label": {
+          "zh": "西侧复层种植",
+          "en": "Layered western planting"
+        },
+        "description": {
+          "zh": "在外墙与内庭之间形成可维护的林下层次；不遮蔽门窗、步道和检修。",
+          "en": "Layer maintainable planting between the outer wall and court without blocking windows, paths or service access."
+        },
+        "position": [
+          -2,
+          8
+        ],
+        "species": {
+          "zh": "气候适配灌木与地被",
+          "en": "Climate-suitable shrubs / ground cover"
+        },
+        "canopyRadius": 1.2,
+        "rootZoneRadius": 1.2,
+        "phase": "phase-1",
+        "spec": {
+          "zh": "详细品种、密度、土壤与灌溉待现场。",
+          "en": "Species, density, soil and irrigation await the site."
+        }
+      }
+    ],
+    "poolSafety": {
+      "id": "PS01",
+      "label": {
+        "zh": "泳池独立安全围界",
+        "en": "Independent pool safety enclosure"
+      },
+      "description": {
+        "zh": "泳池以自身四边围界隔离，不能借地界墙或主宅门替代；示意1.5m高围界、自闭自锁门、非攀爬构造、防滑与可视监督，实际高度、间隙、锁位和报警依当地要求专业核验。本图不宣称安全认证。",
+        "en": "Use a separate four-sided enclosure, not a boundary wall or house door. The 1.5 m study includes a self-closing/latching gate, non-climbable detailing, slip resistance and supervision sight lines. Verify actual height, gaps, latch and alarms locally; this is not a safety certification."
+      },
+      "rect": {
+        "x": 0.5,
+        "y": 18.5,
+        "w": 15,
+        "d": 6
+      },
+      "height": 1.5,
+      "gate": {
+        "id": "PG01",
+        "a": [
+          7.4,
+          18.5
+        ],
+        "b": [
+          8.6,
+          18.5
+        ],
+        "selfClosing": true,
+        "selfLatching": true
+      }
+    },
+    "areaSummary": {
+      "parcelArea": 1190,
+      "coreGrossArea": 200,
+      "coreNetArea": 166,
+      "additionalGrossArea": 72,
+      "additionalNetArea": 60,
+      "totalGrossArea": 272,
+      "totalNetArea": 226,
+      "courtyardArea": 30,
+      "poolWaterArea": 36,
+      "poolDeckArea": 54,
+      "description": {
+        "zh": "1190㎡是假想用地。主宅200㎡建面/166㎡净功能；后期翼房另增72㎡建面/60㎡净功能，全部远景合272㎡建面/226㎡净功能。30㎡内庭、36㎡池水、54㎡池畔均为室外单列，不相加成室内面积。",
+        "en": "The hypothetical parcel is 1,190 m². Core: 200 m² gross / 166 m² net. Later wing: 72 m² gross / 60 m² net. Full horizon: 272 m² gross / 226 m² net. The 30 m² court, 36 m² water and 54 m² deck remain separate outdoor areas."
+      }
+    },
+    "wing": {
+      "id": "garden-wing",
+      "netArea": 60,
+      "grossArea": 72,
+      "height": 2.9,
+      "walls": [
+        {
+          "id": "EW01",
+          "a": [
+            18,
+            14
+          ],
+          "b": [
+            18,
+            24
+          ]
+        },
+        {
+          "id": "EW02",
+          "a": [
+            24,
+            14
+          ],
+          "b": [
+            24,
+            24
+          ]
+        },
+        {
+          "id": "EW03",
+          "a": [
+            18,
+            14
+          ],
+          "b": [
+            24,
+            14
+          ]
+        },
+        {
+          "id": "EW04",
+          "a": [
+            18,
+            24
+          ],
+          "b": [
+            24,
+            24
+          ]
+        },
+        {
+          "id": "EW05",
+          "a": [
+            18,
+            18
+          ],
+          "b": [
+            24,
+            18
+          ]
+        },
+        {
+          "id": "EW06",
+          "a": [
+            18,
+            20
+          ],
+          "b": [
+            24,
+            20
+          ]
+        },
+        {
+          "id": "EW07",
+          "a": [
+            21,
+            18
+          ],
+          "b": [
+            21,
+            20
+          ]
+        }
+      ],
+      "openings": [
+        {
+          "id": "ED01",
+          "wallId": "EW01",
+          "a": [
+            18,
+            15.35
+          ],
+          "b": [
+            18,
+            16.65
+          ],
+          "connects": [
+            "outside",
+            "gym"
+          ],
+          "type": "door"
+        },
+        {
+          "id": "ED02",
+          "wallId": "EW01",
+          "a": [
+            18,
+            18.5
+          ],
+          "b": [
+            18,
+            19.5
+          ],
+          "connects": [
+            "outside",
+            "changing"
+          ],
+          "type": "door"
+        },
+        {
+          "id": "ED03",
+          "wallId": "EW01",
+          "a": [
+            18,
+            21.4
+          ],
+          "b": [
+            18,
+            22.6
+          ],
+          "connects": [
+            "outside",
+            "media"
+          ],
+          "type": "door"
+        },
+        {
+          "id": "ED04",
+          "wallId": "EW05",
+          "a": [
+            18.5,
+            18
+          ],
+          "b": [
+            19.5,
+            18
+          ],
+          "connects": [
+            "gym",
+            "changing"
+          ],
+          "type": "door"
+        },
+        {
+          "id": "ED05",
+          "wallId": "EW02",
+          "a": [
+            24,
+            18.35
+          ],
+          "b": [
+            24,
+            19.65
+          ],
+          "connects": [
+            "outside",
+            "plant"
+          ],
+          "type": "door"
+        },
+        {
+          "id": "EV01",
+          "wallId": "EW02",
+          "a": [
+            24,
+            14.8
+          ],
+          "b": [
+            24,
+            17.2
+          ],
+          "connects": [
+            "outside",
+            "gym"
+          ],
+          "type": "window"
+        },
+        {
+          "id": "EV02",
+          "wallId": "EW04",
+          "a": [
+            20.5,
+            24
+          ],
+          "b": [
+            22.5,
+            24
+          ],
+          "connects": [
+            "outside",
+            "media"
+          ],
+          "type": "blackout-window"
+        }
+      ],
+      "furniture": [
+        {
+          "id": "EF01",
+          "roomId": "gym",
+          "label": {
+            "zh": "力量器材预留",
+            "en": "Strength equipment"
+          },
+          "rect": {
+            "x": 19,
+            "y": 14.4,
+            "w": 1.6,
+            "d": 1.2
+          },
+          "height": 2.2
+        },
+        {
+          "id": "EF02",
+          "roomId": "gym",
+          "label": {
+            "zh": "跑步机预留",
+            "en": "Treadmill"
+          },
+          "rect": {
+            "x": 22.2,
+            "y": 14.8,
+            "w": 1,
+            "d": 2
+          },
+          "height": 1.5
+        },
+        {
+          "id": "EF03",
+          "roomId": "gym",
+          "label": {
+            "zh": "伸展垫",
+            "en": "Stretching mat"
+          },
+          "rect": {
+            "x": 20.6,
+            "y": 16.6,
+            "w": 2,
+            "d": 1
+          },
+          "height": 0.02,
+          "blocking": false
+        },
+        {
+          "id": "EF04",
+          "roomId": "changing",
+          "label": {
+            "zh": "更衣凳",
+            "en": "Changing bench"
+          },
+          "rect": {
+            "x": 18.15,
+            "y": 19.55,
+            "w": 1.2,
+            "d": 0.3
+          },
+          "height": 0.45
+        },
+        {
+          "id": "EF05",
+          "roomId": "changing",
+          "label": {
+            "zh": "淋浴预留",
+            "en": "Shower reservation"
+          },
+          "rect": {
+            "x": 19.7,
+            "y": 18.1,
+            "w": 1.2,
+            "d": 1.2
+          },
+          "height": 2.2,
+          "blocking": false
+        },
+        {
+          "id": "EF06",
+          "roomId": "plant",
+          "label": {
+            "zh": "独立设备检修区",
+            "en": "Independent plant bay"
+          },
+          "rect": {
+            "x": 21.2,
+            "y": 18.15,
+            "w": 2.2,
+            "d": 0.6
+          },
+          "height": 1.8
+        },
+        {
+          "id": "EF07",
+          "roomId": "media",
+          "label": {
+            "zh": "投影幕",
+            "en": "Projection screen"
+          },
+          "rect": {
+            "x": 19,
+            "y": 20.1,
+            "w": 4,
+            "d": 0.12
+          },
+          "height": 1.8
+        },
+        {
+          "id": "EF08",
+          "roomId": "media",
+          "label": {
+            "zh": "三人观影位",
+            "en": "Three-person media seat"
+          },
+          "rect": {
+            "x": 19.1,
+            "y": 22.1,
+            "w": 3.1,
+            "d": 0.9
+          },
+          "height": 0.9
+        }
+      ],
+      "mediaAccess": {
+        "width": 0.8,
+        "points": [
+          [
+            18,
+            22
+          ],
+          [
+            18.5,
+            22
+          ],
+          [
+            18.5,
+            23.5
+          ],
+          [
+            20.5,
+            23.5
+          ]
+        ]
+      }
+    },
+    "arrivalStorage": {
+      "id": "EA01",
+      "label": {
+        "zh": "单车与快递格",
+        "en": "Cycle / parcel storage"
+      },
+      "description": {
+        "zh": "露天停车旁的轻量收纳，不增加封闭车库。",
+        "en": "Light storage next to open parking, without adding an enclosed garage."
+      },
+      "rect": {
+        "x": 24.2,
+        "y": 1,
+        "w": 1.2,
+        "d": 0.6
+      },
+      "height": 1.2
+    }
+  },
+  "courtyardBoundary": {
+    "id": "B-W03",
+    "wallId": "W03",
+    "openingIds": [
+      "V06",
+      "D09"
+    ],
+    "insideCameraId": "C-living",
+    "outsideCameraId": "C-garden",
+    "label": {
+      "zh": "同一面墙 · 从室内与庭院看",
+      "en": "One wall · inside and outside"
+    },
+    "description": {
+      "zh": "W03全长6m、墙厚0.24m、墙顶2.70m；V06窗台0.15m、窗顶2.50m，D09门槛0/门顶2.50m。窗门间0.15m实垛不随影像改动；两面图为同一组尺寸，外观左到右与室内向南看镜像。",
+      "en": "W03 is 6 m long, 0.24 m thick and 2.70 m high. V06 sill/head: 0.15/2.50 m; D09 threshold/head: 0/2.50 m. The 0.15 m pier is fixed. Both elevations use one dimension set and reverse for the south-looking interior view."
+    },
+    "roofEdge": {
+      "soffit": 2.7,
+      "top": 2.9,
+      "projection": 0.45,
+      "normal": [
+        0,
+        1
+      ],
+      "description": {
+        "zh": "统一研究平屋面边缘：底2.70m、顶2.90m，向庭院挑0.45m；构造、防水、排水与受力尚待专业深化。",
+        "en": "A shared flat-roof edge: soffit 2.70 m, top 2.90 m, 0.45 m projection into the court. Structure, waterproofing and drainage remain to be developed."
+      }
+    }
+  },
   "note": {
     "zh": "同一模型约束门窗、家具、动线、立面与几何视图；影像仍是材质氛围研究。0.75–0.9m 路线为当前概念净通行带，非无障碍或施工验收结论。",
     "en": "One model governs openings, furniture, routes, elevations and geometric views. Atmospheric images remain material studies. The 0.75–0.9 m paths are concept clearances, not accessibility or construction certification."

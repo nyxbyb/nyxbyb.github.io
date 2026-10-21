@@ -3,6 +3,7 @@ This draws architectural geometry from source; it does not edit generated images
 Run with the system Python (NumPy, Pillow, PyMuPDF).
 """
 import json
+import csv
 import subprocess
 from pathlib import Path
 import numpy as np
@@ -11,13 +12,13 @@ import pymupdf
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / 'web/public/docs/drawings'
-REF = ROOT / 'tmp/house-v2'
+REF = ROOT / 'tmp/house-v3'
 OUT.mkdir(parents=True, exist_ok=True)
 REF.mkdir(parents=True, exist_ok=True)
 source = """
 import {SPATIAL_MODEL as model} from './web/room/spatial-model.js';
-import {perspectiveSVG,planSVG,elevationSVG,sectionSVG} from './web/room/spatial-drawings.js';
-console.log(JSON.stringify({model,views:model.cameras.map(c=>({id:c.roomId,scene:perspectiveSVG(c.roomId,'zh',true),plan:planSVG({selected:c.roomId,layer:'cameras'})})),plan:planSVG(),routes:planSVG({layer:'routes'}),openings:planSVG({layer:'openings'}),lighting:planSVG({layer:'lighting'}),services:planSVG({layer:'services'}),section:sectionSVG(),elevations:model.zones.filter(z=>!z.outdoor).flatMap(z=>['north','east','south','west'].map(d=>({id:z.id+'-'+d,svg:elevationSVG(z.id,d)})))}));
+import {perspectiveSVG,planSVG,elevationSVG,sectionSVG,teaDetailSVG,teaCabinetSVG,courtyardBoundarySVG,estateSVG} from './web/room/spatial-drawings.js';
+console.log(JSON.stringify({model,views:model.cameras.map(c=>({id:c.id==='C-tea'?'tea':c.roomId,scene:perspectiveSVG(c.id,'zh',true),plan:planSVG({selected:c.roomId,layer:'cameras'})})),plan:planSVG(),routes:planSVG({layer:'routes'}),openings:planSVG({layer:'openings'}),lighting:planSVG({layer:'lighting'}),services:planSVG({layer:'services'}),section:sectionSVG(),studies:{'tea-ritual':teaDetailSVG('zh','ritual'),'tea-services':teaDetailSVG('zh','services'),'tea-audio':teaDetailSVG('zh','audio'),'tea-cabinet':teaCabinetSVG('zh'),'courtyard-boundary':courtyardBoundarySVG('zh'),'estate':estateSVG('zh')},elevations:model.zones.filter(z=>!z.outdoor).flatMap(z=>['north','east','south','west'].map(d=>({id:z.id+'-'+d,svg:elevationSVG(z.id,d)})))}));
 """
 data = json.loads(subprocess.check_output(['node', '--input-type=module', '-e', source], cwd=ROOT))
 
@@ -65,5 +66,16 @@ for name in ['plan','routes','openings','lighting','services','section']:
     (OUT / (name+'.svg')).write_text(data[name])
 for e in data['elevations']:
     (OUT / (e['id']+'.svg')).write_text(e['svg'])
+for name, svg in data['studies'].items():
+    (OUT / (name+'.svg')).write_text(svg)
+    (REF / (name+'.svg')).write_text(svg)
+    doc = pymupdf.open(stream=svg.encode(), filetype='svg')
+    doc[0].get_pixmap(matrix=pymupdf.Matrix(2,2), alpha=False).save(REF / (name+'.png'))
 (OUT / 'spatial-model.json').write_text(json.dumps(data['model'],ensure_ascii=False,indent=2))
+with (OUT / 'furniture.csv').open('w', encoding='utf-8-sig', newline='') as stream:
+    writer = csv.writer(stream, lineterminator='\n')
+    writer.writerow(['code','room','name_zh','name_en','width_m','depth_m','height_m','phase'])
+    for item in data['model']['furniture'] + data['model']['estate']['wing']['furniture']:
+        r = item['rect']
+        writer.writerow([item['id'],item['roomId'],item['label']['zh'],item['label']['en'],r['w'],r['d'],item['height'],'phase-2' if item['id'].startswith('EF') else 'phase-1'])
 print(f"Saved {len(data['views'])} fixed-camera studies and model-derived SVG sheets.")

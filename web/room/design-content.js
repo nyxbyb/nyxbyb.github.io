@@ -3,6 +3,20 @@
 
 export const DESIGN_CHAPTERS = [
   {
+    id: 'tea',
+    title: { zh: '茶与独处', en: 'Tea & solitude' },
+    kicker: { zh: '重点深化 · 起居茶室', en: 'IN FOCUS · THE TEA ROOM' },
+    summary: { zh: '水有去处，物有归处，人可以安心坐下。', en: 'Water has a route, belongings have a home, and you can simply sit.' },
+    deliverables: { zh: ['茶席与备水清洗回路', '听音、灯光、插座与收纳', '同一面庭院墙的内外对照'], en: ['Tea setting, preparation and cleanup', 'Listening, lighting, outlets and storage', 'Both sides of the same courtyard wall'] },
+  },
+  {
+    id: 'estate',
+    title: { zh: '园居总图', en: 'House & garden' },
+    kicker: { zh: '扩展研究 · 一个可以生活的园子', en: 'EXPANSION STUDY · A GARDEN TO LIVE IN' },
+    summary: { zh: '日常留在主宅，热闹与运动在花园的另一端。', en: 'Daily life stays in the house; film and movement have a place across the garden.' },
+    deliverables: { zh: ['主宅、画室与运动影音翼', '泳池、步行与家务后台', '树种、季相与分期'], en: ['The house, art studio and recreation wing', 'Pool, walking routes and practical support', 'Trees, seasons and phasing'] },
+  },
+  {
     id: 'inhabitant',
     title: { zh: '使用者', en: 'Inhabitant' },
     kicker: { zh: '01 · 生活简报', en: '01 · Living brief' },

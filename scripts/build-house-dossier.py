@@ -11,6 +11,8 @@ import json
 import math
 import shutil
 import subprocess
+import sys
+from hashlib import sha256
 from pathlib import Path
 from xml.sax.saxutils import escape
 
@@ -18,6 +20,7 @@ from reportlab.lib import colors
 from reportlab.lib.enums import TA_LEFT
 from reportlab.lib.pagesizes import A4, landscape
 from reportlab.lib.styles import ParagraphStyle
+from reportlab.lib.utils import ImageReader
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
@@ -38,8 +41,8 @@ WOOD = colors.HexColor("#B79C76")
 GREEN = colors.HexColor("#657965")
 PALE_GREEN = colors.HexColor("#E0E6DA")
 WATER = colors.HexColor("#6D8790")
-DATE = "2026-10-20"
-REVISION = "02"
+DATE = "2026-10-21"
+REVISION = "03"
 
 
 def register_fonts():
@@ -100,7 +103,7 @@ def centroid(points):
 class Book:
     def __init__(self, path, model, house):
         self.c = canvas.Canvas(str(path), pagesize=(W, H), pageCompression=1)
-        self.c.setTitle("迟庭 - 住宅设计册 / Revision 02")
+        self.c.setTitle(f"迟庭 - 住宅设计册 / Revision {REVISION}")
         self.c.setAuthor("Caelum - 迟庭概念协调研究")
         self.c.setSubject("同一空间模型的平面、门窗家具、立面与生活场景")
         self.model, self.house = model, house
@@ -115,6 +118,9 @@ class Book:
         self.walls = model.get("walls", [])
         self.routes = model.get("routes", [])
         self.cameras = model.get("cameras", [])
+        self.tea = model.get("tea", {})
+        self.estate = model.get("estate", {})
+        self.courtyard_boundary = model.get("courtyardBoundary", {})
         self.level = model.get("ceilingHeight", model.get("height", 2.8))
         if not isinstance(self.level, (float, int)):
             self.level = 2.8
@@ -198,6 +204,41 @@ class Book:
         if ident in {"outside", "gallery", "vestibule", "bath-main", "bath-wc", "bath-lobby"}:
             return {"outside": "室外", "gallery": "回廊", "vestibule": "玄关家务", "bath-main": "完整浴室", "bath-wc": "客用洗手间", "bath-lobby": "湿区前室"}[ident]
         return zh(self.rooms.get(ident, {}).get("label", ident))
+
+    def svg_image(self, filename):
+        """Render the exported same-model SVG without reinterpreting geometry."""
+        source = ROOT / "web/public/docs/drawings" / filename
+        if not source.exists():
+            raise FileNotFoundError(f"Export the final model drawing first: {source}")
+        digest = sha256(source.read_bytes()).hexdigest()[:12]
+        output = TMP / f"{source.stem}-{digest}.png"
+        if output.exists(): return output
+        program = """import sys,fitz
+from pathlib import Path
+d=fitz.open(stream=Path(sys.argv[1]).read_bytes(),filetype='svg')
+p=fitz.open('pdf',d.convert_to_pdf())
+page=p[0]; scale=2800/max(page.rect.width,page.rect.height)
+page.get_pixmap(matrix=fitz.Matrix(scale,scale),alpha=True).save(sys.argv[2])
+"""
+        candidates = list(dict.fromkeys([sys.executable, "/opt/anaconda3/bin/python3", shutil.which("python3") or "python3"]))
+        errors = []
+        for interpreter in candidates:
+            result = subprocess.run([interpreter, "-c", program, str(source), str(output)], capture_output=True, text=True)
+            if result.returncode == 0: return output
+            errors.append(f"{interpreter}: {result.stderr.strip()[-180:]}")
+        raise RuntimeError("An SVG-capable PyMuPDF Python runtime is required: " + "; ".join(errors))
+
+    def image(self, source, x, y, width, height):
+        image = ImageReader(str(source))
+        iw, ih = image.getSize()
+        factor = min(width / iw, height / ih)
+        ww, hh = iw * factor, ih * factor
+        self.c.drawImage(image, x + (width - ww) / 2, y + (height - hh) / 2, ww, hh, mask="auto")
+
+    def diagram_page(self, code, title, filename, subtitle, caption=""):
+        self.start(code, title, subtitle)
+        self.image(self.svg_image(filename), MARGIN, 74, W - 2 * MARGIN, 410)
+        if caption: self.para(caption, MARGIN, 62, W - 2 * MARGIN, 8, 13, MUTED)
 
     def zone_polygon(self, zone):
         if zone.get("polygons"):
@@ -498,11 +539,11 @@ class Book:
         self.para("一座庭院住宅的概念协调设计册\n平面 / 门窗 / 家具 / 立面 / 剖面 / 日常", MARGIN + 2, 205, 235, 10, 18, MUTED)
         self.plan(335, 92, 448, 392, labels=False, all_ids=False)
         self.text(MARGIN + 2, 77, "200 m² CONCEPT GFA  /  30 m² COURTYARD", 8, "Helvetica", MUTED)
-        self.text(MARGIN + 2, 59, "Caelum  ·  2026.10  ·  REV 02", 8, "Helvetica", MUTED)
+        self.text(MARGIN + 2, 59, f"Caelum  ·  2026.10  ·  REV {REVISION}", 8, "Helvetica", MUTED)
 
     def intent(self):
         self.start("CT-01", "让日常成为设计的依据", "BRIEF / 从实际文字与使用场景出发")
-        self.column("01  一个人，也能完整生活", ["研究、吃饭、洗衣、储物与休息具有同等的设计地位。约200㎡并不意味着把每一种兴趣变成一间专用房。", "四间独立空间安排为主卧、书房、多功能客房与预留室；用途可以随真实生活变化。"], MARGIN, 443, 225)
+        self.column("01  一个人，也能完整生活", ["研究、吃饭、洗衣、储物与休息具有同等的设计地位。首期主屋约200㎡，先完成每日会使用的地方。", "四间独立空间为主卧、书房、多功能客房与可逆画室；健身、影音与泳池放入明确分期，不挤入每个房间。"], MARGIN, 443, 225)
         self.column("02  人与机器分别安放", ["书房容纳思考、判断与设备工作；离开书房后，茶、阅读、音乐和睡眠有各自成立的地方。", "设备选型、散热与电源以实际清单为准；不把住宅变成全天候可见的项目控制台。"], 307, 443, 225)
         self.column("03  美感要经得起使用", ["窗、门、家具、移动路线与空间视图使用同一套米制坐标和编号。先校核能否生活，再讨论画面。", "材料允许触摸、清洁与修补；整齐来自物有所归，也来自愿意保留空处。"], 573, 443, 225)
         self.rule(MARGIN, 180, W - 2 * MARGIN)
@@ -535,7 +576,7 @@ class Book:
         self.text(155, 45, "0", 6, "Helvetica", MUTED)
         self.text(157 + 4 * scale - 7, 45, "4 m", 6, "Helvetica", MUTED)
         x = 616
-        self.column("一个完整的家", ["公共：起居书茶、餐厨与庭院。", "私密：主卧、独立书房、多功能客房、预留房。", "服务：入口、家务、回廊与集中卫浴。"], x, 436, 180)
+        self.column("一个完整的家", ["公共：起居书茶、餐厨与庭院。", "私密：主卧、独立书房、多功能客房、可逆画室。", "服务：入口、家务、回廊与集中卫浴。"], x, 436, 180)
         self.para("蓝线 = 窗\n棕线 = 门与木质家具\n浅绿 = 室外庭院\n所有尺寸单位为米", x, 274, 180, 8.5, 16, MUTED)
         self.para("控制线与概念净面积相互协调；34㎡墙体、结构及设备预留仍需在实际场地与结构方案中落实。", x, 163, 180, 8.5, 15, MUTED)
 
@@ -567,8 +608,10 @@ class Book:
 
     def furniture_schedule(self):
         items = self.furniture
-        for chunk_index, start in enumerate(range(0, len(items), 28)):
-            part = items[start:start + 28]
+        page_count = max(1, math.ceil(len(items) / 28))
+        batch_size = math.ceil(len(items) / page_count)
+        for chunk_index, start in enumerate(range(0, len(items), batch_size)):
+            part = items[start:start + batch_size]
             self.start(f"F-0{chunk_index + 1}", "家具与器物协调表", "FURNITURE REGISTER / 宽、深、高均读取同一模型")
             rows = []
             for f in part:
@@ -578,9 +621,10 @@ class Book:
                 hh = f.get("height", f.get("h", .75))
                 if not isinstance(hh, (int, float)): hh = .75
                 room_id = f.get("roomId", f.get("room", f.get("zone", "")))
-                short_name = {"living": "起居书茶", "study": "独立书房", "bedroom": "主卧", "kitchen": "餐厨", "flex": "多功能客房", "reserve": "预留室", "bath": "卫浴", "entry": "入口家务", "garden": "庭院"}.get(room_id, self.room_name(room_id))
+                short_name = {"living": "起居书茶", "study": "独立书房", "bedroom": "主卧", "kitchen": "餐厨", "flex": "多功能客房", "reserve": "可逆画室", "bath": "卫浴", "entry": "入口家务", "garden": "庭院"}.get(room_id, self.room_name(room_id))
                 rows.append([f.get("id", ""), short_name, zh(f.get("label", f.get("name", f.get("type", "家具")))), f"{ww:.2f} × {dd:.2f} × {hh:.2f}"])
-            for i, batch in enumerate((rows[:14], rows[14:])):
+            split = math.ceil(len(rows) / 2)
+            for i, batch in enumerate((rows[:split], rows[split:])):
                 self.table(["编号", "空间", "家具 / 设备", "宽 × 深 × 高 m"], batch, MARGIN + i * 390, 447, [43, 83, 120, 122], size=7.6, row_min=24, padding=10, line_factor=1.3)
             self.para("家具为概念占位，材质、五金与净距待深化。地毯、平台与展开状态按模型记录；尺寸并非采购规格。树木高度为景观占位，不是室内家具高度。", MARGIN, 67, W - 2 * MARGIN, 8.1, 13, MUTED)
 
@@ -718,6 +762,127 @@ class Book:
         self.text(MARGIN, 126, "166㎡ 净功能 + 34㎡ 构造设备预留 ≈ 200㎡ 概念建面", 15, "Song")
         self.para("庭院30㎡另列。图纸控制线不是施工净尺寸；实际总建面、计容与雨棚规则需结合场地和当地要求重算。适居尺度还取决于清洁投入、通行距离和日常实际使用范围。", MARGIN, 101, W - 2 * MARGIN, 9, 15, MUTED)
 
+    def tea_and_garden(self):
+        if not self.tea or not self.estate:
+            raise RuntimeError("REV03 requires the frozen model.tea and model.estate records.")
+        drawings = [
+            ("T-01", "一席茶，完整的来回", "tea-ritual.svg", "TEA / 柜上烧水，坐下冲泡与慢饮，再清洗归柜", "约0.55m为局部人员服务间隔，并非电壶到桌的全部距离。电热壶留柜，小保温壶短距补水；茶桌的干泡盘和废水盂让人坐着完成冲泡。"),
+            ("T-02", "茶区的灯、插座与水", "tea-services.svg", "LIGHT / POWER / WATER / 同一套可追踪点位", "点位表示功能和操作关系。线缆、负荷、回路、防护与给排水构造仍须结合选定设备和项目设计。"),
+            ("T-03", "把音乐放在可以坐下的位置", "tea-audio.svg", "LISTENING / 左右对称与主听位的几何试摆", "约60°关系是试听起点；耳高、音箱型号、离墙、反射与低频需实测。茶椅可以听音乐，不假定每一张椅子都是最佳听音位。"),
+            ("T-04", "茶柜与物件的归处", "tea-cabinet.svg", "JOINERY / 湿与干、常用与备用分别安放", "柜体、灯具与电器尺寸为概念协调；干茶与精油分柜，湿杯晾干后再收。图中编号回到模型控制表。"),
+            ("B-01", "同一面墙，两侧的生活", "courtyard-boundary.svg", "INSIDE / OUTSIDE / 门、窗、窗台、檐口与地面相互核对", "内外共用同一墙段和开口编号；0.24m墙体及屋檐为概念构造研究，防水、滴水、热桥与结构尚需技术深化。"),
+            ("G-01", "主屋之外，生活向庭院展开", "estate.svg", "HOUSE / GARDEN / PAVILIONS / 约1190㎡假想地块", "场地边界、泳池隔离、园路、植物与附属空间分别表达。没有选址、实测地形或远山假设，图示不表示当地可建条件已核准。"),
+        ]
+        for code, title, filename, subtitle, caption in drawings:
+            self.diagram_page(code, title, filename, subtitle, caption)
+        self.control_register()
+        self.estate_program()
+
+    def control_register(self):
+        def collect(value, group, found, parent_label=""):
+            if isinstance(value, dict):
+                if isinstance(value.get("id"), str):
+                    record = value
+                    if "label" not in value:
+                        suffix = {"opening": "步行门", "gate": "出入口", "wing": "生活翼", "walls": "生活翼墙段", "openings": "生活翼门窗"}.get(group, group)
+                        title = suffix if group in {"wing", "walls", "openings"} else (parent_label + " · " if parent_label else "") + suffix
+                        record = {**value, "label": title}
+                    found.setdefault(value["id"], (group, record))
+                for key, child in value.items():
+                    if isinstance(child, (list, dict)):
+                        collect(child, key, found, zh(value.get("label", parent_label)))
+            elif isinstance(value, list):
+                for child in value: collect(child, group, found, parent_label)
+        records = {}
+        collect(self.tea, "tea", records)
+        collect(self.estate, "estate", records)
+        collect(self.courtyard_boundary, "courtyardBoundary", records)
+        rows = []
+        for ident, (group, item) in records.items():
+            description = zh(item.get("description", item.get("note", item.get("detail", item.get("strategy", ""))))).rstrip("。；; ")
+            if item.get("spec"):
+                description += ("；" if description else "") + zh(item["spec"]).rstrip("。；; ")
+            if item.get("roofEdge", {}).get("description"):
+                description += ("；" if description else "") + zh(item["roofEdge"]["description"]).rstrip("。；; ")
+            details = []
+            if item.get("position") and isinstance(item["position"], list):
+                details.append("模型坐标 " + ", ".join(f"{v:g}" for v in item["position"] if isinstance(v, (float, int))) + " m")
+            if item.get("a") and item.get("b"):
+                details.append(f"({', '.join(f'{n:g}' for n in item['a'])}) → ({', '.join(f'{n:g}' for n in item['b'])}) / 线长 {math.dist(point(item['a']), point(item['b'])):.2f}m")
+            if isinstance(item.get("rect"), dict):
+                rect = item["rect"]
+                details.append(f"占位框 {rect.get('w', 0):g} × {rect.get('d', 0):g}m")
+            if item.get("connects"):
+                names = {"outside": "室外", "gym": "健身", "changing": "淋浴更衣", "plant": "设备", "media": "影音"}
+                details.append("连接 " + " / ".join(names.get(v, v) for v in item["connects"]))
+            if item.get("wallId"): details.append("所属 " + item["wallId"])
+            if item.get("selfClosing"): details.append("自闭")
+            if item.get("selfLatching"): details.append("自动扣合")
+            for key, title in [("mountHeight", "安装高"), ("mountingHeight", "安装高"), ("height", "高度"), ("area", "面积")]:
+                value = item.get(key)
+                if isinstance(value, (int, float)):
+                    details.append(f"{title} {value:g}" + ("㎡" if key == "area" else "m"))
+            if details: description = description + ("；" if description else "") + " / ".join(details)
+            rows.append([ident, zh(item.get("label", item.get("name", group))), description or "概念控制条目；几何位置与关系以同源图版为准。"])
+        groups, group, consumed = [], [], 0
+        for row in rows:
+            sizes = []
+            for value, width in zip(row, [81, 190, 487]):
+                style = ParagraphStyle("measure", fontName="Sans", fontSize=8.5, leading=12.75, wordWrap="CJK")
+                p = Paragraph(escape(str(value)), style)
+                sizes.append(p.wrap(width - 14, H)[1])
+            row_height = max(31, max(sizes) + 12)
+            if group and consumed + row_height > 348:
+                groups.append(group); group, consumed = [], 0
+            group.append(row); consumed += row_height
+        if group: groups.append(group)
+        for page_index, group in enumerate(groups):
+            self.start(f"T-R{page_index + 1}", "茶室与园居 · 控制编号", "REGISTER / 用编号连接图版、设备、收纳与分期")
+            self.table(["编号", "项目", "用途、位置与待深化条件"], group, MARGIN, 446, [81, 190, 487], size=8.5, row_min=31, padding=12, line_factor=1.5)
+            self.para("本表不替代产品选型、回路、给排水、树木根域或施工规格。数值与描述直接读取本次模型，不建立另一套门窗、家具或点位。", MARGIN, 74, W - 2 * MARGIN, 8, 13, MUTED)
+
+    def estate_program(self):
+        self.start("G-02", "园居的尺度与分期", "PHASING / 先让每一期成为完整的生活")
+        area = self.estate["areaSummary"]
+        program = {item["id"]: item for item in self.estate["program"]}
+        core_g, core_n = area["coreGrossArea"], area["coreNetArea"]
+        extra_g, extra_n = area["additionalGrossArea"], area["additionalNetArea"]
+        total_g, total_n = area["totalGrossArea"], area["totalNetArea"]
+        rows = [
+            ["首期主屋", f"{core_g:g}㎡建面 / {core_n:g}㎡净功能", f"原{program['studio']['area']:g}㎡可变房用于画室；茶、听音与家务先完成。{area['courtyardArea']:g}㎡内庭另列。"],
+            ["第二期生活翼", f"{extra_g:g}㎡新增建面 / {extra_n:g}㎡净功能", f"健身{program['gym']['area']:g}㎡ + 影音{program['media']['area']:g}㎡ + 淋浴/设备服务{program['wing-service']['area']:g}㎡；另{extra_g-extra_n:g}㎡构造预留。"],
+            ["第三期泳池", f"{area['poolWaterArea']:g}㎡水面 + {area['poolDeckArea']:g}㎡池畔", "室外面积另列。独立四边围界与自闭、自锁门，与普通园路分开。"],
+            ["完整远景", f"{total_g:g}㎡概念建面 / {total_n:g}㎡净功能", f"{total_g-total_n:g}㎡构造设备预留尚需技术落实。{area['parcelArea']:g}㎡仅为假想场地，不能推导真实容积率或覆盖率。"],
+        ]
+        self.table(["阶段", "面积口径", "这一期需要一起完成的内容"], rows, MARGIN, 444, [115, 221, 422], size=9.2, row_min=44)
+        self.column("一棵桂花，先作为候选", ["桂花典型高约3–6m、冠幅3–4.3m，喜排水良好与日照或半阴。先保留外园树位、根域与维护路线；内庭树种不因画面喜好仓促锁定。", "温带可研究鸡爪槭的枝影与季相；热带可研究九里香的局部香花。选址后按品种、土壤、风与维护投入决定。"], MARGIN, 209, 350)
+        self.column("少而必要的后台", ["生活翼给换衣、毛巾、湿衣和淋浴留位置；泳池设备、清洁品和园艺工具有可检修的地方。", "首期完成茶与基本庭院，使用后再定运动/影音设备，最后落定泳池。空处仍可以保留为空处。"], 449, 209, 350)
+
+    def garden_sources(self):
+        entries = [
+            ("Norm Architects / Pavillion House", "附属工作室与音乐、电视、工作功能；与主屋连续的材料和开窗节奏。", "https://normcph.com/project/pavillion-house/"),
+            ("John Pawson / Picornell House", "场地、光、庭院与泳池的秩序；不将其坡地和地中海条件直接照搬。", "https://www.johnpawson.com/works/picornell-house"),
+            ("NC State / Osmanthus fragrans", "桂花的典型尺度、日照、排水与耐寒分区；品种及本地适生仍待核实。", "https://plants.ces.ncsu.edu/plants/osmanthus-fragrans/"),
+            ("NC State / Acer palmatum", "鸡爪槭的遮阴、土壤与风、热条件，作为有限气候备选。", "https://plants.ces.ncsu.edu/plants/acer-palmatum/"),
+            ("NParks / Murraya paniculata", "九里香的香花、热带及季风环境与维护条件。", "https://www.nparks.gov.sg/florafaunaweb/flora/2/2/2239"),
+            ("Genelec / Studio Monitor Placement", "左右对称、约60°关系与主听位；摆位与房间的共同影响。", "https://www.genelec.com/monitor-placement"),
+            ("Ippodo Tea / Tea storage", "茶叶避日光、高温、湿气和强气味；干茶与精油分柜。", "https://ippodotea.com/blogs/frequently-asked-questions/how-should-i-store-my-tea"),
+            ("MUJI / Essential oil storage", "原瓶密闭、通风冷暗处，避火源与浴室湿气。", "https://faq.muji.com/エッセンシャルオイルの保存方法を教えてください-65cc5db10182170025c1f65b"),
+            ("CDC / Preventing Drowning", "泳池四边隔离与自闭、自锁门；实际设计按所在地核实。", "https://www.cdc.gov/drowning/prevention/index.html"),
+            ("Pool Safely / Pool barriers", "独立围界与可控入口，是泳池方案本身的一部分。", "https://www.poolsafely.gov/2017/05/08/summer-safety-barrier-checklist-for-pool-and-spa-owners/"),
+        ]
+        for i, offset in enumerate((0, 5)):
+            self.start(f"R-0{i + 2}", "园居与日常 · 官方资料", "REFERENCES / 研究日期 2026.10.21 / 设计转译与出处分开")
+            y = 445
+            for title, lesson, url in entries[offset:offset + 5]:
+                self.text(MARGIN, y, title, 11, "Helvetica")
+                y = self.para(lesson, MARGIN, y - 14, W - 2 * MARGIN, 9, 14) - 7
+                display = "faq.muji.com / 精油保存方法（点击查看官方条目）" if "faq.muji.com" in url else url
+                self.text(MARGIN, y, display, 8, "Sans" if "faq.muji.com" in url else "Helvetica", MUTED)
+                self.c.linkURL(url, (MARGIN, y - 2, min(W - MARGIN, MARGIN + 710), y + 10), relative=0)
+                y -= 32
+            self.para("以上是可核对的官方研究依据，不表示设计者为迟庭提供服务、产品背书或当地合规确认。选址、样板与实际使用反馈将继续改变方案。", MARGIN, 79, W - 2 * MARGIN, 8.5, 14, MUTED)
+
     def next_stage(self):
         self.start("P-01", "从概念走向可实施的下一步", "DESIGN DEVELOPMENT / 当前成果的用途与边界")
         rows = [["本轮已协调", "米制模型、九区关系、门窗家具编号、空间机位、生活动线与同源图纸。", "用作沟通、比较、发现矛盾和明确需求。"],
@@ -757,7 +922,9 @@ class Book:
         self.sections()
         self.room_detail("kitchen", "A-03", "餐厨与茶的完整回路", ["洗、切、炒顺序与餐椅后退空间分别核对。茶席到水源、清洗、废水和收纳的距离计入使用。", "操作照明、插座、排烟与可检修位置在装修前共同决定。材料耐清洗、能补修，再考虑表面效果。"])
         self.room_detail("bath", "A-04", "卫浴与安静的家务秩序", ["完整浴室与独立客用洗手间集中布置，分别开门。朋友来访时不用进入卧室。", "防水、排风、排水与检修先于装饰。现布局仍需完整净距、无障碍及设备开启检查。"])
-        self.materials(); self.lighting(); self.services(); self.life(); self.areas(); self.next_stage(); self.sources()
+        self.materials(); self.lighting(); self.services(); self.life(); self.areas()
+        self.tea_and_garden()
+        self.next_stage(); self.sources(); self.garden_sources()
         self.finish()
 
 
@@ -770,6 +937,10 @@ def main():
     args.output.parent.mkdir(parents=True, exist_ok=True)
     register_fonts()
     model = load_model()
+    snapshot = ROOT / "web/public/docs/drawings/spatial-model.json"
+    if model.get("version", 0) >= 3:
+        if not snapshot.exists() or json.loads(snapshot.read_text()) != model:
+            raise RuntimeError("Export the frozen model and all SVG drawings before building the PDF; the public model snapshot is stale.")
     house = json.loads((ROOT / "web/public/data/house.json").read_text())
     book = Book(args.output, model, house)
     book.build()
@@ -777,7 +948,7 @@ def main():
         PUBLIC.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(args.output, PUBLIC)
         assert args.output.read_bytes() == PUBLIC.read_bytes()
-    print(json.dumps({"output": str(args.output), "pages": book.page, "model_revision": model.get("revision", model.get("version")), "public_copy": str(PUBLIC) if not args.no_public_copy else None}, ensure_ascii=False))
+    print(json.dumps({"output": str(args.output), "pages": book.page, "model_revision": model.get("revision", model.get("version")), "model_sha256": sha256(json.dumps(model, ensure_ascii=False, sort_keys=True).encode()).hexdigest(), "public_copy": str(PUBLIC) if not args.no_public_copy else None}, ensure_ascii=False))
 
 
 if __name__ == "__main__":

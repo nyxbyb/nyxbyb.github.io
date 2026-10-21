@@ -1,0 +1,3 @@
+# PDF streams and cross-reference offsets are binary artifacts, even when the
+# encoded stream happens to contain no NUL byte in Git's initial detection window.
+*.pdf binary
